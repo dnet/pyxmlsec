@@ -48,9 +48,12 @@ PyObject *xmlsec_CheckVersionExt(PyObject *self, PyObject *args) {
   int subminor;
   xmlSecCheckVersionMode mode;
   
-  if(!PyArg_ParseTuple(args, (char *) "iiii:checkVersionExt",
-		       &major, &minor, &subminor, &mode))
-    return NULL;
+  if (CheckArgs(args, "IIII:checkVersionExt")) {
+    if(!PyArg_ParseTuple(args, (char *) "iiii:checkVersionExt",
+			 &major, &minor, &subminor, &mode))
+      return NULL;
+  }
+  else return NULL;
 
   return (wrap_int(xmlSecCheckVersionExt(major, minor, subminor, mode)));
 }

@@ -30,8 +30,11 @@ PyObject *xmlsec_NodeGetName(PyObject *self, PyObject *args) {
   PyObject *node_obj;
   xmlNodePtr node;
 
-  if(!PyArg_ParseTuple(args, (char *) "O:NodeGetName", &node_obj))
-    return NULL;
+  if (CheckArgs(args, "O:nodeGetName")) {
+    if(!PyArg_ParseTuple(args, (char *) "O:NodeGetName", &node_obj))
+      return NULL;
+  }
+  else return NULL;
 
   node = xmlNodePtr_get(node_obj);
 
@@ -42,8 +45,11 @@ PyObject *xmlsec_GetNodeNsHref(PyObject *self, PyObject *args) {
   PyObject *cur_obj;
   xmlNodePtr cur;
 
-  if(!PyArg_ParseTuple(args, (char *) "O:getNodeNsHref", &cur_obj))
-    return NULL;
+  if (CheckArgs(args, "O:getNodeNsHref")) {
+    if(!PyArg_ParseTuple(args, (char *) "O:getNodeNsHref", &cur_obj))
+      return NULL;
+  }
+  else return NULL;
 
   cur = xmlNodePtr_get(cur_obj);
 
@@ -56,9 +62,12 @@ PyObject *xmlsec_CheckNodeName(PyObject *self, PyObject *args) {
   const xmlChar *name;
   const xmlChar *ns;
 
-  if(!PyArg_ParseTuple(args, (char *) "Osz:checkNodeName",
-		       &cur_obj, &name, &ns))
-    return NULL;
+  if (CheckArgs(args, "OSs:checkNodeName")) {
+    if(!PyArg_ParseTuple(args, (char *) "Osz:checkNodeName",
+			 &cur_obj, &name, &ns))
+      return NULL;
+  }
+  else return NULL;
 
   cur = xmlNodePtr_get(cur_obj);
 
@@ -70,8 +79,11 @@ PyObject *xmlsec_GetNextElementNode(PyObject *self, PyObject *args) {
   xmlNodePtr cur;
   xmlNodePtr node;
 
-  if(!PyArg_ParseTuple(args, (char *) "O:getNextElementNode", &cur_obj))
-    return NULL;
+  if (CheckArgs(args, "O:getNextElementNode")) {
+    if(!PyArg_ParseTuple(args, (char *) "O:getNextElementNode", &cur_obj))
+      return NULL;
+  }
+  else return NULL;
 
   cur = xmlNodePtr_get(cur_obj);
   node = xmlSecGetNextElementNode(cur);
@@ -86,14 +98,12 @@ PyObject *xmlsec_FindChild(PyObject *self, PyObject *args) {
   xmlNodePtr parent;
   xmlNodePtr node;
 
-  if(!PyArg_ParseTuple(args, (char *) "Osz:findChild",
-		       &parent_obj, &name, &ns))
-    return NULL;
-
-  if (!PyInstance_Check(parent_obj)) {
-    PyErr_SetString(xmlsec_error, "findChild() argument 1 must be an instance");
-    return NULL;
+  if (CheckArgs(args, "OSs:findChild")) {
+    if(!PyArg_ParseTuple(args, (char *) "Osz:findChild",
+			 &parent_obj, &name, &ns))
+      return NULL;
   }
+  else return NULL;
 
   parent = xmlNodePtr_get(parent_obj);
   node = xmlSecFindChild(parent, name, ns);
@@ -108,13 +118,11 @@ PyObject *xmlsec_FindParent(PyObject *self, PyObject *args) {
   xmlNodePtr cur;
   xmlNodePtr node;
 
-  if(!PyArg_ParseTuple(args, (char *) "Osz:findParent", &cur_obj, &name, &ns))
-    return NULL;
-
-  if (!PyInstance_Check(cur_obj)) {
-    PyErr_SetString(xmlsec_error, "findParent() argument 1 must be an instance");
-    return NULL;
+  if (CheckArgs(args, "OSs:findParent")) {
+    if(!PyArg_ParseTuple(args, (char *) "Osz:findParent", &cur_obj, &name, &ns))
+      return NULL;
   }
+  else return NULL;
 
   cur = xmlNodePtr_get(cur_obj);
   node = xmlSecFindParent(cur, name, ns);
@@ -129,14 +137,12 @@ PyObject *xmlsec_FindNode(PyObject *self, PyObject *args) {
   xmlNodePtr parent;
   xmlNodePtr node;
 
-  if(!PyArg_ParseTuple(args, (char *) "Osz:findNode", &parent_obj, &name, &ns))
-    return NULL;
-
-  if (!PyInstance_Check(parent_obj)) {
-    PyErr_SetString(xmlsec_error,
-    		    "findNode() argument 1 must be an xmlNode instance");
-    return NULL;
+  if (CheckArgs(args, "OSs:findNode")) {
+    if(!PyArg_ParseTuple(args, (char *) "Osz:findNode",
+			 &parent_obj, &name, &ns))
+      return NULL;
   }
+  else return NULL;
 
   parent = xmlNodePtr_get(parent_obj);
   node = xmlSecFindNode(parent, name, ns);
@@ -151,13 +157,11 @@ PyObject *xmlsec_AddChild(PyObject *self, PyObject *args) {
   xmlNodePtr parent;
   xmlNodePtr node;
 
-  if(!PyArg_ParseTuple(args, (char *) "Osz:addChild", &parent_obj, &name, &ns))
-    return NULL;
-
-  if (!PyInstance_Check(parent_obj)) {
-    PyErr_SetString(xmlsec_error, "addChild() argument 1 must be an instance");
-    return NULL;
+  if (CheckArgs(args, "OSs:addChild")) {
+    if(!PyArg_ParseTuple(args, (char *) "Osz:addChild", &parent_obj, &name, &ns))
+      return NULL;
   }
+  else return NULL;
 
   parent = xmlNodePtr_get(parent_obj);
   node = xmlSecAddChild(parent, name, ns);
@@ -172,14 +176,12 @@ PyObject *xmlsec_AddNextSibling(PyObject *self, PyObject *args) {
   xmlNodePtr node;
   xmlNodePtr new_node;
 
-  if(!PyArg_ParseTuple(args, (char *) "Osz:addNextSibling",
-		       &node_obj, &name, &ns))
-    return NULL;
-
-  if (!PyInstance_Check(node_obj)) {
-    PyErr_SetString(xmlsec_error, "addNextSibling() argument 1 must be an instance");
-    return NULL;
+  if (CheckArgs(args, "OSs:addNextSibling")) {
+    if(!PyArg_ParseTuple(args, (char *) "Osz:addNextSibling",
+			 &node_obj, &name, &ns))
+      return NULL;
   }
+  else return NULL;
 
   node = xmlNodePtr_get(node_obj);
   new_node = xmlSecAddNextSibling(node, name, ns);
@@ -194,14 +196,12 @@ PyObject *xmlsec_AddPrevSibling(PyObject *self, PyObject *args) {
   xmlNodePtr node;
   xmlNodePtr new_node;
 
-  if(!PyArg_ParseTuple(args, (char *) "Osz:addPrevSibling",
-		       &node_obj, &name, &ns))
-    return NULL;
-
-  if (!PyInstance_Check(node_obj)) {
-    PyErr_SetString(xmlsec_error, "addPrevSibling() argument 1 must be an instance");
-    return NULL;
+  if (CheckArgs(args, "OSs:addPrevSibling")) {
+    if(!PyArg_ParseTuple(args, (char *) "Osz:addPrevSibling",
+			 &node_obj, &name, &ns))
+      return NULL;
   }
+  else return NULL;
 
   node = xmlNodePtr_get(node_obj);
   new_node = xmlSecAddPrevSibling(node, name, ns);
@@ -214,9 +214,12 @@ PyObject *xmlsec_ReplaceNode(PyObject *self, PyObject *args) {
   xmlNodePtr node;
   xmlNodePtr newNode;
   
-  if(!PyArg_ParseTuple(args, (char *) "OO:replaceNode",
-		       &node_obj, &newNode_obj))
-    return NULL;
+  if (CheckArgs(args, "OO:replaceNode")) {
+    if(!PyArg_ParseTuple(args, (char *) "OO:replaceNode",
+			 &node_obj, &newNode_obj))
+      return NULL;
+  }
+  else return NULL;
 
   node = xmlNodePtr_get(node_obj);
   newNode = xmlNodePtr_get(newNode_obj);
@@ -229,9 +232,12 @@ PyObject *xmlsec_ReplaceContent(PyObject *self, PyObject *args) {
   xmlNodePtr node;
   xmlNodePtr newNode;
   
-  if(!PyArg_ParseTuple(args, (char *) "OO:replaceContent",
-		       &node_obj, &newNode_obj))
-    return NULL;
+  if (CheckArgs(args, "OO:replaceContent")) {
+    if(!PyArg_ParseTuple(args, (char *) "OO:replaceContent",
+			 &node_obj, &newNode_obj))
+      return NULL;
+  }
+  else return NULL;
 
   node = xmlNodePtr_get(node_obj);
   newNode = xmlNodePtr_get(newNode_obj);
@@ -245,9 +251,12 @@ PyObject *xmlsec_ReplaceNodeBuffer(PyObject *self, PyObject *args) {
   const xmlSecByte *buffer;
   xmlSecSize size;
 
-  if(!PyArg_ParseTuple(args, (char *) "Osi:replaceNodeBuffer",
-		       &node_obj, &buffer, &size))
-    return NULL;
+  if (CheckArgs(args, "OSI:replaceNodeBuffer")) {
+    if(!PyArg_ParseTuple(args, (char *) "Osi:replaceNodeBuffer",
+			 &node_obj, &buffer, &size))
+      return NULL;
+  }
+  else return NULL;
 
   node = xmlNodePtr_get(node_obj);
 
@@ -260,9 +269,12 @@ PyObject *xmlsec_AddIDs(PyObject *self, PyObject *args) {
   xmlNodePtr cur;
   xmlChar **ids = NULL;
 
-  if (!PyArg_ParseTuple(args, (char *) "OOO:addIDs",
-			&doc_obj, &cur_obj, &ids_obj))
-    return NULL;
+  if (CheckArgs(args, "OOO:addIDs")) {
+    if (!PyArg_ParseTuple(args, (char *) "OOO:addIDs",
+			  &doc_obj, &cur_obj, &ids_obj))
+      return NULL;
+  }
+  else return NULL;
 
   doc = xmlDocPtr_get(doc_obj);
   cur = xmlNodePtr_get(cur_obj);
@@ -280,9 +292,12 @@ PyObject *xmlsec_CreateTree(PyObject *self, PyObject *args) {
   const xmlChar *rootNodeNs;
   xmlDocPtr tree;
 
-  if (!PyArg_ParseTuple(args, (char *) "sz:createTree",
-			&rootNodeName, &rootNodeNs))
-    return NULL;
+  if (CheckArgs(args, "Ss:createTree")) {
+    if (!PyArg_ParseTuple(args, (char *) "sz:createTree",
+			  &rootNodeName, &rootNodeNs))
+      return NULL;
+  }
+  else return NULL;
 
   tree = xmlSecCreateTree(rootNodeName, rootNodeNs);
 
@@ -293,8 +308,11 @@ PyObject *xmlsec_IsEmptyNode(PyObject *self, PyObject *args) {
   PyObject *node_obj;
   xmlNodePtr node;
 
-  if (!PyArg_ParseTuple(args, (char *) "O:isEmptyNode", &node_obj))
-    return NULL;
+  if (CheckArgs(args, "O:isEmptyNode")) {
+    if (!PyArg_ParseTuple(args, (char *) "O:isEmptyNode", &node_obj))
+      return NULL;
+  }
+  else return NULL;
 
   node = xmlNodePtr_get(node_obj);
 
@@ -304,8 +322,11 @@ PyObject *xmlsec_IsEmptyNode(PyObject *self, PyObject *args) {
 PyObject *xmlsec_IsEmptyString(PyObject *self, PyObject *args) {
   const xmlChar *str;
 
-  if (!PyArg_ParseTuple(args, (char *) "s:isEmptyString", &str))
-    return NULL;
+  if (CheckArgs(args, "S:isEmptyString")) {
+    if (!PyArg_ParseTuple(args, (char *) "s:isEmptyString", &str))
+      return NULL;
+  }
+  else return NULL;
 
   return (wrap_int(xmlSecIsEmptyString(str)));
 }

@@ -50,9 +50,12 @@ PyObject *xmlSecEncCtx_getattr(PyObject *self, PyObject *args) {
   xmlSecEncCtxPtr encCtx;
   const char *attr;
 
-  if (!PyArg_ParseTuple(args, "Os:encCtxGetAttr",
-			&encCtx_obj, &attr))
-    return NULL;
+  if (CheckArgs(args, "OS:encCtxGetAttr")) {
+    if (!PyArg_ParseTuple(args, "Os:encCtxGetAttr",
+			  &encCtx_obj, &attr))
+      return NULL;
+  }
+  else return NULL;
 
   encCtx = xmlSecEncCtxPtr_get(encCtx_obj);
 
@@ -121,9 +124,12 @@ PyObject *xmlSecEncCtx_setattr(PyObject *self, PyObject *args) {
   xmlSecEncCtxPtr encCtx;
   const char *name;
 
-  if (!PyArg_ParseTuple(args, "OsO:encCtxSetAttr",
-			&encCtx_obj, &name, &value_obj))
-    return NULL;
+  if (CheckArgs(args, "OSO:encCtxSetAttr")) {
+    if (!PyArg_ParseTuple(args, "OsO:encCtxSetAttr",
+			  &encCtx_obj, &name, &value_obj))
+      return NULL;
+  }
+  else return NULL;
 
   encCtx = xmlSecEncCtxPtr_get(encCtx_obj);
     
@@ -177,12 +183,13 @@ PyObject *xmlsec_EncCtxCreate(PyObject *self, PyObject *args) {
   xmlSecKeysMngrPtr keysMngr = NULL;
   xmlSecEncCtxPtr encCtx;
 
-  if (!PyArg_ParseTuple(args, "O:encCtxCreate", &keysMngr_obj))
-    return NULL;
-
-  if (keysMngr_obj != Py_None) {
-    keysMngr = xmlSecKeysMngrPtr_get(keysMngr_obj);
+  if (CheckArgs(args, "o:encCtxCreate")) {
+    if (!PyArg_ParseTuple(args, "O:encCtxCreate", &keysMngr_obj))
+      return NULL;
   }
+  else return NULL;
+
+  keysMngr = xmlSecKeysMngrPtr_get(keysMngr_obj);
   encCtx = xmlSecEncCtxCreate(keysMngr);
 
   return (wrap_xmlSecEncCtxPtr(encCtx));
@@ -192,8 +199,11 @@ PyObject *xmlsec_EncCtxDestroy(PyObject *self, PyObject *args) {
   PyObject *encCtx_obj;
   xmlSecEncCtxPtr encCtx;
 
-  if (!PyArg_ParseTuple(args, "O:encCtxDestroy", &encCtx_obj))
-    return NULL;
+  if (CheckArgs(args, "O:encCtxDestroy")) {
+    if (!PyArg_ParseTuple(args, "O:encCtxDestroy", &encCtx_obj))
+      return NULL;
+  }
+  else return NULL;
 
   encCtx = xmlSecEncCtxPtr_get(encCtx_obj);
   xmlSecEncCtxDestroy(encCtx);
@@ -207,8 +217,12 @@ PyObject *xmlsec_EncCtxInitialize(PyObject *self, PyObject *args) {
   xmlSecEncCtxPtr encCtx;
   xmlSecKeysMngrPtr keysMngr = NULL;
 
-  if (!PyArg_ParseTuple(args, "OO:encCtxInitialize", &encCtx_obj, &keysMngr_obj))
-    return NULL;
+  if (CheckArgs(args, "Oo:encCtxInitialize")) {
+    if (!PyArg_ParseTuple(args, "OO:encCtxInitialize",
+			  &encCtx_obj, &keysMngr_obj))
+      return NULL;
+  }
+  else return NULL;
 
   encCtx = xmlSecEncCtxPtr_get(encCtx_obj);
   keysMngr = xmlSecKeysMngrPtr_get(keysMngr_obj);
@@ -220,8 +234,11 @@ PyObject *xmlsec_EncCtxFinalize(PyObject *self, PyObject *args) {
   PyObject *encCtx_obj;
   xmlSecEncCtxPtr encCtx;
 
-  if (!PyArg_ParseTuple(args, "O:encCtxFinalize", &encCtx_obj))
-    return NULL;
+  if (CheckArgs(args, "O:encCtxFinalize")) {
+    if (!PyArg_ParseTuple(args, "O:encCtxFinalize", &encCtx_obj))
+      return NULL;
+  }
+  else return NULL;
 
   encCtx = xmlSecEncCtxPtr_get(encCtx_obj);
   
@@ -235,8 +252,11 @@ PyObject *xmlsec_EncCtxCopyUserPref(PyObject *self, PyObject *args) {
   PyObject *dst_obj, *src_obj;
   xmlSecEncCtxPtr dst, src;
 
-  if (!PyArg_ParseTuple(args, "OO:encCtxCopyUserPref", &dst_obj, &src_obj))
-    return NULL;
+  if (CheckArgs(args, "OO:encCtxCopyUserPref")) {
+    if (!PyArg_ParseTuple(args, "OO:encCtxCopyUserPref", &dst_obj, &src_obj))
+      return NULL;
+  }
+  else return NULL;
 
   dst = xmlSecEncCtxPtr_get(dst_obj);
   src = xmlSecEncCtxPtr_get(src_obj);
@@ -248,8 +268,11 @@ PyObject *xmlsec_EncCtxReset(PyObject *self, PyObject *args) {
   PyObject *encCtx_obj;
   xmlSecEncCtxPtr encCtx;
 
-  if (!PyArg_ParseTuple(args, "O:encCtxReset", &encCtx_obj))
-    return NULL;
+  if (CheckArgs(args, "O:encCtxReset")) {
+    if (!PyArg_ParseTuple(args, "O:encCtxReset", &encCtx_obj))
+      return NULL;
+  }
+  else return NULL;
 
   encCtx = xmlSecEncCtxPtr_get(encCtx_obj);
   
@@ -266,9 +289,12 @@ PyObject *xmlsec_EncCtxBinaryEncrypt(PyObject *self, PyObject *args) {
   const xmlSecByte *data;
   xmlSecSize dataSize;
 
-  if (!PyArg_ParseTuple(args, "OOsi:encCtxBinaryEncrypt", &encCtx_obj, &tmpl_obj,
-			&data, &dataSize))
+  if (CheckArgs(args, "OOSI:encCtxBinaryEncrypt")) {
+    if (!PyArg_ParseTuple(args, "OOsi:encCtxBinaryEncrypt",
+			  &encCtx_obj, &tmpl_obj, &data, &dataSize))
     return NULL;
+  }
+  else return NULL;
 
   encCtx = xmlSecEncCtxPtr_get(encCtx_obj);
   tmpl = xmlNodePtr_get(tmpl_obj);
@@ -281,9 +307,12 @@ PyObject *xmlsec_EncCtxXmlEncrypt(PyObject *self, PyObject *args) {
   xmlSecEncCtxPtr encCtx;
   xmlNodePtr tmpl, node;
 
-  if (!PyArg_ParseTuple(args, "OOO:encCtxXmlEncrypt", &encCtx_obj, &tmpl_obj,
-			&node_obj))
+  if (CheckArgs(args, "OOO:encCtxXmlEncrypt")) {
+    if (!PyArg_ParseTuple(args, "OOO:encCtxXmlEncrypt", &encCtx_obj, &tmpl_obj,
+			  &node_obj))
     return NULL;
+  }
+  else return NULL;
 
   encCtx = xmlSecEncCtxPtr_get(encCtx_obj);
   tmpl = xmlNodePtr_get(tmpl_obj);
@@ -298,9 +327,12 @@ PyObject *xmlsec_EncCtxUriEncrypt(PyObject *self, PyObject *args) {
   xmlNodePtr tmpl;
   const xmlChar *uri;
 
-  if (!PyArg_ParseTuple(args, "OOs:encCtxUriEncrypt", &encCtx_obj, &tmpl_obj,
-			&uri))
+  if (CheckArgs(args, "OOS:encCtxUriEncrypt")) {
+    if (!PyArg_ParseTuple(args, "OOs:encCtxUriEncrypt", &encCtx_obj, &tmpl_obj,
+			  &uri))
     return NULL;
+  }
+  else return NULL;
 
   encCtx = xmlSecEncCtxPtr_get(encCtx_obj);
   tmpl = xmlNodePtr_get(tmpl_obj);
@@ -313,8 +345,11 @@ PyObject *xmlsec_EncCtxDecrypt(PyObject *self, PyObject *args) {
   xmlSecEncCtxPtr encCtx;
   xmlNodePtr node;
 
-  if (!PyArg_ParseTuple(args, "OO:encCtxDecrypt", &encCtx_obj, &node_obj))
-    return NULL;
+  if (CheckArgs(args, "OO:encCtxDecrypt")) {
+    if (!PyArg_ParseTuple(args, "OO:encCtxDecrypt", &encCtx_obj, &node_obj))
+      return NULL;
+  }
+  else return NULL;
 
   encCtx = xmlSecEncCtxPtr_get(encCtx_obj);
   node = xmlNodePtr_get(node_obj);
@@ -328,16 +363,16 @@ PyObject *xmlsec_EncCtxDecryptToBuffer(PyObject *self, PyObject *args) {
   xmlNodePtr node;
   xmlSecBufferPtr buf;
 
-  if (!PyArg_ParseTuple(args, "OO:encCtxDecryptToBuffer", &encCtx_obj, &node_obj))
-    return NULL;
+  if (CheckArgs(args, "OO:encCtxDecryptToBuffer")) {
+    if (!PyArg_ParseTuple(args, "OO:encCtxDecryptToBuffer", &encCtx_obj, &node_obj))
+      return NULL;
+  }
+  else return NULL;
 
   encCtx = xmlSecEncCtxPtr_get(encCtx_obj);
   node = xmlNodePtr_get(node_obj);
 
   buf = xmlSecEncCtxDecryptToBuffer(encCtx, node);
-  if (buf == NULL) {
-    PyErr_SetFromErrno(xmlsec_error);
-  }
   
   return (wrap_xmlSecBufferPtr(buf));
 }
@@ -347,8 +382,12 @@ PyObject *xmlsec_EncCtxDebugDump(PyObject *self, PyObject *args) {
   FILE *output;
   xmlSecEncCtxPtr encCtx;
 
-  if (!PyArg_ParseTuple(args, "OO:encCtxDebugDump", &encCtx_obj, &output_obj))
-    return NULL;
+  if (CheckArgs(args, "OF:encCtxDebugDump")) {
+    if (!PyArg_ParseTuple(args, "OO:encCtxDebugDump",
+			  &encCtx_obj, &output_obj))
+      return NULL;
+  }
+  else return NULL;
 
   encCtx = xmlSecEncCtxPtr_get(encCtx_obj);
   output = PythonFile_get(output_obj);
@@ -363,8 +402,12 @@ PyObject *xmlsec_EncCtxDebugXmlDump(PyObject *self, PyObject *args) {
   FILE *output;
   xmlSecEncCtxPtr encCtx;
 
-  if (!PyArg_ParseTuple(args, "OO:encCtxDebugXmlDump", &encCtx_obj, &output_obj))
-    return NULL;
+  if (CheckArgs(args, "OF:encCtxDebugXmlDump")) {
+    if (!PyArg_ParseTuple(args, "OO:encCtxDebugXmlDump",
+			  &encCtx_obj, &output_obj))
+      return NULL;
+  }
+  else return NULL;
 
   encCtx = xmlSecEncCtxPtr_get(encCtx_obj);
   output = PythonFile_get(output_obj);
