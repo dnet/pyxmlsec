@@ -14,6 +14,11 @@ typedef struct {
 PyObject *wrap_xmlSecDSigCtxPtr(xmlSecDSigCtxPtr ctx);
 PyObject *wrap_xmlSecDSigReferenceCtxPtr(xmlSecDSigReferenceCtxPtr ctx);
 
+PyObject *xmlSecDSigCtx_getattr(PyObject *self, PyObject *args);
+PyObject *xmlSecDSigCtx_setattr(PyObject *self, PyObject *args);
+PyObject *xmlSecDSigReferenceCtx_getattr(PyObject *self, PyObject *args);
+PyObject *xmlSecDSigReferenceCtx_setattr(PyObject *self, PyObject *args);
+
 PyObject *xmlsec_DSigCtxCreate(PyObject *self, PyObject *args);
 PyObject *xmlsec_DSigCtxDestroy(PyObject *self, PyObject *args);
 PyObject *xmlsec_DSigCtxInitialize(PyObject *self, PyObject *args);
@@ -37,7 +42,3 @@ PyObject *xmlsec_DSigReferenceCtxDebugXmlDump(PyObject *self, PyObject *args);
 PyObject *xmlsec_DSigReferenceCtxListId(PyObject *self, PyObject *args);
 
 PyObject *xmldsig_set_signKey(PyObject *self, PyObject *args);
-PyObject *xmldsig_set_enabledReferenceUris(PyObject *self, PyObject *args);
-PyObject *xmldsig_get_status(PyObject *self, PyObject *args);
-PyObject *xmldsig_get_keyInfoReadCtx(PyObject *self, PyObject *args);
-PyObject *xmldsig_get_signedInfoReferences(PyObject *self, PyObject *args);
