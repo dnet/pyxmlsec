@@ -1656,6 +1656,22 @@ class TmplCipherReference(libxml2.xmlNode):
         return libxml2.xmlNode(_obj=_obj)
 
 ###############################################################################
+# version.h
+###############################################################################
+# The library version string in the format
+# "<major-number>.<minor-number>.<sub-minor-number>".
+XMLSEC_VERSION          = xmlsecmod.xmlsec_version()
+# The library major version number.
+XMLSEC_VERSION_MAJOR    = xmlsecmod.xmlsec_version_major()
+# The library minor version number.
+XMLSEC_VERSION_MINOR    = xmlsecmod.xmlsec_version_minor()
+# The library sub-minor version number.
+XMLSEC_VERSION_SUBMINOR = xmlsecmod.xmlsec_version_subminor()
+# The library version info string in the format
+# "<major-number>+<minor-number>:<sub-minor-number>:<minor-number>".
+XMLSEC_VERSION_INFO     = xmlsecmod.xmlsec_version_info()
+
+###############################################################################
 # keys.h
 ###############################################################################
 ## Key data types

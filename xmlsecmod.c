@@ -36,6 +36,7 @@
 #include "parser.h"
 #include "templates.h"
 #include "transforms.h"
+#include "version.h"
 #include "xmldsig.h"
 #include "xmlenc.h"
 #include "xmlsec.h"
@@ -44,13 +45,6 @@
 #include "openssl.h"
 
 static PyMethodDef xmlsec_methods[] = {
-  /* xmlsec.h */
-  {"init",              xmlsec_Init,              METH_VARARGS},
-  {"shutdown",          xmlsec_Shutdown,          METH_VARARGS},
-  {"checkVersionExact", xmlsec_CheckVersionExact, METH_VARARGS},
-  {"checkVersion",      xmlsec_CheckVersion,      METH_VARARGS},
-  {"checkVersionExt",   xmlsec_CheckVersionExt,   METH_VARARGS}, // New
-
   /* base64.h */
   {"base64CtxCreate",     xmlsec_Base64CtxCreate,     METH_VARARGS},
   {"base64CtxDestroy",    xmlsec_Base64CtxDestroy,    METH_VARARGS},
@@ -66,73 +60,6 @@ static PyMethodDef xmlsec_methods[] = {
   {"parseMemory",          xmlsec_ParseMemory,          METH_VARARGS},
   {"parseMemoryExt",       xmlsec_ParseMemoryExt,       METH_VARARGS},
   {"transformXmlParserId", xmlsec_TransformXmlParserId, METH_VARARGS},
-
-  /* xmlenc.h */
-  {"encCtxCreate",                 xmlsec_EncCtxCreate,            METH_VARARGS},
-  {"encCtxDestroy",                xmlsec_EncCtxDestroy,           METH_VARARGS},
-  {"encCtxInitialize",             xmlsec_EncCtxInitialize,        METH_VARARGS},
-  {"encCtxFinalize",               xmlsec_EncCtxFinalize,          METH_VARARGS},
-  {"encCtxCopyUserPref",           xmlsec_EncCtxCopyUserPref,      METH_VARARGS},
-  {"encCtxReset",                  xmlsec_EncCtxReset,             METH_VARARGS},
-  {"encCtxBinaryEncrypt",          xmlsec_EncCtxBinaryEncrypt,     METH_VARARGS},
-  {"encCtxXmlEncrypt",             xmlsec_EncCtxXmlEncrypt,        METH_VARARGS},
-  {"encCtxUriEncrypt",             xmlsec_EncCtxUriEncrypt,        METH_VARARGS},
-  {"encCtxDecrypt",                xmlsec_EncCtxDecrypt,           METH_VARARGS},
-  {"encCtxDecryptToBuffer",        xmlsec_EncCtxDecryptToBuffer,   METH_VARARGS},
-  {"encCtxDebugDump",              xmlsec_EncCtxDebugDump,         METH_VARARGS},
-  {"encCtxDebugXmlDump",           xmlsec_EncCtxDebugXmlDump,      METH_VARARGS},
-  {"encCtxSetEncKey",              xmlenc_set_encKey,              METH_VARARGS},
-  {"encCtxGetResult",              xmlenc_get_result,              METH_VARARGS},
-  {"encCtxGetResultBase64Encoded", xmlenc_get_resultBase64Encoded, METH_VARARGS},
-  {"encCtxGetResultReplaced",      xmlenc_get_resultReplaced,      METH_VARARGS},
-
-  /* xmltree.h */
-  {"nodeGetName",        xmlsec_NodeGetName,        METH_VARARGS},
-  {"getNodeNsHref",      xmlsec_GetNodeNsHref,      METH_VARARGS},
-  {"checkNodeName",      xmlsec_CheckNodeName,      METH_VARARGS},
-  {"getNextElementNode", xmlsec_GetNextElementNode, METH_VARARGS},
-  {"findChild",          xmlsec_FindNode,           METH_VARARGS},
-  {"findParent",         xmlsec_FindNode,           METH_VARARGS},
-  {"findNode",           xmlsec_FindNode,           METH_VARARGS},
-  {"addChild",           xmlsec_AddChild,           METH_VARARGS},
-  {"addNextSibling",     xmlsec_AddNextSibling,     METH_VARARGS},
-  {"addPrevSibling",     xmlsec_AddPrevSibling,     METH_VARARGS},
-  {"replaceNode",        xmlsec_ReplaceNode,        METH_VARARGS},
-  {"replaceContent",     xmlsec_ReplaceContent,     METH_VARARGS},
-  {"replaceNodeBuffer",  xmlsec_ReplaceNodeBuffer,  METH_VARARGS},
-  {"addIDs",             xmlsec_AddIDs,             METH_VARARGS},
-  {"createTree",         xmlsec_CreateTree,         METH_VARARGS},
-  {"isEmptyNode",        xmlsec_IsEmptyNode,        METH_VARARGS},
-  {"isEmptyString",      xmlsec_IsEmptyString,      METH_VARARGS},
-  {"isHex",              xmlsec_IsHex,              METH_VARARGS},
-  {"getHex",             xmlsec_GetHex,             METH_VARARGS},
-
-  /* xmldsig.h */
-  {"dsigCtxCreate",                      xmlsec_DSigCtxCreate,                      METH_VARARGS},
-  {"dsigCtxDestroy",                     xmlsec_DSigCtxDestroy,                     METH_VARARGS},
-  {"dsigCtxInitialize",                  xmlsec_DSigCtxInitialize,                  METH_VARARGS},
-  {"dsigCtxFinalize",                    xmlsec_DSigCtxFinalize,                    METH_VARARGS},
-  {"dsigCtxSign",                        xmlsec_DSigCtxSign,                        METH_VARARGS},
-  {"dsigCtxVerify",                      xmlsec_DSigCtxVerify,                      METH_VARARGS},
-  {"dsigCtxEnableReferenceTransform",    xmlsec_DSigCtxEnableReferenceTransform,    METH_VARARGS},
-  {"dsigCtxEnableSignatureTransform",    xmlsec_DSigCtxEnableSignatureTransform,    METH_VARARGS},
-  {"dsigCtxGetPreSignBuffer",            xmlsec_DSigCtxGetPreSignBuffer,            METH_VARARGS},
-  {"dsigCtxDebugDump",                   xmlsec_DSigCtxDebugDump,                   METH_VARARGS},
-  {"dsigCtxDebugXmlDump",                xmlsec_DSigCtxDebugXmlDump,                METH_VARARGS},
-  {"dsigReferenceCtxCreate",             xmlsec_DSigReferenceCtxCreate,             METH_VARARGS},
-  {"dsigReferenceCtxDestroy",            xmlsec_DSigReferenceCtxDestroy,            METH_VARARGS},
-  {"dsigReferenceCtxInitialize",         xmlsec_DSigReferenceCtxInitialize,         METH_VARARGS},
-  {"dsigReferenceCtxFinalize",           xmlsec_DSigReferenceCtxFinalize,           METH_VARARGS},
-  {"dsigReferenceCtxProcessNode",        xmlsec_DSigReferenceCtxProcessNode,        METH_VARARGS},
-  {"dsigReferenceCtxGetPreDigestBuffer", xmlsec_DSigReferenceCtxGetPreDigestBuffer, METH_VARARGS},
-  {"dsigReferenceCtxDebugDump",          xmlsec_DSigReferenceCtxDebugDump,          METH_VARARGS},
-  {"dsigReferenceCtxDebugXmlDump",       xmlsec_DSigReferenceCtxDebugXmlDump,       METH_VARARGS},
-  {"dsigReferenceCtxListId",             xmlsec_DSigReferenceCtxListId,             METH_VARARGS},
-  {"dsigCtxSetSignKey",                  xmldsig_set_signKey,                       METH_VARARGS},
-  {"dsigCtxSetEnabledReferenceUris",     xmldsig_set_enabledReferenceUris,          METH_VARARGS},
-  {"dsigCtxGetStatus",                   xmldsig_get_status,                        METH_VARARGS},
-  {"dsigCtxGetKeyInfoReadCtx",           xmldsig_get_keyInfoReadCtx,                METH_VARARGS},
-  {"dsigCtxGetSignedInfoReferences",     xmldsig_get_signedInfoReferences,          METH_VARARGS},
 
   /* app.h */
   {"cryptoInit",         xmlsec_CryptoInit,         METH_VARARGS},
@@ -196,6 +123,46 @@ static PyMethodDef xmlsec_methods[] = {
   {"bufferBase64NodeContentWrite", xmlsec_BufferBase64NodeContentWrite, METH_VARARGS},
   {"bufferCreateOutputBuffer",     xmlsec_BufferCreateOutputBuffer,     METH_VARARGS},
 
+  /* keys.h */
+  {"keyReqCreate",      keys_KeyReqCreate,        METH_VARARGS},
+  {"keyReqInitialize",  xmlsec_KeyReqInitialize,  METH_VARARGS},
+  {"keyReqFinalize",    xmlsec_KeyReqFinalize,    METH_VARARGS},
+  {"keyReqReset",       xmlsec_KeyReqReset,       METH_VARARGS},
+  {"keyReqMatchKey",    xmlsec_KeyReqMatchKey,    METH_VARARGS},
+  {"keyCreate",         xmlsec_KeyCreate,         METH_VARARGS},
+  {"keyDestroy",        xmlsec_KeyDestroy,        METH_VARARGS},
+  {"keyGetName",        xmlsec_KeySetName,        METH_VARARGS},
+  {"keySetName",        xmlsec_KeySetName,        METH_VARARGS},
+  {"keyGenerate",       xmlsec_KeyGenerate,       METH_VARARGS},
+  {"keyGenerateByName", xmlsec_KeyGenerateByName, METH_VARARGS},
+  {"keyMatch",          xmlsec_KeyMatch,          METH_VARARGS},
+  {"keyReadBuffer",     xmlsec_KeyReadBuffer,     METH_VARARGS},
+  {"keyReadBinaryFile", xmlsec_KeyReadBinaryFile, METH_VARARGS},
+  {"keyReadMemory",     xmlsec_KeyReadMemory,     METH_VARARGS},
+
+  /* keyinfo.h */
+  {"keyInfoCtxCreate",     xmlsec_KeyInfoCtxCreate,     METH_VARARGS},
+  {"keyInfoCtxDestroy",    xmlsec_KeyInfoCtxDestroy,    METH_VARARGS},
+  {"keyInfoCtxInitialize", xmlsec_KeyInfoCtxInitialize, METH_VARARGS},
+  {"keyInfoCtxFinalize",   xmlsec_KeyInfoCtxFinalize,   METH_VARARGS},
+  {"keyInfoCtxReset",      xmlsec_KeyInfoCtxReset,      METH_VARARGS},
+  {"getEnabledKeyData",    keyinfo_get_enabledKeyData,  METH_VARARGS},
+
+  /* keysmngr.h */
+  {"keysMngrCreate",    xmlsec_KeysMngrCreate,    METH_VARARGS},
+  {"keysMngrDestroy",   xmlsec_KeysMngrDestroy,   METH_VARARGS},
+  {"keysMngrFindKey",   xmlsec_KeysMngrFindKey,   METH_VARARGS},
+  {"keyStoreCreate",    xmlsec_KeyStoreCreate,    METH_VARARGS},
+  {"keyStoreDestroy",   xmlsec_KeyStoreDestroy,   METH_VARARGS},
+  {"keyStoreFindKey",   xmlsec_KeyStoreFindKey,   METH_VARARGS},
+  {"simpleKeysStoreId", xmlsec_SimpleKeysStoreId, METH_VARARGS},
+
+  /* list.h  */
+  {"ptrListCreate",  xmlsec_PtrListCreate,  METH_VARARGS},
+  {"ptrListDestroy", xmlsec_PtrListDestroy, METH_VARARGS},
+  {"ptrListAdd",     xmlsec_PtrListAdd,     METH_VARARGS},
+  {"ptrListGetSize", xmlsec_PtrListGetSize, METH_VARARGS},
+
   /* membuf.h */
   {"transformMemBufId",        xmlsec_TransformMemBufId,        METH_VARARGS},
   {"transformMemBufGetBuffer", xmlsec_TransformMemBufGetBuffer, METH_VARARGS},
@@ -211,12 +178,6 @@ static PyMethodDef xmlsec_methods[] = {
   {"nodeSetWalk",          xmlsec_NodeSetWalk,          METH_VARARGS},
   {"nodeSetDumpTextNodes", xmlsec_NodeSetDumpTextNodes, METH_VARARGS},
   {"nodeSetDebugDump",     xmlsec_NodeSetDebugDump,     METH_VARARGS},
-
-  /* list.h  */
-  {"ptrListCreate",  xmlsec_PtrListCreate,  METH_VARARGS},
-  {"ptrListDestroy", xmlsec_PtrListDestroy, METH_VARARGS},
-  {"ptrListAdd",     xmlsec_PtrListAdd,     METH_VARARGS},
-  {"ptrListGetSize", xmlsec_PtrListGetSize, METH_VARARGS},
 
   /* templates.h */
   {"tmplSignatureCreate",               xmlsec_TmplSignatureCreate,               METH_VARARGS},
@@ -272,41 +233,90 @@ static PyMethodDef xmlsec_methods[] = {
   {"transformVisa3DHackId",           xmlsec_TransformVisa3DHackId,           METH_VARARGS},
   {"transformVisa3DHackSetID",        xmlsec_TransformVisa3DHackSetID,        METH_VARARGS},
 
-  /* keys.h */
-  {"keyReqCreate",      keys_KeyReqCreate,        METH_VARARGS},
-  {"keyReqInitialize",  xmlsec_KeyReqInitialize,  METH_VARARGS},
-  {"keyReqFinalize",    xmlsec_KeyReqFinalize,    METH_VARARGS},
-  {"keyReqReset",       xmlsec_KeyReqReset,       METH_VARARGS},
-  {"keyReqMatchKey",    xmlsec_KeyReqMatchKey,    METH_VARARGS},
-  {"keyCreate",         xmlsec_KeyCreate,         METH_VARARGS},
-  {"keyDestroy",        xmlsec_KeyDestroy,        METH_VARARGS},
-  {"keyGetName",        xmlsec_KeySetName,        METH_VARARGS},
-  {"keySetName",        xmlsec_KeySetName,        METH_VARARGS},
-  {"keyGenerate",       xmlsec_KeyGenerate,       METH_VARARGS},
-  {"keyGenerateByName", xmlsec_KeyGenerateByName, METH_VARARGS},
-  {"keyMatch",          xmlsec_KeyMatch,          METH_VARARGS},
-  {"keyReadBuffer",     xmlsec_KeyReadBuffer,     METH_VARARGS},
-  {"keyReadBinaryFile", xmlsec_KeyReadBinaryFile, METH_VARARGS},
-  {"keyReadMemory",     xmlsec_KeyReadMemory,     METH_VARARGS},
-  /* keyinfo.h */
-  {"keyInfoCtxCreate",     xmlsec_KeyInfoCtxCreate,     METH_VARARGS},
-  {"keyInfoCtxDestroy",    xmlsec_KeyInfoCtxDestroy,    METH_VARARGS},
-  {"keyInfoCtxInitialize", xmlsec_KeyInfoCtxInitialize, METH_VARARGS},
-  {"keyInfoCtxFinalize",   xmlsec_KeyInfoCtxFinalize,   METH_VARARGS},
-  {"keyInfoCtxReset",      xmlsec_KeyInfoCtxReset,      METH_VARARGS},
-  {"getEnabledKeyData",    keyinfo_get_enabledKeyData,  METH_VARARGS},
-  /* keysmngr.h */
-  {"keysMngrCreate",    xmlsec_KeysMngrCreate,    METH_VARARGS},
-  {"keysMngrDestroy",   xmlsec_KeysMngrDestroy,   METH_VARARGS},
-  {"keysMngrFindKey",   xmlsec_KeysMngrFindKey,   METH_VARARGS},
-  {"keyStoreCreate",    xmlsec_KeyStoreCreate,    METH_VARARGS},
-  {"keyStoreDestroy",   xmlsec_KeyStoreDestroy,   METH_VARARGS},
-  {"keyStoreFindKey",   xmlsec_KeyStoreFindKey,   METH_VARARGS},
-  {"simpleKeysStoreId", xmlsec_SimpleKeysStoreId, METH_VARARGS},
-
   /* openssl/crypto.h, openssl/app.h */
   {"openSSLAppInit", xmlsec_OpenSSLAppInit, METH_VARARGS},
   {"openSSLInit",    xmlsec_OpenSSLInit,    METH_VARARGS},
+
+  /* version.h */
+  {"xmlsec_version",          xmlsec_xmlsec_version,          METH_VARARGS}, // New
+  {"xmlsec_version_major",    xmlsec_xmlsec_version_major,    METH_VARARGS}, // New
+  {"xmlsec_version_minor",    xmlsec_xmlsec_version_minor,    METH_VARARGS}, // New
+  {"xmlsec_version_subminor", xmlsec_xmlsec_version_subminor, METH_VARARGS}, // New
+  {"xmlsec_version_info",     xmlsec_xmlsec_version_info,     METH_VARARGS}, // New
+
+  /* xmldsig.h */
+  {"dsigCtxCreate",                      xmlsec_DSigCtxCreate,                      METH_VARARGS},
+  {"dsigCtxDestroy",                     xmlsec_DSigCtxDestroy,                     METH_VARARGS},
+  {"dsigCtxInitialize",                  xmlsec_DSigCtxInitialize,                  METH_VARARGS},
+  {"dsigCtxFinalize",                    xmlsec_DSigCtxFinalize,                    METH_VARARGS},
+  {"dsigCtxSign",                        xmlsec_DSigCtxSign,                        METH_VARARGS},
+  {"dsigCtxVerify",                      xmlsec_DSigCtxVerify,                      METH_VARARGS},
+  {"dsigCtxEnableReferenceTransform",    xmlsec_DSigCtxEnableReferenceTransform,    METH_VARARGS},
+  {"dsigCtxEnableSignatureTransform",    xmlsec_DSigCtxEnableSignatureTransform,    METH_VARARGS},
+  {"dsigCtxGetPreSignBuffer",            xmlsec_DSigCtxGetPreSignBuffer,            METH_VARARGS},
+  {"dsigCtxDebugDump",                   xmlsec_DSigCtxDebugDump,                   METH_VARARGS},
+  {"dsigCtxDebugXmlDump",                xmlsec_DSigCtxDebugXmlDump,                METH_VARARGS},
+  {"dsigReferenceCtxCreate",             xmlsec_DSigReferenceCtxCreate,             METH_VARARGS},
+  {"dsigReferenceCtxDestroy",            xmlsec_DSigReferenceCtxDestroy,            METH_VARARGS},
+  {"dsigReferenceCtxInitialize",         xmlsec_DSigReferenceCtxInitialize,         METH_VARARGS},
+  {"dsigReferenceCtxFinalize",           xmlsec_DSigReferenceCtxFinalize,           METH_VARARGS},
+  {"dsigReferenceCtxProcessNode",        xmlsec_DSigReferenceCtxProcessNode,        METH_VARARGS},
+  {"dsigReferenceCtxGetPreDigestBuffer", xmlsec_DSigReferenceCtxGetPreDigestBuffer, METH_VARARGS},
+  {"dsigReferenceCtxDebugDump",          xmlsec_DSigReferenceCtxDebugDump,          METH_VARARGS},
+  {"dsigReferenceCtxDebugXmlDump",       xmlsec_DSigReferenceCtxDebugXmlDump,       METH_VARARGS},
+  {"dsigReferenceCtxListId",             xmlsec_DSigReferenceCtxListId,             METH_VARARGS},
+  {"dsigCtxSetSignKey",                  xmldsig_set_signKey,                       METH_VARARGS},
+  {"dsigCtxSetEnabledReferenceUris",     xmldsig_set_enabledReferenceUris,          METH_VARARGS},
+  {"dsigCtxGetStatus",                   xmldsig_get_status,                        METH_VARARGS},
+  {"dsigCtxGetKeyInfoReadCtx",           xmldsig_get_keyInfoReadCtx,                METH_VARARGS},
+  {"dsigCtxGetSignedInfoReferences",     xmldsig_get_signedInfoReferences,          METH_VARARGS},
+
+  /* xmlenc.h */
+  {"encCtxCreate",                 xmlsec_EncCtxCreate,            METH_VARARGS},
+  {"encCtxDestroy",                xmlsec_EncCtxDestroy,           METH_VARARGS},
+  {"encCtxInitialize",             xmlsec_EncCtxInitialize,        METH_VARARGS},
+  {"encCtxFinalize",               xmlsec_EncCtxFinalize,          METH_VARARGS},
+  {"encCtxCopyUserPref",           xmlsec_EncCtxCopyUserPref,      METH_VARARGS},
+  {"encCtxReset",                  xmlsec_EncCtxReset,             METH_VARARGS},
+  {"encCtxBinaryEncrypt",          xmlsec_EncCtxBinaryEncrypt,     METH_VARARGS},
+  {"encCtxXmlEncrypt",             xmlsec_EncCtxXmlEncrypt,        METH_VARARGS},
+  {"encCtxUriEncrypt",             xmlsec_EncCtxUriEncrypt,        METH_VARARGS},
+  {"encCtxDecrypt",                xmlsec_EncCtxDecrypt,           METH_VARARGS},
+  {"encCtxDecryptToBuffer",        xmlsec_EncCtxDecryptToBuffer,   METH_VARARGS},
+  {"encCtxDebugDump",              xmlsec_EncCtxDebugDump,         METH_VARARGS},
+  {"encCtxDebugXmlDump",           xmlsec_EncCtxDebugXmlDump,      METH_VARARGS},
+  {"encCtxSetEncKey",              xmlenc_set_encKey,              METH_VARARGS},
+  {"encCtxGetResult",              xmlenc_get_result,              METH_VARARGS},
+  {"encCtxGetResultBase64Encoded", xmlenc_get_resultBase64Encoded, METH_VARARGS},
+  {"encCtxGetResultReplaced",      xmlenc_get_resultReplaced,      METH_VARARGS},
+
+  /* xmlsec.h */
+  {"init",              xmlsec_Init,              METH_VARARGS},
+  {"shutdown",          xmlsec_Shutdown,          METH_VARARGS},
+  {"checkVersionExact", xmlsec_CheckVersionExact, METH_VARARGS},
+  {"checkVersion",      xmlsec_CheckVersion,      METH_VARARGS},
+  {"checkVersionExt",   xmlsec_CheckVersionExt,   METH_VARARGS},
+
+  /* xmltree.h */
+  {"nodeGetName",        xmlsec_NodeGetName,        METH_VARARGS},
+  {"getNodeNsHref",      xmlsec_GetNodeNsHref,      METH_VARARGS},
+  {"checkNodeName",      xmlsec_CheckNodeName,      METH_VARARGS},
+  {"getNextElementNode", xmlsec_GetNextElementNode, METH_VARARGS},
+  {"findChild",          xmlsec_FindNode,           METH_VARARGS},
+  {"findParent",         xmlsec_FindNode,           METH_VARARGS},
+  {"findNode",           xmlsec_FindNode,           METH_VARARGS},
+  {"addChild",           xmlsec_AddChild,           METH_VARARGS},
+  {"addNextSibling",     xmlsec_AddNextSibling,     METH_VARARGS},
+  {"addPrevSibling",     xmlsec_AddPrevSibling,     METH_VARARGS},
+  {"replaceNode",        xmlsec_ReplaceNode,        METH_VARARGS},
+  {"replaceContent",     xmlsec_ReplaceContent,     METH_VARARGS},
+  {"replaceNodeBuffer",  xmlsec_ReplaceNodeBuffer,  METH_VARARGS},
+  {"addIDs",             xmlsec_AddIDs,             METH_VARARGS},
+  {"createTree",         xmlsec_CreateTree,         METH_VARARGS},
+  {"isEmptyNode",        xmlsec_IsEmptyNode,        METH_VARARGS},
+  {"isEmptyString",      xmlsec_IsEmptyString,      METH_VARARGS},
+  {"isHex",              xmlsec_IsHex,              METH_VARARGS},
+  {"getHex",             xmlsec_GetHex,             METH_VARARGS},
 
   /* x509.h */
   {"x509DataGetNodeContent", xmlsec_X509DataGetNodeContent, METH_VARARGS},

@@ -4,7 +4,7 @@
 #
 # PyXMLSec - Python bindings for XML Security library (XMLSec)
 #
-# Copyright (C) 2003 Easter-eggs, Valery Febvre
+# Copyright (C) 2003-2004 Easter-eggs, Valery Febvre
 # http://pyxmlsec.labs.libre-entreprise.org
 #
 # Author: Valery Febvre <vfebvre@easter-eggs.com>
@@ -36,8 +36,8 @@ em = Extension("xmlsecmod",
                           "xmlsecmod.c", "app.c", "base64.c", "buffer.c",
                           "keyinfo.c", "keys.c", "keysmngr.c", "list.c",
                           "membuf.c", "nodeset.c", "parser.c", "templates.c",
-                          "transforms.c", "xmldsig.c", "xmlenc.c", "xmlsec.c",
-                          "xmltree.c", "x509.c",
+                          "transforms.c", "version.c", "xmldsig.c", "xmlenc.c",
+                          "xmlsec.c", "xmltree.c", "x509.c",
                           "openssl.c"],
                define_macros = [('XMLSEC_NO_XKMS', '1'),
                                 ('XMLSEC_CRYPTO', 'openssl'),
@@ -50,7 +50,7 @@ em = Extension("xmlsecmod",
                )
 
 setup(name = "pyxmlsec",
-      version = "0.20031125",
+      version = "0.20031228",
       description = "A set of Python bindings for XML Security Library (XMLSec)",
       long_description = ''' ''',
       author = "Valery Febvre",
