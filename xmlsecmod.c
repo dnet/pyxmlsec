@@ -49,6 +49,7 @@ static PyMethodDef xmlsec_methods[] = {
   {"shutdown",          xmlsec_Shutdown,          METH_VARARGS},
   {"checkVersionExact", xmlsec_CheckVersionExact, METH_VARARGS},
   {"checkVersion",      xmlsec_CheckVersion,      METH_VARARGS},
+  {"checkVersionExt",   xmlsec_CheckVersionExt,   METH_VARARGS}, // New
 
   /* base64.h */
   {"base64CtxCreate",     xmlsec_Base64CtxCreate,     METH_VARARGS},
@@ -250,11 +251,11 @@ static PyMethodDef xmlsec_methods[] = {
   {"transformCtxInitialize",          xmlsec_TransformCtxInitialize,          METH_VARARGS},
   {"transformCtxFinalize",            xmlsec_TransformCtxFinalize,            METH_VARARGS},
   {"transformCtxReset",               xmlsec_TransformCtxReset,               METH_VARARGS},
-  {"transformCreate",                 xmlsec_TransformCreate,                 METH_VARARGS}, // New
-  {"transformDestroy",                xmlsec_TransformDestroy,                METH_VARARGS}, // New
-  {"transformNodeRead",               xmlsec_TransformNodeRead,               METH_VARARGS}, // New
-  {"transformSetKey",                 xmlsec_TransformSetKey,                 METH_VARARGS}, // New
-  {"transformSetKeyReq",              xmlsec_TransformSetKeyReq,              METH_VARARGS}, // New
+  {"transformCreate",                 xmlsec_TransformCreate,                 METH_VARARGS},
+  {"transformDestroy",                xmlsec_TransformDestroy,                METH_VARARGS},
+  {"transformNodeRead",               xmlsec_TransformNodeRead,               METH_VARARGS},
+  {"transformSetKey",                 xmlsec_TransformSetKey,                 METH_VARARGS},
+  {"transformSetKeyReq",              xmlsec_TransformSetKeyReq,              METH_VARARGS},
   {"transformBase64Id",               xmlsec_TransformBase64Id,               METH_VARARGS},
   {"transformBase64SetLineSize",      xmlsec_TransformBase64SetLineSize,      METH_VARARGS},
   {"transformInclC14NId",             xmlsec_TransformInclC14NId,             METH_VARARGS},
