@@ -21,3 +21,4 @@ PyObject *xmlsec_TmplReferenceListAddKeyReference(PyObject *self, PyObject *args
 PyObject *xmlsec_TmplKeyInfoAddKeyName(PyObject *self, PyObject *args);
 PyObject *xmlsec_TmplKeyInfoAddKeyValue(PyObject *self, PyObject *args);
 PyObject *xmlsec_TmplKeyInfoAddX509Data(PyObject *self, PyObject *args);
+PyObject *xmlsec_TmplKeyInfoAddEncryptedKey(PyObject *self, PyObject *args);

@@ -441,3 +441,31 @@ PyObject *xmlsec_TmplKeyInfoAddX509Data(PyObject *self, PyObject *args) {
 
   return PyCObject_FromVoidPtrAndDesc((void *) X509Data, (char *) "xmlNodePtr", NULL);
 }
+
+PyObject *xmlsec_TmplKeyInfoAddEncryptedKey(PyObject *self, PyObject *args) {
+  PyObject *keyInfoNode_obj, *encMethodId_meth;
+  xmlNodePtr keyInfoNode;
+  xmlSecTransformId encMethodId = NULL;
+  const xmlChar *id = NULL;
+  const xmlChar *type = NULL;
+  const xmlChar *recipient = NULL;
+  xmlNodePtr encKeyNode;
+
+  if (!PyArg_ParseTuple(args, "OOzzz:tmplKeyInfoAddEncryptedKey", &keyInfoNode_obj,
+			&encMethodId_meth, &id, &type, &recipient))
+    return NULL;
+
+  /* the encryption method is optional. */
+  if (encMethodId_meth != Py_None) {
+    encMethodId = PyCObject_AsVoidPtr(encMethodId_meth);
+  }
+  keyInfoNode = xmlNodePtr_get(PyObject_GetAttr(keyInfoNode_obj, PyString_FromString("_o")));
+  encKeyNode = xmlSecTmplKeyInfoAddEncryptedKey(keyInfoNode, encMethodId,
+						id, type, recipient);
+
+  if (encKeyNode == NULL) {
+    Py_INCREF(Py_None);
+    return Py_None;
+  }
+  return PyCObject_FromVoidPtrAndDesc((void *) encKeyNode, (char *) "xmlNodePtr", NULL);
+}
