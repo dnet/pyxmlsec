@@ -188,7 +188,7 @@ def files_keys_store_find_key(store, name, keyInfoCtx):
         print "Return None"
         return None
     
-    if ctx.keyReq.keyId == xmlsec.keyDataDsaId or ctx.keyReq.keyId == xmlsec.keyDataRsaId:
+    if ctx.keyReq.keyId == xmlsec.keyDataDsaId() or ctx.keyReq.keyId == xmlsec.keyDataRsaId():
 	# Load key from a pem file, if key is not found then it's an error (is it?)
 	key = xmlsec.CryptoAppKeyLoad(name, xmlsec.KeyDataFormatPem, None, None, None)
         if key is None:

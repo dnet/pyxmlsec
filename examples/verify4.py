@@ -151,21 +151,21 @@ def verify_file(mngr, xml_file):
     dsig_ctx.enabledReferenceUris = xmlsec.TransformUriTypeEmpty
 
     # Limit allowed transforms for signature and reference processing
-    if (dsig_ctx.enableSignatureTransform(xmlsec.transformInclC14NId) < 0 or
-        dsig_ctx.enableSignatureTransform(xmlsec.transformExclC14NId) < 0 or
-        dsig_ctx.enableSignatureTransform(xmlsec.transformSha1Id)     < 0 or
-        dsig_ctx.enableSignatureTransform(xmlsec.transformRsaSha1Id)  < 0):
+    if (dsig_ctx.enableSignatureTransform(xmlsec.transformInclC14NId()) < 0 or
+        dsig_ctx.enableSignatureTransform(xmlsec.transformExclC14NId()) < 0 or
+        dsig_ctx.enableSignatureTransform(xmlsec.transformSha1Id())     < 0 or
+        dsig_ctx.enableSignatureTransform(xmlsec.transformRsaSha1Id())  < 0):
         print "Error: failed to limit allowed signature transforms"
         return cleanup(doc, dsig_ctx)
-    if (dsig_ctx.enableReferenceTransform(xmlsec.transformInclC14NId) < 0 or
-        dsig_ctx.enableReferenceTransform(xmlsec.transformExclC14NId) < 0 or
-        dsig_ctx.enableReferenceTransform(xmlsec.transformSha1Id)     < 0 or
-        dsig_ctx.enableReferenceTransform(xmlsec.transformEnvelopedId)< 0):
+    if (dsig_ctx.enableReferenceTransform(xmlsec.transformInclC14NId()) < 0 or
+        dsig_ctx.enableReferenceTransform(xmlsec.transformExclC14NId()) < 0 or
+        dsig_ctx.enableReferenceTransform(xmlsec.transformSha1Id())     < 0 or
+        dsig_ctx.enableReferenceTransform(xmlsec.transformEnvelopedId())< 0):
         print "Error: failed to limit allowed reference transforms"
         return cleanup(doc, dsig_ctx)
 
     # In addition, limit possible key data to valid X509 certificates only
-    if dsig_ctx.keyInfoReadCtx.enabledKeyData.add(xmlsec.keyDataX509Id) < 0:
+    if dsig_ctx.keyInfoReadCtx.enabledKeyData.add(xmlsec.keyDataX509Id()) < 0:
         print "Error: failed to limit allowed key data"
         return cleanup(doc, dsig_ctx)
 

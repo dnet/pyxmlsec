@@ -27,19 +27,19 @@
 #include "xmlsec.h"
 
 PyObject *xmlsec_Init(PyObject *self, PyObject *args) {
-  return wrap_int(xmlSecInit());
+  return (wrap_int(xmlSecInit()));
 }
 
 PyObject *xmlsec_Shutdown(PyObject *self, PyObject *args) {
-  return wrap_int(xmlSecShutdown());
+  return (wrap_int(xmlSecShutdown()));
 }
 
 PyObject *xmlsec_CheckVersionExact(PyObject *self, PyObject *args) {
-  return wrap_int(xmlSecCheckVersionExact());
+  return (wrap_int(xmlSecCheckVersionExact()));
 }
 
 PyObject *xmlsec_CheckVersion(PyObject *self, PyObject *args) {
-  return wrap_int(xmlSecCheckVersion());
+  return (wrap_int(xmlSecCheckVersion()));
 }
 
 PyObject *xmlsec_CheckVersionExt(PyObject *self, PyObject *args) {
@@ -52,6 +52,5 @@ PyObject *xmlsec_CheckVersionExt(PyObject *self, PyObject *args) {
 		       &major, &minor, &subminor, &mode))
     return NULL;
 
-  return wrap_int(xmlSecCheckVersionExt(major, minor, subminor, mode));
+  return (wrap_int(xmlSecCheckVersionExt(major, minor, subminor, mode)));
 }
- 

@@ -91,7 +91,7 @@ def encrypt_file(xml_file, key_file):
 
     # Create encryption template to encrypt XML file and replace 
     # its content with encryption result
-    enc_data_node = xmlsec.TmplEncData(doc, xmlsec.transformDes3CbcId,
+    enc_data_node = xmlsec.TmplEncData(doc, xmlsec.transformDes3CbcId(),
                                        None, xmlsec.TypeEncElement, None, None)
     if enc_data_node is None:
 	print "Error: failed to create encryption template"
@@ -122,7 +122,7 @@ def encrypt_file(xml_file, key_file):
     # Load DES key, assuming that there is not password
     if not check_filename(key_file):
         cleanup(doc, enc_data_node, enc_ctx)
-    key = xmlsec.keyReadBinaryFile(xmlsec.keyDataDesId, key_file)
+    key = xmlsec.keyReadBinaryFile(xmlsec.keyDataDesId(), key_file)
     if key is None:
         print "Error failed to load DES key from binary file \"%s\"" % key_file
         return cleanup(doc, enc_data_node, enc_ctx)

@@ -144,7 +144,7 @@ def encrypt_file(mngr, xml_file, key_name):
 
     # Create encryption template to encrypt XML file and replace 
     # its content with encryption result
-    enc_data_node = xmlsec.TmplEncData(doc, xmlsec.transformDes3CbcId,
+    enc_data_node = xmlsec.TmplEncData(doc, xmlsec.transformDes3CbcId(),
                                        None, xmlsec.TypeEncElement, None, None)
     if enc_data_node is None:
 	print "Error: failed to create encryption template"
@@ -162,7 +162,7 @@ def encrypt_file(mngr, xml_file, key_name):
         cleanup(doc, enc_data_node)
 
     # Add <enc:EncryptedKey/> to store the encrypted session key
-    enc_key_node = key_info_node.addEncryptedKey(xmlsec.transformRsaOaepId, 
+    enc_key_node = key_info_node.addEncryptedKey(xmlsec.transformRsaOaepId(), 
                                                None, None, None)
     if enc_key_node is None:
 	print "Error: failed to add key info"
@@ -191,7 +191,8 @@ def encrypt_file(mngr, xml_file, key_name):
         cleanup(doc, enc_data_node)
 
     # Generate a Triple DES key
-    key = xmlsec.keyGenerate(xmlsec.keyDataDesId, 192, xmlsec.KeyDataTypeSession)
+    key = xmlsec.keyGenerate(xmlsec.keyDataDesId(), 192,
+                             xmlsec.KeyDataTypeSession)
     if key is None:
         print "Error: failed to generate session DES key"
         cleanup(doc, enc_data_node)

@@ -102,7 +102,7 @@ def encrypt_file(tmpl_file, key_file, data, dataSize):
         return cleanup(doc)
         
     # Load DES key, assuming that there is not password
-    key = xmlsec.keyReadBinaryFile(xmlsec.keyDataDesId, key_file)
+    key = xmlsec.keyReadBinaryFile(xmlsec.keyDataDesId(), key_file)
     if key is None:
         print "Error failed to load DES key from binary file \"%s\"" % key_file
         return cleanup(doc, enc_ctx)

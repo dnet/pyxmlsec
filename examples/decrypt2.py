@@ -103,7 +103,7 @@ def load_des_keys(files, files_size):
             mngr.destroy()
             return None
         # Load DES key
-        key = xmlsec.keyReadBinaryFile(xmlsec.keyDataDesId, file)
+        key = xmlsec.keyReadBinaryFile(xmlsec.keyDataDesId(), file)
         if key is None:
     	    print "Error: failed to load des key from binary file \"%s\"" % file
 	    mngr.destroy()

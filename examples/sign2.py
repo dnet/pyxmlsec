@@ -88,8 +88,8 @@ def sign_file(xml_file, key_file):
         return cleanup(doc)
 
     # Create signature template for RSA-SHA1 enveloped signature
-    signNode = xmlsec.TmplSignature(doc, xmlsec.transformExclC14NId,
-                                    xmlsec.transformRsaSha1Id, None)
+    signNode = xmlsec.TmplSignature(doc, xmlsec.transformExclC14NId(),
+                                    xmlsec.transformRsaSha1Id(), None)
     if signNode is None:
         print "Error: failed to create signature template"
         return cleanup(doc)
@@ -98,14 +98,14 @@ def sign_file(xml_file, key_file):
     doc.getRootElement().addChild(signNode)
 
     # Add reference
-    refNode = signNode.addReference(xmlsec.transformSha1Id,
+    refNode = signNode.addReference(xmlsec.transformSha1Id(),
                                     None, None, None)
     if refNode is None:
         print "Error: failed to add reference to signature template"
         return cleanup(doc)
 
     # Add enveloped transform
-    if refNode.addTransform(xmlsec.transformEnvelopedId) is None:
+    if refNode.addTransform(xmlsec.transformEnvelopedId()) is None:
         print "Error: failed to add enveloped transform to reference"
         return cleanup(doc)
 
