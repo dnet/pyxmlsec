@@ -58,6 +58,7 @@ def main():
     # Create keys manager and load keys
     mngr = load_keys(sys.argv[2:], len(sys.argv) - 2)
 
+    res = 0
     # Verify file
     if mngr is not None:
         res = verify_file(mngr, sys.argv[1])
