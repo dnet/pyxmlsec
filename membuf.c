@@ -2,8 +2,8 @@
  *
  * PyXMLSec - Python bindings for XML Security library (XMLSec)
  *
- * Copyright (C) 2003 Easter-eggs, Valery Febvre
- * http://pyxmlsec.labs.libre-entreprise.org/
+ * Copyright (C) 2003-2004 Easter-eggs, Valery Febvre
+ * http://pyxmlsec.labs.libre-entreprise.org
  * 
  * Author: Valery Febvre <vfebvre@easter-eggs.com>
  *
@@ -24,9 +24,9 @@
 
 #include "wrap_objs.h"
 
+#include "membuf.h"
 #include "transforms.h"
 #include "buffer.h"
-#include "membuf.h"
 
 PyObject *xmlsec_TransformMemBufId(PyObject *self, PyObject *args) {
   return PyCObject_FromVoidPtr((void *) xmlSecTransformMemBufId, NULL);
@@ -36,7 +36,6 @@ PyObject *xmlsec_TransformMemBufGetBuffer(PyObject *self, PyObject *args) {
   PyObject *transform_obj;
   xmlSecTransformPtr transform;
   xmlSecBufferPtr buf;
-  PyObject *ret;
 
   if (!PyArg_ParseTuple(args, "O:transformMemBufGetBuffer", &transform_obj))
     return NULL;
@@ -44,6 +43,5 @@ PyObject *xmlsec_TransformMemBufGetBuffer(PyObject *self, PyObject *args) {
   transform = xmlSecTransformPtr_get(transform_obj);
   buf = xmlSecTransformMemBufGetBuffer(transform);
 
-  ret = PyCObject_FromVoidPtrAndDesc((void *) buf, (char *) "xmlSecBufferPtr", NULL);
-  return (ret);
+  return (wrap_xmlSecBufferPtr(buf));
 }
