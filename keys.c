@@ -44,7 +44,8 @@ static PyObject *xmlSecKeyReq_getattr(PyObject *self, char *attr) {
     return Py_BuildValue("[ssss]", "keyId", "keyType", "keyUsage", "keyBitsSize");
 
   if (!strcmp(attr, "keyId")) {
-    return PyCObject_FromVoidPtrAndDesc((void *) key_req.keyId, (char *) "xmlSecKeyDataId", NULL);;
+    return PyCObject_FromVoidPtrAndDesc((void *) key_req.keyId,
+					(char *) "xmlSecKeyDataId", NULL);
   }
   if (!strcmp(attr, "keyType")) {
     return Py_BuildValue("i", key_req.keyType);
