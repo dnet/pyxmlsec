@@ -527,10 +527,10 @@ PyObject *xmlsec_TmplTransformAddXsltStylesheet(PyObject *self, PyObject *args) 
 PyObject *xmlsec_TmplTransformAddC14NInclNamespaces(PyObject *self, PyObject *args) {
   PyObject *transformNode_obj;
   xmlNodePtr transformNode;
-  const xmlChar *prefixList;
+  const xmlChar *prefixList = NULL;
   int ret;
 
-  if (!PyArg_ParseTuple(args, "Os:tmplTransformAddC14NInclNamespaces",
+  if (!PyArg_ParseTuple(args, "Oz:tmplTransformAddC14NInclNamespaces",
 			&transformNode_obj, &prefixList))
     return NULL;
 
@@ -553,7 +553,8 @@ PyObject *xmlsec_TmplTransformAddXPath(PyObject *self, PyObject *args) {
     return NULL;
 
   transformNode = xmlNodePtr_get(transformNode_obj);
-  PyStringList_AsCharPtrArray(nsList_obj, nsList);
+  if (nsList_obj != Py_None)
+    PyStringList_AsCharPtrArray(nsList_obj, nsList);
 
   ret = xmlSecTmplTransformAddXPath(transformNode, expression,
 				    (const xmlChar **)nsList);
@@ -574,7 +575,8 @@ PyObject *xmlsec_TmplTransformAddXPath2(PyObject *self, PyObject *args) {
     return NULL;
 
   transformNode = xmlNodePtr_get(transformNode_obj);
-  PyStringList_AsCharPtrArray(nsList_obj, nsList);
+  if (nsList_obj != Py_None)
+    PyStringList_AsCharPtrArray(nsList_obj, nsList);
 
   ret = xmlSecTmplTransformAddXPath2(transformNode, type, expression,
 				     (const xmlChar **)nsList);
@@ -594,7 +596,8 @@ PyObject *xmlsec_TmplTransformAddXPointer(PyObject *self, PyObject *args) {
     return NULL;
 
   transformNode = xmlNodePtr_get(transformNode_obj);
-  PyStringList_AsCharPtrArray(nsList_obj, nsList);
+  if (nsList_obj != Py_None)
+    PyStringList_AsCharPtrArray(nsList_obj, nsList);
 
   ret = xmlSecTmplTransformAddXPointer(transformNode, expression,
 				       (const xmlChar **)nsList);

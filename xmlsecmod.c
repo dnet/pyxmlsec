@@ -292,8 +292,8 @@ static PyMethodDef xmlsec_methods[] = {
   {"tmplKeyInfoAddKeyName",              xmlsec_TmplKeyInfoAddKeyName,              METH_VARARGS},
   {"tmplKeyInfoAddKeyValue",             xmlsec_TmplKeyInfoAddKeyValue,             METH_VARARGS},
   {"tmplKeyInfoAddX509Data",             xmlsec_TmplKeyInfoAddX509Data,             METH_VARARGS},
-  {"tmplKeyInfoAddRetrievalMethod",      xmlsec_TmplKeyInfoAddRetrievalMethod,      METH_VARARGS},
-  {"tmplRetrievalMethodAddTransform",    xmlsec_TmplRetrievalMethodAddTransform,    METH_VARARGS},
+  {"tmplKeyInfoAddRetrievalMethod",      xmlsec_TmplKeyInfoAddRetrievalMethod,      METH_VARARGS}, // New
+  {"tmplRetrievalMethodAddTransform",    xmlsec_TmplRetrievalMethodAddTransform,    METH_VARARGS}, // New
   {"tmplKeyInfoAddEncryptedKey",         xmlsec_TmplKeyInfoAddEncryptedKey,         METH_VARARGS},
   {"tmplTransformAddHmacOutputLength",   xmlsec_TmplTransformAddHmacOutputLength,   METH_VARARGS}, // New
   {"tmplTransformAddRsaOaepParam",       xmlsec_TmplTransformAddRsaOaepParam,       METH_VARARGS}, // New
