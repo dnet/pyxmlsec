@@ -16,8 +16,6 @@ PyObject *wrap_xmlSecDSigReferenceCtxPtr(xmlSecDSigReferenceCtxPtr ctx);
 
 PyObject *xmlSecDSigCtx_getattr(PyObject *self, PyObject *args);
 PyObject *xmlSecDSigCtx_setattr(PyObject *self, PyObject *args);
-PyObject *xmlSecDSigReferenceCtx_getattr(PyObject *self, PyObject *args);
-PyObject *xmlSecDSigReferenceCtx_setattr(PyObject *self, PyObject *args);
 
 PyObject *xmlsec_DSigCtxCreate(PyObject *self, PyObject *args);
 PyObject *xmlsec_DSigCtxDestroy(PyObject *self, PyObject *args);
@@ -30,6 +28,9 @@ PyObject *xmlsec_DSigCtxEnableSignatureTransform(PyObject *self, PyObject *args)
 PyObject *xmlsec_DSigCtxGetPreSignBuffer(PyObject *self, PyObject *args);
 PyObject *xmlsec_DSigCtxDebugDump(PyObject *self, PyObject *args);
 PyObject *xmlsec_DSigCtxDebugXmlDump(PyObject *self, PyObject *args);
+
+PyObject *xmlSecDSigReferenceCtx_getattr(PyObject *self, PyObject *args);
+PyObject *xmlSecDSigReferenceCtx_setattr(PyObject *self, PyObject *args);
 
 PyObject *xmlsec_DSigReferenceCtxCreate(PyObject *self, PyObject *args);
 PyObject *xmlsec_DSigReferenceCtxDestroy(PyObject *self, PyObject *args);

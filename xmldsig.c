@@ -57,6 +57,8 @@ PyObject *wrap_xmlSecDSigReferenceCtxPtr(xmlSecDSigReferenceCtxPtr ctx) {
 }
 
 /******************************************************************************/
+/* DSigCtx                                                                    */
+/******************************************************************************/
 
 PyObject *xmlSecDSigCtx_getattr(PyObject *self, PyObject *args) {
   PyObject *dsigCtx_obj;
@@ -79,8 +81,8 @@ PyObject *xmlSecDSigCtx_getattr(PyObject *self, PyObject *args) {
 			 "signMethod", "c14nMethod", "preSignMemBufMethod",
 			 "signValueNode", "id", "signedInfoReferences",
 			 "manifestReferences");
-  if (!strcmp(attr, "flags")) return (wrap_int((dsigCtx->flags)));
-  if (!strcmp(attr, "flags2")) return (wrap_int((dsigCtx->flags2)));
+  if (!strcmp(attr, "flags")) return (wrap_int(dsigCtx->flags));
+  if (!strcmp(attr, "flags2")) return (wrap_int(dsigCtx->flags2));
   if (!strcmp(attr, "keyInfoReadCtx"))
     return (wrap_xmlSecKeyInfoCtxPtr(&(dsigCtx->keyInfoReadCtx)));
   if (!strcmp(attr, "keyInfoWriteCtx"))
@@ -88,28 +90,28 @@ PyObject *xmlSecDSigCtx_getattr(PyObject *self, PyObject *args) {
   if (!strcmp(attr, "transformCtx"))
     return (wrap_xmlSecTransformCtxPtr(&(dsigCtx->transformCtx)));
   if (!strcmp(attr, "enabledReferenceUris"))
-    return (wrap_int((dsigCtx->enabledReferenceUris)));
+    return (wrap_int(dsigCtx->enabledReferenceUris));
   if (!strcmp(attr, "enabledReferenceTransforms"))
-    return (wrap_xmlSecPtrListPtr((dsigCtx->enabledReferenceTransforms)));
+    return (wrap_xmlSecPtrListPtr(dsigCtx->enabledReferenceTransforms));
   if (!strcmp(attr, "defSignMethodId"))
-    return (PyCObject_FromVoidPtr((void *) dsigCtx->defSignMethodId, NULL));
+    return (wrap_xmlSecTransformId(dsigCtx->defSignMethodId));
   if (!strcmp(attr, "defC14NMethodId"))
-    return (PyCObject_FromVoidPtr((void *) dsigCtx->defC14NMethodId, NULL));
+    return (wrap_xmlSecTransformId(dsigCtx->defC14NMethodId));
   if (!strcmp(attr, "defDigestMethodId"))
-    return (PyCObject_FromVoidPtr((void *) dsigCtx->defDigestMethodId, NULL));
+    return (wrap_xmlSecTransformId(dsigCtx->defDigestMethodId));
   if (!strcmp(attr, "signKey")) return (wrap_xmlSecKeyPtr(dsigCtx->signKey));
-  if (!strcmp(attr, "operation")) return (wrap_int((dsigCtx->operation)));
-  if (!strcmp(attr, "result")) return (wrap_xmlSecBufferPtr((dsigCtx->result)));
-  if (!strcmp(attr, "status")) return (wrap_int((dsigCtx->status)));
+  if (!strcmp(attr, "operation")) return (wrap_int(dsigCtx->operation));
+  if (!strcmp(attr, "result")) return (wrap_xmlSecBufferPtr(dsigCtx->result));
+  if (!strcmp(attr, "status")) return (wrap_int(dsigCtx->status));
   if (!strcmp(attr, "signMethod"))
-    return (wrap_xmlSecTransformPtr((dsigCtx->signMethod)));
+    return (wrap_xmlSecTransformPtr(dsigCtx->signMethod));
   if (!strcmp(attr, "c14nMethod"))
-    return (wrap_xmlSecTransformPtr((dsigCtx->c14nMethod)));
+    return (wrap_xmlSecTransformPtr(dsigCtx->c14nMethod));
   if (!strcmp(attr, "preSignMemBufMethod"))
-    return (wrap_xmlSecTransformPtr((dsigCtx->preSignMemBufMethod)));
+    return (wrap_xmlSecTransformPtr(dsigCtx->preSignMemBufMethod));
   if (!strcmp(attr, "signValueNode"))
-    return (wrap_xmlNodePtr((dsigCtx->signValueNode)));
-  if (!strcmp(attr, "id")) return (wrap_xmlCharPtr((dsigCtx->id)));
+    return (wrap_xmlNodePtr(dsigCtx->signValueNode));
+  if (!strcmp(attr, "id")) return (wrap_xmlCharPtr(dsigCtx->id));
   if (!strcmp(attr, "signedInfoReferences"))
     return (wrap_xmlSecPtrListPtr(&(dsigCtx->signedInfoReferences)));
   if (!strcmp(attr, "manifestReferences"))
@@ -144,11 +146,11 @@ PyObject *xmlSecDSigCtx_setattr(PyObject *self, PyObject *args) {
   else if (!strcmp(name, "enabledReferenceTransforms"))
     dsigCtx->enabledReferenceTransforms = xmlSecPtrListPtr_get(value_obj);
   else if (!strcmp(name, "defSignMethodId"))
-    dsigCtx->defSignMethodId = PyCObject_AsVoidPtr(value_obj);
+    dsigCtx->defSignMethodId = PyCObject_AsVoidPtr(value_obj); // FIXME
   else if (!strcmp(name, "defC14NMethodId"))
-    dsigCtx->defC14NMethodId = PyCObject_AsVoidPtr(value_obj);
+    dsigCtx->defC14NMethodId = PyCObject_AsVoidPtr(value_obj); // FIXME
   else if (!strcmp(name, "defDigestMethodId"))
-    dsigCtx->defDigestMethodId = PyCObject_AsVoidPtr(value_obj);
+    dsigCtx->defDigestMethodId = PyCObject_AsVoidPtr(value_obj); // FIXME
   else if (!strcmp(name, "signKey"))
     dsigCtx->signKey = xmlSecKeyPtr_get(value_obj);
   else if (!strcmp(name, "operation"))
@@ -171,64 +173,6 @@ PyObject *xmlSecDSigCtx_setattr(PyObject *self, PyObject *args) {
     dsigCtx->signedInfoReferences = *(xmlSecPtrListPtr_get(value_obj));
   else if (!strcmp(name, "manifestReferences"))
     dsigCtx->manifestReferences = *(xmlSecPtrListPtr_get(value_obj));
-
-  Py_INCREF(Py_None);
-  return (Py_None);
-}
-
-PyObject *xmlSecDSigReferenceCtx_getattr(PyObject *self, PyObject *args) {
-  PyObject *dsigRefCtx_obj;
-  xmlSecDSigReferenceCtxPtr dsigRefCtx;
-  const char *attr;
-
-  if (!PyArg_ParseTuple(args, "Os:dsigReferenceCtxGetAttr",
-			&dsigRefCtx_obj, &attr))
-    return NULL;
-
-  dsigRefCtx = xmlSecDSigReferenceCtxPtr_get(dsigRefCtx_obj);
-
-  if (!strcmp(attr, "__members__"))
-    return Py_BuildValue("[ssssssssss]", "dsigCtx",
-			 "origin", "transformCtx", "digestMethod",
-			 "result", "status", "preDigestMemBufMethod",
-			 "id", "uri", "type");
-  if (!strcmp(attr, "dsigCtx"))
-    return (wrap_xmlSecDSigCtxPtr(dsigRefCtx->dsigCtx));
-  if (!strcmp(attr, "origin")) return (wrap_int(dsigRefCtx->origin));
-  if (!strcmp(attr, "transformCtx"))
-    return (wrap_xmlSecTransformCtxPtr(&(dsigRefCtx->transformCtx)));
-  if (!strcmp(attr, "digestMethod"))
-    return (wrap_xmlSecTransformPtr(dsigRefCtx->digestMethod));
-  if (!strcmp(attr, "result")) return (wrap_xmlSecBufferPtr(dsigRefCtx->result));
-  if (!strcmp(attr, "status")) return (wrap_int((dsigRefCtx->status)));
-  if (!strcmp(attr, "preDigestMemBufMethod"))
-    return (wrap_xmlSecTransformPtr((dsigRefCtx->preDigestMemBufMethod)));
-  if (!strcmp(attr, "id")) return (wrap_xmlCharPtr((dsigRefCtx->id)));
-  if (!strcmp(attr, "uri")) return (wrap_xmlCharPtr((dsigRefCtx->uri)));
-  if (!strcmp(attr, "type")) return (wrap_xmlCharPtr((dsigRefCtx->type)));
-  Py_INCREF(Py_None);
-  return (Py_None);
-}
-
-PyObject *xmlSecDSigReferenceCtx_setattr(PyObject *self, PyObject *args) {
-  PyObject *dsigRefCtx_obj, *value_obj;
-  xmlSecDSigReferenceCtxPtr dsigRefCtx;
-  const char *name;
-
-  if (!PyArg_ParseTuple(args, "OsO:dsigReferenceCtxSetAttr",
-			&dsigRefCtx_obj, &name, &value_obj))
-    return NULL;
-
-  dsigRefCtx = xmlSecDSigReferenceCtxPtr_get(dsigRefCtx_obj);
-    
-  if (!strcmp(name, "dsigCtx"))
-    dsigRefCtx->dsigCtx = xmlSecDSigCtxPtr_get(value_obj);
-  else if (!strcmp(name, "origin"))
-    dsigRefCtx->origin = PyInt_AsLong(value_obj);
-  else if (!strcmp(name, "transformCtx"))
-    dsigRefCtx->transformCtx = *(xmlSecTransformCtxPtr_get(value_obj));
-  else if (!strcmp(name, "digestMethod"))
-    dsigRefCtx->digestMethod = xmlSecTransformPtr_get(value_obj);
 
   Py_INCREF(Py_None);
   return (Py_None);
@@ -329,32 +273,41 @@ PyObject *xmlsec_DSigCtxVerify(PyObject *self, PyObject *args) {
 }
 
 PyObject *xmlsec_DSigCtxEnableReferenceTransform(PyObject *self, PyObject *args) {
-  PyObject *dsigCtx_obj, *transformId_meth;
+  PyObject *dsigCtx_obj, *transformId_obj;
   xmlSecDSigCtxPtr dsigCtx;
+  //xmlSecTransformId transformId;
   int ret;
 
   if (!PyArg_ParseTuple(args, "OO:dsigCtxEnableReferenceTransform",
-			&dsigCtx_obj, &transformId_meth))
+			&dsigCtx_obj, &transformId_obj))
     return NULL;
 
   dsigCtx = xmlSecDSigCtxPtr_get(dsigCtx_obj);
+  // FIXME
+  //transformId = xmlSecTransformId_get(transformId_obj);
+  //ret = xmlSecDSigCtxEnableReferenceTransform(dsigCtx, transformId);
   ret = xmlSecDSigCtxEnableReferenceTransform(dsigCtx,
-					      PyCObject_AsVoidPtr(transformId_meth));
+					      PyCObject_AsVoidPtr(transformId_obj));
+
   return (wrap_int(ret));
 }
 
 PyObject *xmlsec_DSigCtxEnableSignatureTransform(PyObject *self, PyObject *args) {
-  PyObject *dsigCtx_obj, *transformId_meth;
+  PyObject *dsigCtx_obj, *transformId_obj;
   xmlSecDSigCtxPtr dsigCtx;
+  //xmlSecTransformId transformId;
   int ret;
 
   if (!PyArg_ParseTuple(args, "OO:dsigCtxEnableSignatureTransform",
-			&dsigCtx_obj, &transformId_meth))
+			&dsigCtx_obj, &transformId_obj))
     return NULL;
 
   dsigCtx = xmlSecDSigCtxPtr_get(dsigCtx_obj);
+  // FIXME
+  //transformId = xmlSecTransformId_get(transformId_obj);
+  //ret = xmlSecDSigCtxEnableSignatureTransform(dsigCtx, transformId);
   ret = xmlSecDSigCtxEnableSignatureTransform(dsigCtx,
-					      PyCObject_AsVoidPtr(transformId_meth));
+					      PyCObject_AsVoidPtr(transformId_obj));
 
   return (wrap_int(ret));
 }
@@ -404,6 +357,82 @@ PyObject *xmlsec_DSigCtxDebugXmlDump(PyObject *self, PyObject *args) {
   Py_INCREF(Py_None);
   return (Py_None);
 }
+
+/*******************************************************************************/
+/* DSigCtxReference                                                            */
+/*******************************************************************************/
+
+PyObject *xmlSecDSigReferenceCtx_getattr(PyObject *self, PyObject *args) {
+  PyObject *dsigRefCtx_obj;
+  xmlSecDSigReferenceCtxPtr dsigRefCtx;
+  const char *attr;
+
+  if (!PyArg_ParseTuple(args, "Os:dsigReferenceCtxGetAttr",
+			&dsigRefCtx_obj, &attr))
+    return NULL;
+
+  dsigRefCtx = xmlSecDSigReferenceCtxPtr_get(dsigRefCtx_obj);
+
+  if (!strcmp(attr, "__members__"))
+    return Py_BuildValue("[ssssssssss]", "dsigCtx",
+			 "origin", "transformCtx", "digestMethod",
+			 "result", "status", "preDigestMemBufMethod",
+			 "id", "uri", "type");
+  if (!strcmp(attr, "dsigCtx"))
+    return (wrap_xmlSecDSigCtxPtr(dsigRefCtx->dsigCtx));
+  if (!strcmp(attr, "origin")) return (wrap_int(dsigRefCtx->origin));
+  if (!strcmp(attr, "transformCtx"))
+    return (wrap_xmlSecTransformCtxPtr(&(dsigRefCtx->transformCtx)));
+  if (!strcmp(attr, "digestMethod"))
+    return (wrap_xmlSecTransformPtr(dsigRefCtx->digestMethod));
+  if (!strcmp(attr, "result")) return (wrap_xmlSecBufferPtr(dsigRefCtx->result));
+  if (!strcmp(attr, "status")) return (wrap_int((dsigRefCtx->status)));
+  if (!strcmp(attr, "preDigestMemBufMethod"))
+    return (wrap_xmlSecTransformPtr((dsigRefCtx->preDigestMemBufMethod)));
+  if (!strcmp(attr, "id")) return (wrap_xmlCharPtr((dsigRefCtx->id)));
+  if (!strcmp(attr, "uri")) return (wrap_xmlCharPtr((dsigRefCtx->uri)));
+  if (!strcmp(attr, "type")) return (wrap_xmlCharPtr((dsigRefCtx->type)));
+  Py_INCREF(Py_None);
+  return (Py_None);
+}
+
+PyObject *xmlSecDSigReferenceCtx_setattr(PyObject *self, PyObject *args) {
+  PyObject *dsigRefCtx_obj, *value_obj;
+  xmlSecDSigReferenceCtxPtr dsigRefCtx;
+  const char *name;
+
+  if (!PyArg_ParseTuple(args, "OsO:dsigReferenceCtxSetAttr",
+			&dsigRefCtx_obj, &name, &value_obj))
+    return NULL;
+
+  dsigRefCtx = xmlSecDSigReferenceCtxPtr_get(dsigRefCtx_obj);
+    
+  if (!strcmp(name, "dsigCtx"))
+    dsigRefCtx->dsigCtx = xmlSecDSigCtxPtr_get(value_obj);
+  else if (!strcmp(name, "origin"))
+    dsigRefCtx->origin = PyInt_AsLong(value_obj);
+  else if (!strcmp(name, "transformCtx"))
+    dsigRefCtx->transformCtx = *(xmlSecTransformCtxPtr_get(value_obj));
+  else if (!strcmp(name, "digestMethod"))
+    dsigRefCtx->digestMethod = xmlSecTransformPtr_get(value_obj);
+  else if (!strcmp(name, "result"))
+    dsigRefCtx->result = xmlSecBufferPtr_get(value_obj);
+  else if (!strcmp(name, "status"))
+    dsigRefCtx->status = PyInt_AsLong(value_obj);
+  else if (!strcmp(name, "preDigestMemBufMethod"))
+    dsigRefCtx->preDigestMemBufMethod = xmlSecTransformPtr_get(value_obj);
+  else if (!strcmp(name, "id"))
+    dsigRefCtx->id = PyString_AsString(value_obj);
+  else if (!strcmp(name, "uri"))
+    dsigRefCtx->uri = PyString_AsString(value_obj);
+  else if (!strcmp(name, "type"))
+    dsigRefCtx->type = PyString_AsString(value_obj);
+
+  Py_INCREF(Py_None);
+  return (Py_None);
+}
+
+/*******************************************************************************/
 
 PyObject *xmlsec_DSigReferenceCtxCreate(PyObject *self, PyObject *args) {
   PyObject *dsigCtx_obj;
