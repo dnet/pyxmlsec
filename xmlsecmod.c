@@ -301,12 +301,10 @@ static PyMethodDef xmlsec_methods[] = {
   {"dsigReferenceCtxDebugDump",          xmlsec_DSigReferenceCtxDebugDump,          METH_VARARGS},
   {"dsigReferenceCtxDebugXmlDump",       xmlsec_DSigReferenceCtxDebugXmlDump,       METH_VARARGS},
   {"dsigReferenceCtxListId",             xmlsec_DSigReferenceCtxListId,             METH_VARARGS},
-  /* TODO */
-  {"dsigCtxSetSignKey",                  xmldsig_set_signKey,                       METH_VARARGS},
 
   /* xmlenc.h */
-  {"encCtxGetAttr", xmlSecEncCtx_getattr, METH_VARARGS}, // New
-  {"encCtxSetAttr", xmlSecEncCtx_setattr, METH_VARARGS}, // New
+  {"encCtxGetAttr", xmlSecEncCtx_getattr, METH_VARARGS},
+  {"encCtxSetAttr", xmlSecEncCtx_setattr, METH_VARARGS},
   {"encCtxCreate",                 xmlsec_EncCtxCreate,            METH_VARARGS},
   {"encCtxDestroy",                xmlsec_EncCtxDestroy,           METH_VARARGS},
   {"encCtxInitialize",             xmlsec_EncCtxInitialize,        METH_VARARGS},
