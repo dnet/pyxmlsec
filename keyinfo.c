@@ -51,8 +51,12 @@ PyObject *xmlSecKeyInfoCtx_getattr(PyObject *self, PyObject *args) {
   xmlSecKeyInfoCtxPtr keyInfoCtx;
   const char *attr;
 
-  if (!PyArg_ParseTuple(args, "Os:keyInfoCtxGetAttr", &keyInfoCtx_obj, &attr))
-    return NULL;
+  if (CheckArgs(args, "OS:keyInfoCtxGetAttr")) {
+    if (!PyArg_ParseTuple(args, "Os:keyInfoCtxGetAttr", &keyInfoCtx_obj,
+			  &attr))
+      return NULL;
+  }
+  else return NULL;
 
   keyInfoCtx = xmlSecKeyInfoCtxPtr_get(keyInfoCtx_obj);
 
@@ -104,9 +108,12 @@ PyObject *xmlSecKeyInfoCtx_setattr(PyObject *self, PyObject *args) {
   xmlSecKeyInfoCtxPtr keyInfoCtx;
   const char *name;
 
-  if (!PyArg_ParseTuple(args, "OsO:keyInfoCtxSetAttr",
-			&keyInfoCtx_obj, &name, &value_obj))
-    return NULL;
+  if (CheckArgs(args, "OS?:keyInfoCtxSetAttr")) {
+    if (!PyArg_ParseTuple(args, "OsO:keyInfoCtxSetAttr",
+			  &keyInfoCtx_obj, &name, &value_obj))
+      return NULL;
+  }
+  else return NULL;
 
   keyInfoCtx = xmlSecKeyInfoCtxPtr_get(keyInfoCtx_obj);
     

@@ -90,6 +90,10 @@ int CheckArgs(PyObject *args, char *format) {
 	return 0;
       }
     }
+    /* type is variable */
+    else if (format[i] == '?') {
+      continue;
+    }
   }
 
   return 1;

@@ -107,36 +107,38 @@ PyObject *xmlsec_Base64CtxFinalize(PyObject *self, PyObject *args) {
   return (Py_None);
 }
 
+/* FIXME */
 PyObject *xmlsec_Base64CtxUpdate(PyObject *self, PyObject *args) {
-  PyObject *ctx_obj, *out_obj;
+  PyObject *ctx_obj;
   xmlSecBase64CtxPtr ctx;
   const xmlSecByte *in;
   xmlSecSize inSize;
+  xmlSecByte *out;
   xmlSecSize outSize;
 
-  if (CheckArgs(args, "OSIOI:base64CtxUpdate")) {
-    if (!PyArg_ParseTuple(args, "OsiOi:base64CtxUpdate", &ctx_obj,
-			  &in, &inSize, &out_obj, &outSize))
-    return NULL;
+  if (CheckArgs(args, "OSISI:base64CtxUpdate")) {
+    if (!PyArg_ParseTuple(args, "Osisi:base64CtxUpdate", &ctx_obj,
+			  &in, &inSize, &out, &outSize))
+      return NULL;
   }
   else return NULL;
 
   ctx = xmlSecBase64CtxPtr_get(ctx_obj);
 
-  return (wrap_int(xmlSecBase64CtxUpdate(ctx, in, inSize,
-					 (xmlSecByte *)out_obj, outSize)));
+  return (wrap_int(xmlSecBase64CtxUpdate(ctx, in, inSize, out, outSize)));
 }
 
+/* FIXME */
 PyObject *xmlsec_Base64CtxFinal(PyObject *self, PyObject *args) {
   PyObject *ctx_obj;
   xmlSecBase64CtxPtr ctx;
   xmlSecByte *out;
   xmlSecSize outSize;
 
-  if (CheckArgs(args, "OS:base64CtxFinal")) {
-    if (!PyArg_ParseTuple(args, "Os#:base64CtxFinal",
+  if (CheckArgs(args, "OSI:base64CtxFinal")) {
+    if (!PyArg_ParseTuple(args, "Osi:base64CtxFinal",
 			  &ctx_obj, &out, &outSize))
-    return NULL;
+      return NULL;
   }
   else return NULL;
 
@@ -149,6 +151,7 @@ PyObject *xmlsec_Base64Encode(PyObject *self, PyObject *args) {
   const xmlSecByte *buf;
   xmlSecSize len;
   int columns;
+  xmlChar *strEnc;
 
   if (CheckArgs(args, "SII:base64Encode")) {
     if (!PyArg_ParseTuple(args, "sii:base64Encode", &buf, &len, &columns))
@@ -156,19 +159,39 @@ PyObject *xmlsec_Base64Encode(PyObject *self, PyObject *args) {
   }
   else return NULL;
 
-  return (wrap_xmlCharPtr(xmlSecBase64Encode(buf, len, columns)));
+  strEnc = xmlSecBase64Encode(buf, len, columns);
+
+  if (strEnc != NULL)
+    return (PyString_FromStringAndSize(strEnc, strlen(strEnc)));
+  else {
+    Py_INCREF(Py_None);
+    return (Py_None);
+  }
 }
 
 PyObject *xmlsec_Base64Decode(PyObject *self, PyObject *args) {
-  const xmlChar* str;
-  xmlSecByte *buf;
+  const xmlChar* strEnc;
+  xmlSecByte *strDec;
   xmlSecSize len;
+  PyObject *ret = NULL;
 
-  if (CheckArgs(args, "SS:base64Decode")) {
-    if (!PyArg_ParseTuple(args, "ss#:base64Decode", &str, &buf, &len))
+  if (CheckArgs(args, "S:base64Decode")) {
+    if (!PyArg_ParseTuple(args, "s:base64Decode", &strEnc))
       return NULL;
   }
   else return NULL;
 
-  return (wrap_int(xmlSecBase64Decode(str, buf, len)));
+  strDec = (xmlSecByte *) xmlMalloc(strlen(strEnc)*2);
+
+  len = xmlSecBase64Decode(strEnc, strDec, strlen(strEnc) * 2);
+
+  if (len >= 0 && strDec != NULL)
+    ret = PyString_FromStringAndSize(strDec, len);
+  else {
+    Py_INCREF(Py_None);
+    ret = Py_None;
+  }
+
+  xmlFree(strDec);
+  return (ret);
 }

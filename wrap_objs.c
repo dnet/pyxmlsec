@@ -30,9 +30,11 @@ PyObject *wrap_int(int val) {
 PyObject *wrap_charPtr(char *str) {
   PyObject *ret;
 
-  if (str == NULL) return NULL;
-
-  ret = Py_BuildValue("s", str);
+  if (str == NULL) {
+    Py_INCREF(Py_None);
+    return (Py_None);
+  }
+  ret = PyString_FromString(str);
   /* deallocation */
   free (str);
 
@@ -146,6 +148,7 @@ PyObject *wrap_xmlSecBytePtr(xmlSecByte *str) {
     return (Py_None);
   }
   ret = PyString_FromString(str);
+  xmlFree(str);
   return (ret);
 }
 

@@ -45,8 +45,11 @@ PyObject *xmlSecBuffer_getattr(PyObject *self, PyObject *args) {
   xmlSecBufferPtr buf;
   const char *attr;
 
-  if (!PyArg_ParseTuple(args, "Os:bufferGetAttr", &buf_obj, &attr))
-    return NULL;
+  if (CheckArgs(args, "OS:bufferGetAttr")) {
+    if (!PyArg_ParseTuple(args, "Os:bufferGetAttr", &buf_obj, &attr))
+      return NULL;
+  }
+  else return NULL;
 
   buf = xmlSecBufferPtr_get(buf_obj);
 
@@ -70,9 +73,12 @@ PyObject *xmlSecBuffer_setattr(PyObject *self, PyObject *args) {
   xmlSecBufferPtr buf;
   const char *name;
 
-  if (!PyArg_ParseTuple(args, "OsO:bufferSetAttr",
-			&buf_obj, &name, &value_obj))
-    return NULL;
+  if (CheckArgs(args, "OS?:bufferSetAttr")) {
+    if (!PyArg_ParseTuple(args, "OsO:bufferSetAttr",
+			  &buf_obj, &name, &value_obj))
+      return NULL;
+  }
+  else return NULL;
 
   buf = xmlSecBufferPtr_get(buf_obj);
     
