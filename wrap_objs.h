@@ -55,6 +55,8 @@ typedef struct {
 
 extern PyObject *xmlsec_error;
 
+#define HASH_TABLE_SIZE 10
+
 /* wrap functions */
 
 PyObject *wrap_int(int val);

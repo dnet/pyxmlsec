@@ -334,9 +334,9 @@ PyObject *xmlsec_PtrListIsValid(PyObject *self, PyObject *args) {
 
 /*****************************************************************************/
 
-static xmlHashTablePtr PtrListIdDuplicateItemMethods = NULL;
-static xmlHashTablePtr PtrListIdDestroyItemMethods   = NULL;
-static xmlHashTablePtr PtrListIdDebugDumpItemMethods = NULL;
+static xmlHashTablePtr PtrDuplicateItemMethods = NULL;
+static xmlHashTablePtr PtrDestroyItemMethods   = NULL;
+static xmlHashTablePtr PtrDebugDumpItemMethods = NULL;
 
 static xmlSecPtr xmlsec_PtrDuplicateItemMethod(xmlSecPtr ptr) {
   xmlSecPtrListPtr list;
@@ -344,7 +344,7 @@ static xmlSecPtr xmlsec_PtrDuplicateItemMethod(xmlSecPtr ptr) {
   PyObject *func = NULL;
 
   list = (xmlSecPtrListPtr) ptr;
-  func = xmlHashLookup(PtrListIdDestroyItemMethods, list->id->name);
+  func = xmlHashLookup(PtrDestroyItemMethods, list->id->name);
 
   args = Py_BuildValue((char *) "O", wrap_xmlSecPtr(ptr));
 
@@ -363,7 +363,7 @@ static void xmlsec_PtrDestroyItemMethod(xmlSecPtr ptr) {
   PyObject *func = NULL;
 
   list = (xmlSecPtrListPtr) ptr;
-  func = xmlHashLookup(PtrListIdDestroyItemMethods, list->id->name);
+  func = xmlHashLookup(PtrDestroyItemMethods, list->id->name);
 
   args = Py_BuildValue((char *) "O", wrap_xmlSecPtr(ptr));
 
@@ -382,7 +382,7 @@ static void xmlsec_PtrDebugDumpItemMethod(xmlSecPtr ptr, FILE *output) {
   PyObject *func = NULL;
 
   list = (xmlSecPtrListPtr) ptr;
-  func = xmlHashLookup(PtrListIdDebugDumpItemMethods, list->id->name);
+  func = xmlHashLookup(PtrDebugDumpItemMethods, list->id->name);
 
   args = Py_BuildValue((char *) "OO", wrap_xmlSecPtr(ptr),
 		       PyFile_FromFile(output, NULL, NULL, NULL));
@@ -407,16 +407,16 @@ PyObject *xmlsec_PtrListIdCreate(PyObject *self, PyObject *args) {
 		       &debugXmlDumpItem_obj))
     return NULL;
   
-  if (PtrListIdDuplicateItemMethods == NULL)
-    PtrListIdDuplicateItemMethods = xmlHashCreate(10);
-  if (PtrListIdDestroyItemMethods == NULL)
-    PtrListIdDestroyItemMethods = xmlHashCreate(10);
-  if (PtrListIdDebugDumpItemMethods == NULL)
-    PtrListIdDebugDumpItemMethods = xmlHashCreate(10);
-  xmlHashAddEntry(PtrListIdDuplicateItemMethods, name, duplicateItem_obj);
-  xmlHashAddEntry(PtrListIdDestroyItemMethods,   name, destroyItem_obj);
-  xmlHashAddEntry(PtrListIdDebugDumpItemMethods, name, debugDumpItem_obj);
-  xmlHashAddEntry(PtrListIdDebugDumpItemMethods, name, debugXmlDumpItem_obj);
+  if (PtrDuplicateItemMethods == NULL)
+    PtrDuplicateItemMethods = xmlHashCreate(HASH_TABLE_SIZE);
+  if (PtrDestroyItemMethods == NULL)
+    PtrDestroyItemMethods = xmlHashCreate(HASH_TABLE_SIZE);
+  if (PtrDebugDumpItemMethods == NULL)
+    PtrDebugDumpItemMethods = xmlHashCreate(HASH_TABLE_SIZE);
+  xmlHashAddEntry(PtrDuplicateItemMethods, name, duplicateItem_obj);
+  xmlHashAddEntry(PtrDestroyItemMethods,   name, destroyItem_obj);
+  xmlHashAddEntry(PtrDebugDumpItemMethods, name, debugDumpItem_obj);
+  xmlHashAddEntry(PtrDebugDumpItemMethods, name, debugXmlDumpItem_obj);
 
   listId = (xmlSecPtrListId) xmlMalloc(sizeof(xmlSecPtrListKlass));
   listId->name = name;

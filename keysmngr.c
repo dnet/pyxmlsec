@@ -113,7 +113,7 @@ PyObject *xmlSecKeysMngr_setattr(PyObject *self, PyObject *args) {
   else if (!strcmp(name, "getKey")) {
     if (value_obj != Py_None) {
       if (GetKeyCallbacks == NULL)
-	GetKeyCallbacks = xmlHashCreate(10);
+	GetKeyCallbacks = xmlHashCreate(HASH_TABLE_SIZE);
       xmlHashAddEntry(GetKeyCallbacks,
 		      mngr->keysStore->id->name, value_obj);
       Py_XINCREF(value_obj);
@@ -383,11 +383,11 @@ PyObject *keysmngr_KeyStoreIdCreate(PyObject *self, PyObject *args) {
     return NULL;
   
   if (KeyStoreInitializeMethods == NULL && initialize_obj != Py_None)
-    KeyStoreInitializeMethods = xmlHashCreate(10);
+    KeyStoreInitializeMethods = xmlHashCreate(HASH_TABLE_SIZE);
   if (KeyStoreFinalizeMethods == NULL && finalize_obj != Py_None)
-    KeyStoreFinalizeMethods = xmlHashCreate(10);
+    KeyStoreFinalizeMethods = xmlHashCreate(HASH_TABLE_SIZE);
   if (KeyStoreFindKeyMethods == NULL && findKey_obj != Py_None)
-    KeyStoreFindKeyMethods = xmlHashCreate(10);
+    KeyStoreFindKeyMethods = xmlHashCreate(HASH_TABLE_SIZE);
 
   if (initialize_obj != Py_None)
     xmlHashAddEntry(KeyStoreInitializeMethods, name, initialize_obj);
