@@ -1,5 +1,57 @@
+2004-01-20  Valery Febvre  <vfebvre@easter-eggs.com>
+	* xmlsec.py:
+	Added 9 functions: keyDataIdsGet, keyDataIdsInit, keyDataIdsShutdown,
+	keyDataIdsRegisterDefault, keyDataIdsRegister, keyDataXmlRead,
+	keyDataXmlWrite, keyDataBinRead, keyDataBinWrite
+	Added new class KeyData with methods: destroy, duplicate, generate,
+	getType, getSize, getIdentifier, debugDump, debugXmlDump, getName,
+	isValid, checkId, checkUsage, checkSize
+	Added new class KeyDataId with method: getName
+
+	* xmlsecmod.c:
+	Added methods keyDataIdsGet, keyDataIdsInit, keyDataIdsShutdown,
+	keyDataIdsRegisterDefault, keyDataIdsRegister, keyDataGetAttr,
+	keyDataSetAttr, keyDataCreate, keyDataDuplicate, keyDataDestroy,
+	keyDataGenerate, keyDataGetType, keyDataGetSize, keyDataGetIdentifier,
+	keyDataDebugDump, keyDataDebugXmlDump, keyDataXmlRead, keyDataXmlWrite,
+	keyDataBinRead, keyDataBinWrite, keyDataGetName, keyDataIsValid,
+	keyDataCheckId, keyDataCheckUsage, keyDataCheckSize, keyDataIdCreate,
+	keyDataIdGetName in xmlsec_methods[]
+
+	* keysdata.c, keysdata.h:
+	Added functions xmlSecKeyDataId_get, wrap_xmlSecKeyDataId,
+	xmlsec_KeyDataIdsGet, xmlsec_KeyDataIdsInit, xmlsec_KeyDataIdsShutdown,
+	xmlsec_KeyDataIdsRegisterDefault, xmlsec_KeyDataIdsRegister,
+	xmlSecKeyData_getattr, xmlSecKeyData_setattr, xmlsec_KeyDataCreate,
+	xmlsec_KeyDataDuplicate, xmlsec_KeyDataDestroy, xmlsec_KeyDataGenerate,
+	xmlsec_KeyDataGetType, xmlsec_KeyDataGetSize,
+	xmlsec_KeyDataGetIdentifier, xmlsec_KeyDataDebugDump,
+	xmlsec_KeyDataDebugXmlDump, xmlsec_KeyDataXmlRead,
+	xmlsec_KeyDataXmlWrite, xmlsec_KeyDataBinRead, xmlsec_KeyDataBinWrite,
+	xmlsec_KeyDataGetName, xmlsec_KeyDataIsValid, xmlsec_KeyDataCheckId,
+	xmlsec_KeyDataCheckUsage, xmlsec_KeyDataCheckSize,
+	keysdata_KeyDataIdCreate, xmlsec_KeyDataKlassGetName
+
+	* wrap_objs.h: Added #include <libxml/xmlmemory.h>
+
+2004-01-17  Valery Febvre  <vfebvre@easter-eggs.com>
+
+	* setup.py: Crypto engine 'nss' added.
+
+2004-01-16  Valery Febvre  <vfebvre@easter-eggs.com>
+
+	* setup.py:
+	Linker, pre-processor and compiler flags are now automatically detected
+	The crypto engine name can be selected
+
+2004-01-16  Valery Febvre  <vfebvre@easter-eggs.com>
+	* setup.py:
+	Linker, pre-processor and compiler flags are now automatically detected
+	The crypto engine name can be selected
+
 2004-01-15  Valery Febvre  <vfebvre@easter-eggs.com>
         *: 0.1.0 release
+
 	* xmlsec.py: Added methods __getattr__ and __setattr__ in classes
 	DSigCtx, DSigReferenceCtx, EncCtx, KeyInfoCtx, Buffer, Key, KeyReq,
 	KeysMngr and PtrList
@@ -9,21 +61,28 @@
 	getResultBase64Encoded, getResultReplaced
 	4 methods removed in class DSigCtx: setEnabledReferenceUris, getStatus,
 	getKeyInfoReadCtx, getSignedInfoReferences
+
 	* buffer.c: Added functions xmlSecBuffer_getattr, xmlSecBuffer_setattr
+
 	* keyinfo.c: Added functions xmlSecKeyInfoCtx_getattr,
 	xmlSecKeyInfoCtx_setattr and removed function keyinfo_get_enabledKeyData
+
 	* keys.c: Added functions xmlSecKey_getattr and xmlSecKey_setattr
 	All KeyReq section rewritten
+
 	* keysmngr.c: Added functions xmlSecKeysMngr_getattr,
 	xmlSecKeysMngr_setattr, xmlsec_GetKeyCallback and fixed function
 	keysmngr_KeyStoreIdCreate
+
 	* list.c: Added functions xmlsec_PtrListInitialize,
 	xmlsec_PtrListFinalize, xmlsec_PtrListEmpty, xmlsec_PtrListCopy,
 	xmlsec_PtrListDuplicate, xmlsec_PtrListGetItem, xmlsec_PtrListSet,
 	xmlsec_PtrListRemove, xmlsec_PtrListDebugDump, xmlsec_PtrListDebugXmlDump
 	xmlsec_PtrListGetName, xmlsec_PtrListIsValid, xmlSecPtrList_getattr
 	xmlSecPtrList_setattr
+
 	* nodeset.c: Added functions xmlSecNodeSet_getattr, xmlSecNodeSet_setattr
+
 	* xmldsig.c: Added functions xmlSecDSigCtx_getattr,
 	xmlSecDSigCtx_setattr, xmlSecDSigReferenceCtx_getattr,
 	xmlSecDSigReferenceCtx_setattr
@@ -32,8 +91,11 @@
 	xmldsig_set_signKey
 	Updated functions: xmlSecDSigCtx_getattr, xmlSecDSigCtx_setattr,
 	xmlSecDSigReferenceCtx_setattr
+
 	* xmlenc.c: Added functions xmlSecEncCtx_getattr, xmlSecEncCtx_setattr
 	Removed functions xmlenc_set_encKey, xmlenc_get_result,
 	xmlenc_get_resultBase64Encoded, xmlenc_get_resultReplaced
+
 	* examples/decrypt3.py: new example
+
 	* examples/pyxmlsec-demo.py: updated
