@@ -27,6 +27,16 @@
 #include "xmlsecmod.h"
 #include "xmltree.h"
 
+PyObject *xmlsec_NodeGetName(PyObject *self, PyObject *args) {
+  PyObject *node_obj;
+  xmlNodePtr node;
+
+  if(!PyArg_ParseTuple(args, (char *) "O:NodeGetName", &node_obj))
+    return NULL;
+  node = xmlNodePtr_get(PyObject_GetAttr(node_obj, PyString_FromString("_o")));
+  return Py_BuildValue("s", xmlSecNodeGetName(node));
+}
+
 PyObject *xmlsec_GetNodeNsHref(PyObject *self, PyObject *args) {
   PyObject *cur_obj;
   xmlNodePtr cur;

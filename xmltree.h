@@ -1,3 +1,4 @@
+PyObject *xmlsec_NodeGetName(PyObject *self, PyObject *args);
 PyObject *xmlsec_GetNodeNsHref(PyObject *self, PyObject *args);
 PyObject *xmlsec_CheckNodeName(PyObject *self, PyObject *args);
 PyObject *xmlsec_GetNextElementNode(PyObject *self, PyObject *args);
