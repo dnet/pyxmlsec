@@ -1120,7 +1120,12 @@ class KeyData:
         return xmlsecmod.keyDataCheckSize(self, size)
 
 class KeyDataId:
-    def __init__(self, klassSize=None, objSize=None, name=None, usage=None, href=None, dataNodeName=None, dataNodeNs=None, _obj=None):
+    def __init__(self, klassSize=None, objSize=None, name=None, usage=None,
+                 href=None, dataNodeName=None, dataNodeNs=None, initialize=None,
+                 duplicate=None, finalize=None, generate=None, getType=None,
+                 getSize=None, getIdentifier=None, xmlRead=None, xmlWrite=None,
+                 binRead=None, binWrite=None, debugDump=None, debugXmlDump=None,
+                 _obj=None):
         """
         Creates new key data klass id.
         klassSize     : the klass size.
