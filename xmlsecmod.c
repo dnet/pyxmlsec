@@ -2,7 +2,7 @@
  *
  * pyxmlsec -- A Python binding for XML Security library (XMLSec)
  *
- * Copyright (C) 2003
+ * Copyright (C) 2003 Easter-eggs, Valery Febvre
  * http://pyxmlsec.labs.libre-entreprise.org
  * 
  * Author: Valery Febvre <vfebvre@easter-eggs.com>
@@ -35,6 +35,8 @@
 #include "list.h"
 #include "app.h"
 #include "buffer.h"
+#include "x509.h"
+#include "parser.h"
 #include "openssl.h"
 
 static PyMethodDef xmlsec_methods[] = {
@@ -43,6 +45,12 @@ static PyMethodDef xmlsec_methods[] = {
   {"shutdown",          xmlsec_Shutdown,          METH_VARARGS},
   {"checkVersionExact", xmlsec_CheckVersionExact, METH_VARARGS},
   {"checkVersion",      xmlsec_CheckVersion,      METH_VARARGS},
+
+  /* parser.h */
+  {"parseFile",            xmlsec_ParseFile,            METH_VARARGS}, // New
+  {"parseMemory",          xmlsec_ParseMemory,          METH_VARARGS}, // New
+  {"parseMemoryExt",       xmlsec_ParseMemoryExt,       METH_VARARGS}, // New
+  {"transformXmlParserId", xmlsec_TransformXmlParserId, METH_VARARGS}, // New
 
   /* xmlenc.h */
   {"encCtxCreate",          xmlsec_EncCtxCreate,          METH_VARARGS}, // New
@@ -187,6 +195,10 @@ static PyMethodDef xmlsec_methods[] = {
   /* openssl/crypto.h, openssl/app.h */
   {"openSSLAppInit", xmlsec_OpenSSLAppInit, METH_VARARGS},
   {"openSSLInit",    xmlsec_OpenSSLInit,    METH_VARARGS},
+
+  /* x509.h */
+  {"x509DataGetNodeContent", xmlsec_X509DataGetNodeContent, METH_VARARGS}, // New
+
   {NULL, NULL} /* End of Methods Sentinel */
 };
 
