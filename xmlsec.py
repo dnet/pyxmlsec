@@ -692,7 +692,7 @@ class Key:
     def getData(self):
         """
         Gets key's data (see also adoptData method).
-        dataId : the requested data klass.
+        dataId  : the requested data klass.
         Returns : additional data associated with the key.
         """
         # TODO : should return KeyData object
@@ -1691,6 +1691,44 @@ class DSigCtx:
         if self._o is None: raise parserError('xmlSecDSigCtxCreate() failed')
     def __repr__(self):
         return "<xmlSecDSigCtx object at 0x%x>" % id (self)
+    def __isprivate(self, name):
+        return name == '_o'
+    def __getattr__(self, name):
+        if self.__isprivate(name):
+            return self.__dict__[name]
+        ret = xmlsecmod.dsigCtxGetAttr(self, name)
+        if name == "keyInfoReadCtx":
+            return KeyInfoCtx(_obj=ret)
+        elif name == "keyInfoWriteCtx":
+            return KeyInfoCtx(_obj=ret)
+        elif name == "transformCtx":
+            return TransformCtx(_obj=ret)
+        elif name == "enabledReferenceTransforms":
+            return PtrList(_obj=ret)
+        elif name == "signKey":
+            return Key(_obj=ret)
+        elif name == "result":
+            return Buffer(_obj=ret)
+        elif name == "signMethod":
+            return Transform(_obj=ret)
+        elif name == "c14nMethod":
+            return Transform(_obj=ret)
+        elif name == "preSignMemBufMethod":
+            return Transform(_obj=ret)
+        elif name == "signValueNode":
+            return libxml2.Node(_obj=ret)
+        elif name == "signedInfoReferences":
+            return PtrList(_obj=ret)
+        elif name == "manifestReferences":
+            return PtrList(_obj=ret)
+        else:
+            # flags, flags2, enabledReferenceUris, operation, status, id
+            return ret
+    def __setattr__(self, name, value):
+        if self.__isprivate(name):
+            self.__dict__[name] = value
+        else:
+            xmlsecmod.dsigCtxSetAttr(self, name, value)
     def destroy(self):
         """
         Destroys context object (<dsig:Signature/> element processing context).
@@ -1759,18 +1797,6 @@ class DSigCtx:
     def setSignKey(self, key):
         """Sets signKey member."""
         self._o = xmlsecmod.dsigCtxSetSignKey(self, key)
-    def setEnabledReferenceUris(self, value):
-        """Sets enabledReferenceUris member."""
-        self._o = xmlsecmod.dsigCtxSetEnabledReferenceUris(self, value)
-    def getStatus(self):
-        """Return status member."""
-        return xmlsecmod.dsigCtxGetStatus(self)
-    def getKeyInfoReadCtx(self):
-        """Return keyInfoReadCtx member."""
-        return KeyInfoCtx(None, _obj=xmlsecmod.dsigCtxGetKeyInfoReadCtx(self))
-    def getSignedInfoReferences(self):
-        """Return signedInfoReferences member."""
-        return PtrList(_obj=xmlsecmod.dsigCtxGetSignedInfoReferences(self))
 
 # The possible <dsig:Reference/> node locations: in the <dsig:SignedInfo/> node
 # or in the <dsig:Manifest/> node.
@@ -1793,6 +1819,30 @@ class DSigReferenceCtx:
         if self._o is None: raise parserError('xmlSecDSigReferenceCtxCreate() failed')
     def __repr__(self):
         return "<xmlSecDSigReferenceCtx object at 0x%x>" % id (self)
+    def __isprivate(self, name):
+        return name == '_o'
+    def __getattr__(self, name):
+        if self.__isprivate(name):
+            return self.__dict__[name]
+        ret = xmlsecmod.dsigReferenceCtxGetAttr(self, name)
+        if name == "dsigCtx":
+            return DSigCtx(_obj=ret)
+        elif name == "transformCtx":
+            return TransformCtx(_obj=ret)
+        elif name == "digestMethod":
+            return Transform(_obj=ret)
+        elif name == "result":
+            return Buffer(_obj=ret)
+        elif name == "preDigestMemBufMethod":
+            return Transform(_obj=ret)
+        else:
+            # origin, id, uri, type
+            return ret
+    def __setattr__(self, name, value):
+        if self.__isprivate(name):
+            self.__dict__[name] = value
+        else:
+            xmlsecmod.dsigReferenceCtxSetAttr(self, name, value)
     def destroy(self):
         """Destroys <dsig:Reference/> element processing context object"""
         return xmlsecmod.dsigReferenceCtxDestroy(self)
