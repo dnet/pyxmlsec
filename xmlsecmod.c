@@ -178,33 +178,33 @@ static PyMethodDef xmlsec_methods[] = {
   {"keyDataEncryptedKeyId",    xmlsec_KeyDataEncryptedKeyId,    METH_VARARGS},
 
   /* keysdata.h */
-  {"keyDataIdsGet",             xmlsec_KeyDataIdsGet,             METH_VARARGS}, // New
-  {"keyDataIdsInit",            xmlsec_KeyDataIdsInit,            METH_VARARGS}, // New
-  {"keyDataIdsShutdown",        xmlsec_KeyDataIdsShutdown,        METH_VARARGS}, // New
-  {"keyDataIdsRegisterDefault", xmlsec_KeyDataIdsRegisterDefault, METH_VARARGS}, // New
-  {"keyDataIdsRegister",        xmlsec_KeyDataIdsRegister,        METH_VARARGS}, // New
-  {"keyDataGetAttr", xmlSecKeyData_getattr, METH_VARARGS}, // New
-  {"keyDataSetAttr", xmlSecKeyData_setattr, METH_VARARGS}, // New
-  {"keyDataCreate",        xmlsec_KeyDataCreate,        METH_VARARGS}, // New
-  {"keyDataDuplicate",     xmlsec_KeyDataDuplicate,     METH_VARARGS}, // New
-  {"keyDataDestroy",       xmlsec_KeyDataDestroy,       METH_VARARGS}, // New
-  {"keyDataGenerate",      xmlsec_KeyDataGenerate,      METH_VARARGS}, // New
-  {"keyDataGetType",       xmlsec_KeyDataGetType,       METH_VARARGS}, // New
-  {"keyDataGetSize",       xmlsec_KeyDataGetSize,       METH_VARARGS}, // New
-  {"keyDataGetIdentifier", xmlsec_KeyDataGetIdentifier, METH_VARARGS}, // New
-  {"keyDataDebugDump",     xmlsec_KeyDataDebugDump,     METH_VARARGS}, // New
-  {"keyDataDebugXmlDump",  xmlsec_KeyDataDebugXmlDump,  METH_VARARGS}, // New
-  {"keyDataXmlRead",  xmlsec_KeyDataXmlRead,  METH_VARARGS}, // New
-  {"keyDataXmlWrite", xmlsec_KeyDataXmlWrite, METH_VARARGS}, // New
-  {"keyDataBinRead",  xmlsec_KeyDataBinRead,  METH_VARARGS}, // New
-  {"keyDataBinWrite", xmlsec_KeyDataBinWrite, METH_VARARGS}, // New
-  {"keyDataGetName",       xmlsec_KeyDataGetName,    METH_VARARGS}, // New
-  {"keyDataIsValid",       xmlsec_KeyDataIsValid,    METH_VARARGS}, // New
-  {"keyDataCheckId",       xmlsec_KeyDataCheckId,    METH_VARARGS}, // New
-  {"keyDataCheckUsage",    xmlsec_KeyDataCheckUsage, METH_VARARGS}, // New
-  {"keyDataCheckSize",     xmlsec_KeyDataCheckSize,  METH_VARARGS}, // New
-  {"keyDataIdCreate",  keysdata_KeyDataIdCreate,   METH_VARARGS}, // New
-  {"keyDataIdGetName", xmlsec_KeyDataKlassGetName, METH_VARARGS}, // New
+  {"keyDataIdsGet",             xmlsec_KeyDataIdsGet,             METH_VARARGS},
+  {"keyDataIdsInit",            xmlsec_KeyDataIdsInit,            METH_VARARGS},
+  {"keyDataIdsShutdown",        xmlsec_KeyDataIdsShutdown,        METH_VARARGS},
+  {"keyDataIdsRegisterDefault", xmlsec_KeyDataIdsRegisterDefault, METH_VARARGS},
+  {"keyDataIdsRegister",        xmlsec_KeyDataIdsRegister,        METH_VARARGS},
+  {"keyDataGetAttr", xmlSecKeyData_getattr, METH_VARARGS},
+  {"keyDataSetAttr", xmlSecKeyData_setattr, METH_VARARGS},
+  {"keyDataCreate",        xmlsec_KeyDataCreate,        METH_VARARGS},
+  {"keyDataDuplicate",     xmlsec_KeyDataDuplicate,     METH_VARARGS},
+  {"keyDataDestroy",       xmlsec_KeyDataDestroy,       METH_VARARGS},
+  {"keyDataGenerate",      xmlsec_KeyDataGenerate,      METH_VARARGS},
+  {"keyDataGetType",       xmlsec_KeyDataGetType,       METH_VARARGS},
+  {"keyDataGetSize",       xmlsec_KeyDataGetSize,       METH_VARARGS},
+  {"keyDataGetIdentifier", xmlsec_KeyDataGetIdentifier, METH_VARARGS},
+  {"keyDataDebugDump",     xmlsec_KeyDataDebugDump,     METH_VARARGS},
+  {"keyDataDebugXmlDump",  xmlsec_KeyDataDebugXmlDump,  METH_VARARGS},
+  {"keyDataXmlRead",  xmlsec_KeyDataXmlRead,  METH_VARARGS},
+  {"keyDataXmlWrite", xmlsec_KeyDataXmlWrite, METH_VARARGS},
+  {"keyDataBinRead",  xmlsec_KeyDataBinRead,  METH_VARARGS},
+  {"keyDataBinWrite", xmlsec_KeyDataBinWrite, METH_VARARGS},
+  {"keyDataGetName",       xmlsec_KeyDataGetName,    METH_VARARGS},
+  {"keyDataIsValid",       xmlsec_KeyDataIsValid,    METH_VARARGS},
+  {"keyDataCheckId",       xmlsec_KeyDataCheckId,    METH_VARARGS},
+  {"keyDataCheckUsage",    xmlsec_KeyDataCheckUsage, METH_VARARGS},
+  {"keyDataCheckSize",     xmlsec_KeyDataCheckSize,  METH_VARARGS},
+  {"keyDataIdCreate",  keysdata_KeyDataIdCreate,   METH_VARARGS},
+  {"keyDataIdGetName", xmlsec_KeyDataKlassGetName, METH_VARARGS},
 
   /* keysmngr.h */
   {"keysMngrGetAttr", xmlSecKeysMngr_getattr, METH_VARARGS},
@@ -269,30 +269,39 @@ static PyMethodDef xmlsec_methods[] = {
   {"transformXmlParserId", xmlsec_TransformXmlParserId, METH_VARARGS},
 
   /* templates.h */
-  {"tmplSignatureCreate",               xmlsec_TmplSignatureCreate,               METH_VARARGS},
-  {"tmplSignatureEnsureKeyInfo",        xmlsec_TmplSignatureEnsureKeyInfo,        METH_VARARGS},
-  {"tmplSignatureAddReference",         xmlsec_TmplSignatureAddReference,         METH_VARARGS},
-  {"tmplSignatureAddObject",            xmlsec_TmplSignatureAddObject,            METH_VARARGS},
-  {"tmplSignatureGetSignMethodNode",    xmlsec_TmplSignatureGetSignMethodNode,    METH_VARARGS},
-  {"tmplSignatureGetC14NMethodNode",    xmlsec_TmplSignatureGetC14NMethodNode,    METH_VARARGS},
-  {"tmplReferenceAddTransform",         xmlsec_TmplReferenceAddTransform,         METH_VARARGS},
-  {"tmplObjectAddSignProperties",       xmlsec_TmplObjectAddSignProperties,       METH_VARARGS},
-  {"tmplObjectAddManifest",             xmlsec_TmplObjectAddManifest,             METH_VARARGS},
-  {"tmplManifestAddReference",          xmlsec_TmplManifestAddReference,          METH_VARARGS},
-  {"tmplEncDataCreate",                 xmlsec_TmplEncDataCreate,                 METH_VARARGS},
-  {"tmplEncDataEnsureKeyInfo",          xmlsec_TmplEncDataEnsureKeyInfo,          METH_VARARGS},
-  {"tmplEncDataEnsureEncProperties",    xmlsec_TmplEncDataEnsureEncProperties,    METH_VARARGS},
-  {"tmplEncDataAddEncProperty",         xmlsec_TmplEncDataAddEncProperty,         METH_VARARGS},
-  {"tmplEncDataEnsureCipherValue",      xmlsec_TmplEncDataEnsureCipherValue,      METH_VARARGS},
-  {"tmplEncDataEnsureCipherReference",  xmlsec_TmplEncDataEnsureCipherReference,  METH_VARARGS},
-  {"tmplEncDataGetEncMethodNode",       xmlsec_TmplEncDataGetEncMethodNode,       METH_VARARGS},
-  {"tmplCipherReferenceAddTransform",   xmlsec_TmplCipherReferenceAddTransform,   METH_VARARGS},
-  {"tmplReferenceListAddDataReference", xmlsec_TmplReferenceListAddDataReference, METH_VARARGS},
-  {"tmplReferenceListAddKeyReference",  xmlsec_TmplReferenceListAddKeyReference,  METH_VARARGS},
-  {"tmplKeyInfoAddKeyName",             xmlsec_TmplKeyInfoAddKeyName,             METH_VARARGS},
-  {"tmplKeyInfoAddKeyValue",            xmlsec_TmplKeyInfoAddKeyValue,            METH_VARARGS},
-  {"tmplKeyInfoAddX509Data",            xmlsec_TmplKeyInfoAddX509Data,            METH_VARARGS},
-  {"tmplKeyInfoAddEncryptedKey",        xmlsec_TmplKeyInfoAddEncryptedKey,        METH_VARARGS},
+  {"tmplSignatureCreate",                xmlsec_TmplSignatureCreate,                METH_VARARGS},
+  {"tmplSignatureEnsureKeyInfo",         xmlsec_TmplSignatureEnsureKeyInfo,         METH_VARARGS},
+  {"tmplSignatureAddReference",          xmlsec_TmplSignatureAddReference,          METH_VARARGS},
+  {"tmplSignatureAddObject",             xmlsec_TmplSignatureAddObject,             METH_VARARGS},
+  {"tmplSignatureGetSignMethodNode",     xmlsec_TmplSignatureGetSignMethodNode,     METH_VARARGS},
+  {"tmplSignatureGetC14NMethodNode",     xmlsec_TmplSignatureGetC14NMethodNode,     METH_VARARGS},
+  {"tmplReferenceAddTransform",          xmlsec_TmplReferenceAddTransform,          METH_VARARGS},
+  {"tmplObjectAddSignProperties",        xmlsec_TmplObjectAddSignProperties,        METH_VARARGS},
+  {"tmplObjectAddManifest",              xmlsec_TmplObjectAddManifest,              METH_VARARGS},
+  {"tmplManifestAddReference",           xmlsec_TmplManifestAddReference,           METH_VARARGS},
+  {"tmplEncDataCreate",                  xmlsec_TmplEncDataCreate,                  METH_VARARGS},
+  {"tmplEncDataEnsureKeyInfo",           xmlsec_TmplEncDataEnsureKeyInfo,           METH_VARARGS},
+  {"tmplEncDataEnsureEncProperties",     xmlsec_TmplEncDataEnsureEncProperties,     METH_VARARGS},
+  {"tmplEncDataAddEncProperty",          xmlsec_TmplEncDataAddEncProperty,          METH_VARARGS},
+  {"tmplEncDataEnsureCipherValue",       xmlsec_TmplEncDataEnsureCipherValue,       METH_VARARGS},
+  {"tmplEncDataEnsureCipherReference",   xmlsec_TmplEncDataEnsureCipherReference,   METH_VARARGS},
+  {"tmplEncDataGetEncMethodNode",        xmlsec_TmplEncDataGetEncMethodNode,        METH_VARARGS},
+  {"tmplCipherReferenceAddTransform",    xmlsec_TmplCipherReferenceAddTransform,    METH_VARARGS},
+  {"tmplReferenceListAddDataReference",  xmlsec_TmplReferenceListAddDataReference,  METH_VARARGS},
+  {"tmplReferenceListAddKeyReference",   xmlsec_TmplReferenceListAddKeyReference,   METH_VARARGS},
+  {"tmplKeyInfoAddKeyName",              xmlsec_TmplKeyInfoAddKeyName,              METH_VARARGS},
+  {"tmplKeyInfoAddKeyValue",             xmlsec_TmplKeyInfoAddKeyValue,             METH_VARARGS},
+  {"tmplKeyInfoAddX509Data",             xmlsec_TmplKeyInfoAddX509Data,             METH_VARARGS},
+  {"tmplKeyInfoAddRetrievalMethod",      xmlsec_TmplKeyInfoAddRetrievalMethod,      METH_VARARGS},
+  {"tmplRetrievalMethodAddTransform",    xmlsec_TmplRetrievalMethodAddTransform,    METH_VARARGS},
+  {"tmplKeyInfoAddEncryptedKey",         xmlsec_TmplKeyInfoAddEncryptedKey,         METH_VARARGS},
+  {"tmplTransformAddHmacOutputLength",   xmlsec_TmplTransformAddHmacOutputLength,   METH_VARARGS}, // New
+  {"tmplTransformAddRsaOaepParam",       xmlsec_TmplTransformAddRsaOaepParam,       METH_VARARGS}, // New
+  {"tmplTransformAddXsltStylesheet",     xmlsec_TmplTransformAddXsltStylesheet,     METH_VARARGS}, // New
+  {"tmplTransformAddC14NInclNamespaces", xmlsec_TmplTransformAddC14NInclNamespaces, METH_VARARGS}, // New
+  {"tmplTransformAddXPath",              xmlsec_TmplTransformAddXPath,              METH_VARARGS}, // New
+  {"tmplTransformAddXPath2",             xmlsec_TmplTransformAddXPath2,             METH_VARARGS}, // New
+  {"tmplTransformAddXPointer",           xmlsec_TmplTransformAddXPointer,           METH_VARARGS}, // New
 
   /* transforms.h */
   {"transformUriTypeCheck",           xmlsec_TransformUriTypeCheck,           METH_VARARGS},
@@ -321,6 +330,7 @@ static PyMethodDef xmlsec_methods[] = {
   {"transformRemoveXmlTagsC14NId",    xmlsec_TransformRemoveXmlTagsC14NId,    METH_VARARGS},
   {"transformVisa3DHackId",           xmlsec_TransformVisa3DHackId,           METH_VARARGS},
   {"transformVisa3DHackSetID",        xmlsec_TransformVisa3DHackSetID,        METH_VARARGS},
+  {"transformIdCreate", transforms_TransformIdCreate, METH_VARARGS}, // New
 
   /* version.h */
   {"xmlsec_version",          xmlsec_xmlsec_version,          METH_VARARGS},
