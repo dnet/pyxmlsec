@@ -198,9 +198,9 @@ PyObject *xmlsec_NodeSetDebugDump(PyObject *self, PyObject *args) {
     return NULL;
 
   nset = xmlSecNodeSetPtr_get(nset_obj);
-  output = (FILE *) PyFile_get(output_obj);
+  output = PyFile_get(output_obj);
   xmlSecNodeSetDebugDump(nset, output);
 
   Py_INCREF(Py_None);
-  return Py_None;
+  return (Py_None);
 }

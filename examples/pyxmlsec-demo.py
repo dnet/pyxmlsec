@@ -159,6 +159,7 @@ def interface():
     clist = CList(cols = [('Examples (double click for demo)', gobject.TYPE_STRING, 0, 0, 0, 0)],
                   cbs  = [('row-activated', on_clist_row_doubleclicked)])
     clist.get_selection().connect('changed', on_clist_row_clicked)
+    clist.set_rules_hint(gtk.TRUE)
     clist.append_row(['Signing a template file'])
     clist.append_row(['Signing a file with a dynamicaly created template'])
     clist.append_row(['Signing a file with a dynamicaly created template and an X509 certificate'])
