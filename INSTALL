@@ -3,13 +3,10 @@ Requirements
 	Python 2.2 or greater
 	GCC
 	LibXML requirements and associated Python bindings
-	XML Security Library version >= 1.2.0
+	XML Security Library version >= 1.2.x
 
 To build
 --------
-	Edit setup.py to set correct values in define_macros, include_dirs,
-	library_dirs and libraries
-
 	./setup.py build
 
 To clean

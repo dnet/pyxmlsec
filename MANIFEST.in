@@ -1,4 +1,4 @@
 include AUTHORS COPYING ChangeLog INSTALL MANIFEST.in README TODO epydoc.prj *.h
 recursive-include examples *
 recursive-include docs *
-exclude examples/vrac* examples/*~
+exclude examples/vrac* examples/*~ docs/cours/*
