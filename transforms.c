@@ -2,8 +2,8 @@
  *
  * PyXMLSec - Python bindings for XML Security library (XMLSec)
  *
- * Copyright (C) 2003 Easter-eggs, Valery Febvre
- * http://pyxmlsec.labs.libre-entreprise.org/
+ * Copyright (C) 2003-2004 Easter-eggs, Valery Febvre
+ * http://pyxmlsec.labs.libre-entreprise.org
  * 
  * Author: Valery Febvre <vfebvre@easter-eggs.com>
  *
@@ -26,6 +26,32 @@
 
 #include "transforms.h"
 #include "keys.h"
+
+PyObject *wrap_xmlSecTransformPtr(xmlSecTransformPtr transform) {
+  PyObject *ret;
+
+  if (transform == NULL) {
+    Py_INCREF(Py_None);
+    return (Py_None);
+  }
+  ret = PyCObject_FromVoidPtrAndDesc((void *) transform,
+				     (char *) "xmlSecTransformPtr", NULL);
+  return (ret);
+}
+
+PyObject *wrap_xmlSecTransformCtxPtr(xmlSecTransformCtxPtr ctx) {
+  PyObject *ret;
+
+  if (ctx == NULL) {
+    Py_INCREF(Py_None);
+    return (Py_None);
+  }
+  ret = PyCObject_FromVoidPtrAndDesc((void *) ctx,
+				     (char *) "xmlSecTransformCtxPtr", NULL);
+  return (ret);
+}
+
+/*****************************************************************************/
 
 PyObject *xmlsec_TransformUriTypeCheck(PyObject *self, PyObject *args) {
   xmlSecTransformUriType type;

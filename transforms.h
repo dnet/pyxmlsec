@@ -11,6 +11,9 @@ typedef struct {
 #define xmlSecTransformPtr_get(v) (((v) == Py_None) ? NULL : (((xmlSecTransformPtr_object *)(PyObject_GetAttr(v, PyString_FromString("_o"))))->obj))
 #define xmlSecTransformCtxPtr_get(v) (((v) == Py_None) ? NULL : (((xmlSecTransformCtxPtr_object *)(PyObject_GetAttr(v, PyString_FromString("_o"))))->obj))
 
+PyObject *wrap_xmlSecTransformPtr(xmlSecTransformPtr ctx);
+PyObject *wrap_xmlSecTransformCtxPtr(xmlSecTransformCtxPtr ctx);
+
 PyObject *xmlsec_TransformUriTypeCheck(PyObject *self, PyObject *args);
 
 PyObject *xmlsec_TransformCtxCreate(PyObject *self, PyObject *args);

@@ -5,6 +5,8 @@ typedef struct {
 
 #define xmlSecEncCtxPtr_get(v) (((v) == Py_None) ? NULL : (((xmlSecEncCtxPtr_object *)(PyObject_GetAttr(v, PyString_FromString("_o"))))->obj))
 
+PyObject *wrap_xmlSecEncCtxPtr(xmlSecEncCtxPtr ctx);
+
 PyObject *xmlsec_EncCtxCreate(PyObject *self, PyObject *args);
 PyObject *xmlsec_EncCtxDestroy(PyObject *self, PyObject *args);
 PyObject *xmlsec_EncCtxInitialize(PyObject *self, PyObject *args);

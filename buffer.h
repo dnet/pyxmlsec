@@ -5,6 +5,8 @@ typedef struct {
 
 #define xmlSecBufferPtr_get(v) (((v) == Py_None) ? NULL : (((xmlSecBufferPtr_object *)(PyObject_GetAttr(v, PyString_FromString("_o"))))->obj))
 
+PyObject *wrap_xmlSecBufferPtr(xmlSecBufferPtr buf);
+
 PyObject *xmlsec_BufferCreate(PyObject *self, PyObject *args);
 PyObject *xmlsec_BufferDestroy(PyObject *self, PyObject *args);
 PyObject *xmlsec_BufferInitialize(PyObject *self, PyObject *args);

@@ -54,19 +54,16 @@ typedef struct {
 
 PyObject *xmlsec_error;
 
-/* wrapper functions */
+/* wrap functions */
 
 PyObject *wrap_int(int val);
 PyObject *wrap_charPtr(char *str);
 PyObject *wrap_charPtrConst(const char *str);
+
 PyObject *wrap_xmlCharPtr(xmlChar *str);
 PyObject *wrap_xmlCharPtrConst(const xmlChar *str);
-
 PyObject *wrap_xmlDocPtr(xmlDocPtr doc);
 PyObject *wrap_xmlNodePtr(xmlNodePtr node);
 PyObject *wrap_xmlOutputBufferPtr(xmlOutputBufferPtr buf);
-
-PyObject *wrap_xmlSecTransformPtr(xmlSecTransformPtr ctx);
-PyObject *wrap_xmlSecTransformCtxPtr(xmlSecTransformCtxPtr ctx);
 
 #endif /* __PYXMLSEC_WRAP_OBJS_H__ */

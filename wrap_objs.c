@@ -87,29 +87,3 @@ PyObject *wrap_xmlOutputBufferPtr(xmlOutputBufferPtr buf) {
 				     (char *) "xmlOutputBufferPtr", NULL);
   return (ret);
 }
-
-/* functions for xmlsec objects */
-
-PyObject *wrap_xmlSecTransformPtr(xmlSecTransformPtr transform) {
-  PyObject *ret;
-
-  if (transform == NULL) {
-    Py_INCREF(Py_None);
-    return (Py_None);
-  }
-  ret = PyCObject_FromVoidPtrAndDesc((void *) transform,
-				     (char *) "xmlSecTransformPtr", NULL);
-  return (ret);
-}
-
-PyObject *wrap_xmlSecTransformCtxPtr(xmlSecTransformCtxPtr ctx) {
-  PyObject *ret;
-
-  if (ctx == NULL) {
-    Py_INCREF(Py_None);
-    return (Py_None);
-  }
-  ret = PyCObject_FromVoidPtrAndDesc((void *) ctx,
-				     (char *) "xmlSecTransformCtxPtr", NULL);
-  return (ret);
-}
