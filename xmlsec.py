@@ -564,29 +564,20 @@ class KeyInfoCtx:
 ###############################################################################
 # keys.h
 ###############################################################################
-## Key data types
-KeyDataTypeUnknown   = 0x0000 # The key data type is unknown (same as #xmlSecKeyDataTypeNone)
-KeyDataTypeNone	     = KeyDataTypeUnknown
-KeyDataTypePublic    = 0x0001 # The key data contain a public key.
-KeyDataTypePrivate   = 0x0002 # The key data contain a private key.
-KeyDataTypeSymmetric = 0x0004 # The key data contain a symmetric key.
-KeyDataTypeSession   = 0x0008 # The key data contain session key (one time key, not stored in keys manager).
-KeyDataTypePermanent = 0x0010 # The key data contain permanent key (stored in keys manager).
-KeyDataTypeTrusted   = 0x0100 # The key data is trusted.
-KeyDataTypeAny       = 0xFFFF # Any key data.
 ## Key usages
 KeyUsageSign    = 0x0001 # Key for signing.
 KeyUsageVerify  = 0x0002 # Key for signature verification.
 KeyUsageEncrypt = 0x0004 # An encryption key.
 KeyUsageDecrypt = 0x0008 # A decryption key.
 KeyUsageAny     = 0xFFFF # Key can be used in any way.
-## Key data formats
-KeyDataFormatUnknown  = 0 # the key data format is unknown.
-KeyDataFormatBinary   = 1 # the binary key data.
-KeyDataFormatPem      = 2 # the PEM key data (cert or public/private key).
-KeyDataFormatDer      = 3 # the DER key data (cert or public/private key).
-KeyDataFormatPkcs8Pem = 4 # the PKCS#8 PEM private key.
-KeyDataFormatPkcs8Der = 5 # the PKCS#8 DER private key.
+def keyCopy(keyDst, keySrc):
+    """
+    Copies key data from keySrc to keyDst.
+    keyDst  : the destination key.
+    keySrc  : the source key.
+    Returns : 0 on success or a negative value if an error occurs.
+    """
+    return xmlsecmod.keyCopy(keyDst, keySrc)
 def keyGenerate(dataId, sizeBits, type):
     """
     Generates new key of requested klass dataId and type.
@@ -630,6 +621,8 @@ def keyReadMemory(dataId, data, dataSize):
     Returns  : newly created key or None if an error occurs.
     """
     return Key(_obj=xmlsecmod.keyReadMemory(dataId, data, dataSize))
+# The keys list klass.
+keyPtrListId = xmlsecmod.keyPtrListId()
 class Key:
     def __init__(self, _obj=None):
         """
@@ -647,6 +640,28 @@ class Key:
     def destroy(self):
         """Destroys the key"""
         xmlsecmod.keyDestroy(self)
+    def empty(self):
+        """Clears the key data."""
+        xmlsecmod.keyEmpty(self)
+    def duplicate(self):
+        """
+        Creates a duplicate of the given key.
+        Returns : the newly key or None if an error occurs.
+        """
+        return xmlsecmod.keyDuplicate(self)
+    def copy(self, keyDst):
+        """
+        Copies key data to keyDst.
+        keyDst  : the destination key.
+        Returns : 0 on success or a negative value if an error occurs.
+        """
+        return xmlsecmod.keyCopy(keyDst, self)
+    def getName(self):
+        """
+        Gets key name (see also setName function).
+        Returns : key name.
+        """
+        return xmlsecmod.keyGetName(self)
     def setName(self, name):
         """
         Sets key name (see also getName function).
@@ -654,12 +669,61 @@ class Key:
         Returns : 0 on success or a negative value if an error occurs.
         """
         return xmlsecmod.keySetName(self, name)
-    def getName(self):
+    def getType(self):
         """
-        Gets key name (see also setName function).
-        Returns : key name.
+        Gets key type.
+        Returns : key type.
         """
-        return xmlsecmod.keyGetName(self)
+        return xmlsecmod.keyGetType(self)
+    def getValue(self):
+        """
+        Gets key value (see also setValue method).
+        Returns : key value (crypto material).
+        """
+        # TODO : should return KeyData object
+        return xmlsecmod.keyGetValue(self)
+    def setValue(self, value):
+        """
+        Sets key value (see also setValue method).
+        value   : the new value.
+        Returns : 0 on success or a negative value if an error occurs.
+        """
+        return xmlsecmod.keySetValue(self, value)
+    def getData(self):
+        """
+        Gets key's data (see also adoptData method).
+        dataId : the requested data klass.
+        Returns : additional data associated with the key.
+        """
+        # TODO : should return KeyData object
+        return xmlsecmod.keyGetData(self)
+    def ensureData(self, dataId):
+        """
+        If necessary, creates key data of dataId klass and adds to key.
+        dataId  : the requested data klass.
+        Returns : key data or None if an error occurs.
+        """
+        # TODO : should return KeyData object
+        return xmlsecmod.keyEnsureData(self, dataId)
+    def adoptData(self):
+        """
+        Adds data to the key. The data object will be destroyed by key.
+        data    : the key data.
+        Returns : 0 on success or a negative value otherwise.
+        """
+        return xmlsecmod.keyAdoptData(self, data)
+    def debugDump(self, output):
+        """
+        Prints the information about the key to the output.
+        output : the output FILE.
+        """
+        xmlsecmod.keyDebugDump(self, output)
+    def debugXmlDump(self, output):
+        """
+        Prints the information about the key to the output in XML format.
+        output : the output FILE.
+        """
+        xmlsecmod.keyDebugXmlDump(self, output)
     def match(self, name, keyReq):
         """
         Checks whether the key matches the given criteria.
@@ -668,7 +732,26 @@ class Key:
         Returns : 1 if the key satisfies the given criteria or 0 otherwise.
         """
         return xmlsecmod.keyMatch(self, name, keyReq)
+    def isValid(self):
+        """
+        Returns 1 if key is not None and key->id is not None or 0 otherwise.
+        """
+        return xmlsecmod.keyIsValid(self)
+    def checkId(self, keyId):
+        """
+        Returns 1 if key is valid and key's id is equal to keyId.
+        keyId : the key Id.
+        """
+        return xmlsecmod.keyCheckId(self, keyId)
 
+def keyReqCopy(dst, src):
+    """
+    Copies key requirements from src object to dst object.
+    dst     : the destination object.
+    src     : the source object.
+    Returns : 0 on success and a negative value if an error occurs.
+    """
+    return xmlsecmod.keyReqCopy(dst, src)
 class KeyReq:
     def __init__(self, keyId, keyType, keyUsage, keyBitsSize):
         self._o = xmlsecmod.keyReqCreate(keyId, keyType, keyUsage, keyBitsSize)
@@ -685,6 +768,13 @@ class KeyReq:
     def reset(self):
         """Resets key requirements object for new key search."""
         xmlsecmod.keyReqReset(self)
+    def copy(self, dst):
+        """
+        Copies key requirements to dst object.
+        dst     : the destination object.
+        Returns : 0 on success and a negative value if an error occurs.
+        """
+        return xmlsecmod.keyReqCopy(dst, self)
     def matchKey(self, key):
         """
         Checks whether key matches key requirements.
@@ -693,13 +783,76 @@ class KeyReq:
         if an error occurs.
         """
         return xmlsecmod.keyReqMatchKey(self, key)
+    def matchKeyValue(self, value):
+        """
+        Checks whether keyValue matches key requirements keyReq.
+        value   : the key value.
+        Returns : 1 if key value matches requirements, 0 if not and a negative
+        value if an error occurs.
+        """
+        return xmlsecmod.keyReqMatchKeyValue(self, value)
     def getKeyBitsSize(self):
         """Gets keyBitsSize member"""
         return self._o.keyBitsSize
 
 ###############################################################################
+# keysdata.h
+###############################################################################
+## Key data usages
+# The key data usage is unknown.
+KeyDataUsageUnknown                = 0x00000
+# The key data could be read from a <dsig:KeyInfo/> child.
+KeyDataUsageKeyInfoNodeRead        = 0x00001
+# The key data could be written to a <dsig:KeyInfo /> child.
+KeyDataUsageKeyInfoNodeWrite       = 0x00002
+# The key data could be read from a <dsig:KeyValue /> child.
+KeyDataUsageKeyValueNodeRead       = 0x00004
+# The key data could be written to a <dsig:KeyValue /> child.
+KeyDataUsageKeyValueNodeWrite      = 0x00008
+# The key data could be retrieved using <dsig:RetrievalMethod /> node in XML format.
+KeyDataUsageRetrievalMethodNodeXml = 0x00010
+# The key data could be retrieved using <dsig:RetrievalMethod /> node in binary format.
+KeyDataUsageRetrievalMethodNodeBin = 0x00020
+# Any key data usage.
+KeyDataUsageAny                    = 0xFFFFF
+# The key data could be read and written from/to a <dsig:KeyInfo /> child.
+KeyDataUsageKeyInfoNode            = KeyDataUsageKeyInfoNodeRead | KeyDataUsageKeyInfoNodeWrite
+# The key data could be read and written from/to a <dsig:KeyValue /> child.
+KeyDataUsageKeyValueNode           = KeyDataUsageKeyValueNodeRead | KeyDataUsageKeyValueNodeWrite
+# The key data could be retrieved using <dsig:RetrievalMethod /> node in any format.
+KeyDataUsageRetrievalMethodNode    = KeyDataUsageRetrievalMethodNodeXml | KeyDataUsageRetrievalMethodNodeBin
+## Key data types
+KeyDataTypeUnknown   = 0x0000 # The key data type is unknown (same as #xmlSecKeyDataTypeNone)
+KeyDataTypeNone	     = KeyDataTypeUnknown
+KeyDataTypePublic    = 0x0001 # The key data contain a public key.
+KeyDataTypePrivate   = 0x0002 # The key data contain a private key.
+KeyDataTypeSymmetric = 0x0004 # The key data contain a symmetric key.
+KeyDataTypeSession   = 0x0008 # The key data contain session key (one time key, not stored in keys manager).
+KeyDataTypePermanent = 0x0010 # The key data contain permanent key (stored in keys manager).
+KeyDataTypeTrusted   = 0x0100 # The key data is trusted.
+KeyDataTypeAny       = 0xFFFF # Any key data.
+## Key data formats
+KeyDataFormatUnknown  = 0 # the key data format is unknown.
+KeyDataFormatBinary   = 1 # the binary key data.
+KeyDataFormatPem      = 2 # the PEM key data (cert or public/private key).
+KeyDataFormatDer      = 3 # the DER key data (cert or public/private key).
+KeyDataFormatPkcs8Pem = 4 # the PKCS#8 PEM private key.
+KeyDataFormatPkcs8Der = 5 # the PKCS#8 DER private key.
+
+###############################################################################
 # keysmngr.h
 ###############################################################################
+def getKeyCallback(keyInfoNode, keyInfoCtx):
+    """Not implemented"""
+    return "Not implemented"
+def getKey(keyInfoNode, keyInfoCtx):
+    """
+    Reads the <dsig:KeyInfo/> node keyInfoNode and extracts the key.
+    keyInfoNode : the <dsig:KeyInfo/> node.
+    keyInfoCtx  : the <dsig:KeyInfo/> node processing context.
+    Returns     : the key or None if the key is not found or an error occurs.
+    """
+    return Key(_obj=xmlsecmod.keysMngrGetKey(keyInfoNode, keyInfoCtx))
 class KeysMngr:
     def __init__(self, _obj=None):
         """
@@ -727,7 +880,36 @@ class KeysMngr:
         _obj = xmlsecmod.keysMngrFindKey(self, name, key_info_ctx)
         if _obj is None: raise parserError('xmlSecKeysMngrFindKey() failed')
         return Key(_obj=_obj)
-    # !!! come from app.h (not keysmngr.h) !!!
+    def adoptKeysStore(self, store):
+        """
+        Adopts keys store in the keys manager mngr.
+        store   : the keys store.
+        Returns : 0 on success or a negative value if an error occurs.
+        """
+        return xmlsecmod.keysMngrAdoptKeysStore(self, store)
+    def getKeysStore(self):
+        """
+        Gets the keys store.
+        Returns : the keys store in the keys manager mngr or None if there is
+        no store or an error occurs.
+        """
+        return KeyStore(_obj=xmlsecmod.keysMngrGetKeysStore(self))
+    def adoptDataStore(self, store):
+        """
+        Adopts data store in the keys manager.
+        store   : the data store.
+        Returns : 0 on success or a negative value if an error occurs.
+        """
+        return xmlsecmod.keysMngrAdoptDataStore(self, store)
+    def getDataStore(self, id):
+        """
+        Lookups the data store of given klass id in the keys manager.
+        id      : the desired data store klass.
+        Returns : data store or None if it is not found or an error occurs.
+        """
+        # TODO : should return KeyDataStore object
+        return xmlsecmod.keysMngrGetDataStore(self, id)
+    # !!! comes from app.h (not keysmngr.h) !!!
     def certLoad(self, filename, format, type):
         """
         Reads cert from filename and adds to the list of trusted
@@ -742,7 +924,7 @@ class KeysMngr:
 
 simpleKeysStoreId = xmlsecmod.simpleKeysStoreId()
 class KeyStore:
-    def __init__(self, id, _obj=None):
+    def __init__(self, id=None, _obj=None):
         """
         Creates new store of the specified klass id. Caller is responsible for
         freeing the returned store by calling destroy method.
