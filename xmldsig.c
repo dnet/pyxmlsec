@@ -146,11 +146,11 @@ PyObject *xmlSecDSigCtx_setattr(PyObject *self, PyObject *args) {
   else if (!strcmp(name, "enabledReferenceTransforms"))
     dsigCtx->enabledReferenceTransforms = xmlSecPtrListPtr_get(value_obj);
   else if (!strcmp(name, "defSignMethodId"))
-    dsigCtx->defSignMethodId = PyCObject_AsVoidPtr(value_obj); // FIXME
+    dsigCtx->defSignMethodId = xmlSecTransformId_get(value_obj);
   else if (!strcmp(name, "defC14NMethodId"))
-    dsigCtx->defC14NMethodId = PyCObject_AsVoidPtr(value_obj); // FIXME
+    dsigCtx->defC14NMethodId = xmlSecTransformId_get(value_obj);
   else if (!strcmp(name, "defDigestMethodId"))
-    dsigCtx->defDigestMethodId = PyCObject_AsVoidPtr(value_obj); // FIXME
+    dsigCtx->defDigestMethodId = xmlSecTransformId_get(value_obj);
   else if (!strcmp(name, "signKey"))
     dsigCtx->signKey = xmlSecKeyPtr_get(value_obj);
   else if (!strcmp(name, "operation"))
@@ -275,7 +275,7 @@ PyObject *xmlsec_DSigCtxVerify(PyObject *self, PyObject *args) {
 PyObject *xmlsec_DSigCtxEnableReferenceTransform(PyObject *self, PyObject *args) {
   PyObject *dsigCtx_obj, *transformId_obj;
   xmlSecDSigCtxPtr dsigCtx;
-  //xmlSecTransformId transformId;
+  xmlSecTransformId transformId;
   int ret;
 
   if (!PyArg_ParseTuple(args, "OO:dsigCtxEnableReferenceTransform",
@@ -283,11 +283,8 @@ PyObject *xmlsec_DSigCtxEnableReferenceTransform(PyObject *self, PyObject *args)
     return NULL;
 
   dsigCtx = xmlSecDSigCtxPtr_get(dsigCtx_obj);
-  // FIXME
-  //transformId = xmlSecTransformId_get(transformId_obj);
-  //ret = xmlSecDSigCtxEnableReferenceTransform(dsigCtx, transformId);
-  ret = xmlSecDSigCtxEnableReferenceTransform(dsigCtx,
-					      PyCObject_AsVoidPtr(transformId_obj));
+  transformId = xmlSecTransformId_get(transformId_obj);
+  ret = xmlSecDSigCtxEnableReferenceTransform(dsigCtx, transformId);
 
   return (wrap_int(ret));
 }
@@ -295,7 +292,7 @@ PyObject *xmlsec_DSigCtxEnableReferenceTransform(PyObject *self, PyObject *args)
 PyObject *xmlsec_DSigCtxEnableSignatureTransform(PyObject *self, PyObject *args) {
   PyObject *dsigCtx_obj, *transformId_obj;
   xmlSecDSigCtxPtr dsigCtx;
-  //xmlSecTransformId transformId;
+  xmlSecTransformId transformId;
   int ret;
 
   if (!PyArg_ParseTuple(args, "OO:dsigCtxEnableSignatureTransform",
@@ -303,11 +300,8 @@ PyObject *xmlsec_DSigCtxEnableSignatureTransform(PyObject *self, PyObject *args)
     return NULL;
 
   dsigCtx = xmlSecDSigCtxPtr_get(dsigCtx_obj);
-  // FIXME
-  //transformId = xmlSecTransformId_get(transformId_obj);
-  //ret = xmlSecDSigCtxEnableSignatureTransform(dsigCtx, transformId);
-  ret = xmlSecDSigCtxEnableSignatureTransform(dsigCtx,
-					      PyCObject_AsVoidPtr(transformId_obj));
+  transformId = xmlSecTransformId_get(transformId_obj);
+  ret = xmlSecDSigCtxEnableSignatureTransform(dsigCtx, transformId);
 
   return (wrap_int(ret));
 }
