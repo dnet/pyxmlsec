@@ -93,9 +93,15 @@ static PyMethodDef xmlsec_methods[] = {
   /* keys.h */
   {"keyCreate",  xmlsec_KeyCreate,  METH_VARARGS},
   {"keyDestroy", xmlsec_KeyDestroy, METH_VARARGS},
+  {"keyGetName", xmlsec_KeySetName, METH_VARARGS},
   {"keySetName", xmlsec_KeySetName, METH_VARARGS},
   /* keyinfo.h */
-  {"getEnabledKeyData", keyinfo_get_enabledKeyData, METH_VARARGS},
+  {"keyInfoCtxCreate",     xmlsec_KeyInfoCtxCreate,     METH_VARARGS},
+  {"keyInfoCtxDestroy",    xmlsec_KeyInfoCtxDestroy,    METH_VARARGS},
+  {"keyInfoCtxInitialize", xmlsec_KeyInfoCtxInitialize, METH_VARARGS},
+  {"keyInfoCtxFinalize",   xmlsec_KeyInfoCtxFinalize,   METH_VARARGS},
+  {"keyInfoCtxReset",      xmlsec_KeyInfoCtxReset,      METH_VARARGS},
+  {"getEnabledKeyData",    keyinfo_get_enabledKeyData,  METH_VARARGS},
   /* keysmngr.h */
   {"keysMngrCreate",  xmlsec_KeysMngrCreate,  METH_VARARGS},
   {"keysMngrDestroy", xmlsec_KeysMngrDestroy, METH_VARARGS},
