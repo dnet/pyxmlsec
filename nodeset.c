@@ -257,7 +257,7 @@ PyObject *xmlsec_NodeSetDebugDump(PyObject *self, PyObject *args) {
   xmlSecNodeSetPtr nset;
   FILE *output;
 
-  if (!PyArg_ParseTuple(args, "Os:nodeSetDebugDump", &nset_obj, &output_obj))
+  if (!PyArg_ParseTuple(args, "OO:nodeSetDebugDump", &nset_obj, &output_obj))
     return NULL;
 
   nset = xmlSecNodeSetPtr_get(nset_obj);

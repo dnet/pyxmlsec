@@ -184,6 +184,7 @@ PyObject *xmlsec_EncCtxCreate(PyObject *self, PyObject *args) {
     keysMngr = xmlSecKeysMngrPtr_get(keysMngr_obj);
   }
   encCtx = xmlSecEncCtxCreate(keysMngr);
+
   return (wrap_xmlSecEncCtxPtr(encCtx));
 }
 
@@ -346,7 +347,7 @@ PyObject *xmlsec_EncCtxDebugDump(PyObject *self, PyObject *args) {
   FILE *output;
   xmlSecEncCtxPtr encCtx;
 
-  if (!PyArg_ParseTuple(args, "Os:encCtxDebugDump", &encCtx_obj, &output_obj))
+  if (!PyArg_ParseTuple(args, "OO:encCtxDebugDump", &encCtx_obj, &output_obj))
     return NULL;
 
   encCtx = xmlSecEncCtxPtr_get(encCtx_obj);
@@ -362,7 +363,7 @@ PyObject *xmlsec_EncCtxDebugXmlDump(PyObject *self, PyObject *args) {
   FILE *output;
   xmlSecEncCtxPtr encCtx;
 
-  if (!PyArg_ParseTuple(args, "Os:encCtxDebugXmlDump", &encCtx_obj, &output_obj))
+  if (!PyArg_ParseTuple(args, "OO:encCtxDebugXmlDump", &encCtx_obj, &output_obj))
     return NULL;
 
   encCtx = xmlSecEncCtxPtr_get(encCtx_obj);

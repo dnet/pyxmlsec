@@ -285,7 +285,8 @@ PyObject *xmlsec_KeyInfoCtxDebugDump(PyObject *self, PyObject *args) {
   xmlSecKeyInfoCtxPtr keyInfoCtx;
   FILE *output;
 
-  if (!PyArg_ParseTuple(args, "Os:keyInfoCtxDebugDump", &keyInfoCtx_obj, &output_obj))
+  if (!PyArg_ParseTuple(args, "OO:keyInfoCtxDebugDump",
+			&keyInfoCtx_obj, &output_obj))
     return NULL;
 
   keyInfoCtx = xmlSecKeyInfoCtxPtr_get(keyInfoCtx_obj);
@@ -301,7 +302,7 @@ PyObject *xmlsec_KeyInfoCtxDebugXmlDump(PyObject *self, PyObject *args) {
   xmlSecKeyInfoCtxPtr keyInfoCtx;
   FILE *output;
 
-  if (!PyArg_ParseTuple(args, "Os:keyInfoCtxDebugXmlDump",
+  if (!PyArg_ParseTuple(args, "OO:keyInfoCtxDebugXmlDump",
 			&keyInfoCtx_obj, &output_obj))
     return NULL;
 

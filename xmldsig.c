@@ -378,7 +378,7 @@ PyObject *xmlsec_DSigCtxDebugDump(PyObject *self, PyObject *args) {
   FILE *output;
   xmlSecDSigCtxPtr dsigCtx;
 
-  if (!PyArg_ParseTuple(args, "Os:dsigCtxDebugDump", &dsigCtx_obj, &output_obj))
+  if (!PyArg_ParseTuple(args, "OO:dsigCtxDebugDump", &dsigCtx_obj, &output_obj))
     return NULL;
 
   dsigCtx = xmlSecDSigCtxPtr_get(dsigCtx_obj);
@@ -394,7 +394,7 @@ PyObject *xmlsec_DSigCtxDebugXmlDump(PyObject *self, PyObject *args) {
   FILE *output;
   xmlSecDSigCtxPtr dsigCtx;
 
-  if (!PyArg_ParseTuple(args, "Os:dsigCtxDebugXmlDump", &dsigCtx_obj, &output_obj))
+  if (!PyArg_ParseTuple(args, "OO:dsigCtxDebugXmlDump", &dsigCtx_obj, &output_obj))
     return NULL;
 
   dsigCtx = xmlSecDSigCtxPtr_get(dsigCtx_obj);

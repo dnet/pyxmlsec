@@ -389,7 +389,7 @@ PyObject *xmlsec_KeyDebugDump(PyObject *self, PyObject *args) {
   FILE *output;
   xmlSecKeyPtr key;
 
-  if (!PyArg_ParseTuple(args, "Os:keyDebugDump", &key_obj, &output_obj))
+  if (!PyArg_ParseTuple(args, "OO:keyDebugDump", &key_obj, &output_obj))
     return NULL;
 
   key = xmlSecKeyPtr_get(key_obj);
@@ -405,7 +405,7 @@ PyObject *xmlsec_KeyDebugXmlDump(PyObject *self, PyObject *args) {
   FILE *output;
   xmlSecKeyPtr key;
 
-  if (!PyArg_ParseTuple(args, "Os:keyDebugXmlDump", &key_obj, &output_obj))
+  if (!PyArg_ParseTuple(args, "OO:keyDebugXmlDump", &key_obj, &output_obj))
     return NULL;
 
   key = xmlSecKeyPtr_get(key_obj);

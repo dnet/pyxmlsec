@@ -281,7 +281,7 @@ PyObject *xmlsec_PtrListDebugDump(PyObject *self, PyObject *args) {
   FILE *output;
   xmlSecPtrListPtr list;
 
-  if (!PyArg_ParseTuple(args, "Os:ptrListDebugDump", &list_obj, &output_obj))
+  if (!PyArg_ParseTuple(args, "OO:ptrListDebugDump", &list_obj, &output_obj))
     return NULL;
 
   list = xmlSecPtrListPtr_get(list_obj);
@@ -297,7 +297,7 @@ PyObject *xmlsec_PtrListDebugXmlDump(PyObject *self, PyObject *args) {
   FILE *output;
   xmlSecPtrListPtr list;
 
-  if (!PyArg_ParseTuple(args, "Os:ptrListDebugXmlDump", &list_obj, &output_obj))
+  if (!PyArg_ParseTuple(args, "OO:ptrListDebugXmlDump", &list_obj, &output_obj))
     return NULL;
 
   list = xmlSecPtrListPtr_get(list_obj);
@@ -384,6 +384,7 @@ static void xmlsec_PtrDebugDumpItemMethod(xmlSecPtr ptr, FILE *output) {
   list = (xmlSecPtrListPtr) ptr;
   func = xmlHashLookup(PtrDebugDumpItemMethods, list->id->name);
 
+  /* FIXME */
   args = Py_BuildValue((char *) "OO", wrap_xmlSecPtr(ptr),
 		       PyFile_FromFile(output, NULL, NULL, NULL));
 
