@@ -19,8 +19,7 @@
 # This is free software; see COPYING file in the source
 # distribution for preciese wording.
 # 
-# Copyright (C) 2002-2003 Aleksey Sanin <aleksey@aleksey.com>
-# Copyright (C) 2003 Valery Febvre <vfebvre@easter-eggs.com>
+# Copyright (C) 2003-2004 Valery Febvre <vfebvre@easter-eggs.com>
 #
 
 import os, sys
@@ -133,7 +132,7 @@ def encrypt_file(xml_file, key_file):
         print "Error: failed to set key name for key from \"%s\"" % key_file
         return cleanup(doc, enc_data_node, enc_ctx)
 
-    enc_ctx.setEncKey(key)
+    enc_ctx.encKey = key
 
     # Encrypt the data
     if enc_ctx.xmlEncrypt(enc_data_node, doc.getRootElement()) < 0:

@@ -113,7 +113,7 @@ def encrypt_file(tmpl_file, key_file, data, dataSize):
         print "Error: failed to set key name for key from \"%s\"" % key_file
         return cleanup(doc, enc_ctx)
 
-    enc_ctx.setEncKey(key)
+    enc_ctx.encKey = key
 
     # Encrypt the data
     if enc_ctx.binaryEncrypt(node, data, dataSize) < 0:

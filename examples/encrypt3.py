@@ -20,8 +20,7 @@
 # This is free software; see COPYING file in the source
 # distribution for preciese wording.
 # 
-# Copyright (C) 2002-2003 Aleksey Sanin <aleksey@aleksey.com>
-# Copyright (C) 2003 Valery Febvre <vfebvre@easter-eggs.com>
+# Copyright (C) 2003-2004 Valery Febvre <vfebvre@easter-eggs.com>
 #
 
 import sys, os
@@ -196,7 +195,8 @@ def encrypt_file(mngr, xml_file, key_name):
     if key is None:
         print "Error: failed to generate session DES key"
         cleanup(doc, enc_data_node)
-    enc_ctx.setEncKey(key)
+
+    enc_ctx.encKey = key
 
     # Encrypt the data
     if enc_ctx.xmlEncrypt(enc_data_node, doc.getRootElement()) < 0:
