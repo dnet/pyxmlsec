@@ -258,8 +258,7 @@ PyObject *xmlsec_AddIDs(PyObject *self, PyObject *args) {
   PyObject *doc_obj, *cur_obj, *ids_obj;
   xmlDocPtr doc;
   xmlNodePtr cur;
-  xmlChar **ids;
-  int i;
+  xmlChar **ids = NULL;
 
   if (!PyArg_ParseTuple(args, (char *) "OOO:addIDs",
 			&doc_obj, &cur_obj, &ids_obj))
@@ -267,19 +266,12 @@ PyObject *xmlsec_AddIDs(PyObject *self, PyObject *args) {
 
   doc = xmlDocPtr_get(doc_obj);
   cur = xmlNodePtr_get(cur_obj);
-  /* convert Python list into a NULL terminated list */
-  ids = (xmlChar **) calloc (PyList_Size(ids_obj)+1, sizeof (xmlChar *));
-  for (i=0; i<PyList_Size(ids_obj); i++) {
-    ids[i] = (xmlChar *) calloc (PyString_Size(PyList_GetItem(ids_obj, i))+1,
-				 sizeof (xmlChar));
-    sscanf (PyString_AsString(PyList_GetItem(ids_obj, i)), "%s", ids[i]);
-  }
-  ids[i] = NULL;
+  PyStringList_AsCharPtrArray(ids_obj, ids);
 
   xmlSecAddIDs(doc, cur, (const xmlChar **)ids);
 
   Py_INCREF(Py_None);
-  return Py_None;
+  return (Py_None);
 }
 
 PyObject *xmlsec_CreateTree(PyObject *self, PyObject *args) {

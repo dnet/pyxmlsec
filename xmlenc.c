@@ -78,7 +78,7 @@ PyObject *xmlSecEncCtx_getattr(PyObject *self, PyObject *args) {
   if (!strcmp(attr, "transformCtx"))
     return (wrap_xmlSecTransformCtxPtr(&(encCtx->transformCtx)));
   if (!strcmp(attr, "defEncMethodId"))
-    return (PyCObject_FromVoidPtr((void *) encCtx->defEncMethodId, NULL));
+    return (wrap_xmlSecTransformId(encCtx->defEncMethodId));
   if (!strcmp(attr, "encKey"))
     return (wrap_xmlSecKeyPtr(encCtx->encKey));
   if (!strcmp(attr, "operation"))
@@ -140,7 +140,7 @@ PyObject *xmlSecEncCtx_setattr(PyObject *self, PyObject *args) {
   else if (!strcmp(name, "transformCtx"))
     encCtx->transformCtx = *(xmlSecTransformCtxPtr_get(value_obj));
   else if (!strcmp(name, "defEncMethodId"))
-    encCtx->defEncMethodId = PyCObject_AsVoidPtr(value_obj);
+    encCtx->defEncMethodId = xmlSecTransformId_get(value_obj);
   else if (!strcmp(name, "encKey"))
     encCtx->encKey = xmlSecKeyPtr_get(value_obj);
   else if (!strcmp(name, "operation"))
