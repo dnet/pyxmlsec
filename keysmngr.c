@@ -69,3 +69,53 @@ PyObject *xmlsec_KeysMngrFindKey(PyObject *self, PyObject *args) {
   ret = PyCObject_FromVoidPtrAndDesc((void *) key, (char *) "xmlSecKeyPtr", NULL);
   return (ret);
 }
+
+PyObject *xmlsec_KeyStoreCreate(PyObject *self, PyObject *args) {
+  PyObject *id_meth;
+  xmlSecKeyStorePtr keyStore;
+  PyObject *ret;
+
+  if (!PyArg_ParseTuple(args, "O:keyStoreCreate", &id_meth))
+    return NULL;
+
+  keyStore = xmlSecKeyStoreCreate((xmlSecKeyStoreId) PyCObject_AsVoidPtr(id_meth));
+  ret = PyCObject_FromVoidPtrAndDesc((void *) keyStore, (char *) "xmlSecKeyStorePtr", NULL);
+  return (ret);  
+}
+
+PyObject *xmlsec_KeyStoreDestroy(PyObject *self, PyObject *args) {
+  PyObject *store_obj;
+  xmlSecKeyStorePtr store;
+
+  if (!PyArg_ParseTuple(args, "O:keyStoreDestroy", &store_obj))
+    return NULL;
+
+  store = xmlSecKeyStorePtr_get(PyObject_GetAttr(store_obj, PyString_FromString("_o")));
+  xmlSecKeyStoreDestroy(store);
+
+  Py_INCREF(Py_None);
+  return Py_None;
+}
+
+PyObject *xmlsec_KeyStoreFindKey(PyObject *self, PyObject *args) {
+  PyObject *store_obj, *keyInfoCtx_obj;
+  const xmlChar *name;
+  xmlSecKeyStorePtr store;
+  xmlSecKeyInfoCtxPtr keyInfoCtx;
+  xmlSecKeyPtr key;
+  PyObject *ret;
+
+  if (!PyArg_ParseTuple(args, "OsO:keyStoreFindKey", &store_obj, &name, &keyInfoCtx_obj))
+    return NULL;
+ 
+  store = xmlSecKeyStorePtr_get(PyObject_GetAttr(store_obj, PyString_FromString("_o")));
+  keyInfoCtx = xmlSecKeyInfoCtxPtr_get(PyObject_GetAttr(keyInfoCtx_obj, PyString_FromString("_o")));
+  key = xmlSecKeyStoreFindKey(store, name, keyInfoCtx);
+
+  ret = PyCObject_FromVoidPtrAndDesc((void *) key, (char *) "xmlSecKeyPtr", NULL);
+  return (ret);
+}
+
+PyObject *xmlsec_SimpleKeysStoreId(PyObject *self, PyObject *args) {
+  return PyCObject_FromVoidPtr((void *) xmlSecSimpleKeysStoreId, NULL);
+}
