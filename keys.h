@@ -25,6 +25,9 @@ PyObject *xmlsec_KeyReqCopy(PyObject *self, PyObject *args);
 PyObject *xmlsec_KeyReqMatchKey(PyObject *self, PyObject *args);
 PyObject *xmlsec_KeyReqMatchKeyValue(PyObject *self, PyObject *args);
 
+PyObject *xmlSecKey_getattr(PyObject *self, PyObject *args);
+PyObject *xmlSecKey_setattr(PyObject *self, PyObject *args);
+
 PyObject *xmlsec_KeyCreate(PyObject *self, PyObject *args);
 PyObject *xmlsec_KeyDestroy(PyObject *self, PyObject *args);
 PyObject *xmlsec_KeyEmpty(PyObject *self, PyObject *args);

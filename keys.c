@@ -27,6 +27,7 @@
 #include "buffer.h"
 #include "keys.h"
 #include "keysdata.h"
+#include "list.h"
 
 PyObject *wrap_xmlSecKeyReqPtr(xmlSecKeyReqPtr keyReq) {
   PyObject *ret;
@@ -213,6 +214,66 @@ PyObject *xmlsec_KeyReqMatchKeyValue(PyObject *self, PyObject *args) {
 
 /******************************************************************************/
 /* Key                                                                        */
+/******************************************************************************/
+
+PyObject *xmlSecKey_getattr(PyObject *self, PyObject *args) {
+  PyObject *key_obj;
+  xmlSecKeyPtr key;
+  const char *attr;
+
+  if (!PyArg_ParseTuple(args, "Os:keyGetAttr", &key_obj, &attr))
+    return NULL;
+
+  key = xmlSecKeyPtr_get(key_obj);
+
+  if (!strcmp(attr, "__members__"))
+    return Py_BuildValue("[ssssss]", "name", "value", "dataList", "usage",
+			 "notValidBefore", "notValidAfter");
+  if (!strcmp(attr, "name"))
+    return (wrap_xmlCharPtr(key->name));
+  if (!strcmp(attr, "value"))
+    return (wrap_xmlSecKeyDataPtr(key->value));
+  if (!strcmp(attr, "dataList"))
+    return (wrap_xmlSecPtrListPtr(key->dataList));
+  if (!strcmp(attr, "usage"))
+    return (wrap_int(key->usage));
+  if (!strcmp(attr, "notValidBefore"))
+    return (wrap_int(key->notValidBefore));
+  if (!strcmp(attr, "notValidAfter"))
+    return (wrap_int(key->notValidAfter));
+
+  Py_INCREF(Py_None);
+  return (Py_None);
+}
+
+PyObject *xmlSecKey_setattr(PyObject *self, PyObject *args) {
+  PyObject *key_obj, *value_obj;
+  xmlSecKeyPtr key;
+  const char *name;
+
+  if (!PyArg_ParseTuple(args, "OsO:keySetAttr",
+			&key_obj, &name, &value_obj))
+    return NULL;
+
+  key = xmlSecKeyPtr_get(key_obj);
+    
+  if (!strcmp(name, "name"))
+    key->name = PyString_AsString(value_obj);
+  else if (!strcmp(name, "value"))
+    key->value = xmlSecKeyDataPtr_get(value_obj);
+  else if (!strcmp(name, "dataList"))
+    key->dataList = xmlSecPtrListPtr_get(value_obj);
+  else if (!strcmp(name, "usage"))
+    key->usage = PyInt_AsLong(value_obj);
+  else if (!strcmp(name, "notValidBefore"))
+    key->notValidBefore = PyInt_AsLong(value_obj);
+  else if (!strcmp(name, "notValidAfter"))
+    key->notValidAfter = PyInt_AsLong(value_obj);
+
+  Py_INCREF(Py_None);
+  return (Py_None);
+}
+
 /******************************************************************************/
 
 PyObject *xmlsec_KeyCreate(PyObject *self, PyObject *args) {
