@@ -72,6 +72,7 @@ PyObject *xmlsec_KeyInfoCtxInitialize(PyObject *self, PyObject *args) {
   if (mngr_obj != Py_None)
     mngr = xmlSecKeysMngrPtr_get(PyObject_GetAttr(mngr_obj, PyString_FromString("_o")));
   
+  /* mngr may be NULL */
   ret = xmlSecKeyInfoCtxInitialize(keyInfoCtx, mngr);
   if (ret < 0) {
     PyErr_SetFromErrno(xmlsec_error);
@@ -100,8 +101,8 @@ PyObject *xmlsec_KeyInfoCtxReset(PyObject *self, PyObject *args) {
     return NULL;
 
   keyInfoCtx = xmlSecKeyInfoCtxPtr_get(PyObject_GetAttr(keyInfoCtx_obj, PyString_FromString("_o")));
-  
   xmlSecKeyInfoCtxReset(keyInfoCtx);
+
   return Py_BuildValue("i", 0);
 }
 
