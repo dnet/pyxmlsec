@@ -3,7 +3,7 @@
  * PyXMLSec - Python bindings for XML Security library (XMLSec)
  *
  * Copyright (C) 2003-2004 Easter-eggs, Valery Febvre
- * http://pyxmlsec.labs.libre-entreprise.org/
+ * http://pyxmlsec.labs.libre-entreprise.org
  * 
  * Author: Valery Febvre <vfebvre@easter-eggs.com>
  *
@@ -25,6 +25,20 @@
 #include "wrap_objs.h"
 
 #include "list.h"
+
+PyObject *wrap_xmlSecPtrListPtr(xmlSecPtrListPtr list) {
+  PyObject *ret;
+
+  if (list == NULL) {
+    Py_INCREF(Py_None);
+    return (Py_None);
+  }
+  ret = PyCObject_FromVoidPtrAndDesc((void *) list,
+				     (char *) "xmlSecPtrListPtr", NULL);
+  return (ret);
+}
+
+/*****************************************************************************/
 
 PyObject *xmlsec_PtrListCreate(PyObject *self, PyObject *args) {
   PyObject *id_meth;

@@ -1144,7 +1144,7 @@ class DSigCtx:
         """
         Destroys context object (<dsig:Signature/> element processing context).
         """
-        return xmlsecmod.dsigCtxDestroy(self)
+        xmlsecmod.dsigCtxDestroy(self)
     def initialize(self, mngr):
         """
         Initializes <dsig:Signature/> element processing context. The caller is

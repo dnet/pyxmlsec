@@ -11,6 +11,9 @@ typedef struct {
 #define xmlSecDSigCtxPtr_get(v) (((v) == Py_None) ? NULL : (((xmlSecDSigCtxPtr_object *)(PyObject_GetAttr(v, PyString_FromString("_o"))))->obj))
 #define xmlSecDSigReferenceCtxPtr_get(v) (((v) == Py_None) ? NULL : (((xmlSecDSigReferenceCtxPtr_object *)(PyObject_GetAttr(v, PyString_FromString("_o"))))->obj))
 
+PyObject *wrap_xmlSecDSigCtxPtr(xmlSecDSigCtxPtr ctx);
+PyObject *wrap_xmlSecDSigReferenceCtxPtr(xmlSecDSigReferenceCtxPtr ctx);
+
 PyObject *xmlsec_DSigCtxCreate(PyObject *self, PyObject *args);
 PyObject *xmlsec_DSigCtxDestroy(PyObject *self, PyObject *args);
 PyObject *xmlsec_DSigCtxInitialize(PyObject *self, PyObject *args);
@@ -22,6 +25,7 @@ PyObject *xmlsec_DSigCtxEnableSignatureTransform(PyObject *self, PyObject *args)
 PyObject *xmlsec_DSigCtxGetPreSignBuffer(PyObject *self, PyObject *args);
 PyObject *xmlsec_DSigCtxDebugDump(PyObject *self, PyObject *args);
 PyObject *xmlsec_DSigCtxDebugXmlDump(PyObject *self, PyObject *args);
+
 PyObject *xmlsec_DSigReferenceCtxCreate(PyObject *self, PyObject *args);
 PyObject *xmlsec_DSigReferenceCtxDestroy(PyObject *self, PyObject *args);
 PyObject *xmlsec_DSigReferenceCtxInitialize(PyObject *self, PyObject *args);
