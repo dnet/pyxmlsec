@@ -1,13 +1,37 @@
+2004-02-08  Valery Febvre  <vfebvre@easter-eggs.com>
+
+	* xmlsec.py: dsigReferenceCtxListId was transformed into a function
+
+	* transforms.c, xmldsig.c:
+	Basic args checking was added in all xmlsec functions
+
+2004-02-07  Valery Febvre  <vfebvre@easter-eggs.com>
+
+	* parser.c, x509.c, xmlenc.c, xmlsec.c, xmltree.c, nodeset.c, keys.c
+	* keysdata.c, keysmngr.c, keysmngr.h, list.c, membuf.c:
+	Basic args checking added in all xmlsec functions
+
+	* xmlsec.py:
+	keyPtrListId, keyDataNameId, keyDataValueId, keyDataRetrievalMethodId,
+	keyDataEncryptedKeyId, transformXmlParserId, transformMemBufId and
+	simpleKeysStoreId were transformed into functions (+ doc added).
+	base64Encode() and base64Decode() functions modified (params were changed).
+
+	* list.h: Missing prototype for wrap_xmlSecPtrListId() func was added.
+
 2004-02-03  Valery Febvre  <vfebvre@easter-eggs.com>
 
 	* app.c, base64.c, buffer.c, keyinfo.c:
-	Args checking added in all xmlsec functions
+	Basic args checking was added in all xmlsec functions
 
-	* utils.c: File checking type was added in CheckArgs() function
+	* utils.c: File type was added in CheckArgs() function
 
 2004-02-02  Valery Febvre  <vfebvre@easter-eggs.com>
 
 	* setup.py: utils.c added in sources list.
+
+	* templates.c:
+	Basic args checking was added in all xmlsec functions
 
 	* utils.c, utils.h, xmlsecmod.h: Initial commit
 

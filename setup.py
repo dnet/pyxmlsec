@@ -188,7 +188,7 @@ em = Extension("xmlsecmod",
 doclines = __doc__.split("\n")
 
 setup(name = "PyXMLSec",
-      version = "0.20040202",
+      version = "0.20040209",
       description = doclines[0],
       long_description = "\n" . join(doclines[2:]),
       author = "Valéry Febvre",
