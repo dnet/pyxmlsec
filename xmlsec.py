@@ -71,9 +71,9 @@ keyDataDsaId  = xmlsecmod.keyDataDsaId()
 keyDataRsaId  = xmlsecmod.keyDataRsaId()
 keyDataX509Id = xmlsecmod.keyDataX509Id()
 # Crypto Transforms Ids methods
-transformDsaSha1Id   = xmlsecmod.transformDsaSha1Id()
-transformRsaSha1Id   = xmlsecmod.transformRsaSha1Id()
-transformSha1Id      = xmlsecmod.transformSha1Id()
+transformDsaSha1Id = xmlsecmod.transformDsaSha1Id()
+transformRsaSha1Id = xmlsecmod.transformRsaSha1Id()
+transformSha1Id    = xmlsecmod.transformSha1Id()
 # High level routines form xmlsec command line utility
 def cryptoAppInit(config=None):
     return xmlsecmod.cryptoAppInit(config)
@@ -91,10 +91,72 @@ def cryptoAppDefaultKeysMngrSave(mngr, filename, type):
 def cryptoAppDefaultKeysMngrAdoptKey(mngr, key):
     return xmlsecmod.cryptoAppDefaultKeysMngrAdoptKey(mngr, key)
 def cryptoAppKeysMngrCertLoad(mngr, filename, format, type):
-    return xmlsecmod.cryptoAppKeysMngrCertLoad(mngr, filename,
-                                               format, type)
+    return xmlsecmod.cryptoAppKeysMngrCertLoad(mngr, filename, format, type)
 def cryptoAppShutdown():
     return xmlsecmod.cryptoAppShutdown()
+
+###############################################################################
+# parse.h
+###############################################################################
+transformXmlParserId = xmlsecmod.transformXmlParserId()
+def parseFile(filename):
+    """
+    Loads XML Doc from file filename. We need a special version because of c14n
+    issue. The code is copied from xmlSAXParseFileWithData() function.
+    filename : the filename.
+    Returns  : the loaded XML document or None if an error occurs.
+    """
+    return xmlsecmod.parseFile(filename)
+def parseMemory(buffer, size, recovery):
+    """
+    Loads XML Doc from memory. We need a special version because of c14n issue.
+    The code is copied from xmlSAXParseMemory() function.
+    buffer   : the input buffer.
+    size     : the input buffer size.
+    recovery : the flag.
+    Returns  : the loaded XML document or None if an error occurs.
+    """
+    return xmlsecmod.parseMemory(buffer, size, recovery)
+def parseMemoryExt(prefix, prefixSize, buffer, bufferSize, postfix, postfixSize):
+    """
+    Loads XML Doc from 3 chunks of memory: prefix, buffer and postfix.
+    prefix      : the first part of the input.
+    prefixSize  : the size of the first part of the input.
+    buffer      : the second part of the input.
+    bufferSize  : the size of the second part of the input.
+    postfix     : the third part of the input.
+    postfixSize : the size of the third part of the input.
+    Returns     : the loaded XML document or None if an error occurs.
+    """
+    return xmlsecmod.parseMemoryExt(prefix, prefixSize, buffer, bufferSize,
+                                    postfix, postfixSize)
+
+###############################################################################
+# x509.h
+###############################################################################
+# <dsig:X509Certificate/> node found or would be written back.
+X509DATA_CERTIFICATE_NODE  = 0x00000001
+# <dsig:X509SubjectName/> node found or would be written back.
+X509DATA_SUBJECTNAME_NODE  = 0x00000002
+# <dsig:X509IssuerSerial/> node found or would be written back.
+X509DATA_ISSUERSERIAL_NODE = 0x00000004
+# <dsig:/X509SKI> node found or would be written back.
+X509DATA_SKI_NODE          = 0x00000008
+# <dsig:X509CRL/> node found or would be written back.
+X509DATA_CRL_NODE          = 0x00000010
+# Default set of nodes to write in case of empty <dsig:X509Data/> node template.
+X509DATA_DEFAULT = X509DATA_CERTIFICATE_NODE | X509DATA_CRL_NODE
+def x509DataGetNodeContent(node, deleteChildren, keyInfoCtx):
+    """
+    Reads the contents of <dsig:X509Data/> node and returns it as a bits mask.
+    node           : the <dsig:X509Data/> node.
+    deleteChildren : the flag that indicates whether to remove node children
+    after reading.
+    keyInfoCtx     : the <dsig:KeyInfo/> node processing context.
+    Returns        : the bit mask representing the <dsig:X509Data/> node content
+    or a negative value if an error occurs.
+    """
+    return xmlsecmod.x509DataGetNodeContent(node, deleteChildren, keyInfoCtx)
 
 ###############################################################################
 # xmltree.h
@@ -159,17 +221,23 @@ def isHex(c):
 def getHex(c):
     return xmlsecmod.getHex(c)
 
+###############################################################################
+# transforms.h
+###############################################################################
 transformInclC14NId  = xmlsecmod.transformInclC14NId()
 transformExclC14NId  = xmlsecmod.transformExclC14NId()
 transformEnvelopedId = xmlsecmod.transformEnvelopedId()
-
+# Transform URIs types
 TransformUriTypeNone         = 0x0000 # The URI type is unknown or not set.
 TransformUriTypeEmpty        = 0x0001 # The empty URI ("") type.
-TransformUriTypeSameDocument = 0x0002 # The smae document ("#...") but not empty ("") URI type.	
+TransformUriTypeSameDocument = 0x0002 # The same document ("#...") but not empty ("") URI type.	
 TransformUriTypeLocal        = 0x0004 # The local URI ("file:///....") type.
 TransformUriTypeRemote       = 0x0008 # The remote URI type.
 TransformUriTypeAny          = 0xFFFF # Any URI type.
 
+###############################################################################
+# buffer.h
+###############################################################################
 class Buffer:
     def __init__(self, size=None, _obj=None):
         """
@@ -198,6 +266,9 @@ class Buffer:
         """Frees allocated resource for a buffer intialized with initialize method."""
         xmlsecmod.bufferFinalize(self)
 
+###############################################################################
+# xmldsig.h
+###############################################################################
 # If this flag is set then <dsig:Manifests/> nodes will not be processed.
 DSIG_FLAGS_IGNORE_MANIFESTS =            0x00000001
 # If this flag is set then pre-digest buffer for <dsig:Reference/> child
@@ -386,7 +457,10 @@ class DSigReferenceCtx:
         output : path of output file.
         """
         xmlsecmod.dsigCtxDebugXmlDump(self, output)
-
+        
+###############################################################################
+# list.h
+###############################################################################
 class PtrList:
     def __init__(self, id=None, _obj=None):
         """
@@ -419,6 +493,9 @@ class PtrList:
         """
         return xmlsecmod.ptrListGetSize(self)
 
+###############################################################################
+# templates.h
+###############################################################################
 class TmplSignature(libxml2.xmlNode):
     def __init__(self, doc, c14nMethodId, signMethodId, id=None, _obj=None):
         """
@@ -604,6 +681,9 @@ class TmplManifest(libxml2.xmlNode):
                                                   id, uri, type)
         return TmplReference(_obj=_obj)
 
+###############################################################################
+# keys.h
+###############################################################################
 ## Key data types
 KeyDataTypeUnknown   = 0x0000 # The key data type is unknown (same as #xmlSecKeyDataTypeNone)
 KeyDataTypeNone	     = KeyDataTypeUnknown
@@ -685,6 +765,9 @@ class KeyReq:
         """
         return xmlsecmod.keyReqMatchKey(self, key)
 
+###############################################################################
+# keyinfo.h
+###############################################################################
 class KeyInfoCtx:
     def __init__(self, mngr=None, _obj=None):
         """
@@ -721,6 +804,9 @@ class KeyInfoCtx:
         """Return enabledKeyData member."""
         return PtrList(None, _obj=xmlsecmod.getEnabledKeyData(self))
 
+###############################################################################
+# keysmngr.h
+###############################################################################
 class KeysMngr:
     def __init__(self, _obj=None):
         """
