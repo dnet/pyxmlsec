@@ -1957,6 +1957,18 @@ class TmplKeyInfo(libxml2.xmlNode):
         if _obj is None:
             raise Error('xmlSecTmplKeyInfoAddEncryptedKey() failed')
         return TmplEncData(_obj=_obj)
+    def addRetrievalMethod(self, uri, type):
+        """
+        Adds <dsig:RetrievalMethod/> node to the <dsig:KeyInfo/> node.
+        uri     : the URI attribute (optional).
+        type    : the Type attribute(optional).
+        Returns : the newly created <dsig:RetrievalMethod/> node or None if an
+        error occurs.
+        """
+        _obj = xmlsecmod.tmplKeyInfoAddRetrievalMethod(self, uri, type)
+        if _obj is None:
+            raise Error('xmlSecTmplKeyInfoAddRetrievalMethod() failed')
+        return TmplRetrievalMethod(_obj=_obj)
 
 class TmplReference(libxml2.xmlNode):
     def __init__(self, _obj=None):
@@ -1970,7 +1982,7 @@ class TmplReference(libxml2.xmlNode):
         an error occurs.
         """
         _obj = xmlsecmod.tmplReferenceAddTransform(self, transformId)
-        return libxml2.xmlNode(_obj=_obj)
+        return TmplTransform(_obj=_obj)
 
 class TmplObject(libxml2.xmlNode):
     def __init__(self, _obj=None):
@@ -1996,7 +2008,66 @@ class TmplObject(libxml2.xmlNode):
         an error occurs.
         """
         return TmplManifest(_obj=xmlsecmod.tmplObjectAddManifest(self, id))
-        
+
+class TmplTransform(libxml2.xmlNode):
+    def __init__(self, _obj=None):
+        self._o = None
+        libxml2.xmlNode.__init__(self, _obj=_obj)
+    def addHmacOutputLength(self, bitsLen):
+        """
+        Creates <dsig:HMACOutputLength/> child for the HMAC transform node.
+        bitsLen : the required length in bits
+        Returns : 0 on success and a negatie value otherwise.
+        """
+        return xmlsecmod.tmplTransformAddHmacOutputLength(self, bitsLen)
+    def addRsaOaepParam(self, buf):
+        """
+        Creates <enc:OAEPParam/> child node in the node.
+        buf     : the OAEP param buffer.
+        Returns : 0 on success or a negative value if an error occurs.
+        """
+        return xmlsecmod.tmplTransformAddRsaOaepParam(self, buf)
+    def addXsltStylesheet(self, xslt):
+        """
+        Writes the XSLT transform expression to the node.
+        xslt    : the XSLT transform exspression.
+        Returns : 0 on success or a negative value otherwise.
+        """
+        return xmlsecmod.tmplTransformAddXsltStylesheet(self, xslt)
+    def addC14NInclNamespaces(self, prefixList):
+        """
+        Adds 'inclusive' namespaces to the ExcC14N transform node.
+        prefixList : the white space delimited list of namespace prefixes,
+        where 'default' indicates the default namespace (optional).
+        Returns    : 0 if success or a negative value otherwise.
+        """
+        return xmlsecmod.tmplTransformAddC14NInclNamespaces(self, prefixList)
+    def addXPath(self, expression, nsList):
+        """
+        Writes XPath transform infromation to the <dsig:Transform/> node node.
+        expression : the XPath expression.
+        nsList     : the list of namespace prefix/href pairs (optional).
+        Returns    : 0 for success or a negative value otherwise.
+        """
+        return xmlsecmod.tmplTransformAddXPath(self, expression, nsList)
+    def addXPath2(self, type, expression, nsList):
+        """
+        Writes XPath2 transform infromation to the <dsig:Transform/> node.
+        type       : the XPath2 transform type ('union', 'intersect' or 'subtract').
+        expression : the XPath expression.
+        nsList     : the list of namespace prefix/href pairs. (optional).
+        Returns    : 0 for success or a negative value otherwise.
+        """
+        return xmlsecmod.tmplTransformAddXPath2(self, type, expression, nsList)
+    def addXPointer(self, expression, nsList):
+        """
+        Writes XPoniter transform infromation to the <dsig:Transform/> node.
+        expression : the XPath expression.
+        nsList     : the list of namespace prefix/href pairs. (optional).
+        Returns    : 0 for success or a negative value otherwise.
+        """
+        return xmlsecmod.tmplTransformAddXPointer(self, expression, nsList)
+
 class TmplManifest(libxml2.xmlNode):
     def __init__(self, _obj=None):
         self._o = None
@@ -2130,6 +2201,21 @@ class TmplCipherReference(libxml2.xmlNode):
         """
         _obj = xmlsecmod.tmplCipherReferenceAddTransform(self, transformId)
         return libxml2.xmlNode(_obj=_obj)
+
+class TmplRetrievalMethod(libxml2.xmlNode):
+    def __init__(self, _obj=None):
+        self._o = None
+        libxml2.xmlNode.__init__(self, _obj=_obj)
+    def addTransform(self, transformId):
+        """
+        Adds <dsig:Transform/> node (and the parent <dsig:Transforms/> node if
+        required) to the <dsig:RetrievalMethod/> node retrMethod.
+        transformId : the transform id.
+        Returns     : the newly created <dsig:dsig:Transforms/> node or None if
+        an error occurs.
+        """
+        _obj = xmlsecmod.tmplRetrievalMethodAddTransform(self, transformId)
+        return TmplTransform(_obj=_obj)
 
 ###############################################################################
 # transforms.h
