@@ -27,57 +27,111 @@
 
 #include "xmlsecmod.h"
 #include "keys.h"
+#include "keysmngr.h"
 
 PyObject *xmlsec_CryptoAppInit(PyObject *self, PyObject *args) {
   char *config;
-  int result;
-  if (!PyArg_ParseTuple(args, "z", &config))
+  int ret;
+  if (!PyArg_ParseTuple(args, "z:cryptoAppInit", &config))
     return NULL;
-  result = xmlSecCryptoAppInit(config);
-  if (result < 0) {
+  ret = xmlSecCryptoAppInit(config);
+  if (ret < 0) {
     PyErr_SetFromErrno(xmlsec_error);
   }
-  return Py_BuildValue("i", result);
+  return Py_BuildValue("i", ret);
 }
 
 PyObject *xmlsec_CryptoAppShutdown(PyObject *self, PyObject *args) {
-  int result;
-  result = xmlSecCryptoAppShutdown();
-  if (result < 0) {
+  int ret;
+  ret = xmlSecCryptoAppShutdown();
+  if (ret < 0) {
     PyErr_SetFromErrno(xmlsec_error);
   }
-  return Py_BuildValue("i", result);
+  return Py_BuildValue("i", ret);
+}
+
+PyObject *xmlsec_CryptoAppDefaultKeysMngrInit(PyObject *self, PyObject *args) {
+  PyObject *mngr_obj;
+  xmlSecKeysMngrPtr mngr;
+  int ret;
+
+  if (!PyArg_ParseTuple(args, "O:cryptoAppDefaultKeysMngrInit", &mngr_obj))
+    return NULL;
+  mngr = xmlSecKeysMngrPtr_get(PyObject_GetAttr(mngr_obj, PyString_FromString("_o")));
+  ret = xmlSecCryptoAppDefaultKeysMngrInit(mngr);
+  if (ret < 0) {
+    PyErr_SetFromErrno(xmlsec_error);
+  }
+  return Py_BuildValue("i", ret);
+}
+
+PyObject *xmlsec_CryptoAppDefaultKeysMngrAdoptKey(PyObject *self, PyObject *args) {
+  PyObject *mngr_obj, *key_obj;
+  xmlSecKeysMngrPtr mngr;
+  xmlSecKeyPtr key;
+  int ret;
+
+  if (!PyArg_ParseTuple(args, "OO:cryptoAppDefaultKeysMngrAdoptKey", &mngr_obj, &key_obj))
+    return NULL;
+
+  mngr = xmlSecKeysMngrPtr_get(PyObject_GetAttr(mngr_obj, PyString_FromString("_o")));
+  key = xmlSecKeyPtr_get(PyObject_GetAttr(key_obj, PyString_FromString("_o")));
+  ret = xmlSecOpenSSLAppDefaultKeysMngrAdoptKey(mngr, key);
+  if (ret < 0) {
+    PyErr_SetFromErrno(xmlsec_error);
+  }
+  return Py_BuildValue("i", ret);
+}
+
+PyObject *xmlsec_CryptoAppKeysMngrCertLoad(PyObject *self, PyObject *args) {
+  PyObject *mngr_obj;
+  xmlSecKeysMngrPtr mngr;
+  const char *filename;
+  xmlSecKeyDataFormat format;
+  xmlSecKeyDataType type;
+  int ret;
+
+  if (!PyArg_ParseTuple(args, "Osii:cryptoAppKeysMngrCertLoad", &mngr_obj,
+			&filename, &format, &type))
+    return NULL;
+
+  mngr = xmlSecKeysMngrPtr_get(PyObject_GetAttr(mngr_obj, PyString_FromString("_o")));
+  ret = xmlSecCryptoAppKeysMngrCertLoad(mngr, filename, format, type);
+  if (ret < 0) {
+    PyErr_SetFromErrno(xmlsec_error);
+  }
+  return Py_BuildValue("i", ret);
 }
 
 PyObject *xmlsec_CryptoInit(PyObject *self, PyObject *args) {
-  int result;
-  result = xmlSecCryptoInit();
-  if (result < 0) {
+  int ret;
+  ret = xmlSecCryptoInit();
+  if (ret < 0) {
     PyErr_SetFromErrno(xmlsec_error);
   }
-  return Py_BuildValue("i", result);
+  return Py_BuildValue("i", ret);
 }
 
 PyObject *xmlsec_CryptoShutdown(PyObject *self, PyObject *args) {
-  int result;
-  result = xmlSecCryptoShutdown();
-  if (result < 0) {
+  int ret;
+  ret = xmlSecCryptoShutdown();
+  if (ret < 0) {
     PyErr_SetFromErrno(xmlsec_error);
   }
-  return Py_BuildValue("i", result);
+  return Py_BuildValue("i", ret);
 }
 
 PyObject *xmlsec_CryptoAppKeyLoad(PyObject *self, PyObject *args) {
   const char *filename;
   int format;
   const char *pwd;
-  PyObject *obj_pwd_callback;
-  PyObject *obj_pwd_callback_ctx;
+  PyObject *pwd_callback_obj;
+  PyObject *pwd_callback_ctx_obj;
   xmlSecKeyPtr key;
   PyObject *ret;
 
-  if (!PyArg_ParseTuple(args, "sizOO", &filename, &format, &pwd,
-			&obj_pwd_callback, &obj_pwd_callback_ctx))
+  if (!PyArg_ParseTuple(args, "sizOO:cryptoAppKeyLoad", &filename, &format,
+			&pwd, &pwd_callback_obj, &pwd_callback_ctx_obj))
     return NULL;
 
   key = xmlSecCryptoAppKeyLoad(filename, format, NULL, NULL, NULL);
@@ -94,4 +148,14 @@ PyObject *xmlsec_TransformRsaSha1Id(PyObject *self, PyObject *args) {
 }
 PyObject *xmlsec_TransformSha1Id(PyObject *self, PyObject *args) {
   return PyCObject_FromVoidPtr((void  *)xmlSecTransformSha1Id, NULL);
+}
+/* Key data ids */
+PyObject *xmlsec_KeyDataDsaId(PyObject *self, PyObject *args) {
+  return PyCObject_FromVoidPtr((void  *)xmlSecKeyDataDsaId, NULL);
+}
+PyObject *xmlsec_KeyDataRsaId(PyObject *self, PyObject *args) {
+  return PyCObject_FromVoidPtr((void  *)xmlSecKeyDataRsaId, NULL);
+}
+PyObject *xmlsec_KeyDataX509Id(PyObject *self, PyObject *args) {
+  return PyCObject_FromVoidPtr((void  *)xmlSecKeyDataX509Id, NULL);
 }
