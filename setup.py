@@ -24,30 +24,38 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 from distutils.core import setup, Extension
+import commands
+
+#print commands.getoutput('pkg-config libxml-2.0 --cflags')
+#print commands.getoutput('pkg-config libxml-2.0 --libs')
+#print commands.getoutput('pkg-config xmlsec1 --cflags')
+#print commands.getoutput('pkg-config xmlsec1 --libs')
+
+em = Extension("xmlsecmod",
+               sources = ["xmlsecmod.c", "app.c", "base64.c", "buffer.c",
+                          "keyinfo.c", "keys.c", "keysmngr.c", "list.c",
+                          "membuf.c", "nodeset.c", "parser.c", "templates.c",
+                          "transforms.c", "xmldsig.c", "xmlenc.c", "xmlsec.c",
+                          "xmltree.c", "x509.c",
+                          "openssl.c"],
+               define_macros = [('XMLSEC_NO_XKMS', '1'),
+                                ('XMLSEC_CRYPTO', 'openssl'),
+                                ('XMLSEC_CRYPTO_OPENSSL', '1')],
+               include_dirs  = ["/usr/local/include/xmlsec1/",
+                                "/usr/include/libxml2/"],
+               library_dirs  = ["/usr/lib", "/usr/local/lib"],
+               libraries     = ["xmlsec1-openssl", "xmlsec1", "crypto",
+                                "xslt", "xml2", "pthread", "z" ,"m"]
+               )
 
 setup(name = "pyxmlsec",
-      version = "0.20031118",
+      version = "0.20031125",
       description = "A set of Python bindings for XML Security Library (XMLSec)",
       long_description = ''' ''',
       author = "Valery Febvre",
       author_email = "vfebvre@easter-eggs.com",
       license = "GNU GPL",
       url = "http://pyxmlsec.labs.libre-entreprise.org",
-      ext_modules = [Extension("xmlsecmod",
-                               sources = ["xmlsecmod.c", "xmlsec.c", "xmltree.c",
-                                          "xmldsig.c", "app.c", "buffer.c", "membuf.c",
-                                          "openssl.c", "templates.c", "transforms.c",
-                                          "keys.c", "keyinfo.c", "keysmngr.c",
-                                          "list.c", "xmlenc.c", "x509.c", "parser.c",
-                                          "base64.c"],
-                               define_macros = [('XMLSEC_NO_XKMS', '1'),
-                                                ('XMLSEC_CRYPTO', 'openssl'),
-                                                ('XMLSEC_CRYPTO_OPENSSL', '1')],
-                               include_dirs = ["/usr/local/include/xmlsec1/",
-                                               "/usr/include/libxml2/"],
-                               library_dirs = ["/usr/lib", "/usr/local/lib"],
-                               libraries = ["xmlsec1-openssl", "xmlsec1", "crypto",
-                                            "xslt", "xml2", "pthread", "z" ,"m"],
-                               )],
+      ext_modules = [em],
       py_modules = ["xmlsec", "xmlsec_strings"]
 )
