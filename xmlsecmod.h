@@ -4,8 +4,8 @@
 typedef struct {
     PyObject_HEAD
     xmlNodePtr obj;
-} PyxmlNode_Object;
+} xmlNodePtr_object;
 
-#define PyxmlNode_Get(v) (((v) == Py_None) ? NULL : (((PyxmlNode_Object *)(v))->obj))
+#define xmlNodePtr_get(v) (((v) == Py_None) ? NULL : (((xmlNodePtr_object *)(v))->obj))
 
 PyObject *xmlsec_error;
