@@ -198,6 +198,8 @@ static PyMethodDef xmlsec_methods[] = {
   {"transformMemBufGetBuffer", xmlsec_TransformMemBufGetBuffer, METH_VARARGS},
 
   /* nodeset.h */
+  {"nodeSetGetAttr", xmlSecNodeSet_getattr, METH_VARARGS}, // New
+  {"nodeSetSetAttr", xmlSecNodeSet_setattr, METH_VARARGS}, // New
   {"nodeSetCreate",        xmlsec_NodeSetCreate,        METH_VARARGS},
   {"nodeSetDestroy",       xmlsec_NodeSetDestroy,       METH_VARARGS},
   {"nodeSetDocDestroy",    xmlsec_NodeSetDocDestroy,    METH_VARARGS},
