@@ -37,9 +37,10 @@ Topic :: Software Development :: Libraries :: Python Modules
 from distutils.core import setup, Extension
 import sys, commands
 
-# the crypto engine name : openssl or gnutls
+# the crypto engine name : openssl, gnutls or nss
 xmlsec1_crypto = "openssl"
 #xmlsec1_crypto = "gnutls"
+#xmlsec1_crypto = "nss"
 
 define_macros = []
 include_dirs  = []
