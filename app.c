@@ -207,24 +207,61 @@ PyObject *xmlsec_TransformAes192CbcId(PyObject *self, PyObject *args) {
 PyObject *xmlsec_TransformAes256CbcId(PyObject *self, PyObject *args) {
   return PyCObject_FromVoidPtr((void  *)xmlSecTransformAes256CbcId, NULL);
 }
+
+/* only OPENSSL */
 PyObject *xmlsec_TransformKWAes128Id(PyObject *self, PyObject *args) {
+#if defined XMLSEC_CRYPTO_OPENSSL
   return PyCObject_FromVoidPtr((void  *)xmlSecTransformKWAes128Id, NULL);
+#else
+  Py_INCREF(Py_None);
+  return (Py_None);
+#endif
 }
+
+/* only OPENSSL */
 PyObject *xmlsec_TransformKWAes192Id(PyObject *self, PyObject *args) {
+#if defined XMLSEC_CRYPTO_OPENSSL
   return PyCObject_FromVoidPtr((void  *)xmlSecTransformKWAes192Id, NULL);
+#else
+  Py_INCREF(Py_None);
+  return (Py_None);
+#endif
 }
+
+/* only OPENSSL */
 PyObject *xmlsec_TransformKWAes256Id(PyObject *self, PyObject *args) {
+#if defined XMLSEC_CRYPTO_OPENSSL
   return PyCObject_FromVoidPtr((void  *)xmlSecTransformKWAes256Id, NULL);
+#else
+  Py_INCREF(Py_None);
+  return (Py_None);
+#endif
 }
+
 PyObject *xmlsec_TransformDes3CbcId(PyObject *self, PyObject *args) {
   return PyCObject_FromVoidPtr((void  *)xmlSecTransformDes3CbcId, NULL);
 }
+
+/* only OPENSSL */
 PyObject *xmlsec_TransformKWDes3Id(PyObject *self, PyObject *args) {
+#if defined XMLSEC_CRYPTO_OPENSSL
   return PyCObject_FromVoidPtr((void  *)xmlSecTransformKWDes3Id, NULL);
+#else
+  Py_INCREF(Py_None);
+  return (Py_None);
+#endif
 }
+
+/* only OPENSSL */
 PyObject *xmlsec_TransformDsaSha1Id(PyObject *self, PyObject *args) {
+#if defined XMLSEC_CRYPTO_OPENSSL
   return PyCObject_FromVoidPtr((void  *)xmlSecTransformDsaSha1Id, NULL);
+#else
+  Py_INCREF(Py_None);
+  return (Py_None);
+#endif
 }
+
 PyObject *xmlsec_TransformHmacSha1Id(PyObject *self, PyObject *args) {
   return PyCObject_FromVoidPtr((void  *)xmlSecTransformHmacSha1Id, NULL);
 }
@@ -234,18 +271,47 @@ PyObject *xmlsec_TransformHmacRipemd160Id(PyObject *self, PyObject *args) {
 PyObject *xmlsec_TransformHmacMd5Id(PyObject *self, PyObject *args) {
   return PyCObject_FromVoidPtr((void  *)xmlSecTransformHmacMd5Id, NULL);
 }
+
+/* only OPENSSL */
 PyObject *xmlsec_TransformRipemd160Id(PyObject *self, PyObject *args) {
+#if defined XMLSEC_CRYPTO_OPENSSL
   return PyCObject_FromVoidPtr((void  *)xmlSecTransformRipemd160Id, NULL);
+#else
+  Py_INCREF(Py_None);
+  return (Py_None);
+#endif
 }
+
+/* only OPENSSL */
 PyObject *xmlsec_TransformRsaSha1Id(PyObject *self, PyObject *args) {
+#if defined XMLSEC_CRYPTO_OPENSSL
   return PyCObject_FromVoidPtr((void  *)xmlSecTransformRsaSha1Id, NULL);
+#else
+  Py_INCREF(Py_None);
+  return (Py_None);
+#endif
 }
+
+/* only OPENSSL */
 PyObject *xmlsec_TransformRsaPkcs1Id(PyObject *self, PyObject *args) {
+#if defined XMLSEC_CRYPTO_OPENSSL
   return PyCObject_FromVoidPtr((void  *)xmlSecTransformRsaPkcs1Id, NULL);
+#else
+  Py_INCREF(Py_None);
+  return (Py_None);
+#endif
 }
+
+/* only OPENSSL */
 PyObject *xmlsec_TransformRsaOaepId(PyObject *self, PyObject *args) {
+#if defined XMLSEC_CRYPTO_OPENSSL
   return PyCObject_FromVoidPtr((void  *)xmlSecTransformRsaOaepId, NULL);
+#else
+  Py_INCREF(Py_None);
+  return (Py_None);
+#endif
 }
+
 PyObject *xmlsec_TransformSha1Id(PyObject *self, PyObject *args) {
   return PyCObject_FromVoidPtr((void  *)xmlSecTransformSha1Id, NULL);
 }
@@ -256,21 +322,57 @@ PyObject *xmlsec_KeyDataAesId(PyObject *self, PyObject *args) {
 PyObject *xmlsec_KeyDataDesId(PyObject *self, PyObject *args) {
   return PyCObject_FromVoidPtr((void  *)xmlSecKeyDataDesId, NULL);
 }
+
+/* only OPENSSL */
 PyObject *xmlsec_KeyDataDsaId(PyObject *self, PyObject *args) {
+#if defined XMLSEC_CRYPTO_OPENSSL
   return PyCObject_FromVoidPtr((void  *)xmlSecKeyDataDsaId, NULL);
+#else
+  Py_INCREF(Py_None);
+  return (Py_None);
+#endif
 }
+
 PyObject *xmlsec_KeyDataHmacId(PyObject *self, PyObject *args) {
   return PyCObject_FromVoidPtr((void  *)xmlSecKeyDataHmacId, NULL);
 }
+
+/* only OPENSSL */
 PyObject *xmlsec_KeyDataRsaId(PyObject *self, PyObject *args) {
+#if defined XMLSEC_CRYPTO_OPENSSL
   return PyCObject_FromVoidPtr((void  *)xmlSecKeyDataRsaId, NULL);
+#else
+  Py_INCREF(Py_None);
+  return (Py_None);
+#endif
 }
+
+/* only OPENSSL */
 PyObject *xmlsec_KeyDataX509Id(PyObject *self, PyObject *args) {
+#if defined XMLSEC_CRYPTO_OPENSSL
   return PyCObject_FromVoidPtr((void  *)xmlSecKeyDataX509Id, NULL);
+#else
+  Py_INCREF(Py_None);
+  return (Py_None);
+#endif
 }
+
+/* only OPENSSL */
 PyObject *xmlsec_KeyDataRawX509CertId(PyObject *self, PyObject *args) {
+#if defined XMLSEC_CRYPTO_OPENSSL
   return PyCObject_FromVoidPtr((void  *)xmlSecKeyDataRawX509CertId, NULL);
+#else
+  Py_INCREF(Py_None);
+  return (Py_None);
+#endif
 }
+
+/* only OPENSSL */
 PyObject *xmlsec_X509StoreId(PyObject *self, PyObject *args) {
+#if defined XMLSEC_CRYPTO_OPENSSL
   return PyCObject_FromVoidPtr((void  *)xmlSecX509StoreId, NULL);
+#else
+  Py_INCREF(Py_None);
+  return (Py_None);
+#endif
 }
