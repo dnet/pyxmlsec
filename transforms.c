@@ -29,6 +29,9 @@
 #include "transforms.h"
 
 /* Transforms Ids */
+PyObject *xmlsec_TransformInclC14NId(PyObject *self, PyObject *args) {
+  return PyCObject_FromVoidPtr((void *) xmlSecTransformInclC14NId, NULL);
+}
 PyObject *xmlsec_TransformExclC14NId(PyObject *self, PyObject *args) {
   return PyCObject_FromVoidPtr((void *) xmlSecTransformExclC14NId, NULL);
 }
