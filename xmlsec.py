@@ -2,7 +2,7 @@
 #
 # $Id$
 #
-# PyXMLSec - A Python binding for XML Security library (XMLSec)
+# PyXMLSec - Python bindings for XML Security library (XMLSec)
 #
 # Copyright (C) 2003 Easter-eggs, Valery Febvre
 # http://pyxmlsec.labs.libre-entreprise.org
@@ -24,7 +24,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 """
-PyXMLSec - A Python binding for XML Security library (XMLSec)
+PyXMLSec - Python bindings for XML Security library (XMLSec)
 Copyright (C) 2003 Easter-eggs, Valery Febvre
 
 Author   : Valery Febvre <vfebvre@easter-eggs.com>
@@ -72,9 +72,23 @@ keyDataDsaId  = xmlsecmod.keyDataDsaId()
 keyDataRsaId  = xmlsecmod.keyDataRsaId()
 keyDataX509Id = xmlsecmod.keyDataX509Id()
 # Crypto Transforms Ids methods
-transformDsaSha1Id = xmlsecmod.transformDsaSha1Id()
-transformRsaSha1Id = xmlsecmod.transformRsaSha1Id()
-transformSha1Id    = xmlsecmod.transformSha1Id()
+transformAes128CbcId     = xmlsecmod.transformAes128CbcId()
+transformAes192CbcId     = xmlsecmod.transformAes192CbcId()
+transformAes256CbcId     = xmlsecmod.transformAes256CbcId()
+transformKWAes128Id      = xmlsecmod.transformKWAes128Id()
+transformKWAes192Id      = xmlsecmod.transformKWAes192Id()
+transformKWAes256Id      = xmlsecmod.transformKWAes256Id()
+transformDes3CbcId       = xmlsecmod.transformDes3CbcId()
+transformKWDes3Id        = xmlsecmod.transformKWDes3Id()
+transformDsaSha1Id       = xmlsecmod.transformDsaSha1Id()
+transformHmacSha1Id      = xmlsecmod.transformHmacSha1Id()
+transformHmacRipemd160Id = xmlsecmod.transformHmacRipemd160Id()
+transformHmacMd5Id       = xmlsecmod.transformHmacMd5Id()
+transformRipemd160Id     = xmlsecmod.transformRipemd160Id()
+transformRsaSha1Id       = xmlsecmod.transformRsaSha1Id()
+transformRsaPkcs1Id      = xmlsecmod.transformRsaPkcs1Id()
+transformRsaOaepId       = xmlsecmod.transformRsaOaepId()
+transformSha1Id          = xmlsecmod.transformSha1Id()
 # High level routines form xmlsec command line utility
 def cryptoAppInit(config=None):
     return xmlsecmod.cryptoAppInit(config)
@@ -977,15 +991,127 @@ class TmplManifest(libxml2.xmlNode):
         (type) attributes and the required children <dsig:DigestMethod/> and
         <dsig:DigestValue/> to the <dsig:Manifest/> node.
         digestMethodId : the reference digest method.
-        id      : the node id (may be None).
-        uri     : the reference node uri (may be None).
-        type    : the reference node type (may be None).
-        Returns : the newly created <dsig:Reference/> node or None if
+        id             : the node id (may be None).
+        uri            : the reference node uri (may be None).
+        type           : the reference node type (may be None).
+        Returns        : the newly created <dsig:Reference/> node or None if
         an error occurs.
         """
         _obj = xmlsecmod.tmplManifestAddReference(self, digestMethodId,
                                                   id, uri, type)
         return TmplReference(_obj=_obj)
+
+class TmplEncData(libxml2.xmlNode):
+    def __init__(self, doc=None, encMethodId=None, id=None, type=None,
+                 mimeType=None, encoding=None, _obj=None):
+        """
+        Creates new <enc:EncryptedData /> node for encryption template.
+        doc         : the signature document or None; in the later case,
+        application must later call xmlSetTreeDoc to ensure that all the
+        children nodes have correct pointer to XML document.
+        encMethodId : the encryption method (may be None).
+        id          : the Id attribute (optional).
+        type        : the Type attribute (optional)
+        mimeType    : the MimeType attribute (optional)
+        encoding    : the Encoding attribute (optional)
+        Returns     : the newly created <enc:EncryptedData/> node or
+        None if an error occurs.
+        """
+        if _obj != None:
+            self._o = _obj
+            return
+        _obj = xmlsecmod.tmplEncDataCreate(doc, encMethodId, id, type,
+                                           mimeType, encoding)
+        if _obj is None: raise parserError('xmlSecTmplEncDataCreate() failed')
+        libxml2.xmlNode.__init__(self, _obj=_obj)
+    def __repr__(self):
+        return "<xmlSecTmplEncData object (%s) at 0x%x>" % (self.name,
+                                                            id (self))
+    def ensureKeyInfo(self, id=None):
+        """
+        Adds <dsig:KeyInfo/> to the <enc:EncryptedData/> node encNode.
+        id      : the Id attrbibute (optional).
+        Returns : the newly created <dsig:KeyInfo/> node or None if an error occurs.
+        """
+        return xmlsecmod.tmplEncDataEnsureKeyInfo(self, id)
+    def ensureEncProperties(self, id=None):
+        """
+        Adds <enc:EncryptionProperties/> node to the <enc:EncryptedData/> node
+        encNode.
+        id      : the Id attribute (optional).
+        Returns : the newly created <enc:EncryptionProperties/> node or None if
+        an error occurs.
+        """
+        return xmlsecmod.tmplEncDataEnsureEncProperties(self, id)
+    def addEncProperty(self, id=None, target=None):
+        """
+        Adds <enc:EncryptionProperty/> node (and the parent
+        <enc:EncryptionProperties/> node if required) to the
+        <enc:EncryptedData/> node encNode.
+        id      : the Id attribute (optional).
+        target  : the Target attribute (optional).
+        Returns : the newly created <enc:EncryptionProperty/> node or None if
+        an error occurs.
+        """
+        return xmlsecmod.tmplEncDataAddEncProperty(self, id, target)
+    def ensureCipherValue(self):
+        """
+        Adds <enc:CipherValue/> to the <enc:EncryptedData/> node encNode.
+        Returns : the newly created <enc:CipherValue/> node or None if an error
+        occurs.
+        """
+        return xmlsecmod.tmplEncDataEnsureCipherValue(self)
+    def ensureCipherReference(self, uri=None):
+        """
+        Adds <enc:CipherReference/> node with specified URI attribute uri to
+        the <enc:EncryptedData/> node encNode.
+        uri     : the URI attribute (may be None).
+        Returns : the newly created <enc:CipherReference/> node or None if an
+        error occurs.
+        """
+        return TmplCipherReference(_obj=xmlsecmod.tmplEncDataEnsureCipherReference(self, uri))
+    def getEncMethodNode(self):
+        """
+        Gets the <enc:EncrytpionMethod/> node.
+        Returns : the <enc:EncryptionMethod /> node or None if an error occurs.
+        """
+        return xmlsecmod.tmplEncDataGetEncMethodNode(self)
+    def addDataReference(self, uri=None):
+        """
+        Adds <enc:DataReference/> and the parent <enc:ReferenceList/> node
+        (if needed).
+        uri     : uri to reference (optional)
+        Returns : the newly created <enc:DataReference/> node or None if an
+        error occurs.
+        """
+        return xmlsecmod.tmplReferenceListAddDataReference(self, uri)
+    def addKeyReference(self, uri=None):
+        """
+        Adds <enc:KeyReference/> and the parent <enc:ReferenceList/> node
+        (if needed).
+        uri     : uri to reference (optional)
+        Returns : the newly created <enc:KeyReference/> node or None if an error
+        occurs.
+        """
+        return xmlsecmod.tmplReferenceListAddKeyReference(self, uri)
+
+class TmplCipherReference(libxml2.xmlNode):
+    def __init__(self, _obj=None):
+        self._o = None
+        libxml2.xmlNode.__init__(self, _obj=_obj)
+    def __repr__(self):
+        return "<xmlSecTmplCipherReference object (%s) at 0x%x>" % (self.name,
+                                                                    id (self))
+    def addTransform(self, transformId):
+        """
+        Adds <dsig:Transform/> node (and the parent <dsig:Transforms/> node)
+        with specified transform methods transform to the <enc:CipherReference/>
+        child node of the <enc:EncryptedData/> node encNode.
+        transformId         : the transform id.
+        Returns             : the newly created <dsig:Transform/> node or None
+        if an error occurs.
+        """
+        return xmlsecmod.tmplCipherReferenceAddTransform(self, transformId)
 
 ###############################################################################
 # keys.h
