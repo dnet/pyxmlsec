@@ -1,10 +1,10 @@
-#!/usr/bin/env python2.2
+#!/usr/bin/env python
 
 import sys
 sys.path.insert(0, '../')
 
 import libxml2
-import libxslt
+#import libxslt
 
 import xmlsec
 
