@@ -377,26 +377,22 @@ def cryptoAppGetDefaultPwdCallback():
 ###############################################################################
 BASE64_LINESIZE = 64 # The default maximum base64 encoded line size.
 # Standalone functions to do base64 encode/decode "at once"
-def base64Encode(buf, len, columns):
-    # TODO : xmlfree on return buf ???
+def base64Encode(buf, columns):
     """
     Encodes the data from input buffer.
     buf     : the input buffer.
-    len     : the input buffer size.
     columns : the output max line length (if 0 then no line breaks would be
     inserted)
     Returns : a string with base64 encoded data or None if an error occurs.
     """
-    return xmlsecmod.base64Encode(buf, len, columns)
-def base64Decode(str, buf):
+    return xmlsecmod.base64Encode(buf, len(buf), columns)
+def base64Decode(str):
     """
-    Decodes input base64 encoded string and puts result into the output buffer.
-    str     : the input buffer with base64 encoded string
-    buf     : the output buffer
-    Returns : the number of bytes written to the output buffer or a negative
-    value if an error occurs 
+    Decodes input base64 encoded string.
+    str     : the input buffer with base64 encoded string.
+    Returns : a string with decoded data or None if an error occurs.
     """
-    return xmlsecmod.base64Decode(str, buf)
+    return xmlsecmod.base64Decode(str)
 class Base64Ctx:
     def __init__(self, encode, columns, _obj=None):
         """
@@ -425,26 +421,29 @@ class Base64Ctx:
     def finalize(self):
         """Frees all the resources allocated by Base64 context."""
         xmlsecmod.base64CtxDestroy(self)
-    def update(self, inBuf, inBufSize, outBuf, outBufSize):
+    def update(self, in, inSize, out, outSize):
+        # FIXME
         """
         Encodes or decodes the next piece of data from input buffer.
-        inBuf      : the input buffer
-        inBufSize  : the input buffer size
-        outBuf     : the output buffer
-        outBufSize : the output buffer size
-        Returns    : the number of bytes written to output buffer
+        in      : the input buffer
+        inSize  : the input buffer size
+        out     : the output buffer
+        outSize : the output buffer size
+        Returns : the number of bytes written to output buffer
         or -1 if an error occurs.
         """
-        return xmlsecmod.base64CtxUpdate(self, inBuf, inBufSize, outBuf, outBufSize)
-    def final(self, outBuf):
+        return xmlsecmod.base64CtxUpdate(self, in, inSize, out, outSize)
+    def final(self, out, outSize):
+        # FIXME
         """
         Encodes or decodes the last piece of data stored in the context and
         finalizes the result.
-        outBuf     : the output buffer
-        Returns    : the number of bytes written to output buffer
-        or -1 if an error occurs.
+        out     : the output buffer
+        outSize : the output buffer size
+        Returns : the number of bytes written to output buffer or -1 if an
+        error occurs.
         """
-        return xmlsecmod.base64CtxFinal(self, outBuf)
+        return xmlsecmod.base64CtxFinal(self, out, outSize)
 
 ###############################################################################
 # buffer.h
@@ -599,7 +598,7 @@ class Buffer:
         """
         Sets the content of the node to the base64 encoded buffer data.
         node    : the node.
-        columns : the max line size fro base64 encoded data.
+        columns : the max line size for base64 encoded data.
         Returns : 0 on success or a negative value if an error occurs.
         """
         return xmlsecmod.bufferBase64NodeContentWrite(self, node, columns)
@@ -655,7 +654,8 @@ KEYINFO_FLAGS_STOP_ON_EMPTY_NODE                    = 0x00002000
 KEYINFO_FLAGS_X509DATA_SKIP_STRICT_CHECKS           = 0x00004000
 def keyInfoNodeRead(keyInfoNode, key, keyInfoCtx):
     """
-    Parses the <dsig:KeyInfo/> element keyInfoNode, extracts the key data and stores into key.
+    Parses the <dsig:KeyInfo/> element keyInfoNode, extracts the key data and
+    stores into key.
     keyInfoNode : the <dsig:KeyInfo/> node.
     key         : the result key object.
     keyInfoCtx  : the <dsig:KeyInfo/> element processing context.
@@ -680,10 +680,69 @@ def keyInfoCtxCopyUserPref(dst, src):
     """
     return xmlsecmod.keyInfoCtxCopyUserPref(dst, src)
 # Key data Ids methods
-keyDataNameId            = xmlsecmod.keyDataNameId()
-keyDataValueId           = xmlsecmod.keyDataValueId()
-keyDataRetrievalMethodId = xmlsecmod.keyDataRetrievalMethodId()
-keyDataEncryptedKeyId    = xmlsecmod.keyDataEncryptedKeyId()
+def keyDataNameId():
+    """
+    The <dsig:KeyName/> element key data id
+    (http://www.w3.org/TR/xmldsig-core/sec-KeyName)
+
+    The KeyName element contains a string value (in which white space is
+    significant) which may be used by the signer to communicate a key identifier
+    to the recipient. Typically, KeyName contains an identifier related to the
+    key pair used to sign the message, but it may contain other protocol-related
+    information that indirectly identifies a key pair. (Common uses of KeyName
+    include simple string names for keys, a key index, a distinguished name (DN),
+    an email address, etc.)
+    
+    Returns : the <dsig:KeyName/> element processing key data id.
+    """
+    return KeyDataId(_obj=xmlsecmod.keyDataNameId())
+def keyDataValueId():
+    """
+    The <dsig:KeyValue/> element key data id
+    (http://www.w3.org/TR/xmldsig-core/sec-KeyValue)
+
+    The KeyValue element contains a single public key that may be useful in
+    validating the signature.
+    
+    Returns : the <dsig:KeyValue/> element processing key data id.
+    """
+    return KeyDataId(_obj=xmlsecmod.keyDataValueId())
+def keyDataRetrievalMethodId():
+    """
+    The <dsig:RetrievalMethod/> element key data id
+    (http://www.w3.org/TR/xmldsig-core/sec-RetrievalMethod)
+
+    A RetrievalMethod element within KeyInfo is used to convey a reference to
+    KeyInfo information that is stored at another location. For example, several
+    signatures in a document might use a key verified by an X.509v3 certificate
+    chain appearing once in the document or remotely outside the document; each
+    signature's KeyInfo can reference this chain using a single RetrievalMethod
+    element instead of including the entire chain with a sequence of
+    X509Certificate elements.
+
+    RetrievalMethod uses the same syntax and dereferencing behavior as
+    Reference's URI and The Reference Processing Model.
+
+    Returns : the <dsig:RetrievalMethod/> element processing key data id.
+    """
+    return KeyDataId(_obj=xmlsecmod.keyDataRetrievalMethodId())
+def keyDataEncryptedKeyId():
+    """
+    The <enc:EncryptedKey/> element key data id
+    (http://www.w3.org/TR/xmlenc-core/sec-EncryptedKey)
+
+    The EncryptedKey element is used to transport encryption keys from the
+    originator to a known recipient(s). It may be used as a stand-alone XML
+    document, be placed within an application document, or appear inside an
+    EncryptedData element as a child of a ds:KeyInfo element. The key value
+    is always encrypted to the recipient(s). When EncryptedKey is decrypted
+    the resulting octets are made available to the EncryptionMethod algorithm
+    without any additional processing.
+
+    Returns : the <enc:EncryptedKey/> element processing key data id.
+    """
+    return KeyDataId(_obj=xmlsecmod.keyDataEncryptedKeyId())
+
 class KeyInfoCtx:
     def __init__(self, mngr=None, _obj=None):
         """
@@ -832,7 +891,10 @@ def keyReadMemory(dataId, data, dataSize):
     """
     return Key(_obj=xmlsecmod.keyReadMemory(dataId, data, dataSize))
 # The keys list klass.
-keyPtrListId = xmlsecmod.keyPtrListId()
+def keyPtrListId():
+    """Returns the keys list klass."""
+    return PtrListId(_obj=xmlsecmod.keyPtrListId())
+
 class Key:
     def __init__(self, _obj=None):
         """
