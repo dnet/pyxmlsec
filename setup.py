@@ -23,6 +23,17 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+classifiers = """\
+Development Status :: 1 - Pre-Alpha
+Intended Audience :: Developers
+License :: OSI Approved :: GNU General Public License (GPL)
+Operating System :: MacOS :: MacOS X
+Operating System :: POSIX :: Linux
+Programming Language :: C
+Programming Language :: Python
+Topic :: Software Development :: Libraries :: Python Modules
+"""
+
 from distutils.core import setup, Extension
 import commands
 
@@ -51,12 +62,13 @@ em = Extension("xmlsecmod",
                )
 
 setup(name = "pyxmlsec",
-      version = "0.20031230",
+      version = "0.20040113",
       description = "A set of Python bindings for XML Security Library (XMLSec)",
-      long_description = ''' ''',
+      long_description = "",
       author = "Valery Febvre",
       author_email = "vfebvre@easter-eggs.com",
       license = "GNU GPL",
+      platforms = ["any"],
       url = "http://pyxmlsec.labs.libre-entreprise.org",
       ext_modules = [em],
       py_modules = ["xmlsec", "xmlsec_strings"]
