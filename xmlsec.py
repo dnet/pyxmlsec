@@ -2,6 +2,8 @@
 #
 # $Id$
 #
+# PyXMLSec - A Python binding for XML Security library (XMLSec)
+#
 # Copyright (C) 2003 Easter-eggs, Valery Febvre
 # http://pyxmlsec.labs.libre-entreprise.org
 #
@@ -460,6 +462,7 @@ class TmplManifest(libxml2.xmlNode):
                                                   id, uri, type)
         return TmplReference(_obj=_obj)
 
+## Key data types
 KeyDataTypeUnknown   = 0x0000 # The key data type is unknown (same as #xmlSecKeyDataTypeNone)
 KeyDataTypeNone	     = KeyDataTypeUnknown
 KeyDataTypePublic    = 0x0001 # The key data contain a public key.
@@ -469,7 +472,13 @@ KeyDataTypeSession   = 0x0008 # The key data contain session key (one time key, 
 KeyDataTypePermanent = 0x0010 # The key data contain permanent key (stored in keys manager).
 KeyDataTypeTrusted   = 0x0100 # The key data is trusted.
 KeyDataTypeAny       = 0xFFFF # Any key data.
-
+## Key usages
+KeyUsageSign    = 0x0001 # Key for signing.
+KeyUsageVerify  = 0x0002 # Key for signature verification.
+KeyUsageEncrypt = 0x0004 # An encryption key.
+KeyUsageDecrypt = 0x0008 # A decryption key.
+KeyUsageAny     = 0xFFFF # Key can be used in any way.
+## Key data formats
 KeyDataFormatUnknown  = 0 # the key data format is unknown.
 KeyDataFormatBinary   = 1 # the binary key data.
 KeyDataFormatPem      = 2 # the PEM key data (cert or public/private key).
@@ -506,6 +515,33 @@ class Key:
         Returns : key name.
         """
         return xmlsecmod.keyGetName(self)
+
+class KeyReq:
+    def __init__(self, keyId, keyType, keyUsage, keyBitsSize):
+        self._o = xmlsecmod.keyReqCreate(keyId, keyType, keyUsage, keyBitsSize)
+    def getKeyBitsSize(self):
+        return self._o.keyBitsSize
+    def initialize(self):
+        """
+        Initialize key requirements object. Caller is responsible for cleaning
+        it with finalize method.
+        Returns : 0 on success or a negative value if an error occurs.
+        """
+        return xmlsecmod.keyReqInitialize(self)
+    def finalize(self):
+        """Cleans the key requirements object."""
+        xmlsecmod.keyReqFinalize(self)
+    def reset(self):
+        """Resets key requirements object for new key search."""
+        xmlsecmod.keyReqReset(self)
+    def matchKey(self, key):
+        """
+        Checks whether key matches key requirements.
+        key     : the key.
+        Returns : 1 if key matches requirements, 0 if not and a negative value
+        if an error occurs.
+        """
+        return xmlsecmod.keyReqMatchKey(self, key)
 
 class KeyInfoCtx:
     def __init__(self, mngr=None, _obj=None):
