@@ -5,6 +5,8 @@ typedef struct {
 
 #define xmlSecNodeSetPtr_get(v) (((v) == Py_None) ? NULL : (((xmlSecNodeSetPtr_object *)(PyObject_GetAttr(v, PyString_FromString("_o"))))->obj))
 
+PyObject *wrap_xmlSecNodeSetPtr(xmlSecNodeSetPtr nset);
+
 PyObject *xmlsec_NodeSetCreate(PyObject *self, PyObject *args);
 PyObject *xmlsec_NodeSetDestroy(PyObject *self, PyObject *args);
 PyObject *xmlsec_NodeSetDocDestroy(PyObject *self, PyObject *args);

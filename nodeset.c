@@ -26,24 +26,33 @@
 
 #include "nodeset.h"
 
+PyObject *wrap_xmlSecNodeSetPtr(xmlSecNodeSetPtr nset) {
+  PyObject *ret;
+
+  if (nset == NULL) {
+    Py_INCREF(Py_None);
+    return (Py_None);
+  }
+  ret = PyCObject_FromVoidPtrAndDesc((void *) nset,
+				     (char *) "xmlSecNodeSetPtr", NULL);
+  return (ret);
+}
+
+/*****************************************************************************/
+
 PyObject *xmlsec_NodeSetCreate(PyObject *self, PyObject *args) {
   PyObject *doc_obj, *nodes_obj;
   xmlDocPtr doc;
   xmlNodeSetPtr nodes;
   xmlSecNodeSetType type;
-  xmlSecNodeSetPtr nset;
-  PyObject *ret;
 
   if (!PyArg_ParseTuple(args, "OOi:nodeSetCreate", &doc_obj, &nodes_obj, &type))
     return NULL;
 
   doc = xmlDocPtr_get(doc_obj);
   nodes = xmlNodeSetPtr_get(nodes_obj);
-  nset = xmlSecNodeSetCreate(doc, nodes, type);
-  
-  ret = PyCObject_FromVoidPtrAndDesc((void *) nset,
-				     (char *) "xmlSecNodeSetPtr", NULL);
-  return (ret);
+
+  return (wrap_xmlSecNodeSetPtr(xmlSecNodeSetCreate(doc, nodes, type)));
 }
 
 PyObject *xmlsec_NodeSetDestroy(PyObject *self, PyObject *args) {
@@ -57,7 +66,7 @@ PyObject *xmlsec_NodeSetDestroy(PyObject *self, PyObject *args) {
   xmlSecNodeSetDestroy(nset);
 
   Py_INCREF(Py_None);
-  return Py_None;
+  return (Py_None);
 }
 
 PyObject *xmlsec_NodeSetDocDestroy(PyObject *self, PyObject *args) {
@@ -71,7 +80,7 @@ PyObject *xmlsec_NodeSetDocDestroy(PyObject *self, PyObject *args) {
   xmlSecNodeSetDocDestroy(nset);
 
   Py_INCREF(Py_None);
-  return Py_None;
+  return (Py_None);
 }
 
 PyObject *xmlsec_NodeSetContains(PyObject *self, PyObject *args) {
@@ -79,7 +88,6 @@ PyObject *xmlsec_NodeSetContains(PyObject *self, PyObject *args) {
   xmlSecNodeSetPtr nset;
   xmlNodePtr node;
   xmlNodePtr parent;
-  int ret;
 
   if (!PyArg_ParseTuple(args, "OOO:nodeSetContains", &nset_obj, &node_obj,
 			&parent_obj))
@@ -88,9 +96,8 @@ PyObject *xmlsec_NodeSetContains(PyObject *self, PyObject *args) {
   nset = xmlSecNodeSetPtr_get(nset_obj);
   node = xmlNodePtr_get(node_obj);
   parent = xmlNodePtr_get(parent_obj);
-  ret = xmlSecNodeSetContains(nset, node, parent);
 
-  return (wrap_int(ret));
+  return (wrap_int(xmlSecNodeSetContains(nset, node, parent)));
 }
 
 PyObject *xmlsec_NodeSetAdd(PyObject *self, PyObject *args) {
@@ -98,19 +105,14 @@ PyObject *xmlsec_NodeSetAdd(PyObject *self, PyObject *args) {
   xmlSecNodeSetPtr nset;
   xmlSecNodeSetPtr newNSet;
   xmlSecNodeSetOp op;
-  xmlSecNodeSetPtr cnset;
-  PyObject *ret;
 
   if (!PyArg_ParseTuple(args, "OOi:nodeSetAdd", &nset_obj, &newNSet_obj, &op))
     return NULL;
 
   nset = xmlSecNodeSetPtr_get(nset_obj);
   newNSet = xmlSecNodeSetPtr_get(newNSet_obj);
-  cnset = xmlSecNodeSetAdd(nset, newNSet, op);
 
-  ret = PyCObject_FromVoidPtrAndDesc((void *) cnset,
-				     (char *) "xmlSecNodeSetPtr", NULL);
-  return (ret);
+  return (wrap_xmlSecNodeSetPtr(xmlSecNodeSetAdd(nset, newNSet, op)));
 }
 
 PyObject *xmlsec_NodeSetAddList(PyObject *self, PyObject *args) {
@@ -118,19 +120,14 @@ PyObject *xmlsec_NodeSetAddList(PyObject *self, PyObject *args) {
   xmlSecNodeSetPtr nset;
   xmlSecNodeSetPtr newNSet;
   xmlSecNodeSetOp op;
-  xmlSecNodeSetPtr cnset;
-  PyObject *ret;
 
   if (!PyArg_ParseTuple(args, "OOi:nodeSetAddList", &nset_obj, &newNSet_obj, &op))
     return NULL;
 
   nset = xmlSecNodeSetPtr_get(nset_obj);
   newNSet = xmlSecNodeSetPtr_get(newNSet_obj);
-  cnset = xmlSecNodeSetAddList(nset, newNSet, op);
 
-  ret = PyCObject_FromVoidPtrAndDesc((void *) cnset,
-				     (char *) "xmlSecNodeSetPtr", NULL);
-  return (ret);
+  return (wrap_xmlSecNodeSetPtr(xmlSecNodeSetAddList(nset, newNSet, op)));
 }
 
 PyObject *xmlsec_NodeSetGetChildren(PyObject *self, PyObject *args) {
@@ -139,7 +136,6 @@ PyObject *xmlsec_NodeSetGetChildren(PyObject *self, PyObject *args) {
   xmlNodePtr parent = NULL;
   int withComments, invert;
   xmlSecNodeSetPtr cnset;
-  PyObject *ret;
 
   if (!PyArg_ParseTuple(args, "OOii:nodeSetGetChildren", &doc_obj, &parent_obj,
 			&withComments, &invert))
@@ -152,9 +148,7 @@ PyObject *xmlsec_NodeSetGetChildren(PyObject *self, PyObject *args) {
   }
   cnset = xmlSecNodeSetGetChildren(doc, parent, withComments, invert);
 
-  ret = PyCObject_FromVoidPtrAndDesc((void *) cnset,
-				     (char *) "xmlSecNodeSetPtr", NULL);
-  return (ret);
+  return (wrap_xmlSecNodeSetPtr(cnset));
 }
 
 PyObject *xmlsec_NodeSetWalk(PyObject *self, PyObject *args) {
