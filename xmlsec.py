@@ -1,28 +1,29 @@
 #! /usr/bin/env python2.2
+#
+# $Id$
+#
+# Copyright (C) 2003
+# http://
+#
+# Author: Valery Febvre <vfebvre@easter-eggs.com>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 """
 PyXMLSec - A Python binding for XML Security library (XMLSec)
-
-$Id$
-
-Copyright (C) 2003
-http://
-
 Author: Valery Febvre <vfebvre@easter-eggs.com>
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 """
 
 import libxml2
@@ -138,6 +139,21 @@ TransformUriTypeLocal        = 0x0004 # The local URI ("file:///....") type.
 TransformUriTypeRemote       = 0x0008 # The remote URI type.
 TransformUriTypeAny          = 0xFFFF # Any URI type.
 
+# If this flag is set then <dsig:Manifests/> nodes will not be processed.
+DSIG_FLAGS_IGNORE_MANIFESTS =            0x00000001
+# If this flag is set then pre-digest buffer for <dsig:Reference/> child
+# of <dsig:KeyInfo/> element will be stored in #xmlSecDSigCtx.
+DSIG_FLAGS_STORE_SIGNEDINFO_REFERENCES = 0x00000002
+# If this flag is set then pre-digest buffer for <dsig:Reference/> child
+# of <dsig:Manifest/> element will be stored in #xmlSecDSigCtx.
+DSIG_FLAGS_STORE_MANIFEST_REFERENCES =   0x00000004
+# If this flag is set then pre-signature buffer for <dsig:SignedInfo/>
+# element processing will be stored in #xmlSecDSigCtx.
+DSIG_FLAGS_STORE_SIGNATURE =             0x00000008
+# DSig processing status.
+DSigStatusUnknown   = 0
+DSigStatusSucceeded = 1
+DSigStatusInvalid   = 2
 class DSigCtx:
     def __init__(self, keysMngr=None, _obj=None):
         """
@@ -161,17 +177,28 @@ class DSigCtx:
         Destroy context object (<dsig:Signature/> element processing context).
         """
         return xmlsecmod.dsigCtxDestroy(self)
+    def initialize(self, mngr):
+        """
+        Initializes <dsig:Signature/> element processing context. The caller is
+        responsible for cleaing up returend object by calling finalize method.
+        keysMngr : the keys manager.
+        Returns  : 0 on success or a negative value if an error occurs.
+        """
+        return xmlsecmod.dsigCtxInitialize(self, mngr)
+    def finalize(self):
+        """Cleans up DSigCtx object."""
+        xmlsecmod.dsigCtxFinalize(self)
     def sign(self, tmpl):
         """
         Signs the data as described in tmpl node.
-        tmpl : the pointer to <dsig:Signature/> node with signature template.
+        tmpl : the <dsig:Signature/> node with signature template.
         """
         return xmlsecmod.dsigCtxSign(self, tmpl)
     def verify(self, node):
         """
         Validates signature in the node. The verification result is returned
         in status member of the dsigCtx object.
-        node    : the pointer with <dsig:Signature/> node.
+        node    : the <dsig:Signature/> node.
         Returns : 0 on success (check status member of dsigCtx to get signature
         verification result) or a negative value if an error occurs.
         """
@@ -245,8 +272,8 @@ class TmplSignature(libxml2.xmlNode):
         <dsig:CanonicalizationMethod/>, <dsig:SignatureMethod/> and
         <dsig:SignatureValue/> children and sub-children. The application is
         responsible for inserting the returned node in the XML document.
-        doc          : the pointer to signature document or None; in the second
-        case, application must later call libxml2 setTreeDoc function to ensure
+        doc          : the signature document or None; in the second case,
+        application must later call libxml2 setTreeDoc function to ensure
         that all the children nodes have correct pointer to XML document.
         c14nMethodId : the signature canonicalization method.
         signMethodId : the signature method.
@@ -475,7 +502,7 @@ class KeyInfoCtx:
         """
         Allocates and initializes <dsig:KeyInfo/> element processing context.
         Caller is responsible for freeing it by calling destroy method.
-        mngr     : the pointer to keys manager (may be None).
+        mngr     : the keys manager (may be None).
         Returns  : the newly allocated object or None if an error occurs.
         """
 	if _obj != None:
@@ -492,7 +519,7 @@ class KeyInfoCtx:
         """
         Initializes <dsig:KeyInfo/> element processing context. Caller is
         responsible for cleaning it up by finalize method.
-        mngr     : the pointer to keys manager (may be None).
+        mngr     : the keys manager (may be None).
         Returns  : 0 on success and a negative value if an error occurs.
         """
         return xmlsecmod.keyInfoCtxInitialize(self, mngr)
@@ -528,10 +555,40 @@ class KeysMngr:
         Lookups key in the keys manager keys store. The caller is responsible
         for destroying the returned key using destroy method.
         name       : the desired key name.
-        keyInfoCtx : the pointer to <dsig:KeyInfo/> node processing context.
-        Returns    : the pointer to a key or None if key is not found or
-        an error occurs.
+        keyInfoCtx : the <dsig:KeyInfo/> node processing context.
+        Returns    : a key or None if key is not found or an error occurs.
         """
         _obj = xmlsecmod.keysMngrFindKey(self, name, key_info_ctx)
         if _obj is None: raise parserError('xmlSecKeysMngrFindKey() failed')
+        return Key(_obj=_obj)
+
+simpleKeysStoreId = xmlsecmod.simpleKeysStoreId()
+class KeyStore:
+    def __init__(self, id, _obj=None):
+        """
+        Creates new store of the specified klass id. Caller is responsible for
+        freeing the returned store by calling destroy method.
+        id      : the key store klass.
+        Returns : the newly allocated keys store or None if an error occurs.
+        """
+	if _obj != None:
+            self._o = _obj
+            return
+        self._o = xmlsecmod.keyStoreCreate(id)
+        if self._o is None: raise parserError('xmlSecKeyStoreCreate() failed')
+    def __repr__(self):
+        return "<xmlSecKeyStore object at 0x%x>" % id (self)
+    def destroy(self):
+        """Destroys the keys store"""
+        xmlsecmod.keyStoreDestroy(self)
+    def findKey(self, name, key_info_ctx):
+        """
+        Lookups key in the keys store. The caller is responsible for destroying
+        the returned key using destroy method.
+        name       : the desired key name.
+        keyInfoCtx : the <dsig:KeyInfo/> node processing context.
+        Returns    : a key or None if key is not found or an error occurs.
+        """
+        _obj = xmlsecmod.keyStoreFindKey(self, name, key_info_ctx)
+        if _obj is None: raise parserError('xmlSecKeyStoreFindKey() failed')
         return Key(_obj=_obj)
