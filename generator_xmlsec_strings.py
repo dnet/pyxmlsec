@@ -30,7 +30,7 @@ MATCH_BLANK   = re.compile(r'^\s*\n$')
 MATCH_COMMENT = re.compile(r'^[ /]+(?P<text>.*)\n$')
 MATCH_CONST   = re.compile(r'^const\s+xmlChar\s+(?P<name>\w+)\[\]\s*=\s+(?P<value>.*)\n$')
 
-header = """# $Id$ 
+header = """# $%s$
 # 
 # PyXMLSec - Python bindings for XML Security library (XMLSec)
 #
@@ -53,7 +53,7 @@ header = """# $Id$
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-"""
+""" % "id"
 
 file_in = sys.argv[1]
 file_out = "./xmlsec_strings.py"
