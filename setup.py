@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-
+# -*- coding: UTF-8 -*-
+#
 # $Id$
 #
 # PyXMLSec - Python bindings for XML Security library (XMLSec)
@@ -23,8 +24,13 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+__doc__ = """Python bindings for XMLSec Library
+
+PyXMLSec is a set of Python bindings for XML Security Library (XMLSec).
+"""
+
 classifiers = """\
-Development Status :: 1 - Pre-Alpha
+Development Status :: 2 - Pre-Alpha
 Intended Audience :: Developers
 License :: OSI Approved :: GNU General Public License (GPL)
 Operating System :: MacOS :: MacOS X
@@ -139,11 +145,13 @@ em = Extension("xmlsecmod",
                libraries     = libraries
                )
 
-setup(name = "pyxmlsec",
+doclines = __doc__.split("\n")
+
+setup(name = "PyXMLSec",
       version = "0.20040115",
-      description = "A set of Python bindings for XML Security Library (XMLSec)",
-      long_description = "",
-      author = "Valery Febvre",
+      description = doclines[0],
+      long_description = "\n" . join(doclines[2:]),
+      author = "Valéry Febvre",
       author_email = "vfebvre@easter-eggs.com",
       license = "GNU GPL",
       platforms = ["any"],

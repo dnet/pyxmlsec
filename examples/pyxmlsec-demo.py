@@ -1,14 +1,14 @@
 #!/usr/bin/env python
-# -*- coding: iso-8859-15 -*-
+# -*- coding: UTF-8 -*-
 #
 # $Id$
 #
 # PyXMLSec - Python bindings for XML Security library (XMLSec)
 #
-# Copyright (C) 2003-2004 Valery Febvre
+# Copyright (C) 2003-2004 Valéry Febvre
 # http://pyxmlsec.labs.libre-entreprise.org
 #
-# Author: Valery Febvre <vfebvre@easter-eggs.com>
+# Author: Valéry Febvre <vfebvre@easter-eggs.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -133,8 +133,8 @@ class TView(gtk.TextView):
         if nb_tab:
             tab = '\n' + '    ' * nb_tab
             text = '    ' * nb_tab + string.replace(text, '\n', tab)
-        self.buffer.insert_with_tags_by_name(iter, latin_to_utf8(text+'\n'), "monospace")
-        # self.buffer.insert(iter, latin_to_utf8(text+'\n'))
+        self.buffer.insert_with_tags_by_name(iter, text+'\n', "monospace")
+        # self.buffer.insert(iter, text+'\n')
 
 def quit(widget=None, *args):
     gtk.mainquit()
@@ -193,11 +193,6 @@ def interface():
     sw_tview_exec.add(tview_exec)
     # Show all widgets
     window.show_all()
-
-def utf8_to_latin(s):
-    return s.encode('iso-8859-1', 'replace')
-def latin_to_utf8(s):
-    return unicode(s, 'iso-8859-1')
 
 def on_clist_row_clicked(selection):
     ntb.set_current_page(0)
