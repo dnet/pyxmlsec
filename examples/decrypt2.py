@@ -83,8 +83,7 @@ def main():
 # The caller is responsible for destroying returned keys manager using
 # destroy.
 #
-# Returns the pointer to newly created keys manager or None if an error
-# occurs.
+# Returns the newly created keys manager or None if an error occurs.
 def load_des_keys(files, files_size):
     assert(files)
     assert(files_size > 0)
