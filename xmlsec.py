@@ -420,10 +420,10 @@ class EncCtx:
         xmlsecmod.encCtxDebugXmlDump(self, output)
     def setEncKey(self, key):
         """Sets encKey member."""
-        self._o = xmlsecmod.encCtxSetEncKey(self, key)
+        xmlsecmod.encCtxSetEncKey(self, key)
     def getResult(self):
         """Gets result member."""
-        return xmlsecmod.encCtxGetResult(self)
+        return Buffer(_obj=xmlsecmod.encCtxGetResult(self))
     def getResultBase64Encoded(self):
         """Gets resultBase64Encoded member."""
         return xmlsecmod.encCtxGetResultBase64Encoded(self)
