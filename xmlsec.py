@@ -1095,13 +1095,15 @@ class Key:
         Returns : 0 on success or a negative value if an error occurs.
         """
         return xmlsecmod.keySetValue(self, value)
-    def getData(self):
+    def getData(self, dataId):
         """
         Gets key's data (see also adoptData method).
         dataId  : the requested data klass.
         Returns : additional data associated with the key.
         """
-        return KeyData(_obj=xmlsecmod.keyGetData(self))
+        obj = xmlsecmod.keyGetData(self, dataId)
+        if obj:
+            return KeyData(_obj=obj)
     def ensureData(self, dataId):
         """
         If necessary, creates key data of dataId klass and adds to key.
