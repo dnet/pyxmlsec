@@ -60,13 +60,14 @@ static void xmlsec_ErrorsCallback(const char *file, int line, const char *func,
 PyObject *xmlsec_ErrorsSetCallback(PyObject *self, PyObject *args) {
   PyObject *callback_obj;
 
-  if (CheckArgs(args, "?:errorsSetCallback")) {
+  if (CheckArgs(args, "C:errorsSetCallback")) {
     if (!PyArg_ParseTuple(args, "O:errorsSetCallback", &callback_obj))
       return NULL;
   }
   else return NULL;
 
   Py_XINCREF(callback_obj);
+  Py_XDECREF(ErrorsCallback);
   ErrorsCallback = callback_obj;
 
   xmlSecErrorsSetCallback(xmlsec_ErrorsCallback);
