@@ -2,7 +2,7 @@
  *
  * PyXMLSec - Python bindings for XML Security library (XMLSec)
  *
- * Copyright (C) 2003 Easter-eggs, Valery Febvre
+ * Copyright (C) 2003-2004 Easter-eggs, Valery Febvre
  * http://pyxmlsec.labs.libre-entreprise.org/
  * 
  * Author: Valery Febvre <vfebvre@easter-eggs.com>
@@ -42,5 +42,5 @@ PyObject *xmlsec_X509DataGetNodeContent(PyObject *self, PyObject *args) {
   keyInfoCtx = xmlSecKeyInfoCtxPtr_get(keyInfoCtx_obj);
   ret = xmlSecX509DataGetNodeContent(node, deleteChildren, keyInfoCtx);
 
-  return Py_BuildValue("i", ret);
+  return wrap_int(ret);
 }
