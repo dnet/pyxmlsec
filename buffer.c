@@ -38,7 +38,58 @@ PyObject *wrap_xmlSecBufferPtr(xmlSecBufferPtr buf) {
   return (ret);
 }
 
-/*****************************************************************************/
+/******************************************************************************/
+
+PyObject *xmlSecBuffer_getattr(PyObject *self, PyObject *args) {
+  PyObject *buf_obj;
+  xmlSecBufferPtr buf;
+  const char *attr;
+
+  if (!PyArg_ParseTuple(args, "Os:bufferGetAttr", &buf_obj, &attr))
+    return NULL;
+
+  buf = xmlSecBufferPtr_get(buf_obj);
+
+  if (!strcmp(attr, "__members__"))
+    return Py_BuildValue("[ssss]", "data", "size", "maxSize", "allocMode");
+  if (!strcmp(attr, "data"))
+    return (wrap_xmlSecBytePtr(buf->data));
+  if (!strcmp(attr, "size"))
+    return (wrap_int(buf->size));
+  if (!strcmp(attr, "maxSize"))
+    return (wrap_int(buf->maxSize));
+  if (!strcmp(attr, "allocMode"))
+    return (wrap_int(buf->allocMode));
+
+  Py_INCREF(Py_None);
+  return (Py_None);
+}
+
+PyObject *xmlSecBuffer_setattr(PyObject *self, PyObject *args) {
+  PyObject *buf_obj, *value_obj;
+  xmlSecBufferPtr buf;
+  const char *name;
+
+  if (!PyArg_ParseTuple(args, "OsO:bufferSetAttr",
+			&buf_obj, &name, &value_obj))
+    return NULL;
+
+  buf = xmlSecBufferPtr_get(buf_obj);
+    
+  if (!strcmp(name, "data"))
+    buf->data = PyString_AsString(value_obj);
+  else if (!strcmp(name, "size"))
+    buf->size = PyInt_AsLong(value_obj);
+  else if (!strcmp(name, "maxSize"))
+    buf->maxSize = PyInt_AsLong(value_obj);
+  else if (!strcmp(name, "allocMode"))
+    buf->allocMode = PyInt_AsLong(value_obj);
+
+  Py_INCREF(Py_None);
+  return (Py_None);
+}
+
+/******************************************************************************/
 
 PyObject *xmlsec_BufferSetDefaultAllocMode(PyObject *self, PyObject *args) {
   xmlSecAllocMode defAllocMode;

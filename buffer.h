@@ -7,6 +7,9 @@ typedef struct {
 
 PyObject *wrap_xmlSecBufferPtr(xmlSecBufferPtr buf);
 
+PyObject *xmlSecBuffer_getattr(PyObject *self, PyObject *args);
+PyObject *xmlSecBuffer_setattr(PyObject *self, PyObject *args);
+
 PyObject *xmlsec_BufferSetDefaultAllocMode(PyObject *self, PyObject *args);
 PyObject *xmlsec_BufferCreate(PyObject *self, PyObject *args);
 PyObject *xmlsec_BufferDestroy(PyObject *self, PyObject *args);
