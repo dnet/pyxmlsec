@@ -1,3 +1,37 @@
+2004-02-03  Valery Febvre  <vfebvre@easter-eggs.com>
+
+	* app.c, base64.c, buffer.c, keyinfo.c:
+	Args checking added in all xmlsec functions
+
+	* utils.c: File checking type was added in CheckArgs() function
+
+2004-02-02  Valery Febvre  <vfebvre@easter-eggs.com>
+
+	* setup.py: utils.c added in sources list.
+
+	* utils.c, utils.h, xmlsecmod.h: Initial commit
+
+	* wrap_objs.c, wrap_objs.h:
+	PythonStringList_AsCharPtrPtr was renamed in PythonStringList_get
+	xmlsec_error and HASH_TABLE_SIZE was moved in xmlsecmod.h
+
+2004-01-27  Valery Febvre  <vfebvre@easter-eggs.com>
+
+	* xmlsec.py:
+	Methods __getattr__ and __setattr__ were added in Transform and
+	TransformCtx classes
+
+	* xmlsecmod.c:
+	Added methods: transformCtxGetAttr, transformCtxSetAttr,
+	transformGetAttr, transformSetAttr
+
+	* transforms.c, transforms.h:
+	Added functions: xmlSecTransform_getattr, xmlSecTransform_setattr
+
+	* transforms.c, transforms.h:
+	Added functions: xmlsec_TransformCtxPreExecuteCallback,
+	xmlSecTransformCtx_getattr, xmlSecTransformCtx_setattr
+
 2004-01-25  Valery Febvre  <vfebvre@easter-eggs.com>
 
 	* examples/*.py:
