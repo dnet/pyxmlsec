@@ -7,13 +7,13 @@
 # Signs a template file using a key from PEM file
 #
 # Usage:
-#	./sign1 <xml-tmpl> <pem-key> 
+#	./sign1.py <xml-tmpl> <pem-key> 
 #
 # Example:
-#	./sign1 sign1-tmpl.xml rsakey.pem > sign1-res.xml
+#	./sign1.py sign1-tmpl.xml rsakey.pem > sign1-res.xml
 #
 # The result signature could be validated using verify1 example:
-#	./verify1 sign1-res.xml rsapub.pem
+#	./verify1.py sign1-res.xml rsapub.pem
 #
 # This is free software; see COPYING file in the source
 # distribution for preciese wording.
@@ -57,8 +57,7 @@ def main():
     if xmlsec.cryptoInit() < 0:
         print "Error: xmlsec-crypto initialization failed."
 
-    if sign_file(sys.argv[1], sys.argv[2]) < 0:
-	sys.exit(-1)
+    res = sign_file(sys.argv[1], sys.argv[2])
 
     # Shutdown xmlsec-crypto library
     xmlsec.cryptoShutdown()
@@ -72,6 +71,8 @@ def main():
     # Shutdown LibXML2
     libxml2.cleanupParser()
 
+    sys.exit(res)
+
 
 # Signs the tmpl_file using private key from key_file.
 # Returns 0 on success or a negative value if an error occurs.
@@ -83,41 +84,44 @@ def sign_file(tmpl_file, key_file):
     doc = libxml2.parseFile(tmpl_file)
     if doc is None or doc.getRootElement() is None:
 	print "Error: unable to parse file \"%s\"" % tmpl_file
-        cleanup(doc)
+        return cleanup(doc)
     
     # Find start node
-    node = xmlsec.findNode(doc.getRootElement(), xmlsec.NodeSignature, xmlsec.DSigNs)
+    node = xmlsec.findNode(doc.getRootElement(), xmlsec.NodeSignature,
+                           xmlsec.DSigNs)
     if node is None:
 	print "Error: start node not found in \"%s\"" % tmpl_file
-        cleanup(doc)
+        return cleanup(doc)
         
     # Create signature context, we don't need keys manager in this example
     dsig_ctx = xmlsec.DSigCtx()
     if dsig_ctx is None:
         print "Error: failed to create signature context"
-        cleanup(doc, dsig_ctx)
+        return cleanup(doc, dsig_ctx)
 
     # Load private key, assuming that there is not password
-    key = xmlsec.cryptoAppKeyLoad(key_file, xmlsec.KeyDataFormatPem, None, None, None)
+    key = xmlsec.cryptoAppKeyLoad(key_file, xmlsec.KeyDataFormatPem,
+                                  None, None, None)
     if key is None:
         print "Error: failed to load private pem key from \"%s\"" % key_file
-        cleanup(doc, dsig_ctx)
+        return cleanup(doc, dsig_ctx)
     dsig_ctx.setSignKey(key)
 
     # Set key name to the file name, this is just an example!
     if key.setName(key_file) < 0:
         print "Error: failed to set key name for key from \"%s\"" % key_file
+        return cleanup(doc, dsig_ctx)
 
     # Sign the template
     if dsig_ctx.sign(node) < 0:
         print "Error: signature failed"
-        cleanup(doc, dsig_ctx)
+        return cleanup(doc, dsig_ctx)
 
     # Print signed document to stdout
     doc.dump("-")
 
     # Success
-    cleanup(doc, dsig_ctx, 1)
+    return cleanup(doc, dsig_ctx, 1)
 
 
 def cleanup(doc=None, dsig_ctx=None, res=-1):
