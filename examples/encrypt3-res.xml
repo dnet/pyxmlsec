@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+XML Security Library example: Original XML doc file before encryption (encrypt3 example). 
+-->
+<EncryptedData xmlns="http://www.w3.org/2001/04/xmlenc#" Type="http://www.w3.org/2001/04/xmlenc#Element">
+<EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#tripledes-cbc"/>
+<KeyInfo xmlns="http://www.w3.org/2000/09/xmldsig#">
+<EncryptedKey xmlns="http://www.w3.org/2001/04/xmlenc#">
+<EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p"/>
+<KeyInfo xmlns="http://www.w3.org/2000/09/xmldsig#">
+<KeyName>rsakey.pem</KeyName>
+</KeyInfo>
+<CipherData>
+<CipherValue>U/Bg9JP/dlWIyzYMxiWVHzDBzRyGDmQH54jPzOmvJHBdF5XRZOuD2VMYy1ZnIcK3
+nKH2MvgY4MH4wgMc4J61mvoUOOVXEBal982CLC+mewhHFQolTPH2w2jgllBVs9ZO
+NTfOzoY1VhXN+lvsHPIdX1PrZk7QWC78ivaCR263JEr3xpETvwlqF16x1X0duO4W
+Nk1+mF+TkzdNwIVr7YPrUwwxwrPzQJCzH6qFhOkmObcV44Ql4EEgGNxkRmlwdYgj
+U5mRkbuIDfHDvEtshM23B1PQ96BYlDay9LGqhhoJt8Ed1TRE02dZBxGDn5klX7Et
+RR977bxENGK1w8bLNt6NUQ==</CipherValue>
+</CipherData>
+</EncryptedKey>
+</KeyInfo>
+<CipherData>
+<CipherValue>KCNsuvrhDBxyv4sRM5LZrFuuWjYu5XREtMiHD+XK9+FrvDDESvAhWZLGamfe/Anp
+utf8C3zCceYIQ415LOjt6ErBT4zGXYIj6MS7JR/DhT+9+UIpATPQlA==</CipherValue>
+</CipherData>
+</EncryptedData>

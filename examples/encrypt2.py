@@ -143,14 +143,14 @@ def encrypt_file(xml_file, key_file):
     doc.dump("-")
 
     # Success
-    return cleanup(doc, enc_data_node, enc_ctx, 1)
+    return cleanup(doc, None, enc_ctx, 1)
 
 
 def cleanup(doc=None, enc_data_node=None, enc_ctx=None, res=-1):
     if enc_ctx is not None:
         enc_ctx.destroy()
-    #if enc_data_node is not None:
-    #     enc_data_node.freeNode()
+    if enc_data_node is not None:
+        enc_data_node.freeNode()
     if doc is not None:
         doc.freeDoc()
     return res
