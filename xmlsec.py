@@ -937,6 +937,222 @@ KeyDataFormatPkcs8Pem = 4 # the PKCS#8 PEM private key.
 KeyDataFormatPkcs8Der = 5 # the PKCS#8 DER private key.
 # The "unknown" id.
 KeyDataIdUnknown = None
+def keyDataIdsGet():
+    """
+    Gets global registered key data klasses list.
+    Returns : the list of all registered key data klasses.
+    """
+    return PtrList(_obj=xmlsecmod.keyDataIdsGet())
+def keyDataIdsInit():
+    """
+    Initializes the key data klasses. This function is called from the init
+    function and the application should not call it directly.
+    Returns : 0 on success or a negative value if an error occurs.
+    """
+    return xmlsecmod.keyDataIdsInit()
+def keyDataIdsShutdown():
+    """
+    Shuts down the keys data klasses. This function is called from the shutdown
+    function and the application should not call it directly.
+    """
+    xmlsecmod.keyDataIdsShutdown()
+def keyDataIdsRegisterDefault():
+    """
+    Registers default (implemented by XML Security Library) key data klasses:
+    <dsig:KeyName/> element processing klass, <dsig:KeyValue/> element
+    processing klass, ...
+    Returns : 0 on success or a negative value if an error occurs.
+    """
+    return xmlsecmod.keyDataIdsRegisterDefault()
+def keyDataIdsRegister(id):
+    """
+    Registers id in the global list of key data klasses.
+    id      : the key data klass.
+    Returns : 0 on success or a negative value if an error occurs.
+    """
+    return xmlsecmod.keyDataIdsRegister(id)
+def keyDataXmlRead(id, key, node, keyInfoCtx):
+    """
+    Reads the key data of klass id from XML node and adds them to key.
+    id         : the data klass.
+    key        : the destination key.
+    node       : the XML node.
+    keyInfoCtx : the <dsig:KeyInfo/> element processing context.
+    Returns    : 0 on success or a negative value otherwise.
+    """
+    return xmlsecmod.keyDataXmlRead(id, key, node, keyInfoCtx)
+def keyDataXmlWrite(id, key, node, keyInfoCtx):
+    """
+    Writes the key data of klass id from key to an XML node.
+    id         : the data klass.
+    key        : the source key.
+    node       : the XML node.
+    keyInfoCtx : the <dsig:KeyInfo/> element processing context.
+    Returns    : 0 on success or a negative value otherwise.
+    """
+    return xmlsecmod.keyDataXmlWrite(id, key, node, keyInfoCtx)
+def keyDataBinRead(id, key, buf, bufSize, keyInfoCtx):
+    """
+    Reads the key data of klass id from binary buffer buf to key.
+    id         : the data klass.
+    key        : the destination key.
+    buf        : the input binary buffer.
+    bufSize    : the input buffer size.
+    keyInfoCtx : the <dsig:KeyInfo/> node processing context.
+    Returns    : 0 on success or a negative value if an error occurs.
+    """
+    return xmlsecmod.keyDataBinRead(id, key, buf, bufSize, keyInfoCtx)
+def keyDataBinWrite(id, key, buf, bufSize, keyInfoCtx):
+    """
+    Writes the key data of klass id from the key to a binary buffer buf.
+    id         : the data klass.
+    key        : the source key.
+    buf        : the output binary buffer.
+    bufSize    : the output buffer size.
+    keyInfoCtx : the <dsig:KeyInfo/> node processing context.
+    Returns    : 0 on success or a negative value if an error occurs.
+    """
+    return xmlsecmod.keyDataBinWrite(id, key, buf, bufSize, keyInfoCtx)
+class KeyData:
+    def __init__(self, id=None, _obj=None):
+        """
+        Creates new key data of the specified type id. Caller is responsible for
+        destroing returned object with destroy method.
+        id      : the data id.
+        Returns : the newly key data object or None if an error occurs.
+        """
+	if _obj != None:
+            self._o = _obj
+            return
+        self._o = xmlsecmod.keyDataCreate(id)
+        if self._o is None: raise parserError('xmlSecKeyDataCreate() failed')
+    def __isprivate(self, name):
+        return name == '_o'
+    def __getattr__(self, name):
+        if self.__isprivate(name):
+            return self.__dict__[name]
+        if name[:2] == "__" and name[-2:] == "__" and name != "__members__":
+            raise AttributeError, name
+        ret = xmlsecmod.keyDataGetAttr(self, name)
+        if ret is None:
+            raise AttributeError, name
+        if name == "id":
+            return KeyDataId(_obj=ret)
+    def __setattr__(self, name, value):
+        if self.__isprivate(name):
+            self.__dict__[name] = value
+        else:
+            xmlsecmod.keyDataSetAttr(self, name, value)
+    def destroy(self):
+        """Destroys the data and frees all allocated memory."""
+        xmlsecmod.keyDataDestroy(self)
+    def duplicate(self):
+        """
+        Creates a duplicate of the given data. Caller is responsible for
+        destroing returned object with destroy function.
+        Returns : the newly key data object or None if an error occurs.
+        """
+        return KeyData(_obj=xmlsecmod.keyDataDuplicate(self))
+    def generate(self, sizeBits, type):
+        """
+        Generates new key data of given size and type.
+        sizeBits : the desired key data size (in bits).
+        type     : the desired key data type.
+        Returns  : 0 on success or a negative value otherwise.
+        """
+        return xmlsecmod.keyDataGenerate(self, sizeBits, type)
+    def getType(self):
+        """
+        Gets key data type.
+        Returns : key data type.
+        """
+        return xmlsecmod.keyDataGetType(self)
+    def getSize(self):
+        """
+        Gets key data size.
+        Returns : key data size (in bits).
+        """
+        return xmlsecmod.keyDataGetSize(self)
+    def getIdentifier(self):
+        """
+        Gets key data identifier string.
+        Returns : key data id string.
+        """
+        return xmlsecmod.keyDataGetIdentifier(self)
+    def debugDump(self, output):
+        """
+        Prints key data debug info.
+        output : the output FILE.
+        """
+        xmlsecmod.keyDataDebugDump(self, output)
+    def debugXmlDump(self, output):
+        """
+        Prints key data debug info in XML format.
+        output : the output FILE.
+        """
+        xmlsecmod.keyDataDebugXmlDump(self, output)
+    def getName(self):
+        """Returns the key data name."""
+        return xmlsecmod.keyDataGetName(self)
+    def isValid(self):
+        """
+        Returns 1 if KeyData object is not None and id attribut is not None
+        or 0 otherwise.
+        """
+        return xmlsecmod.keyDataIsValid(self)
+    def checkId(self, id):
+        """
+        Returns 1 if data is valid and data's id is equal to dataId.
+        id : the data Id.
+        """
+        return xmlsecmod.keyDataCheckId(self, id)
+    def checkUsage(self, usage):
+        """
+        Returns 1 if data is valid and could be used for usage.
+        usage : the data usage.
+        """
+        return xmlsecmod.keyDataCheckUsage(self, usage)
+    def checkSize(self, size):
+        """
+        Returns 1 if data is valid and data's object has at least size bytes.
+        size : the expected size.
+        """
+        return xmlsecmod.keyDataCheckSize(self, size)
+
+class KeyDataId:
+    def __init__(self, klassSize=None, objSize=None, name=None, usage=None, href=None, dataNodeName=None, dataNodeNs=None, _obj=None):
+        """
+        Creates new key data klass id.
+        klassSize     : the klass size.
+        objSize       : the object size.
+        name          : the object name.
+        usage         : the allowed data usage.
+        href          : the identification string (href).
+        dataNodeName  : the data's XML node name.
+        dataNodeNs    : the data's XML node namespace.
+        initialize    : the initialization method.
+        duplicate     : the duplicate (copy) method.
+        finalize      : the finalization (destroy) method.
+        generate      : the new data generation method.
+        getType       : the method to access data's type information.
+        getSize       : the method to access data's size.
+        getIdentifier : the method to access data's string identifier.
+        xmlRead       : the method for reading data from XML node.
+        xmlWrite      : the method for writing data to XML node.
+        binRead       : the method for reading data from a binary buffer.
+        binWrite      : the method for writing data to binary buffer.
+        debugDump     : the method for printing debug data information.
+        debugXmlDump  : the method for printing debug data information in XML format.
+        Returns       : the newly key data klass id or None if an error occurs.
+        """
+	if _obj != None:
+            self._o = _obj
+            return
+        self._o = xmlsecmod.keyDataIdCreate()
+    def getName(self):
+        """Returns data klass name."""
+        return xmlsecmod.keyDataIdGetName(self)
+
 ###############################################################################
 # keysmngr.h
 ###############################################################################
