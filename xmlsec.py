@@ -1609,7 +1609,7 @@ def parseFile(filename):
     filename : the filename.
     Returns  : the loaded XML document or None if an error occurs.
     """
-    return xmlsecmod.parseFile(filename)
+    return libxml2.xmlDoc(_obj=xmlsecmod.parseFile(filename))
 def parseMemory(buffer, size, recovery):
     """
     Loads XML Doc from memory. We need a special version because of c14n issue.
@@ -1619,7 +1619,7 @@ def parseMemory(buffer, size, recovery):
     recovery : the flag.
     Returns  : the loaded XML document or None if an error occurs.
     """
-    return xmlsecmod.parseMemory(buffer, size, recovery)
+    return libxml2.xmlDoc(_obj=xmlsecmod.parseMemory(buffer, size, recovery))
 def parseMemoryExt(prefix, prefixSize, buffer, bufferSize, postfix, postfixSize):
     """
     Loads XML Doc from 3 chunks of memory: prefix, buffer and postfix.
@@ -1631,8 +1631,9 @@ def parseMemoryExt(prefix, prefixSize, buffer, bufferSize, postfix, postfixSize)
     postfixSize : the size of the third part of the input.
     Returns     : the loaded XML document or None if an error occurs.
     """
-    return xmlsecmod.parseMemoryExt(prefix, prefixSize, buffer, bufferSize,
-                                    postfix, postfixSize)
+    return libxml2.xmlDoc(_obj=xmlsecmod.parseMemoryExt(prefix, prefixSize,
+                                                        buffer, bufferSize,
+                                                        postfix, postfixSize))
 
 ###############################################################################
 # templates.h
