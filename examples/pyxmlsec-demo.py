@@ -137,7 +137,7 @@ class TView(gtk.TextView):
         # self.buffer.insert(iter, latin_to_utf8(text+'\n'))
 
 def quit(widget=None, *args):
-        gtk.mainquit()
+    gtk.mainquit()
 
 def interface():
     global ntb, tview_exec, tview_src
