@@ -1,18 +1,25 @@
 typedef struct {
     PyObject_HEAD
+    xmlSecTransformCtxPtr obj;
+} xmlSecTransformCtxPtr_object;
+
+typedef struct {
+    PyObject_HEAD
     xmlSecTransformPtr obj;
 } xmlSecTransformPtr_object;
 
 typedef struct {
     PyObject_HEAD
-    xmlSecTransformCtxPtr obj;
-} xmlSecTransformCtxPtr_object;
+    xmlSecTransformId obj;
+} xmlSecTransformId_object;
 
 #define xmlSecTransformPtr_get(v) (((v) == Py_None) ? NULL : (((xmlSecTransformPtr_object *)(PyObject_GetAttr(v, PyString_FromString("_o"))))->obj))
 #define xmlSecTransformCtxPtr_get(v) (((v) == Py_None) ? NULL : (((xmlSecTransformCtxPtr_object *)(PyObject_GetAttr(v, PyString_FromString("_o"))))->obj))
+#define xmlSecTransformId_get(v) (((v) == Py_None) ? NULL : (((xmlSecTransformId_object *)(PyObject_GetAttr(v, PyString_FromString("_o"))))->obj))
 
-PyObject *wrap_xmlSecTransformPtr(xmlSecTransformPtr ctx);
 PyObject *wrap_xmlSecTransformCtxPtr(xmlSecTransformCtxPtr ctx);
+PyObject *wrap_xmlSecTransformPtr(xmlSecTransformPtr ctx);
+PyObject *wrap_xmlSecTransformId(xmlSecTransformId transformId);
 
 PyObject *xmlsec_TransformUriTypeCheck(PyObject *self, PyObject *args);
 

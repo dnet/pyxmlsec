@@ -51,6 +51,18 @@ PyObject *wrap_xmlSecTransformCtxPtr(xmlSecTransformCtxPtr ctx) {
   return (ret);
 }
 
+PyObject *wrap_xmlSecTransformId(xmlSecTransformId transformId) {
+  PyObject *ret;
+
+  if (transformId == NULL) {
+    Py_INCREF(Py_None);
+    return (Py_None);
+  }
+  ret = PyCObject_FromVoidPtrAndDesc((void *) transformId,
+				     (char *) "xmlSecTransformId", NULL);
+  return (ret);
+}
+
 /*****************************************************************************/
 
 PyObject *xmlsec_TransformUriTypeCheck(PyObject *self, PyObject *args) {
