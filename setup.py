@@ -172,7 +172,7 @@ extract_libs(xmlsec1_libs)
 
 em = Extension("xmlsecmod",
                sources = ["utils.c", "wrap_objs.c",
-                          "app.c", "base64.c", "buffer.c",
+                          "app.c", "base64.c", "buffer.c", "errors.c",
                           "keyinfo.c", "keys.c", "keysdata.c", "keysmngr.c",
                           "list.c", "membuf.c", "nodeset.c", "parser.c",
                           "templates.c", "transforms.c", "version.c",

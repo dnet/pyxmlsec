@@ -5,6 +5,7 @@
 
 #include <xmlsec/base64.h>
 #include <xmlsec/buffer.h>
+#include <xmlsec/errors.h>
 #include <xmlsec/keyinfo.h>
 #include <xmlsec/keys.h>
 #include <xmlsec/keysmngr.h>

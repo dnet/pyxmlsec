@@ -614,6 +614,117 @@ class Buffer:
         return libxml2.outputBuffer(_obj=xmlsecmod.bufferCreateOutputBuffer(self))
 
 ###############################################################################
+# errors.h
+###############################################################################
+# An XMLSec function failed (error subject is the failed function).
+ERRORS_R_XMLSEC_FAILED		 	= 1
+# Failed to allocate memory error.
+ERRORS_R_MALLOC_FAILED		 	= 2
+# Failed to duplicate string error.
+ERRORS_R_STRDUP_FAILED		 	= 3
+# Crypto (OpenSSL) function failed (error subject is the failed function). 
+ERRORS_R_CRYPTO_FAILED		 	= 4
+# LibXML function failed (error subject is the failed function).
+ERRORS_R_XML_FAILED		 	= 5
+# LibXSLT function failed (error subject is the failed function).
+ERRORS_R_XSLT_FAILED		 	= 6
+# IO operation failed.
+ERRORS_R_IO_FAILED		 	= 7
+# The feature is disabled during compilation.
+# Check './configure --help' for details on how to enable it.
+ERRORS_R_DISABLED		 	= 8
+# Feature is not implemented.
+ERRORS_R_NOT_IMPLEMENTED		= 9
+# Invalid size.
+ERRORS_R_INVALID_SIZE		 	= 11
+# Invalid data.
+ERRORS_R_INVALID_DATA		 	= 12
+# Invalid result.
+ERRORS_R_INVALID_RESULT		 	= 13
+# Invalid type.
+ERRORS_R_INVALID_TYPE		 	= 14
+# Invalid operation.
+ERRORS_R_INVALID_OPERATION	 	= 15
+# Invalid status.
+ERRORS_R_INVALID_STATUS 		= 16
+# Invalid format.
+ERRORS_R_INVALID_FORMAT 		= 17
+# The data do not match our expectation.
+ERRORS_R_DATA_NOT_MATCH		 	= 18
+# Invalid node (error subject is the node name).
+ERRORS_R_INVALID_NODE	 	 	= 21
+# Invalid node content (error subject is the node name).
+ERRORS_R_INVALID_NODE_CONTENT	 	= 22
+# Invalid node attribute (error subject is the node name).
+ERRORS_R_INVALID_NODE_ATTRIBUTE	 	= 23
+# Missing node attribute (error subject is the node name).
+ERRORS_R_MISSING_NODE_ATTRIBUTE	 	= 25
+# Node already present,
+ERRORS_R_NODE_ALREADY_PRESENT	 	= 26
+# Unexpected node (error subject is the node name).
+ERRORS_R_UNEXPECTED_NODE	 	= 27
+# Node not found (error subject is the required node name).
+ERRORS_R_NODE_NOT_FOUND 	 	= 28
+# This transform is invlaid here.
+ERRORS_R_INVALID_TRANSFORM	 	= 31
+# Key is invalid for this transform.
+ERRORS_R_INVALID_TRANSFORM_KEY		= 32
+# Invalid URI type.
+ERRORS_R_INVALID_URI_TYPE 	 	= 33
+# The transform requires the input document to be the same as context.
+ERRORS_R_TRANSFORM_SAME_DOCUMENT_REQUIRED 	= 34
+# The transform is disabled.
+ERRORS_R_TRANSFORM_DISABLED		= 35
+# Key data is invalid.
+ERRORS_R_INVALID_KEY_DATA	 	= 41
+# Data is not found (error subject is the data name).
+ERRORS_R_KEY_DATA_NOT_FOUND		= 42
+# The key data is already exist.
+ERRORS_R_KEY_DATA_ALREADY_EXIST	 	= 43
+# Invalid key size.
+ERRORS_R_INVALID_KEY_DATA_SIZE	 	= 44
+# Key not found.
+ERRORS_R_KEY_NOT_FOUND		 	= 45
+# The key data type disabled.
+ERRORS_R_KEYDATA_DISABLED		= 46
+# Max allowed retrievals level reached.
+ERRORS_R_MAX_RETRIEVALS_LEVEL	 	= 51
+# The retrieved key data type does not match the one specified 
+# in the <dsig:RetrievalMethod/> node.
+ERRORS_R_MAX_RETRIEVAL_TYPE_MISMATCH	= 52
+# Max EncryptedKey level reached.
+ERRORS_R_MAX_ENCKEY_LEVEL	 	= 61
+# Certificate verification failed.
+ERRORS_R_CERT_VERIFY_FAILED	 	= 71
+# Requested certificate is not found.
+ERRORS_R_CERT_NOT_FOUND		 	= 72
+# The certificate is revoked.
+ERRORS_R_CERT_REVOKED		 	= 73
+# Failed to get certificate issuer.
+ERRORS_R_CERT_ISSUER_FAILED	 	= 74
+# "Not valid before" verification failed.
+ERRORS_R_CERT_NOT_YET_VALID	 	= 75
+# "Not valid after" verification failed.
+ERRORS_R_CERT_HAS_EXPIRED	 	= 76
+# The <dsig:Reference> nodes not found.
+ERRORS_R_DSIG_NO_REFERENCES 	 	= 81
+# The <dsig:Reference> validation failed.
+ERRORS_R_DSIG_INVALID_REFERENCE 	= 82
+# Invalid assertion.
+ERRORS_R_ASSERTION		 	= 100
+# The maximum xmlsec errors number.
+ERRORS_MAX_NUMBER			= 256
+# Empty error message " ".
+ERRORS_NO_MESSAGE = " "
+def errorsSetCallback(callback):
+    """
+    Sets the errors callback function to callback that will be called every
+    time an error occurs.
+    callback : the new errors callback function.
+    """
+    xmlsecmod.errorsSetCallback(callback)
+
+###############################################################################
 # keyinfo.h
 ###############################################################################
 # The KeyInfoCtx operation mode (read or write).
@@ -2642,16 +2753,16 @@ class TransformId:
 ###############################################################################
 # The library version string in the format
 # "<major-number>.<minor-number>.<sub-minor-number>".
-XMLSEC_VERSION          = xmlsecmod.xmlsec_version()
+VERSION          = xmlsecmod.xmlsec_version()
 # The library major version number.
-XMLSEC_VERSION_MAJOR    = xmlsecmod.xmlsec_version_major()
+VERSION_MAJOR    = xmlsecmod.xmlsec_version_major()
 # The library minor version number.
-XMLSEC_VERSION_MINOR    = xmlsecmod.xmlsec_version_minor()
+VERSION_MINOR    = xmlsecmod.xmlsec_version_minor()
 # The library sub-minor version number.
-XMLSEC_VERSION_SUBMINOR = xmlsecmod.xmlsec_version_subminor()
+VERSION_SUBMINOR = xmlsecmod.xmlsec_version_subminor()
 # The library version info string in the format
 # "<major-number>+<minor-number>:<sub-minor-number>:<minor-number>".
-XMLSEC_VERSION_INFO     = xmlsecmod.xmlsec_version_info()
+VERSION_INFO     = xmlsecmod.xmlsec_version_info()
 
 ###############################################################################
 # xmldsig.h

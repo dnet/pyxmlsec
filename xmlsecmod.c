@@ -27,6 +27,7 @@
 #include "app.h"
 #include "base64.h"
 #include "buffer.h"
+#include "errors.h"
 #include "keyinfo.h"
 #include "keys.h"
 #include "keysdata.h"
@@ -120,6 +121,9 @@ static PyMethodDef xmlsec_methods[] = {
   {"bufferBase64NodeContentRead",  xmlsec_BufferBase64NodeContentRead,  METH_VARARGS},
   {"bufferBase64NodeContentWrite", xmlsec_BufferBase64NodeContentWrite, METH_VARARGS},
   {"bufferCreateOutputBuffer",     xmlsec_BufferCreateOutputBuffer,     METH_VARARGS},
+
+  /* errors.h */
+  {"errorsSetCallback", xmlsec_ErrorsSetCallback, METH_VARARGS},
 
   /* keys.h */
   {"keyReqGetAttr", xmlSecKeyReq_getattr, METH_VARARGS},
