@@ -133,3 +133,20 @@ PyObject *wrap_xmlSecBytePtrConst(const xmlSecByte *str) {
   ret = PyString_FromString(str);
   return (ret);
 }
+
+/****************************************************************************/
+/* Python objects -> C                                                      */
+/****************************************************************************/
+
+void PyStringList_AsCharPtrArray(PyObject *list_obj, xmlChar **list) {
+  int i;
+
+  /* convert Python list into a NULL terminated C list */
+  list = (xmlChar **) calloc (PyList_Size(list_obj)+1, sizeof (xmlChar *));
+  for (i=0; i<PyList_Size(list_obj); i++) {
+    list[i] = (xmlChar *) calloc (PyString_Size(PyList_GetItem(list_obj, i))+1,
+				  sizeof (xmlChar));
+    sscanf (PyString_AsString(PyList_GetItem(list_obj, i)), "%s", list[i]);
+  }
+  list[i] = NULL;
+}
