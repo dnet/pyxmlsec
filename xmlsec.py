@@ -41,10 +41,15 @@ by SMEs - programme.
 __docformat__ = "plaintext en"
 
 import libxml2
-import libxslt
 
 import xmlsecmod
 from xmlsec_strings import *
+
+class parserError:
+    def __init__(self, msg):
+        self.msg = msg
+    def __str__(self):
+        return self.msg
 
 ###############################################################################
 # app.h
@@ -417,14 +422,14 @@ class Buffer:
         columns : the max line size fro base64 encoded data.
         Returns : 0 on success or a negative value if an error occurs.
         """
-        return xmlsecmod.bufferBase64NodeContentWrite(self, node)
+        return xmlsecmod.bufferBase64NodeContentWrite(self, node, columns)
     def createOutputBuffer(self):
         """
         Creates new LibXML output buffer to store data in the buf. Caller is
         responsible for destroying buf when processing is done.
         Returns : newly allocated output buffer or None if an error occurs.
         """
-        return libxml2.xmlOutputBuffer(_obj=xmlsecmod.bufferCreateOutputBuffer(self))
+        return libxml2.outputBuffer(_obj=xmlsecmod.bufferCreateOutputBuffer(self))
 
 ###############################################################################
 # keyinfo.h
@@ -512,8 +517,26 @@ class KeyInfoCtx:
             return
         self._o = xmlsecmod.keyInfoCtxCreate(mngr)
         if self._o is None: raise parserError('xmlSecKeyInfoCtxCreate() failed')
-    def __repr__(self):
-        return "<xmlSecKeyInfoCtx object at 0x%x>" % id (self)
+    def __isprivate(self, name):
+        return name == '_o'
+    def __getattr__(self, name):
+        if self.__isprivate(name):
+            return self.__dict__[name]
+        if name[:2] == "__" and name[-2:] == "__":
+            raise AttributeError, name
+        ret = xmlsecmod.keyInfoCtxGetAttr(self, name)
+        if ret is None:
+            raise AttributeError, name
+        if name == "keyReq":
+            return KeyReq(_obj=ret)
+        else:
+            # flags, flags2
+            return ret
+    def __setattr__(self, name, value):
+        if self.__isprivate(name):
+            self.__dict__[name] = value
+        else:
+            xmlsecmod.keyInfoCtxSetAttr(self, name, value)
     def destroy(self):
         """Destroys the keyInfoCtx object"""
         return xmlsecmod.keyInfoCtxDestroy(self)
@@ -635,8 +658,6 @@ class Key:
             return
         self._o = xmlsecmod.keyCreate()
         if self._o is None: raise parserError('xmlSecKeyCreate() failed')
-    def __repr__(self):
-        return "<xmlSecKey object at 0x%x>" % id (self)
     def destroy(self):
         """Destroys the key"""
         xmlsecmod.keyDestroy(self)
@@ -680,7 +701,7 @@ class Key:
         Gets key value (see also setValue method).
         Returns : key value (crypto material).
         """
-        # TODO : should return KeyData object
+        # FIXME : should return KeyData object
         return xmlsecmod.keyGetValue(self)
     def setValue(self, value):
         """
@@ -695,7 +716,7 @@ class Key:
         dataId  : the requested data klass.
         Returns : additional data associated with the key.
         """
-        # TODO : should return KeyData object
+        # FIXME : should return KeyData object
         return xmlsecmod.keyGetData(self)
     def ensureData(self, dataId):
         """
@@ -703,9 +724,9 @@ class Key:
         dataId  : the requested data klass.
         Returns : key data or None if an error occurs.
         """
-        # TODO : should return KeyData object
+        # FIXME : should return KeyData object
         return xmlsecmod.keyEnsureData(self, dataId)
-    def adoptData(self):
+    def adoptData(self, data):
         """
         Adds data to the key. The data object will be destroyed by key.
         data    : the key data.
@@ -751,10 +772,31 @@ def keyReqCopy(dst, src):
     src     : the source object.
     Returns : 0 on success and a negative value if an error occurs.
     """
-    return xmlsecmod.keyReqCopy(dst, src)
+    return KeyReq(_obj=xmlsecmod.keyReqCopy(dst, src))
 class KeyReq:
-    def __init__(self, keyId, keyType, keyUsage, keyBitsSize):
+    def __init__(self, keyId=None, keyType=None, keyUsage=None, keyBitsSize=None, _obj=None):
+	if _obj != None:
+            self._o = _obj
+            return
         self._o = xmlsecmod.keyReqCreate(keyId, keyType, keyUsage, keyBitsSize)
+        if self._o is None: raise parserError('xmlSecKeyReqCreate() failed')
+    def __isprivate(self, name):
+        return name == '_o'
+    def __getattr__(self, name):
+        if self.__isprivate(name):
+            return self.__dict__[name]
+        if name[:2] == "__" and name[-2:] == "__":
+            raise AttributeError, name
+        ret = xmlsecmod.keyReqGetAttr(self, name)
+        if ret is None:
+            raise AttributeError, name
+        # keyId, keyType, keyUsage, keyBitsSize
+        return ret
+    def __setattr__(self, name, value):
+        if self.__isprivate(name):
+            self.__dict__[name] = value
+        else:
+            xmlsecmod.keyReqSetAttr(self, name, value)
     def initialize(self):
         """
         Initialize key requirements object. Caller is responsible for cleaning
@@ -838,14 +880,12 @@ KeyDataFormatPem      = 2 # the PEM key data (cert or public/private key).
 KeyDataFormatDer      = 3 # the DER key data (cert or public/private key).
 KeyDataFormatPkcs8Pem = 4 # the PKCS#8 PEM private key.
 KeyDataFormatPkcs8Der = 5 # the PKCS#8 DER private key.
-
+# The "unknown" id.
+KeyDataIdUnknown = None
 ###############################################################################
 # keysmngr.h
 ###############################################################################
-def getKeyCallback(keyInfoNode, keyInfoCtx):
-    """Not implemented"""
-    return "Not implemented"
-def getKey(keyInfoNode, keyInfoCtx):
+def keysMngrGetKey(keyInfoNode, keyInfoCtx):
     """
     Reads the <dsig:KeyInfo/> node keyInfoNode and extracts the key.
     keyInfoNode : the <dsig:KeyInfo/> node.
@@ -865,8 +905,28 @@ class KeysMngr:
             return
         self._o = xmlsecmod.keysMngrCreate()
         if self._o is None: raise parserError('xmlSecKeysMngrCreate() failed')
-    def __repr__(self):
-        return "<xmlSecKeysMngr object at 0x%x>" % id (self)
+    def __isprivate(self, name):
+        return name == '_o'
+    def __getattr__(self, name):
+        if self.__isprivate(name):
+            return self.__dict__[name]
+        if name[:2] == "__" and name[-2:] == "__":
+            raise AttributeError, name
+        ret = xmlsecmod.keysMngrGetAttr(self, name)
+        if ret is None:
+            raise AttributeError, name
+        if name == "keysStore":
+            return KeyStore(_obj=ret)
+        elif name == "storesList":
+            return PtrList(_obj=ret)
+        else:
+            # getKey
+            return ret
+    def __setattr__(self, name, value):
+        if self.__isprivate(name):
+            self.__dict__[name] = value
+        else:
+            xmlsecmod.keysMngrSetAttr(self, name, value)
     def destroy(self):
         """Destroys keys manager"""
         xmlsecmod.keysMngrDestroy(self)
@@ -922,7 +982,6 @@ class KeysMngr:
         """
         return xmlsecmod.cryptoAppKeysMngrCertLoad(self, filename, format, type)
 
-simpleKeysStoreId = xmlsecmod.simpleKeysStoreId()
 class KeyStore:
     def __init__(self, id=None, _obj=None):
         """
@@ -936,8 +995,6 @@ class KeyStore:
             return
         self._o = xmlsecmod.keyStoreCreate(id)
         if self._o is None: raise parserError('xmlSecKeyStoreCreate() failed')
-    def __repr__(self):
-        return "<xmlSecKeyStore object at 0x%x>" % id (self)
     def destroy(self):
         """Destroys the keys store"""
         xmlsecmod.keyStoreDestroy(self)
@@ -951,10 +1008,40 @@ class KeyStore:
         _obj = xmlsecmod.keyStoreFindKey(self, name, key_info_ctx)
         if _obj is None: raise parserError('xmlSecKeyStoreFindKey() failed')
         return Key(_obj=_obj)
+    
+simpleKeysStoreId = xmlsecmod.simpleKeysStoreId()
+class KeyStoreId:
+    def __init__(self, klassSize, objSize, name, initialize=None, finalize=None,
+                 findKey=None, _obj=None):
+        """
+        Creates new store klass id.
+        klassSize  : the store klass size.
+        objSize    : the store obj size.
+        name       : the store's name.
+        initialize : the store's initialization method.
+        finalize   : the store's finalization (destroy) method.
+        findKey    : the store's find method.
+        Returns    : the newly store klass id or None if an error occurs.
+        """
+	if _obj != None:
+            self._o = _obj
+            return
+        self._o = xmlsecmod.keyStoreIdCreate(klassSize, objSize, name,
+                                             initialize, finalize, findKey)
 
 ###############################################################################
 # list.h
 ###############################################################################
+PtrListIdUnknown = None
+def ptrListCopy(dst, src):
+    """
+    Copies src list items to dst list using duplicateItem method of the list klass.
+    If duplicateItem method is None then we jsut copy pointers to items.
+    dst     : the destination list.
+    src     : the source list.
+    Returns : 0 on success or a negative value if an error occurs.
+    """
+    return xmlsecmod.ptrListCopy(dst, src)
 class PtrList:
     def __init__(self, id=None, _obj=None):
         """
@@ -968,11 +1055,70 @@ class PtrList:
             return
         self._o = xmlsecmod.ptrListCreate(id)
         if self._o is None: raise parserError('xmlSecPtrListCreate() failed')
-    def __repr__(self):
-        return "<xmlSecPtrList object at 0x%x>" % id (self)
+    def __isprivate(self, name):
+        return name == '_o'
+    def __getattr__(self, name):
+        if self.__isprivate(name):
+            return self.__dict__[name]
+        if name[:2] == "__" and name[-2:] == "__":
+            raise AttributeError, name
+        ret = xmlsecmod.ptrListGetAttr(self, name)
+        if ret is None:
+            raise AttributeError, name
+        # id, data, use, max, allocMode
+        return ret
+    def __setattr__(self, name, value):
+        if self.__isprivate(name):
+            self.__dict__[name] = value
+        else:
+            xmlsecmod.ptrListSetAttr(self, name, value)
     def destroy(self):
         """Destroys list."""
-        return xmlsecmod.ptrListDestroy(self)
+        xmlsecmod.ptrListDestroy(self)
+    def initialize(self, id):
+        """
+        Initializes the list of given klass. Caller is responsible for cleaning
+        up by calling finalize method.
+        id      : the list klass.
+        Returns : 0 on success or a negative value if an error occurs.
+        """
+        return xmlsecmod.ptrListInitialize(self, id)
+    def finalize(self):
+        """Cleans up the list initialized with initialize method."""
+        xmlsecmod.ptrListFinalize(self)
+    def empty(self):
+        """
+        Remove all items from list (if any).
+        """
+        xmlsecmod.ptrListEmpty(self)
+    def copy(self, dst):
+        """
+        Copies list items to dst list using duplicateItem method of the list klass.
+        If duplicateItem method is None then we just copy pointers to items.
+        dst     : the destination list.
+        Returns : 0 on success or a negative value if an error occurs.
+        """
+        return xmlsecmod.ptrListCopy(dst, self)
+    def duplicate(self):
+        """
+        Creates a new copy of list and all its items.
+        Returns : newly list or None if an error occurs.
+        """
+        return PtrList(_obj=xmlsecmod.ptrListDuplicate(self))
+    def getSize(self):
+        """
+        Gets list size.
+        Returns : the number of itmes in list.
+        """
+        return xmlsecmod.ptrListGetSize(self)
+    def getItem(self, pos):
+        """
+        Gets item from the list.
+        pos     : the item position.
+        Returns : the list item at position pos or None if pos is greater than
+        the number of items in the list or an error occurs.
+        """
+        return xmlsecmod.ptrListGetItem(self, pos)
     def add(self, item):
         """
         Adds item to the end of the list.
@@ -980,12 +1126,41 @@ class PtrList:
         Returns : 0 on success or a negative value if an error occurs.
         """
         return xmlsecmod.ptrListAdd(self, item)
-    def getSize(self):
+    def set(self, item, pos):
         """
-        Gets list size.
-        Returns : the number of itmes in list.
+        Sets the value of list item at position pos. The old value is destroyed.
+        item    : the item.
+        pos     : the pos.
+        Returns : 0 on success or a negative value if an error occurs.
         """
-        return xmlsecmod.ptrListGetSize(self)
+        return xmlsecmod.ptrListSet(self, item, pos)
+    def remove(self, pos):
+        """
+        Destroys list item at the position pos and sets it value to None.
+        pos     : the position.
+        Returns : 0 on success or a negative value if an error occurs.
+        """
+        return xmlsecmod.ptrListRemove(self, pos)
+    def debugDump(self, output):
+        """
+        Prints debug information about list to the output.
+        output : the output FILE.
+        """
+        xmlsecmod.ptrListDebugDump(self, output)
+    def debugXmlDump(self, output):
+        """
+        Prints debug information about list to the output in XML format.
+        output : the output FILE.
+        """
+        xmlsecmod.ptrListDebugXmlDump(self, output)
+    def getName(self):
+        """Returns lists's name."""
+        return xmlsecmod.ptrListGetName(self)
+    def isValid(self):
+        """
+        Returns 1 if list is not None and list.id is not None or 0 otherwise.
+        """
+        return xmlsecmod.ptrListIsValid(self)
 
 ###############################################################################
 # membuf.h
@@ -1051,7 +1226,7 @@ def nodeSetAddList(nset, newNSet, op):
     """
     return xmlsecmod.nodeSetAddList(nset, newNSet, op)
 class NodeSet:
-    def __init__(self, doc, nodes, types, _obj=None):
+    def __init__(self, doc=None, nodes=None, type=None, _obj=None):
         """
         Creates new nodes set. Caller is responsible for freeing returned object
         by calling destroy method.
@@ -1185,8 +1360,6 @@ class TmplSignature(libxml2.xmlNode):
                                              signMethodId, id)
         if _obj is None: raise parserError('xmlSecTmplSignatureCreate() failed')
         libxml2.xmlNode.__init__(self, _obj=_obj)
-    def __repr__(self):
-        return "<xmlSecTmplSignature object (%s) at 0x%x>" % (self.name, id(self))
     def addReference(self, digestMethodId, id=None, uri=None, type=None):
         """
         Adds <dsig:Reference/> node with given URI (uri), Id (id) and Type
@@ -1244,9 +1417,6 @@ class TmplKeyInfo(libxml2.xmlNode):
     def __init__(self, _obj=None):
         self._o = None
         libxml2.xmlNode.__init__(self, _obj=_obj)
-    def __repr__(self):
-        return "<xmlSecTmplKeyInfo object (%s) at 0x%x>" % (self.name,
-                                                            id (self))
     def addKeyName(self, name=None):
         """
         Adds <dsig:KeyName/> node to the <dsig:KeyInfo/> node.
@@ -1299,9 +1469,6 @@ class TmplReference(libxml2.xmlNode):
     def __init__(self, _obj=None):
         self._o = None
         libxml2.xmlNode.__init__(self, _obj=_obj)
-    def __repr__(self):
-        return "<xmlSecTmplReference object (%s) at 0x%x>" % (self.name,
-                                                              id (self))
     def addTransform(self, transformId):
         """
         Adds <dsig:Transform/> node to the <dsig:Reference/> node.
@@ -1316,9 +1483,6 @@ class TmplObject(libxml2.xmlNode):
     def __init__(self, _obj=None):
         self._o = None
         libxml2.xmlNode.__init__(self, _obj=_obj)
-    def __repr__(self):
-        return "<xmlSecTmplObject object (%s) at 0x%x>" % (self.name,
-                                                           id (self))
     def addSignProperties(self, id=None, target=None):
         """
         Adds <dsig:SignatureProperties/> node to the <dsig:Object/> node.
@@ -1344,9 +1508,6 @@ class TmplManifest(libxml2.xmlNode):
     def __init__(self, _obj=None):
         self._o = None
         libxml2.xmlNode.__init__(self, _obj=_obj)
-    def __repr__(self):
-        return "<xmlSecTmplManifest object (%s) at 0x%x>" % (self.name,
-                                                             id (self))
     def addReference(self, digestMethodId, id=None, uri=None, type=None):
         """
         Adds <dsig:Reference/> node with specified URI (uri), Id (id) and Type
@@ -1386,9 +1547,6 @@ class TmplEncData(libxml2.xmlNode):
                                            mimeType, encoding)
         if _obj is None: raise parserError('xmlSecTmplEncDataCreate() failed')
         libxml2.xmlNode.__init__(self, _obj=_obj)
-    def __repr__(self):
-        return "<xmlSecTmplEncData object (%s) at 0x%x>" % (self.name,
-                                                            id (self))
     def ensureKeyInfo(self, id=None):
         """
         Adds <dsig:KeyInfo/> to the <enc:EncryptedData/> node encNode.
@@ -1468,9 +1626,6 @@ class TmplCipherReference(libxml2.xmlNode):
     def __init__(self, _obj=None):
         self._o = None
         libxml2.xmlNode.__init__(self, _obj=_obj)
-    def __repr__(self):
-        return "<xmlSecTmplCipherReference object (%s) at 0x%x>" % (self.name,
-                                                                    id (self))
     def addTransform(self, transformId):
         """
         Adds <dsig:Transform/> node (and the parent <dsig:Transforms/> node)
@@ -1689,14 +1844,16 @@ class DSigCtx:
             return
         self._o = xmlsecmod.dsigCtxCreate(keysMngr)
         if self._o is None: raise parserError('xmlSecDSigCtxCreate() failed')
-    def __repr__(self):
-        return "<xmlSecDSigCtx object at 0x%x>" % id (self)
     def __isprivate(self, name):
         return name == '_o'
     def __getattr__(self, name):
         if self.__isprivate(name):
             return self.__dict__[name]
+        if name[:2] == "__" and name[-2:] == "__":
+            raise AttributeError, name
         ret = xmlsecmod.dsigCtxGetAttr(self, name)
+        if ret is None:
+            raise AttributeError, name
         if name == "keyInfoReadCtx":
             return KeyInfoCtx(_obj=ret)
         elif name == "keyInfoWriteCtx":
@@ -1716,7 +1873,7 @@ class DSigCtx:
         elif name == "preSignMemBufMethod":
             return Transform(_obj=ret)
         elif name == "signValueNode":
-            return libxml2.Node(_obj=ret)
+            return libxml2.xmlNode(_obj=ret)
         elif name == "signedInfoReferences":
             return PtrList(_obj=ret)
         elif name == "manifestReferences":
@@ -1816,14 +1973,16 @@ class DSigReferenceCtx:
             return
         self._o = xmlsecmod.dsigReferenceCtxCreate(dsigCtx, origin)
         if self._o is None: raise parserError('xmlSecDSigReferenceCtxCreate() failed')
-    def __repr__(self):
-        return "<xmlSecDSigReferenceCtx object at 0x%x>" % id (self)
     def __isprivate(self, name):
         return name == '_o'
     def __getattr__(self, name):
         if self.__isprivate(name):
             return self.__dict__[name]
+        if name[:2] == "__" and name[-2:] == "__":
+            raise AttributeError, name
         ret = xmlsecmod.dsigReferenceCtxGetAttr(self, name)
+        if ret is None:
+            raise AttributeError, name
         if name == "dsigCtx":
             return DSigCtx(_obj=ret)
         elif name == "transformCtx":
@@ -1848,7 +2007,8 @@ class DSigReferenceCtx:
     def initialize(self, dsigCtx, origin):
         """
         Initializes new <dsig:Reference/> element processing context. Caller is
-        responsible for cleaning up the returned context by calling finalize method.
+        responsible for cleaning up the returned context by calling finalize
+        method.
         dsigCtx : the parent <dsig:Signature/> node processing context.
         origin  : the reference origin (<dsig:SignedInfo/> or <dsig:Manifest/> node).
         Returns : 0 on succes or a negative value otherwise.
@@ -1915,14 +2075,16 @@ class EncCtx:
             return
         self._o = xmlsecmod.encCtxCreate(keysMngr)
         if self._o is None: raise parserError('xmlSecEncCtxCreate() failed')
-    def __repr__(self):
-        return "<xmlSecEncCtx object at 0x%x>" % id (self)
     def __isprivate(self, name):
         return name == '_o'
     def __getattr__(self, name):
         if self.__isprivate(name):
             return self.__dict__[name]
+        if name[:2] == "__" and name[-2:] == "__":
+            raise AttributeError, name
         ret = xmlsecmod.encCtxGetAttr(self, name)
+        if ret is None:
+            raise AttributeError, name
         if name == "keyInfoReadCtx":
             return KeyInfoCtx(_obj=ret)
         elif name == "keyInfoWriteCtx":
@@ -1936,13 +2098,13 @@ class EncCtx:
         elif name == "encMethod":
             return Transform(_obj=ret)
         elif name == "encDataNode":
-            return libxml2.Node(_obj=ret)
+            return libxml2.xmlNode(_obj=ret)
         elif name == "encMethodNode":
-            return libxml2.Node(_obj=ret)
+            return libxml2.xmlNode(_obj=ret)
         elif name == "keyInfoNode":
-            return libxml2.Node(_obj=ret)
+            return libxml2.xmlNode(_obj=ret)
         elif name == "cipherValueNode":
-            return libxml2.Node(_obj=ret)
+            return libxml2.xmlNode(_obj=ret)
         else:
             # flags, flags2, mode, defEncMethodId, operation
             # resultBase64Encoded, resultReplaced
@@ -2023,7 +2185,7 @@ class EncCtx:
         output : the output file.
         """
         xmlsecmod.encCtxDebugDump(self, output)
-    def debugXmlDump(self):
+    def debugXmlDump(self, output):
         """
         Prints the debug information about enc context to output in XML format.
         output : the output file.
