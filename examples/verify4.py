@@ -148,8 +148,8 @@ def verify_file(mngr, xml_file):
         print "Error: failed to create signature context"
         return cleanup(doc)
 
-    # Limit the Reference URI attributes to empty or NULL
-    dsig_ctx.setEnabledReferenceUris(xmlsec.TransformUriTypeEmpty)
+    # Limit the Reference URI attributes to empty or None
+    dsig_ctx.enabledReferenceUris = xmlsec.TransformUriTypeEmpty
 
     # Limit allowed transforms for siganture and reference processing
     if (dsig_ctx.enableSignatureTransform(xmlsec.transformInclC14NId) < 0 or
@@ -166,7 +166,7 @@ def verify_file(mngr, xml_file):
         return cleanup(doc, dsig_ctx)
 
     # In addition, limit possible key data to valid X509 certificates only
-    enable_key_data = dsig_ctx.getKeyInfoReadCtx().getEnabledKeyData()
+    enable_key_data = dsig_ctx.keyInfoReadCtx.getEnabledKeyData()
     if enable_key_data.add(xmlsec.keyDataX509Id) < 0:
         print "Error: failed to limit allowed key data"
         return cleanup(doc, dsig_ctx)
@@ -177,8 +177,8 @@ def verify_file(mngr, xml_file):
         return cleanup(doc, dsig_ctx)
 
     # Check that we have only one Reference
-    if (dsig_ctx.getStatus() == xmlsec.DSigStatusSucceeded and
-        dsig_ctx.getSignedInfoReferences().getSize() != 1):
+    if (dsig_ctx.status == xmlsec.DSigStatusSucceeded and
+        dsig_ctx.signedInfoReferences.getSize() != 1):
         print "Error: only one reference is allowed"
         return cleanup(doc, dsig_ctx)
 

@@ -146,7 +146,7 @@ def verify_file(mngr, xml_file):
         return cleanup(doc, dsig_ctx)
 
     # Print verification result to stdout
-    if dsig_ctx.getStatus() == xmlsec.DSigStatusSucceeded:
+    if dsig_ctx.status == xmlsec.DSigStatusSucceeded:
         print "Signature is OK"
     else:
         print "Signature is INVALID"
