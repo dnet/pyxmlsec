@@ -143,9 +143,9 @@ static PyMethodDef xmlsec_methods[] = {
   {"cryptoAppDefaultKeysMngrSave",     xmlsec_CryptoAppDefaultKeysMngrSave,     METH_VARARGS},
   {"cryptoAppKeysMngrCertLoad",        xmlsec_CryptoAppKeysMngrCertLoad,        METH_VARARGS},
   {"cryptoAppKeyLoad",                 xmlsec_CryptoAppKeyLoad,                 METH_VARARGS},
-  {"cryptoAppPkcs12Load",              xmlsec_CryptoAppPkcs12Load,              METH_VARARGS}, // New
-  {"cryptoAppKeyCertLoad",             xmlsec_CryptoAppKeyCertLoad,             METH_VARARGS}, // New
-  {"cryptoAppGetDefaultPwdCallback",   xmlsec_CryptoAppGetDefaultPwdCallback,   METH_VARARGS}, // New
+  {"cryptoAppPkcs12Load",              xmlsec_CryptoAppPkcs12Load,              METH_VARARGS},
+  {"cryptoAppKeyCertLoad",             xmlsec_CryptoAppKeyCertLoad,             METH_VARARGS},
+  {"cryptoAppGetDefaultPwdCallback",   xmlsec_CryptoAppGetDefaultPwdCallback,   METH_VARARGS},
   {"transformAes128CbcId",     xmlsec_TransformAes128CbcId,     METH_VARARGS},
   {"transformAes192CbcId",     xmlsec_TransformAes192CbcId,     METH_VARARGS},
   {"transformAes256CbcId",     xmlsec_TransformAes256CbcId,     METH_VARARGS},
@@ -163,14 +163,14 @@ static PyMethodDef xmlsec_methods[] = {
   {"transformRsaPkcs1Id",      xmlsec_TransformRsaPkcs1Id,      METH_VARARGS},
   {"transformRsaOaepId",       xmlsec_TransformRsaOaepId,       METH_VARARGS},
   {"transformSha1Id",          xmlsec_TransformSha1Id,          METH_VARARGS},
-  {"keyDataAesId",         xmlsec_KeyDataAesId,         METH_VARARGS}, // New
+  {"keyDataAesId",         xmlsec_KeyDataAesId,         METH_VARARGS},
   {"keyDataDesId",         xmlsec_KeyDataDesId,         METH_VARARGS},
   {"keyDataDsaId",         xmlsec_KeyDataDsaId,         METH_VARARGS},
-  {"keyDataHmacId",        xmlsec_KeyDataHmacId,        METH_VARARGS}, // New
+  {"keyDataHmacId",        xmlsec_KeyDataHmacId,        METH_VARARGS},
   {"keyDataRsaId",         xmlsec_KeyDataRsaId,         METH_VARARGS},
   {"keyDataX509Id",        xmlsec_KeyDataX509Id,        METH_VARARGS},
-  {"keyDataRawX509CertId", xmlsec_KeyDataRawX509CertId, METH_VARARGS}, // New
-  {"x509StoreId",          xmlsec_X509StoreId,          METH_VARARGS}, // New
+  {"keyDataRawX509CertId", xmlsec_KeyDataRawX509CertId, METH_VARARGS},
+  {"x509StoreId",          xmlsec_X509StoreId,          METH_VARARGS},
 
   /* buffer.h */
   {"bufferCreate",                 xmlsec_BufferCreate,                 METH_VARARGS},
@@ -227,6 +227,7 @@ static PyMethodDef xmlsec_methods[] = {
   {"tmplKeyInfoAddKeyName",             xmlsec_TmplKeyInfoAddKeyName,             METH_VARARGS},
   {"tmplKeyInfoAddKeyValue",            xmlsec_TmplKeyInfoAddKeyValue,            METH_VARARGS},
   {"tmplKeyInfoAddX509Data",            xmlsec_TmplKeyInfoAddX509Data,            METH_VARARGS},
+  {"tmplKeyInfoAddEncryptedKey",        xmlsec_TmplKeyInfoAddEncryptedKey,        METH_VARARGS}, // New
 
   /* transforms.h */
   {"transformInclC14NId",  xmlsec_TransformInclC14NId,  METH_VARARGS},
@@ -243,6 +244,9 @@ static PyMethodDef xmlsec_methods[] = {
   {"keyDestroy",        xmlsec_KeyDestroy,        METH_VARARGS},
   {"keyGetName",        xmlsec_KeySetName,        METH_VARARGS},
   {"keySetName",        xmlsec_KeySetName,        METH_VARARGS},
+  {"keyGenerate",       xmlsec_KeyGenerate,       METH_VARARGS}, // New
+  {"keyGenerateByName", xmlsec_KeyGenerateByName, METH_VARARGS}, // New
+  {"keyMatch",          xmlsec_KeyMatch,          METH_VARARGS}, // New
   {"keyReadBuffer",     xmlsec_KeyReadBuffer,     METH_VARARGS},
   {"keyReadBinaryFile", xmlsec_KeyReadBinaryFile, METH_VARARGS},
   {"keyReadMemory",     xmlsec_KeyReadMemory,     METH_VARARGS},
