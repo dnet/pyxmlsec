@@ -118,10 +118,15 @@ static PyMethodDef xmlsec_methods[] = {
   {"transformEnvelopedId", xmlsec_TransformEnvelopedId, METH_VARARGS},
 
   /* keys.h */
-  {"keyCreate",  xmlsec_KeyCreate,  METH_VARARGS},
-  {"keyDestroy", xmlsec_KeyDestroy, METH_VARARGS},
-  {"keyGetName", xmlsec_KeySetName, METH_VARARGS},
-  {"keySetName", xmlsec_KeySetName, METH_VARARGS},
+  {"keyReqCreate",     keys_KeyReqCreate,       METH_VARARGS},
+  {"keyReqInitialize", xmlsec_KeyReqInitialize, METH_VARARGS},
+  {"keyReqFinalize",   xmlsec_KeyReqFinalize,   METH_VARARGS},
+  {"keyReqReset",      xmlsec_KeyReqReset,      METH_VARARGS},
+  {"keyReqMatchKey",   xmlsec_KeyReqMatchKey,   METH_VARARGS},
+  {"keyCreate",        xmlsec_KeyCreate,        METH_VARARGS},
+  {"keyDestroy",       xmlsec_KeyDestroy,       METH_VARARGS},
+  {"keyGetName",       xmlsec_KeySetName,       METH_VARARGS},
+  {"keySetName",       xmlsec_KeySetName,       METH_VARARGS},
   /* keyinfo.h */
   {"keyInfoCtxCreate",     xmlsec_KeyInfoCtxCreate,     METH_VARARGS},
   {"keyInfoCtxDestroy",    xmlsec_KeyInfoCtxDestroy,    METH_VARARGS},
