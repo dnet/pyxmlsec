@@ -1,3 +1,6 @@
+#ifndef __PYXMLSEC_XMLSECMOD_H__
+#define __PYXMLSEC_XMLSECMOD_H__
+
 #include <Python.h>
 #include <libxml/tree.h>
 
@@ -21,3 +24,5 @@ typedef struct {
 #define xmlOutputBufferPtr_get(v) (((v) == Py_None) ? NULL : (((xmlOutputBufferPtr_object *)(v))->obj))
 
 PyObject *xmlsec_error;
+
+#endif /* __PYXMLSEC_XMLSECMOD_H__ */
