@@ -83,9 +83,16 @@ PyObject *xmlSecKeyInfoCtx_getattr(PyObject *self, PyObject *args) {
     return (wrap_xmlSecEncCtxPtr(keyInfoCtx->encCtx));
   if (!strcmp(attr, "maxEncryptedKeyLevel"))
     return (wrap_int(keyInfoCtx->maxEncryptedKeyLevel));
+  if (!strcmp(attr, "certsVerificationTime"))
+    return (wrap_int(keyInfoCtx->certsVerificationTime));
+  if (!strcmp(attr, "certsVerificationDepth"))
+    return (wrap_int(keyInfoCtx->certsVerificationDepth));
+  if (!strcmp(attr, "curRetrievalMethodLevel"))
+    return (wrap_int(keyInfoCtx->curRetrievalMethodLevel));
+  if (!strcmp(attr, "curEncryptedKeyLevel"))
+    return (wrap_int(keyInfoCtx->curEncryptedKeyLevel));
   if (!strcmp(attr, "keyReq"))
     return wrap_xmlSecKeyReqPtr(&(keyInfoCtx->keyReq));
-  /* TODO */
 
   Py_INCREF(Py_None);
   return (Py_None);
@@ -122,9 +129,16 @@ PyObject *xmlSecKeyInfoCtx_setattr(PyObject *self, PyObject *args) {
     keyInfoCtx->encCtx = xmlSecEncCtxPtr_get(value_obj);
   else if (!strcmp(name, "maxEncryptedKeyLevel"))
     keyInfoCtx->maxEncryptedKeyLevel = PyInt_AsLong(value_obj);
+  else if (!strcmp(name, "certsVerificationTime"))
+    keyInfoCtx->certsVerificationTime = PyInt_AsLong(value_obj);
+  else if (!strcmp(name, "certsVerificationDepth"))
+    keyInfoCtx->certsVerificationDepth = PyInt_AsLong(value_obj);
+  else if (!strcmp(name, "curRetrievalMethodLevel"))
+    keyInfoCtx->curRetrievalMethodLevel = PyInt_AsLong(value_obj);
+  else if (!strcmp(name, "curEncryptedKeyLevel"))
+    keyInfoCtx->curEncryptedKeyLevel = PyInt_AsLong(value_obj);
   else if (!strcmp(name, "keyReq"))
     keyInfoCtx->keyReq = *(xmlSecKeyReqPtr_get(value_obj));
-  /* TODO */
 
   Py_INCREF(Py_None);
   return (Py_None);
