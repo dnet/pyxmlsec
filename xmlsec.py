@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python2.2
 
 """
 PyXMLSec - A Python binding for XML Security library (XMLSec)
@@ -88,7 +88,8 @@ class DSigCtx:
         Creates <dsig:Signature/> element processing context. The caller is
         responsible for destroying returend object by calling destroy method.
         keysMngr : the keys manager.
-        Returns  : newly allocated context object or None if an error occurs."""
+        Returns  : newly allocated context object or None if an error occurs.
+        """
         if _obj != None:
             self._o = _obj
             return
@@ -101,12 +102,14 @@ class DSigCtx:
     #flags = property(get_flags, None, None, "the XML Digital Signature processing flags")
     def destroy(self):
         """
-        Destroy context object (<dsig:Signature/> element processing context)."""
+        Destroy context object (<dsig:Signature/> element processing context).
+        """
         return xmlsecmod.dsigCtxDestroy(self)
     def sign(self, tmpl):
         """
         Signs the data as described in tmpl node.
-        tmpl : the pointer to <dsig:Signature/> node with signature template."""
+        tmpl : the pointer to <dsig:Signature/> node with signature template.
+        """
         return xmlsecmod.dsigCtxSign(self, tmpl)
     def verify(self, node):
         """
@@ -114,19 +117,22 @@ class DSigCtx:
         in status member of the dsigCtx object.
         node    : the pointer with <dsig:Signature/> node.
         Returns : 0 on success (check status member of dsigCtx to get signature
-        verification result) or a negative value if an error occurs."""
+        verification result) or a negative value if an error occurs.
+        """
         return xmlsecmod.dsigCtxVerify(self, node)
     def enableReferenceTransform(self, transformId):
         """
         Enables transformId for <dsig:Reference/> elements processing.
         transformId : the transform Id klass.
-        Returns     : 0 on success or a negative value if an error occurs."""
+        Returns     : 0 on success or a negative value if an error occurs.
+        """
         return xmlsecmod.dsigCtxEnableReferenceTransform(self, transformId)
     def enableSignatureTransform(self, transformId):
         """
         Enables transformId for <dsig:SignedInfo/> element processing.
         transformId : the transform Id klass.
-        Returns     : 0 on success or a negative value if an error occurs."""
+        Returns     : 0 on success or a negative value if an error occurs.
+        """
         return xmlsecmod.dsigCtxEnableSignatureTransform(self, transformId)
     def setSignKey(self, key):
         """Sets signKey member."""
@@ -139,7 +145,7 @@ class DSigCtx:
         return xmlsecmod.dsigCtxGetStatus(self)
     def getKeyInfoReadCtx(self):
         """Return keyInfoReadCtx member."""
-        return KeyInfoCtx(_obj=xmlsecmod.dsigCtxGetKeyInfoReadCtx(self))
+        return KeyInfoCtx(None, _obj=xmlsecmod.dsigCtxGetKeyInfoReadCtx(self))
     def getSignedInfoReferences(self):
         """Return signedInfoReferences member."""
         return PtrList(_obj=xmlsecmod.dsigCtxGetSignedInfoReferences(self))
@@ -150,7 +156,8 @@ class PtrList:
         Creates new list object. Caller is responsible for freeing returned list
         by calling destroy method.
         id      : the list klass.
-        Returns : newly allocated list or None if an error occurs."""
+        Returns : newly allocated list or None if an error occurs.
+        """
         if _obj != None:
             self._o = _obj
             return
@@ -165,12 +172,14 @@ class PtrList:
         """
         Adds item to the end of the list.
         item    : the item.
-        Returns : 0 on success or a negative value if an error occurs."""
+        Returns : 0 on success or a negative value if an error occurs.
+        """
         return xmlsecmod.ptrListAdd(self, item)
     def getSize(self):
         """
         Gets list size.
-        Returns : the number of itmes in list."""
+        Returns : the number of itmes in list.
+        """
         return xmlsecmod.ptrListGetSize(self)
 
 class TmplSignature(libxml2.xmlNode):
@@ -186,8 +195,9 @@ class TmplSignature(libxml2.xmlNode):
         c14nMethodId : the signature canonicalization method.
         signMethodId : the signature method.
         id           : the node id (may be None).
-        Returns      : the pointer to newly created <dsig:Signature/> node or
-        None if an error occurs."""
+        Returns      : the newly created <dsig:Signature/> node or None if an
+        error occurs.
+        """
         if _obj != None:
             self._o = _obj
             return
@@ -207,7 +217,8 @@ class TmplSignature(libxml2.xmlNode):
         uri            : the reference node uri (may be None).
         type           : the reference node type (may be None).
         Returns        : the newly created <dsig:Reference/> node or None if
-        an error occurs."""
+        an error occurs.
+        """
         return TmplReference(xmlsecmod.tmplSignatureAddReference(self,
                                                                  digestMethodId,
                                                                  id, uri, type))
@@ -216,7 +227,8 @@ class TmplSignature(libxml2.xmlNode):
         Adds (if necessary) <dsig:KeyInfo/> node to the <dsig:Signature/> node.
         id : the node id (may be None).
         Returns : the newly created <dsig:KeyInfo/> node or None if an error
-        occurs."""
+        occurs.
+        """
         return TmplKeyInfo(xmlsecmod.tmplSignatureEnsureKeyInfo(self, id))
 
 
@@ -232,7 +244,8 @@ class TmplKeyInfo(libxml2.xmlNode):
         Adds <dsig:KeyName/> node to the <dsig:KeyInfo/> node.
         name    : the key name (optional).
         Returns : the pointer to the newly created <dsig:KeyName/> node or None
-        if an error occurs."""
+        if an error occurs.
+        """
         return TmplKeyName(xmlsecmod.tmplKeyInfoAddKeyName(self, name))
 
 
@@ -256,7 +269,8 @@ class TmplReference(libxml2.xmlNode):
         Adds <dsig:Transform/> node to the <dsig:Reference/> node.
         transformId : the transform method id.
         Returns     : the newly created <dsig:Transform/> node or None if
-        an error occurs."""
+        an error occurs.
+        """
         return xmlsecmod.tmplReferenceAddTransform(self, transformId)
 
 
@@ -278,6 +292,11 @@ KeyDataFormatPkcs8Pem = 4 # the PKCS#8 PEM private key.
 KeyDataFormatPkcs8Der = 5 # the PKCS#8 DER private key.
 class Key:
     def __init__(self, _obj=None):
+        """
+        Allocates and initializes new key. Caller is responsible for freeing
+        returned object with destroy method.
+        Returns : the newly allocated key or None if an error occurs.
+        """
 	if _obj != None:
             self._o = _obj
             return
@@ -292,23 +311,59 @@ class Key:
         """
         Sets key name (see also getName function).
         name    : the new key name.
-        Returns : 0 on success or a negative value if an error occurs."""
+        Returns : 0 on success or a negative value if an error occurs.
+        """
         return xmlsecmod.keySetName(self, name)
+    def getName(self):
+        """
+        Gets key name (see also setName function).
+        Returns : key name.
+        """
+        return xmlsecmod.keyGetName(self)
 
 class KeyInfoCtx:
-    def __init__(self, _obj=None):
+    def __init__(self, mngr=None, _obj=None):
+        """
+        Allocates and initializes <dsig:KeyInfo/> element processing context.
+        Caller is responsible for freeing it by calling destroy method.
+        mngr     : the pointer to keys manager (may be None).
+        Returns  : the newly allocated object or None if an error occurs.
+        """
 	if _obj != None:
             self._o = _obj
             return
-        self._o = None
+        self._o = xmlsecmod.keyInfoCtxCreate(mngr)
+        if self._o is None: raise parserError('xmlSecKeyInfoCtxCreate() failed')
     def __repr__(self):
         return "<xmlSecKeyInfoCtx object at 0x%x>" % id (self)
+    def destroy(self):
+        """Destroys the keyInfoCtx object"""
+        return xmlsecmod.keyInfoCtxDestroy(self)
+    def initialize(self, mngr=None):
+        """
+        Initializes <dsig:KeyInfo/> element processing context. Caller is
+        responsible for cleaning it up by finalize method.
+        mngr     : the pointer to keys manager (may be None).
+        Returns  : 0 on success and a negative value if an error occurs.
+        """
+        return xmlsecmod.keyInfoCtxInitialize(self, mngr)
+    def finalize(self):
+        """Cleans up the keyInfoCtx initialized."""
+        xmlsecmod.keyInfoCtxFinalize(self)
+    def reset(self):
+        """Resets the keyInfoCtx state. User settings are not changed."""
+        xmlsecmod.keyInfoCtxReset(self)
     def getEnabledKeyData(self):
         """Return enabledKeyData member."""
         return PtrList(None, _obj=xmlsecmod.getEnabledKeyData(self))
 
 class KeysMngr:
     def __init__(self, _obj=None):
+        """
+        Creates new keys manager. Caller is responsible for freeing it with
+        destroy method.
+        Returns : the newly allocated keys manager or None if an error occurs.
+        """
 	if _obj != None:
             self._o = _obj
             return
@@ -326,7 +381,8 @@ class KeysMngr:
         name       : the desired key name.
         keyInfoCtx : the pointer to <dsig:KeyInfo/> node processing context.
         Returns    : the pointer to a key or None if key is not found or
-        an error occurs."""
+        an error occurs.
+        """
         _obj = xmlsecmod.keysMngrFindKey(self, name, key_info_ctx)
         if _obj is None: raise parserError('xmlSecKeysMngrFindKey() failed')
         return Key(_obj=_obj)
