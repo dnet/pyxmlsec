@@ -224,16 +224,15 @@ def base64Encode(buf, len, columns):
     Returns : a string with base64 encoded data or None if an error occurs.
     """
     return xmlsecmod.base64Encode(buf, len, columns)
-def base64Decode(str, buf, len):
+def base64Decode(str, buf):
     """
     Decodes input base64 encoded string and puts result into the output buffer.
     str     : the input buffer with base64 encoded string
     buf     : the output buffer
-    len     : the output buffer size
     Returns : the number of bytes written to the output buffer or a negative
     value if an error occurs 
     """
-    return xmlsecmod.base64Decode(str, buf, len)
+    return xmlsecmod.base64Decode(str, buf)
 class Base64Ctx:
     def __init__(self, encode, columns, _obj=None):
         """
@@ -273,16 +272,15 @@ class Base64Ctx:
         or -1 if an error occurs.
         """
         return xmlsecmod.base64CtxUpdate(self, inBuf, inBufSize, outBuf, outBufSize)
-    def final(self, outBuf, outBufSize):
+    def final(self, outBuf):
         """
         Encodes or decodes the last piece of data stored in the context and
         finalizes the result.
         outBuf     : the output buffer
-        outBufSize : the output buffer size
         Returns    : the number of bytes written to output buffer
         or -1 if an error occurs.
         """
-        return xmlsecmod.base64CtxFinal(self, outBuf, outBufSize)
+        return xmlsecmod.base64CtxFinal(self, outBuf)
 
 ###############################################################################
 # buffer.h
@@ -1961,9 +1959,9 @@ class TmplCipherReference(libxml2.xmlNode):
         Adds <dsig:Transform/> node (and the parent <dsig:Transforms/> node)
         with specified transform methods transform to the <enc:CipherReference/>
         child node of the <enc:EncryptedData/> node encNode.
-        transformId         : the transform id.
-        Returns             : the newly created <dsig:Transform/> node or None
-        if an error occurs.
+        transformId : the transform id.
+        Returns     : the newly created <dsig:Transform/> node or None if an
+        error occurs.
         """
         _obj = xmlsecmod.tmplCipherReferenceAddTransform(self, transformId)
         return libxml2.xmlNode(_obj=_obj)
@@ -2094,6 +2092,7 @@ class Transform:
         Returns : 0 on success or a negative value if an error occurs.
         """
         return xmlsecmod.transformVisa3DHackSetID(self, id)
+
 class TransformCtx:
     def __init__(self, _obj=None):
         """
