@@ -26,7 +26,9 @@
 
 #include "app.h"
 #include "keys.h"
+#include "keysdata.h"
 #include "keysmngr.h"
+#include "transforms.h"
 
 /* Crypto Init/Shutdown */
 
@@ -240,19 +242,19 @@ PyObject *xmlsec_CryptoAppGetDefaultPwdCallback(PyObject *self, PyObject *args) 
 
 /* Crypto transforms ids */
 PyObject *xmlsec_TransformAes128CbcId(PyObject *self, PyObject *args) {
-  return PyCObject_FromVoidPtr((void  *)xmlSecTransformAes128CbcId, NULL);
+  return (wrap_xmlSecTransformId(xmlSecTransformAes128CbcId));
 }
 PyObject *xmlsec_TransformAes192CbcId(PyObject *self, PyObject *args) {
-  return PyCObject_FromVoidPtr((void  *)xmlSecTransformAes192CbcId, NULL);
+  return (wrap_xmlSecTransformId(xmlSecTransformAes192CbcId));
 }
 PyObject *xmlsec_TransformAes256CbcId(PyObject *self, PyObject *args) {
-  return PyCObject_FromVoidPtr((void  *)xmlSecTransformAes256CbcId, NULL);
+  return (wrap_xmlSecTransformId(xmlSecTransformAes256CbcId));
 }
 
 /* only OPENSSL */
 PyObject *xmlsec_TransformKWAes128Id(PyObject *self, PyObject *args) {
 #if defined XMLSEC_CRYPTO_OPENSSL
-  return PyCObject_FromVoidPtr((void  *)xmlSecTransformKWAes128Id, NULL);
+  return (wrap_xmlSecTransformId(xmlSecTransformKWAes128Id));
 #else
   return (NULL);
 #endif
@@ -261,7 +263,7 @@ PyObject *xmlsec_TransformKWAes128Id(PyObject *self, PyObject *args) {
 /* only OPENSSL */
 PyObject *xmlsec_TransformKWAes192Id(PyObject *self, PyObject *args) {
 #if defined XMLSEC_CRYPTO_OPENSSL
-  return PyCObject_FromVoidPtr((void  *)xmlSecTransformKWAes192Id, NULL);
+  return (wrap_xmlSecTransformId(xmlSecTransformKWAes192Id));
 #else
   return (NULL);
 #endif
@@ -270,20 +272,20 @@ PyObject *xmlsec_TransformKWAes192Id(PyObject *self, PyObject *args) {
 /* only OPENSSL */
 PyObject *xmlsec_TransformKWAes256Id(PyObject *self, PyObject *args) {
 #if defined XMLSEC_CRYPTO_OPENSSL
-  return PyCObject_FromVoidPtr((void  *)xmlSecTransformKWAes256Id, NULL);
+  return (wrap_xmlSecTransformId(xmlSecTransformKWAes256Id));
 #else
   return (NULL);
 #endif
 }
 
 PyObject *xmlsec_TransformDes3CbcId(PyObject *self, PyObject *args) {
-  return PyCObject_FromVoidPtr((void  *)xmlSecTransformDes3CbcId, NULL);
+  return (wrap_xmlSecTransformId(xmlSecTransformDes3CbcId));
 }
 
 /* only OPENSSL */
 PyObject *xmlsec_TransformKWDes3Id(PyObject *self, PyObject *args) {
 #if defined XMLSEC_CRYPTO_OPENSSL
-  return PyCObject_FromVoidPtr((void  *)xmlSecTransformKWDes3Id, NULL);
+  return (wrap_xmlSecTransformId(xmlSecTransformKWDes3Id));
 #else
   return (NULL);
 #endif
@@ -292,26 +294,26 @@ PyObject *xmlsec_TransformKWDes3Id(PyObject *self, PyObject *args) {
 /* only OPENSSL */
 PyObject *xmlsec_TransformDsaSha1Id(PyObject *self, PyObject *args) {
 #if defined XMLSEC_CRYPTO_OPENSSL
-  return PyCObject_FromVoidPtr((void  *)xmlSecTransformDsaSha1Id, NULL);
+  return (wrap_xmlSecTransformId(xmlSecTransformDsaSha1Id));
 #else
   return (NULL);
 #endif
 }
 
 PyObject *xmlsec_TransformHmacSha1Id(PyObject *self, PyObject *args) {
-  return PyCObject_FromVoidPtr((void  *)xmlSecTransformHmacSha1Id, NULL);
+  return (wrap_xmlSecTransformId(xmlSecTransformHmacSha1Id));
 }
 PyObject *xmlsec_TransformHmacRipemd160Id(PyObject *self, PyObject *args) {
-  return PyCObject_FromVoidPtr((void  *)xmlSecTransformHmacRipemd160Id, NULL);
+  return (wrap_xmlSecTransformId(xmlSecTransformHmacRipemd160Id));
 }
 PyObject *xmlsec_TransformHmacMd5Id(PyObject *self, PyObject *args) {
-  return PyCObject_FromVoidPtr((void  *)xmlSecTransformHmacMd5Id, NULL);
+  return (wrap_xmlSecTransformId(xmlSecTransformHmacMd5Id));
 }
 
 /* only OPENSSL */
 PyObject *xmlsec_TransformRipemd160Id(PyObject *self, PyObject *args) {
 #if defined XMLSEC_CRYPTO_OPENSSL
-  return PyCObject_FromVoidPtr((void  *)xmlSecTransformRipemd160Id, NULL);
+  return (wrap_xmlSecTransformId(xmlSecTransformRipemd160Id));
 #else
   return (NULL);
 #endif
@@ -320,7 +322,7 @@ PyObject *xmlsec_TransformRipemd160Id(PyObject *self, PyObject *args) {
 /* only OPENSSL */
 PyObject *xmlsec_TransformRsaSha1Id(PyObject *self, PyObject *args) {
 #if defined XMLSEC_CRYPTO_OPENSSL
-  return PyCObject_FromVoidPtr((void  *)xmlSecTransformRsaSha1Id, NULL);
+  return (wrap_xmlSecTransformId(xmlSecTransformRsaSha1Id));
 #else
   return (NULL);
 #endif
@@ -329,7 +331,7 @@ PyObject *xmlsec_TransformRsaSha1Id(PyObject *self, PyObject *args) {
 /* only OPENSSL */
 PyObject *xmlsec_TransformRsaPkcs1Id(PyObject *self, PyObject *args) {
 #if defined XMLSEC_CRYPTO_OPENSSL
-  return PyCObject_FromVoidPtr((void  *)xmlSecTransformRsaPkcs1Id, NULL);
+  return (wrap_xmlSecTransformId(xmlSecTransformRsaPkcs1Id));
 #else
   return (NULL);
 #endif
@@ -338,40 +340,41 @@ PyObject *xmlsec_TransformRsaPkcs1Id(PyObject *self, PyObject *args) {
 /* only OPENSSL */
 PyObject *xmlsec_TransformRsaOaepId(PyObject *self, PyObject *args) {
 #if defined XMLSEC_CRYPTO_OPENSSL
-  return PyCObject_FromVoidPtr((void  *)xmlSecTransformRsaOaepId, NULL);
+  return (wrap_xmlSecTransformId(xmlSecTransformRsaOaepId));
 #else
   return (NULL);
 #endif
 }
 
 PyObject *xmlsec_TransformSha1Id(PyObject *self, PyObject *args) {
-  return PyCObject_FromVoidPtr((void  *)xmlSecTransformSha1Id, NULL);
+  return (wrap_xmlSecTransformId(xmlSecTransformSha1Id));
 }
+
 /* Key data ids */
 PyObject *xmlsec_KeyDataAesId(PyObject *self, PyObject *args) {
-  return PyCObject_FromVoidPtr((void  *)xmlSecKeyDataAesId, NULL);
+  return (wrap_xmlSecKeyDataId(xmlSecKeyDataAesId));
 }
 PyObject *xmlsec_KeyDataDesId(PyObject *self, PyObject *args) {
-  return PyCObject_FromVoidPtr((void  *)xmlSecKeyDataDesId, NULL);
+  return (wrap_xmlSecKeyDataId(xmlSecKeyDataDesId));
 }
 
 /* only OPENSSL */
 PyObject *xmlsec_KeyDataDsaId(PyObject *self, PyObject *args) {
 #if defined XMLSEC_CRYPTO_OPENSSL
-  return PyCObject_FromVoidPtr((void  *)xmlSecKeyDataDsaId, NULL);
+  return (wrap_xmlSecKeyDataId(xmlSecKeyDataDsaId));
 #else
   return (NULL);
 #endif
 }
 
 PyObject *xmlsec_KeyDataHmacId(PyObject *self, PyObject *args) {
-  return PyCObject_FromVoidPtr((void  *)xmlSecKeyDataHmacId, NULL);
+  return (wrap_xmlSecKeyDataId(xmlSecKeyDataHmacId));
 }
 
 /* only OPENSSL */
 PyObject *xmlsec_KeyDataRsaId(PyObject *self, PyObject *args) {
 #if defined XMLSEC_CRYPTO_OPENSSL
-  return PyCObject_FromVoidPtr((void  *)xmlSecKeyDataRsaId, NULL);
+  return (wrap_xmlSecKeyDataId(xmlSecKeyDataRsaId));
 #else
   return (NULL);
 #endif
@@ -380,7 +383,7 @@ PyObject *xmlsec_KeyDataRsaId(PyObject *self, PyObject *args) {
 /* only OPENSSL */
 PyObject *xmlsec_KeyDataX509Id(PyObject *self, PyObject *args) {
 #if defined XMLSEC_CRYPTO_OPENSSL
-  return PyCObject_FromVoidPtr((void  *)xmlSecKeyDataX509Id, NULL);
+  return (wrap_xmlSecKeyDataId(xmlSecKeyDataX509Id));
 #else
   return (NULL);
 #endif
@@ -389,7 +392,7 @@ PyObject *xmlsec_KeyDataX509Id(PyObject *self, PyObject *args) {
 /* only OPENSSL */
 PyObject *xmlsec_KeyDataRawX509CertId(PyObject *self, PyObject *args) {
 #if defined XMLSEC_CRYPTO_OPENSSL
-  return PyCObject_FromVoidPtr((void  *)xmlSecKeyDataRawX509CertId, NULL);
+  return (wrap_xmlSecKeyDataId(xmlSecKeyDataRawX509CertId));
 #else
   return (NULL);
 #endif
@@ -398,6 +401,7 @@ PyObject *xmlsec_KeyDataRawX509CertId(PyObject *self, PyObject *args) {
 /* only OPENSSL */
 PyObject *xmlsec_X509StoreId(PyObject *self, PyObject *args) {
 #if defined XMLSEC_CRYPTO_OPENSSL
+  // FIXME
   return PyCObject_FromVoidPtr((void  *)xmlSecX509StoreId, NULL);
 #else
   return (NULL);
