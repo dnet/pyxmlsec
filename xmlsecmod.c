@@ -23,6 +23,7 @@
  */
 
 #include "xmlsecmod.h"
+#include "base64.h"
 #include "xmlenc.h"
 #include "xmlsec.h"
 #include "xmltree.h"
@@ -35,6 +36,7 @@
 #include "list.h"
 #include "app.h"
 #include "buffer.h"
+#include "membuf.h"
 #include "x509.h"
 #include "parser.h"
 #include "openssl.h"
@@ -46,26 +48,36 @@ static PyMethodDef xmlsec_methods[] = {
   {"checkVersionExact", xmlsec_CheckVersionExact, METH_VARARGS},
   {"checkVersion",      xmlsec_CheckVersion,      METH_VARARGS},
 
+  /* base64.h */
+  {"base64CtxCreate",     xmlsec_Base64CtxCreate,     METH_VARARGS}, // New
+  {"base64CtxDestroy",    xmlsec_Base64CtxDestroy,    METH_VARARGS}, // New
+  {"base64CtxInitialize", xmlsec_Base64CtxInitialize, METH_VARARGS}, // New
+  {"base64CtxFinalize",   xmlsec_Base64CtxFinalize,   METH_VARARGS}, // New
+  {"base64CtxUpdate",     xmlsec_Base64CtxUpdate,     METH_VARARGS}, // New
+  {"base64CtxFinal",      xmlsec_Base64CtxFinal,      METH_VARARGS}, // New
+  {"base64Encode",        xmlsec_Base64Encode,        METH_VARARGS}, // New
+  {"base64Decode",        xmlsec_Base64Decode,        METH_VARARGS}, // New
+
   /* parser.h */
-  {"parseFile",            xmlsec_ParseFile,            METH_VARARGS}, // New
-  {"parseMemory",          xmlsec_ParseMemory,          METH_VARARGS}, // New
-  {"parseMemoryExt",       xmlsec_ParseMemoryExt,       METH_VARARGS}, // New
-  {"transformXmlParserId", xmlsec_TransformXmlParserId, METH_VARARGS}, // New
+  {"parseFile",            xmlsec_ParseFile,            METH_VARARGS},
+  {"parseMemory",          xmlsec_ParseMemory,          METH_VARARGS},
+  {"parseMemoryExt",       xmlsec_ParseMemoryExt,       METH_VARARGS},
+  {"transformXmlParserId", xmlsec_TransformXmlParserId, METH_VARARGS},
 
   /* xmlenc.h */
-  {"encCtxCreate",          xmlsec_EncCtxCreate,          METH_VARARGS}, // New
-  {"encCtxDestroy",         xmlsec_EncCtxDestroy,         METH_VARARGS}, // New
-  {"encCtxInitialize",      xmlsec_EncCtxInitialize,      METH_VARARGS}, // New
-  {"encCtxFinalize",        xmlsec_EncCtxFinalize,        METH_VARARGS}, // New
-  {"encCtxCopyUserPref",    xmlsec_EncCtxCopyUserPref,    METH_VARARGS}, // New
-  {"encCtxReset",           xmlsec_EncCtxReset,           METH_VARARGS}, // New
-  {"encCtxBinaryEncrypt",   xmlsec_EncCtxBinaryEncrypt,   METH_VARARGS}, // New
-  {"encCtxXmlEncrypt",      xmlsec_EncCtxXmlEncrypt,      METH_VARARGS}, // New
-  {"encCtxUriEncrypt",      xmlsec_EncCtxUriEncrypt,      METH_VARARGS}, // New
-  {"encCtxDecrypt",         xmlsec_EncCtxDecrypt,         METH_VARARGS}, // New
-  {"encCtxDecryptToBuffer", xmlsec_EncCtxDecryptToBuffer, METH_VARARGS}, // New
-  {"encCtxDebugDump",       xmlsec_EncCtxDebugDump,       METH_VARARGS}, // New
-  {"encCtxDebugXmlDump",    xmlsec_EncCtxDebugXmlDump,    METH_VARARGS}, // New
+  {"encCtxCreate",          xmlsec_EncCtxCreate,          METH_VARARGS},
+  {"encCtxDestroy",         xmlsec_EncCtxDestroy,         METH_VARARGS},
+  {"encCtxInitialize",      xmlsec_EncCtxInitialize,      METH_VARARGS},
+  {"encCtxFinalize",        xmlsec_EncCtxFinalize,        METH_VARARGS},
+  {"encCtxCopyUserPref",    xmlsec_EncCtxCopyUserPref,    METH_VARARGS},
+  {"encCtxReset",           xmlsec_EncCtxReset,           METH_VARARGS},
+  {"encCtxBinaryEncrypt",   xmlsec_EncCtxBinaryEncrypt,   METH_VARARGS},
+  {"encCtxXmlEncrypt",      xmlsec_EncCtxXmlEncrypt,      METH_VARARGS},
+  {"encCtxUriEncrypt",      xmlsec_EncCtxUriEncrypt,      METH_VARARGS},
+  {"encCtxDecrypt",         xmlsec_EncCtxDecrypt,         METH_VARARGS},
+  {"encCtxDecryptToBuffer", xmlsec_EncCtxDecryptToBuffer, METH_VARARGS},
+  {"encCtxDebugDump",       xmlsec_EncCtxDebugDump,       METH_VARARGS},
+  {"encCtxDebugXmlDump",    xmlsec_EncCtxDebugXmlDump,    METH_VARARGS},
 
   /* xmltree.h */
   {"nodeGetName",        xmlsec_NodeGetName,        METH_VARARGS},
@@ -140,6 +152,10 @@ static PyMethodDef xmlsec_methods[] = {
   {"bufferInitialize", xmlsec_BufferInitialize, METH_VARARGS},
   {"bufferFinalize",   xmlsec_BufferFinalize,   METH_VARARGS},
 
+  /* membuf.h */
+  {"transformMemBufId",        xmlsec_TransformMemBufId,        METH_VARARGS}, // New
+  {"transformMemBufGetBuffer", xmlsec_TransformMemBufGetBuffer, METH_VARARGS}, // New
+
   /* list.h  */
   {"ptrListCreate",  xmlsec_PtrListCreate,  METH_VARARGS},
   {"ptrListDestroy", xmlsec_PtrListDestroy, METH_VARARGS},
@@ -197,7 +213,7 @@ static PyMethodDef xmlsec_methods[] = {
   {"openSSLInit",    xmlsec_OpenSSLInit,    METH_VARARGS},
 
   /* x509.h */
-  {"x509DataGetNodeContent", xmlsec_X509DataGetNodeContent, METH_VARARGS}, // New
+  {"x509DataGetNodeContent", xmlsec_X509DataGetNodeContent, METH_VARARGS},
 
   {NULL, NULL} /* End of Methods Sentinel */
 };
