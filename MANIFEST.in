@@ -1,0 +1,2 @@
+include README COPYING MANIFEST.in *.h
+recursive-include examples *
