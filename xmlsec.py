@@ -1,4 +1,4 @@
-#! /usr/bin/env python2.2
+#! /usr/bin/env python
 #
 # $Id$
 #
@@ -44,13 +44,37 @@ import libxslt
 import xmlsecmod
 from xmlsec_strings import *
 
-## xmlsec.h
+###############################################################################
+# xmlsec.h
+###############################################################################
 def init():
     return xmlsecmod.init()
 def shutdown():
     return xmlsecmod.shutdown()
+def checkVersionExact():
+    return xmlsecmod.checkVersionExact()
+def checkVersion():
+    return xmlsecmod.checkVersion()
 
-## crypto.h
+###############################################################################
+# app.h
+###############################################################################
+# Crypto Init/Shutdown
+def cryptoInit():
+    return xmlsecmod.cryptoInit()
+def cryptoShutdown():
+    return xmlsecmod.cryptoShutdown()
+def cryptoKeysMngrInit(mngr):
+    return xmlsecmod.cryptoKeysMngrInit(mngr)
+# Key data ids methods
+keyDataDsaId  = xmlsecmod.keyDataDsaId()
+keyDataRsaId  = xmlsecmod.keyDataRsaId()
+keyDataX509Id = xmlsecmod.keyDataX509Id()
+# Crypto Transforms Ids methods
+transformDsaSha1Id   = xmlsecmod.transformDsaSha1Id()
+transformRsaSha1Id   = xmlsecmod.transformRsaSha1Id()
+transformSha1Id      = xmlsecmod.transformSha1Id()
+# High level routines form xmlsec command line utility
 def cryptoAppInit(config=None):
     return xmlsecmod.cryptoAppInit(config)
 def cryptoAppKeyLoad(filename, format, pwd, pwdCallback, pwdCallbackCtx):
@@ -60,6 +84,10 @@ def cryptoAppKeyLoad(filename, format, pwd, pwdCallback, pwdCallbackCtx):
     return Key(_obj=ret)
 def cryptoAppDefaultKeysMngrInit(mngr):
     return xmlsecmod.cryptoAppDefaultKeysMngrInit(mngr)
+def cryptoAppDefaultKeysMngrLoad(mngr, uri):
+    return xmlsecmod.cryptoAppDefaultKeysMngrLoad(mngr, uri)
+def cryptoAppDefaultKeysMngrSave(mngr, filename, type):
+    return xmlsecmod.cryptoAppDefaultKeysMngrSave(mngr, filename, type)
 def cryptoAppDefaultKeysMngrAdoptKey(mngr, key):
     return xmlsecmod.cryptoAppDefaultKeysMngrAdoptKey(mngr, key)
 def cryptoAppKeysMngrCertLoad(mngr, filename, format, type):
@@ -68,12 +96,11 @@ def cryptoAppKeysMngrCertLoad(mngr, filename, format, type):
 def cryptoAppShutdown():
     return xmlsecmod.cryptoAppShutdown()
 
-def cryptoInit():
-    return xmlsecmod.cryptoInit()
-def cryptoShutdown():
-    return xmlsecmod.cryptoShutdown()
-
-## xmltree.h
+###############################################################################
+# xmltree.h
+###############################################################################
+def nodeGetName(node):
+    return xmlsecmod.nodeGetName(node)
 def getNodeNsHref(cur):
     return xmlsecmod.getNodeNsHref(cur)
 def checkNodeName(cur, name, ns=None):
@@ -132,17 +159,9 @@ def isHex(c):
 def getHex(c):
     return xmlsecmod.getHex(c)
 
-## Transforms Ids methods
 transformInclC14NId  = xmlsecmod.transformInclC14NId()
 transformExclC14NId  = xmlsecmod.transformExclC14NId()
 transformEnvelopedId = xmlsecmod.transformEnvelopedId()
-transformDsaSha1Id   = xmlsecmod.transformDsaSha1Id()
-transformRsaSha1Id   = xmlsecmod.transformRsaSha1Id()
-transformSha1Id      = xmlsecmod.transformSha1Id()
-## Key data ids methods
-keyDataDsaId  = xmlsecmod.keyDataDsaId()
-keyDataRsaId  = xmlsecmod.keyDataRsaId()
-keyDataX509Id = xmlsecmod.keyDataX509Id()
 
 TransformUriTypeNone         = 0x0000 # The URI type is unknown or not set.
 TransformUriTypeEmpty        = 0x0001 # The empty URI ("") type.
@@ -150,6 +169,31 @@ TransformUriTypeSameDocument = 0x0002 # The smae document ("#...") but not empty
 TransformUriTypeLocal        = 0x0004 # The local URI ("file:///....") type.
 TransformUriTypeRemote       = 0x0008 # The remote URI type.
 TransformUriTypeAny          = 0xFFFF # Any URI type.
+
+class Buffer:
+    def __init__(self, size):
+        """
+        Allocates and initalizes new memory buffer with given size. Caller is
+        responsible for calling destroy method to free the buffer.
+        size    : the initial buffer size.
+        Returns : pointer to newly allocated buffer or None if an error occurs.
+        """
+        self._o = xmlsecmod.bufferCreate(size)
+        if self._o is None: raise parserError('xmlSecBufferCreate() failed')
+    def destroy(self):
+        """Destroys buffer object."""
+        return xmlsecmod.bufferDestroy(self)
+    def initialize(self, size):
+        """
+        Initializes buffer object buf. Caller is responsible for calling
+        finalize method to free allocated resources.
+        size    : the initial buffer size.
+        Returns : 0 on success or a negative value if an error occurs.
+        """
+        return xmlsecmod.bufferInitialize(self, size)
+    def finalize(self):
+        """Frees allocated resource for a buffer intialized with initialize method."""
+        xmlsecmod.bufferFinalize(self)
 
 # If this flag is set then <dsig:Manifests/> nodes will not be processed.
 DSIG_FLAGS_IGNORE_MANIFESTS =            0x00000001
@@ -170,7 +214,7 @@ class DSigCtx:
     def __init__(self, keysMngr=None, _obj=None):
         """
         Creates <dsig:Signature/> element processing context. The caller is
-        responsible for destroying returend object by calling destroy method.
+        responsible for destroying returned object by calling destroy method.
         keysMngr : the keys manager.
         Returns  : newly allocated context object or None if an error occurs.
         """
