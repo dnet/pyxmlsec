@@ -76,6 +76,17 @@ PyObject *wrap_xmlNodePtr(xmlNodePtr node) {
   return (ret);
 }
 
+PyObject *wrap_xmlNodeSetPtr(xmlNodeSetPtr nset) {
+  PyObject *ret;
+
+  if (nset == NULL) {
+    Py_INCREF(Py_None);
+    return (Py_None);
+  }
+  ret = PyCObject_FromVoidPtrAndDesc((void *) nset, (char *) "xmlNodeSetPtr", NULL);
+  return (ret);
+}
+
 PyObject *wrap_xmlOutputBufferPtr(xmlOutputBufferPtr buf) {
   PyObject *ret;
 
