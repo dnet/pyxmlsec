@@ -28,7 +28,10 @@
 #include "xmldsig.h"
 #include "templates.h"
 #include "transforms.h"
+#include "keyinfo.h"
 #include "keys.h"
+#include "keysmngr.h"
+#include "list.h"
 #include "crypto.h"
 #include "openssl.h"
 
@@ -41,22 +44,39 @@ static PyMethodDef xmlsec_methods[] = {
   {"findNode", xmlsec_FindNode, METH_VARARGS},
 
   /* xmldsig.h */
-  {"dsigCtxCreate",     xmlsec_DSigCtxCreate,  METH_VARARGS},
-  {"dsigCtxDestroy",    xmlsec_DSigCtxDestroy, METH_VARARGS},
-  {"dsigCtxSign",       xmlsec_DSigCtxSign,    METH_VARARGS},
-  {"dsigCtxVerify",     xmlsec_DSigCtxVerify,  METH_VARARGS},
-  {"dsigCtxSetSignKey", xmldsig_set_signKey,   METH_VARARGS},
-  {"dsigCtxGetStatus",  xmldsig_get_status,    METH_VARARGS},
+  {"dsigCtxCreate",                   xmlsec_DSigCtxCreate,                   METH_VARARGS},
+  {"dsigCtxDestroy",                  xmlsec_DSigCtxDestroy,                  METH_VARARGS},
+  {"dsigCtxSign",                     xmlsec_DSigCtxSign,                     METH_VARARGS},
+  {"dsigCtxVerify",                   xmlsec_DSigCtxVerify,                   METH_VARARGS},
+  {"dsigCtxEnableReferenceTransform", xmlsec_DSigCtxEnableReferenceTransform, METH_VARARGS},
+  {"dsigCtxEnableSignatureTransform", xmlsec_DSigCtxEnableSignatureTransform, METH_VARARGS},
+  {"dsigCtxSetSignKey",               xmldsig_set_signKey,                    METH_VARARGS},
+  {"dsigCtxSetEnabledReferenceUris",  xmldsig_set_enabledReferenceUris,       METH_VARARGS},
+  {"dsigCtxGetStatus",                xmldsig_get_status,                     METH_VARARGS},
+  {"dsigCtxGetKeyInfoReadCtx",        xmldsig_get_keyInfoReadCtx,             METH_VARARGS},
+  {"dsigCtxGetSignedInfoReferences",  xmldsig_get_signedInfoReferences,       METH_VARARGS},
 
   /* crypto.h */
-  {"cryptoAppInit",      xmlsec_CryptoAppInit,      METH_VARARGS},
-  {"cryptoAppKeyLoad",   xmlsec_CryptoAppKeyLoad,   METH_VARARGS},
-  {"cryptoAppShutdown",  xmlsec_CryptoAppShutdown,  METH_VARARGS},
-  {"cryptoInit",         xmlsec_CryptoInit,         METH_VARARGS},
-  {"cryptoShutdown",     xmlsec_CryptoShutdown,     METH_VARARGS},
+  {"cryptoAppInit",                    xmlsec_CryptoAppInit,                    METH_VARARGS},
+  {"cryptoAppKeyLoad",                 xmlsec_CryptoAppKeyLoad,                 METH_VARARGS},
+  {"cryptoAppShutdown",                xmlsec_CryptoAppShutdown,                METH_VARARGS},
+  {"cryptoAppDefaultKeysMngrInit",     xmlsec_CryptoAppDefaultKeysMngrInit,     METH_VARARGS},
+  {"cryptoAppDefaultKeysMngrAdoptKey", xmlsec_CryptoAppDefaultKeysMngrAdoptKey, METH_VARARGS},
+  {"cryptoAppKeysMngrCertLoad",        xmlsec_CryptoAppKeysMngrCertLoad,        METH_VARARGS},
+  {"cryptoInit",     xmlsec_CryptoInit,     METH_VARARGS},
+  {"cryptoShutdown", xmlsec_CryptoShutdown, METH_VARARGS},
   {"transformDsaSha1Id", xmlsec_TransformDsaSha1Id, METH_VARARGS},
   {"transformRsaSha1Id", xmlsec_TransformRsaSha1Id, METH_VARARGS},
   {"transformSha1Id",    xmlsec_TransformSha1Id,    METH_VARARGS},
+  {"keyDataDsaId",  xmlsec_KeyDataDsaId,  METH_VARARGS},
+  {"keyDataRsaId",  xmlsec_KeyDataRsaId,  METH_VARARGS},
+  {"keyDataX509Id", xmlsec_KeyDataX509Id, METH_VARARGS},
+
+  /* list.h  */
+  {"ptrListCreate",  xmlsec_PtrListCreate,  METH_VARARGS},
+  {"ptrListDestroy", xmlsec_PtrListDestroy, METH_VARARGS},
+  {"ptrListAdd",     xmlsec_PtrListAdd,     METH_VARARGS},
+  {"ptrListGetSize", xmlsec_PtrListGetSize, METH_VARARGS},
 
   /* templates.h */
   {"tmplSignatureCreate",        xmlsec_TmplSignatureCreate,        METH_VARARGS},
@@ -66,12 +86,19 @@ static PyMethodDef xmlsec_methods[] = {
   {"tmplKeyInfoAddKeyName",      xmlsec_TmplKeyInfoAddKeyName,      METH_VARARGS},
 
   /* transforms.h */
+  {"transformInclC14NId",  xmlsec_TransformInclC14NId,  METH_VARARGS},
   {"transformExclC14NId",  xmlsec_TransformExclC14NId,  METH_VARARGS},
   {"transformEnvelopedId", xmlsec_TransformEnvelopedId, METH_VARARGS},
 
   /* keys.h */
   {"keyCreate",  xmlsec_KeyCreate,  METH_VARARGS},
+  {"keyDestroy", xmlsec_KeyDestroy, METH_VARARGS},
   {"keySetName", xmlsec_KeySetName, METH_VARARGS},
+  /* keyinfo.h */
+  {"getEnabledKeyData", keyinfo_get_enabledKeyData, METH_VARARGS},
+  /* keysmngr.h */
+  {"keysMngrCreate",  xmlsec_KeysMngrCreate,  METH_VARARGS},
+  {"keysMngrDestroy", xmlsec_KeysMngrDestroy, METH_VARARGS},
 
   /* openssl/crypto.h, openssl/app.h */
   {"openSSLAppInit", xmlsec_OpenSSLAppInit, METH_VARARGS},
