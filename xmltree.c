@@ -266,10 +266,11 @@ PyObject *xmlsec_AddIDs(PyObject *self, PyObject *args) {
 
   doc = xmlDocPtr_get(doc_obj);
   cur = xmlNodePtr_get(cur_obj);
-  PyStringList_AsCharPtrArray(ids_obj, ids);
+  ids = PyStringList_AsCharPtrPtr(ids_obj);
 
   xmlSecAddIDs(doc, cur, (const xmlChar **)ids);
-
+  xmlFree(ids);
+  
   Py_INCREF(Py_None);
   return (Py_None);
 }

@@ -43,10 +43,50 @@ Topic :: Software Development :: Libraries :: Python Modules
 from distutils.core import setup, Extension
 import sys, commands
 
+# check python version
+if not hasattr(sys, 'version_info') or sys.version_info < (2,2):
+    raise SystemExit, "PyXMLSec requires Python version 2.2 or above."
+
+# sanity check for any arguments
+if len(sys.argv) == 1:
+    msg = 'Choose an action :\n' \
+          '   1. Build\n' \
+          '   2. Install\n' \
+          '   3. Clean\n' \
+          '   4. Exit\n' \
+          'Your choice : '
+    reply = raw_input(msg)
+    choice = None
+    if reply:
+        choice = reply[0]
+    if choice == '1':
+        sys.argv.append('build')
+    elif choice == '2':
+        sys.argv.append('install')
+    elif choice == '3':
+        sys.argv.append('clean')
+        sys.argv.append('-a')
+    elif choice == '4':
+        sys.exit(0)
+
 # the crypto engine name : openssl, gnutls or nss
 xmlsec1_crypto = "openssl"
-#xmlsec1_crypto = "gnutls"
-#xmlsec1_crypto = "nss"
+if 'build' in sys.argv:
+    msg = '\nChoose a crypto engine :\n' \
+          '   1. OpenSSL\n' \
+          '   2. GnuTLS\n' \
+          '   3. NSS\n' \
+          'Your choice : '
+    reply = raw_input(msg)
+    choice = None
+    if reply:
+        choice = reply[0]
+    if choice == '1':
+        xmlsec1_crypto = "openssl"
+    elif choice == '2':
+        xmlsec1_crypto = "gnutls"
+    elif choice == '3':
+        xmlsec1_crypto = "nss"
 
 define_macros = []
 include_dirs  = []

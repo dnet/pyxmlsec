@@ -82,6 +82,6 @@ PyObject *wrap_xmlSecPtr(xmlSecPtr ptr);
 PyObject *wrap_xmlSecBytePtr(xmlSecByte *str);
 PyObject *wrap_xmlSecBytePtrConst(const xmlSecByte *str);
 
-void PyStringList_AsCharPtrArray(PyObject *list_obj, xmlChar **list);
+xmlChar **PyStringList_AsCharPtrPtr(PyObject *list_obj);
 
 #endif /* __PYXMLSEC_WRAP_OBJS_H__ */

@@ -554,10 +554,11 @@ PyObject *xmlsec_TmplTransformAddXPath(PyObject *self, PyObject *args) {
 
   transformNode = xmlNodePtr_get(transformNode_obj);
   if (nsList_obj != Py_None)
-    PyStringList_AsCharPtrArray(nsList_obj, nsList);
+    nsList = PyStringList_AsCharPtrPtr(nsList_obj);
 
   ret = xmlSecTmplTransformAddXPath(transformNode, expression,
 				    (const xmlChar **)nsList);
+  xmlFree(nsList);
   
   return (wrap_int(ret));
 }
@@ -576,11 +577,12 @@ PyObject *xmlsec_TmplTransformAddXPath2(PyObject *self, PyObject *args) {
 
   transformNode = xmlNodePtr_get(transformNode_obj);
   if (nsList_obj != Py_None)
-    PyStringList_AsCharPtrArray(nsList_obj, nsList);
+    nsList = PyStringList_AsCharPtrPtr(nsList_obj);
 
   ret = xmlSecTmplTransformAddXPath2(transformNode, type, expression,
 				     (const xmlChar **)nsList);
-  
+  xmlFree(nsList);
+
   return (wrap_int(ret));
 }
 
@@ -597,10 +599,11 @@ PyObject *xmlsec_TmplTransformAddXPointer(PyObject *self, PyObject *args) {
 
   transformNode = xmlNodePtr_get(transformNode_obj);
   if (nsList_obj != Py_None)
-    PyStringList_AsCharPtrArray(nsList_obj, nsList);
+    nsList = PyStringList_AsCharPtrPtr(nsList_obj);
 
   ret = xmlSecTmplTransformAddXPointer(transformNode, expression,
 				       (const xmlChar **)nsList);
+  xmlFree(nsList);
   
   return (wrap_int(ret));
 }

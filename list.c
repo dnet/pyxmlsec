@@ -342,6 +342,7 @@ PyObject *xmlsec_PtrListIsValid(PyObject *self, PyObject *args) {
 static xmlHashTablePtr PtrDuplicateItemMethods    = NULL;
 static xmlHashTablePtr PtrDestroyItemMethods      = NULL;
 static xmlHashTablePtr PtrDebugDumpItemMethods    = NULL;
+static xmlHashTablePtr PtrDebugXmlDumpItemMethods = NULL;
 
 static xmlSecPtr xmlsec_PtrDuplicateItemMethod(xmlSecPtr ptr) {
   xmlSecPtrListPtr list;
@@ -402,6 +403,27 @@ static void xmlsec_PtrDebugDumpItemMethod(xmlSecPtr ptr, FILE *output) {
   Py_XDECREF(result);
 }
 
+static void xmlsec_PtrDebugXmlDumpItemMethod(xmlSecPtr ptr, FILE *output) {
+  xmlSecPtrListPtr list;
+  PyObject *args, *result;
+  PyObject *func = NULL;
+
+  list = (xmlSecPtrListPtr) ptr;
+  func = xmlHashLookup(PtrDebugXmlDumpItemMethods, list->id->name);
+
+  /* FIXME */
+  args = Py_BuildValue((char *) "OO", wrap_xmlSecPtr(ptr),
+		       PyFile_FromFile(output, NULL, NULL, NULL));
+
+  /* Protect refcount against reentrant manipulation of callback hash */
+  Py_INCREF(func);
+  result = PyEval_CallObject(func, args);
+  Py_DECREF(func);
+  Py_DECREF(args);
+
+  Py_XDECREF(result);
+}
+
 PyObject *xmlsec_PtrListIdCreate(PyObject *self, PyObject *args) {
   PyObject *duplicateItem_obj, *destroyItem_obj;
   PyObject *debugDumpItem_obj, *debugXmlDumpItem_obj;
@@ -417,9 +439,10 @@ PyObject *xmlsec_PtrListIdCreate(PyObject *self, PyObject *args) {
     PtrDuplicateItemMethods = xmlHashCreate(HASH_TABLE_SIZE);
   if (PtrDestroyItemMethods == NULL && destroyItem_obj != Py_None)
     PtrDestroyItemMethods = xmlHashCreate(HASH_TABLE_SIZE);
-  if (PtrDebugDumpItemMethods == NULL &&
-      (debugDumpItem_obj != Py_None || debugXmlDumpItem_obj != Py_None))
-    PtrDebugDumpItemMethods = xmlHashCreate(HASH_TABLE_SIZE * 2);
+  if (PtrDebugDumpItemMethods == NULL && debugDumpItem_obj != Py_None)
+    PtrDebugDumpItemMethods = xmlHashCreate(HASH_TABLE_SIZE);
+  if (PtrDebugXmlDumpItemMethods == NULL && debugXmlDumpItem_obj != Py_None)
+    PtrDebugXmlDumpItemMethods = xmlHashCreate(HASH_TABLE_SIZE);
 
   if (duplicateItem_obj != Py_None)
     xmlHashAddEntry(PtrDuplicateItemMethods, name, duplicateItem_obj);
@@ -428,7 +451,7 @@ PyObject *xmlsec_PtrListIdCreate(PyObject *self, PyObject *args) {
   if (debugDumpItem_obj != Py_None)
     xmlHashAddEntry(PtrDebugDumpItemMethods, name, debugDumpItem_obj);
   if (debugXmlDumpItem_obj != Py_None)
-    xmlHashAddEntry(PtrDebugDumpItemMethods, name, debugXmlDumpItem_obj);
+    xmlHashAddEntry(PtrDebugXmlDumpItemMethods, name, debugXmlDumpItem_obj);
 
   listId = xmlMalloc(sizeof(xmlSecPtrListKlass));
   listId->name = name;
@@ -445,7 +468,7 @@ PyObject *xmlsec_PtrListIdCreate(PyObject *self, PyObject *args) {
   else
     listId->debugDumpItem = NULL;
   if (debugXmlDumpItem_obj != Py_None)
-    listId->debugXmlDumpItem = xmlsec_PtrDebugDumpItemMethod;
+    listId->debugXmlDumpItem = xmlsec_PtrDebugXmlDumpItemMethod;
   else
     listId->debugXmlDumpItem = NULL;
 
