@@ -1,5 +1,13 @@
 PyObject *xmlsec_TmplSignatureCreate(PyObject *self, PyObject *args);
-PyObject *xmlsec_TmplSignatureAddReference(PyObject *self, PyObject *args);
-PyObject *xmlsec_TmplReferenceAddTransform(PyObject *self, PyObject *args);
 PyObject *xmlsec_TmplSignatureEnsureKeyInfo(PyObject *self, PyObject *args);
+PyObject *xmlsec_TmplSignatureAddReference(PyObject *self, PyObject *args);
+PyObject *xmlsec_TmplSignatureAddObject(PyObject *self, PyObject *args);
+PyObject *xmlsec_TmplSignatureGetSignMethodNode(PyObject *self, PyObject *args);
+PyObject *xmlsec_TmplSignatureGetC14NMethodNode(PyObject *self, PyObject *args);
+PyObject *xmlsec_TmplReferenceAddTransform(PyObject *self, PyObject *args);
+PyObject *xmlsec_TmplObjectAddSignProperties(PyObject *self, PyObject *args);
+PyObject *xmlsec_TmplObjectAddManifest(PyObject *self, PyObject *args);
+PyObject *xmlsec_TmplManifestAddReference(PyObject *self, PyObject *args);
 PyObject *xmlsec_TmplKeyInfoAddKeyName(PyObject *self, PyObject *args);
+PyObject *xmlsec_TmplKeyInfoAddKeyValue(PyObject *self, PyObject *args);
+PyObject *xmlsec_TmplKeyInfoAddX509Data(PyObject *self, PyObject *args);
