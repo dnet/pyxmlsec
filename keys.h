@@ -1,10 +1,5 @@
 typedef struct {
   PyObject_HEAD
-  xmlSecKeyReq obj;
-} xmlSecKeyReq_object;
-
-typedef struct {
-  PyObject_HEAD
   xmlSecKeyReqPtr obj;
 } xmlSecKeyReqPtr_object;
 
@@ -13,8 +8,14 @@ typedef struct {
   xmlSecKeyPtr obj;
 } xmlSecKeyPtr_object;
 
-#define xmlSecKeyPtr_get(v) (((v) == Py_None) ? NULL : (((xmlSecKeyPtr_object *)(PyObject_GetAttr(v, PyString_FromString("_o"))))->obj))
 #define xmlSecKeyReqPtr_get(v) (((v) == Py_None) ? NULL : (((xmlSecKeyReqPtr_object *)(PyObject_GetAttr(v, PyString_FromString("_o"))))->obj))
+#define xmlSecKeyPtr_get(v) (((v) == Py_None) ? NULL : (((xmlSecKeyPtr_object *)(PyObject_GetAttr(v, PyString_FromString("_o"))))->obj))
+
+PyObject *wrap_xmlSecKeyReqPtr(xmlSecKeyReqPtr key);
+PyObject *wrap_xmlSecKeyPtr(xmlSecKeyPtr key);
+
+PyObject *xmlSecKeyReq_getattr(PyObject *self, PyObject *args);
+PyObject *xmlSecKeyReq_setattr(PyObject *self, PyObject *args);
 
 PyObject *keys_KeyReqCreate(PyObject *self, PyObject *args);
 PyObject *xmlsec_KeyReqInitialize(PyObject *self, PyObject *args);
@@ -23,8 +24,6 @@ PyObject *xmlsec_KeyReqReset(PyObject *self, PyObject *args);
 PyObject *xmlsec_KeyReqCopy(PyObject *self, PyObject *args);
 PyObject *xmlsec_KeyReqMatchKey(PyObject *self, PyObject *args);
 PyObject *xmlsec_KeyReqMatchKeyValue(PyObject *self, PyObject *args);
-
-PyObject *wrap_xmlSecKeyPtr(xmlSecKeyPtr key);
 
 PyObject *xmlsec_KeyCreate(PyObject *self, PyObject *args);
 PyObject *xmlsec_KeyDestroy(PyObject *self, PyObject *args);

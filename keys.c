@@ -2,7 +2,7 @@
  *
  * PyXMLSec - Python bindings for XML Security library (XMLSec)
  *
- * Copyright (C) 2003 Easter-eggs, Valery Febvre
+ * Copyright (C) 2003-2004 Easter-eggs, Valery Febvre
  * http://pyxmlsec.labs.libre-entreprise.org
  * 
  * Author: Valery Febvre <vfebvre@easter-eggs.com>
@@ -28,186 +28,17 @@
 #include "keys.h"
 #include "keysdata.h"
 
-/* KeyReq : the key requirements information. */
-
-static PyObject *xmlSecKeyReq_dealloc(xmlSecKeyReq_object *self, PyObject *args) {
-  PyMem_DEL(self);
-  Py_INCREF(Py_None);
-  return (Py_None);
-}
-
-static PyObject *xmlSecKeyReq_getattr(PyObject *self, char *attr) {
-  xmlSecKeyReq key_req = ((xmlSecKeyReq_object *)self)->obj;
-
-  if (!strcmp(attr, "__members__"))
-    return Py_BuildValue("[ssss]", "keyId", "keyType", "keyUsage", "keyBitsSize");
-  if (!strcmp(attr, "keyId"))
-    return PyCObject_FromVoidPtrAndDesc((void *) key_req.keyId,
-					(char *) "xmlSecKeyDataId", NULL);
-  if (!strcmp(attr, "keyType"))
-    return Py_BuildValue("i", key_req.keyType);
-  if (!strcmp(attr, "keyUsage"))
-    return Py_BuildValue("i", key_req.keyUsage);
-  if (!strcmp(attr, "keyBitsSize"))
-    return Py_BuildValue("i", key_req.keyBitsSize);
-
-  Py_INCREF(Py_None);
-  return (Py_None);
-}
-
-static PyObject *xmlSecKeyReq_setattr(PyObject *self, char *attr, PyObject *value) {
-  PyObject *new_value;
-
-  if (!strcmp(attr, "keyId")) {
-    PyArg_Parse(value, "O", &new_value);
-    ((xmlSecKeyReq_object *)self)->obj.keyId = PyCObject_AsVoidPtr(new_value);
-  }
-  else if (!strcmp(attr, "keyType"))
-    PyArg_Parse(value, "i", &(((xmlSecKeyReq_object *)self)->obj.keyType));
-  else if (!strcmp(attr, "keyUsage"))
-    PyArg_Parse(value, "i", &(((xmlSecKeyReq_object *)self)->obj.keyUsage));
-  else if (!strcmp(attr, "keyBitsSize"))
-    PyArg_Parse(value, "i", &(((xmlSecKeyReq_object *)self)->obj.keyBitsSize));
-
-  Py_INCREF(Py_None);
-  return (Py_None);
-}
-
-static PyTypeObject xmlSecKeyReq_type = {
-  PyObject_HEAD_INIT(&PyType_Type)
-  0,
-  "KeyReq",
-  sizeof(xmlSecKeyReq_object),
-  0,
-  (destructor)xmlSecKeyReq_dealloc,  /*tp_dealloc*/
-  0,          /*tp_print*/
-  (getattrfunc)xmlSecKeyReq_getattr, /*tp_getattr*/
-  (setattrfunc)xmlSecKeyReq_setattr, /*tp_setattr*/
-  0,          /*tp_compare*/
-  0,          /*tp_repr*/
-  0,          /*tp_as_number*/
-  0,          /*tp_as_sequence*/
-  0,          /*tp_as_mapping*/
-  0,          /*tp_hash */
-};
-
-static PyObject *new_xmlSecKeyReq_object(xmlSecKeyDataId keyId, xmlSecKeyDataType keyType, 
-					 xmlSecKeyUsage keyUsage, xmlSecSize keyBitsSize) {
-  xmlSecKeyReq_object *keyReq_obj = NULL;
-  
-  keyReq_obj = PyObject_NEW(xmlSecKeyReq_object, &xmlSecKeyReq_type);
-  if (keyReq_obj == NULL) return NULL;
-  
-  keyReq_obj->obj.keyId       = keyId;
-  keyReq_obj->obj.keyType     = keyType;
-  keyReq_obj->obj.keyUsage    = keyUsage;
-  keyReq_obj->obj.keyBitsSize = keyBitsSize;
-  
-  return (PyObject *)keyReq_obj;
-}
-
-PyObject *keys_KeyReqCreate(PyObject *self, PyObject *args) {
-  PyObject *keyId_meth;
-  xmlSecKeyDataType keyType;
-  xmlSecKeyUsage keyUsage;
-  xmlSecSize keyBitsSize;
+PyObject *wrap_xmlSecKeyReqPtr(xmlSecKeyReqPtr keyReq) {
   PyObject *ret;
 
-  if (!PyArg_ParseTuple(args, "Oiii:keyReqCreate", &keyId_meth, &keyType,
-			&keyUsage, &keyBitsSize))
-    return NULL;
-
-  ret = new_xmlSecKeyReq_object(PyCObject_AsVoidPtr(keyId_meth),
-				keyType, keyUsage, keyBitsSize);
-
+  if (keyReq == NULL) {
+    Py_INCREF(Py_None);
+    return (Py_None);
+  }
+  ret = PyCObject_FromVoidPtrAndDesc((void *) keyReq,
+				     (char *) "xmlSecKeyReqPtr", NULL);
   return (ret);
 }
-
-PyObject *xmlsec_KeyReqInitialize(PyObject *self, PyObject *args) {
-  xmlSecKeyReq_object *keyReq_obj = NULL;
-  xmlSecKeyReq keyReq;
-
-  if (!PyArg_ParseTuple(args, "O:keyReqInitialize", &keyReq_obj))
-    return NULL;
-
-  keyReq = keyReq_obj->obj;
-
-  return (wrap_int(xmlSecKeyReqInitialize(&keyReq)));
-}
-
-PyObject *xmlsec_KeyReqFinalize(PyObject *self, PyObject *args) {
-  xmlSecKeyReq_object *keyReq_obj = NULL;
-  xmlSecKeyReq keyReq;
-
-  if (!PyArg_ParseTuple(args, "O:keyReqFinalize", &keyReq_obj))
-    return NULL;
-
-  keyReq = keyReq_obj->obj;
-  xmlSecKeyReqFinalize(&keyReq);
-
-  Py_INCREF(Py_None);
-  return (Py_None);
-}
-
-PyObject *xmlsec_KeyReqReset(PyObject *self, PyObject *args) {
-  xmlSecKeyReq_object *keyReq_obj = NULL;
-  xmlSecKeyReq keyReq;
-
-  if (!PyArg_ParseTuple(args, "O:keyReqReset", &keyReq_obj))
-    return NULL;
-
-  keyReq = keyReq_obj->obj;
-  xmlSecKeyReqReset(&keyReq);
-
-  Py_INCREF(Py_None);
-  return (Py_None);
-}
-
-PyObject *xmlsec_KeyReqCopy(PyObject *self, PyObject *args) {
-  xmlSecKeyReq_object *dst_obj, *src_obj;
-  xmlSecKeyReq dst;
-  xmlSecKeyReq src;
-
-  if (!PyArg_ParseTuple(args, "OO:keyReqCopy", &dst_obj, &src_obj))
-    return NULL;
-
-  dst = dst_obj->obj;
-  src = src_obj->obj;
-  
-  return (wrap_int(xmlSecKeyReqCopy(&dst, &src)));
-}
-
-PyObject *xmlsec_KeyReqMatchKey(PyObject *self, PyObject *args) {
-  xmlSecKeyReq_object *keyReq_obj = NULL;
-  PyObject *key_obj;
-  xmlSecKeyReq keyReq;
-  xmlSecKeyPtr key;
-
-  if (!PyArg_ParseTuple(args, "OO:keyReqMatchKey", &keyReq_obj, &key_obj))
-    return NULL;
-
-  keyReq = keyReq_obj->obj;
-  key = xmlSecKeyPtr_get(key_obj);
-
-  return (wrap_int(xmlSecKeyReqMatchKey(&keyReq, key)));
-}
-
-PyObject *xmlsec_KeyReqMatchKeyValue(PyObject *self, PyObject *args) {
-  xmlSecKeyReq_object *keyReq_obj = NULL;
-  PyObject *value_obj;
-  xmlSecKeyReq keyReq;
-  xmlSecKeyDataPtr value;
-
-  if (!PyArg_ParseTuple(args, "OO:keyReqMatchKeyValue", &keyReq_obj, &value_obj))
-    return NULL;
-
-  keyReq = keyReq_obj->obj;
-  value = xmlSecKeyDataPtr_get(value_obj);
-
-  return (wrap_int(xmlSecKeyReqMatchKeyValue(&keyReq, value)));
-}
-
-/* Key */
 
 PyObject *wrap_xmlSecKeyPtr(xmlSecKeyPtr key) {
   PyObject *ret;
@@ -221,7 +52,168 @@ PyObject *wrap_xmlSecKeyPtr(xmlSecKeyPtr key) {
   return (ret);
 }
 
-/*****************************************************************************/
+/******************************************************************************/
+/* KeyReq                                                                     */
+/******************************************************************************/
+
+PyObject *xmlSecKeyReq_getattr(PyObject *self, PyObject *args) {
+  PyObject *keyReq_obj;
+  xmlSecKeyReqPtr keyReq;
+  const char *attr;
+
+  if (!PyArg_ParseTuple(args, "Os:keyReqGetAttr", &keyReq_obj, &attr))
+    return NULL;
+
+  keyReq = xmlSecKeyReqPtr_get(keyReq_obj);
+
+  if (!strcmp(attr, "__members__"))
+    return Py_BuildValue("[ssss]", "keyId", "keyType",
+			 "keyUsage", "keyBitsSize");
+  if (!strcmp(attr, "keyId"))
+    return PyCObject_FromVoidPtrAndDesc((void *) keyReq->keyId,
+                                        (char *) "xmlSecKeyDataId", NULL);
+  if (!strcmp(attr, "keyType"))
+    return wrap_int(keyReq->keyType);
+  if (!strcmp(attr, "keyUsage"))
+    return wrap_int(keyReq->keyUsage);
+  if (!strcmp(attr, "keyBitsSize"))
+    return wrap_int(keyReq->keyBitsSize);
+
+  Py_INCREF(Py_None);
+  return (Py_None);
+}
+
+PyObject *xmlSecKeyReq_setattr(PyObject *self, PyObject *args) {
+  PyObject *keyReq_obj, *value_obj;
+  xmlSecKeyReqPtr keyReq;
+  const char *name;
+
+  if (!PyArg_ParseTuple(args, "OsO:keyReqSetAttr",
+			&keyReq_obj, &name, &value_obj))
+    return NULL;
+
+  keyReq = xmlSecKeyReqPtr_get(keyReq_obj);
+
+  if (!strcmp(name, "keyId"))
+    keyReq->keyId = PyCObject_AsVoidPtr(value_obj);
+  else if (!strcmp(name, "keyType"))
+    keyReq->keyType = PyInt_AsLong(value_obj);
+  else if (!strcmp(name, "keyUsage"))
+    keyReq->keyUsage = PyInt_AsLong(value_obj);
+  else if (!strcmp(name, "keyBitsSize"))
+    keyReq->keyBitsSize = PyInt_AsLong(value_obj);
+
+  Py_INCREF(Py_None);
+  return (Py_None);
+}
+
+/******************************************************************************/
+
+PyObject *keys_KeyReqCreate(PyObject *self, PyObject *args) {
+  PyObject *keyId_obj;
+  xmlSecKeyDataType keyType;
+  xmlSecKeyUsage keyUsage;
+  xmlSecSize keyBitsSize;
+  xmlSecKeyReqPtr keyReq;
+
+  if (!PyArg_ParseTuple(args, "Oiii:keyReqCreate", &keyId_obj, &keyType,
+			&keyUsage, &keyBitsSize))
+    return NULL;
+
+  keyReq = (xmlSecKeyReqPtr) xmlMalloc(sizeof(xmlSecKeyReq));
+  keyReq->keyId       = PyCObject_AsVoidPtr(keyId_obj);
+  keyReq->keyType     = keyType;
+  keyReq->keyUsage    = keyUsage;
+  keyReq->keyBitsSize = keyBitsSize;
+  
+  return (wrap_xmlSecKeyReqPtr(keyReq));
+}
+
+PyObject *xmlsec_KeyReqInitialize(PyObject *self, PyObject *args) {
+  PyObject *keyReq_obj;
+  xmlSecKeyReqPtr keyReq;
+
+  if (!PyArg_ParseTuple(args, "O:keyReqInitialize", &keyReq_obj))
+    return NULL;
+
+  keyReq = xmlSecKeyReqPtr_get(keyReq_obj);
+
+  return (wrap_int(xmlSecKeyReqInitialize(keyReq)));
+}
+
+PyObject *xmlsec_KeyReqFinalize(PyObject *self, PyObject *args) {
+  PyObject *keyReq_obj;
+  xmlSecKeyReqPtr keyReq;
+
+  if (!PyArg_ParseTuple(args, "O:keyReqFinalize", &keyReq_obj))
+    return NULL;
+
+  keyReq = xmlSecKeyReqPtr_get(keyReq_obj);
+  xmlSecKeyReqFinalize(keyReq);
+
+  Py_INCREF(Py_None);
+  return (Py_None);
+}
+
+PyObject *xmlsec_KeyReqReset(PyObject *self, PyObject *args) {
+  PyObject *keyReq_obj;
+  xmlSecKeyReqPtr keyReq;
+
+  if (!PyArg_ParseTuple(args, "O:keyReqReset", &keyReq_obj))
+    return NULL;
+
+  keyReq = xmlSecKeyReqPtr_get(keyReq_obj);
+  xmlSecKeyReqReset(keyReq);
+
+  Py_INCREF(Py_None);
+  return (Py_None);
+}
+
+PyObject *xmlsec_KeyReqCopy(PyObject *self, PyObject *args) {
+  PyObject *dst_obj, *src_obj;
+  xmlSecKeyReqPtr dst;
+  xmlSecKeyReqPtr src;
+
+  if (!PyArg_ParseTuple(args, "OO:keyReqCopy", &dst_obj, &src_obj))
+    return NULL;
+
+  dst = xmlSecKeyReqPtr_get(dst_obj);
+  src = xmlSecKeyReqPtr_get(src_obj);
+  
+  return (wrap_int(xmlSecKeyReqCopy(dst, src)));
+}
+
+PyObject *xmlsec_KeyReqMatchKey(PyObject *self, PyObject *args) {
+  PyObject *keyReq_obj, *key_obj;
+  xmlSecKeyReqPtr keyReq;
+  xmlSecKeyPtr key;
+
+  if (!PyArg_ParseTuple(args, "OO:keyReqMatchKey", &keyReq_obj, &key_obj))
+    return NULL;
+
+  keyReq = xmlSecKeyReqPtr_get(keyReq_obj);
+  key = xmlSecKeyPtr_get(key_obj);
+
+  return (wrap_int(xmlSecKeyReqMatchKey(keyReq, key)));
+}
+
+PyObject *xmlsec_KeyReqMatchKeyValue(PyObject *self, PyObject *args) {
+  PyObject *keyReq_obj, *value_obj;
+  xmlSecKeyReqPtr keyReq;
+  xmlSecKeyDataPtr value;
+
+  if (!PyArg_ParseTuple(args, "OO:keyReqMatchKeyValue", &keyReq_obj, &value_obj))
+    return NULL;
+
+  keyReq = xmlSecKeyReqPtr_get(keyReq_obj);
+  value = xmlSecKeyDataPtr_get(value_obj);
+
+  return (wrap_int(xmlSecKeyReqMatchKeyValue(keyReq, value)));
+}
+
+/******************************************************************************/
+/* Key                                                                        */
+/******************************************************************************/
 
 PyObject *xmlsec_KeyCreate(PyObject *self, PyObject *args) {
   return (wrap_xmlSecKeyPtr(xmlSecKeyCreate()));
