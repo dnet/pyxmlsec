@@ -46,6 +46,8 @@ XkmsNs = "http://www.w3.org/2002/03/xkms#"
 XPathNs = "http://www.w3.org/TR/1999/REC-xpath-19991116"
 XPath2Ns = "http://www.w3.org/2002/06/xmldsig-filter2"
 XPointerNs = "http://www.w3.org/2001/04/xmldsig-more/xptr"
+Soap11Ns = "http://schemas.xmlsoap.org/soap/envelope/"
+Soap12Ns = "http://www.w3.org/2002/06/soap-envelope"
 
 # *************************************************************************
 # *
@@ -89,6 +91,15 @@ TypeEncElement = "http://www.w3.org/2001/04/xmlenc#Element"
 # * XKMS Nodes
 # *
 # ************************************************************************/
+XkmsServerRequestResultName = "result-response"
+XkmsServerRequestStatusName = "status-request"
+XkmsServerRequestLocateName = "locate-request"
+XkmsServerRequestValidateName = "validate-request"
+XkmsServerRequestCompoundName = "compound-request"
+
+NodeResult = "Result"
+NodeStatusRequest = "StatusRequest"
+NodeStatusResult = "StatusResult"
 NodeLocateRequest = "LocateRequest"
 NodeLocateResult = "LocateResult"
 NodeValidateRequest = "ValidateRequest"
@@ -108,6 +119,10 @@ NodeTimeInstant = "TimeInstant"
 NodeRequestSignatureValue = "RequestSignatureValue"
 NodeUnverifiedKeyBinding = "UnverifiedKeyBinding"
 NodeValidityInterval = "ValidityInterval"
+NodeStatus = "Status"
+NodeValidReason = "ValidReason"
+NodeInvalidReason = "InvalidReason"
+NodeIndeterminateReason = "IndeterminateReason"
 
 AttrService = "Service"
 AttrNonce = "Nonce"
@@ -122,10 +137,11 @@ AttrRequestId = "RequestId"
 AttrNotBefore = "NotBefore"
 AttrNotOnOrAfter = "NotOnOrAfter"
 AttrTime = "Time"
+AttrStatusValue = "StatusValue"
 
-ResponsePending = "Pending"
-ResponseRepresent = "Represent"
-ResponseRequestSignatureValue = "RequestSignatureValue"
+ResponseMechanismPending = "Pending"
+ResponseMechanismRepresent = "Represent"
+ResponseMechanismRequestSignatureValue = "RequestSignatureValue"
 
 RespondWithKeyName = "KeyName"
 RespondWithKeyValue = "KeyValue"
@@ -147,12 +163,22 @@ KeyUsageEncryption = "Encryption"
 KeyUsageSignature = "Signature"
 KeyUsageExchange = "Exchange"
 
+KeyBindingStatusValid = "Valid"
+KeyBindingStatusInvalid = "Invalid"
+KeyBindingStatusIndeterminate = "Indeterminate"
+
+KeyBindingReasonIssuerTrust = "IssuerTrust"
+KeyBindingReasonRevocationStatus = "RevocationStatus"
+KeyBindingReasonValidityInterval = "ValidityInterval"
+KeyBindingReasonSignature = "Signature"
+
 ResultMajorCodeSuccess = "Success"
 ResultMajorCodeVersionMismatch = "VersionMismatch"
 ResultMajorCodeSender = "Sender"
 ResultMajorCodeReceiver = "Receiver"
 ResultMajorCodeRepresent = "Represent"
 ResultMajorCodePending = "Pending"
+
 ResultMinorCodeNoMatch = "NoMatch"
 ResultMinorCodeTooManyResponses = "TooManyResponses"
 ResultMinorCodeIncomplete = "Incomplete"
@@ -162,6 +188,21 @@ ResultMinorCodeNoAuthentication = "NoAuthentication"
 ResultMinorCodeMessageNotSupported = "MessageNotSupported"
 ResultMinorCodeUnknownResponseId = "UnknownResponseId"
 ResultMinorCodeNotSynchronous = "NotSynchronous"
+
+XkmsSoapSubcodeValueMessageNotSupported = "MessageNotSupported"
+XkmsSoapSubcodeValueBadMessage = "BadMessage"
+
+XkmsSoapFaultReasonLang = "en"
+XkmsSoapFaultReasonUnsupportedVersion = "Unsupported SOAP version"
+XkmsSoapFaultReasonUnableToProcess = "Unable to process %s"
+XkmsSoapFaultReasonServiceUnavailable = "Service temporarily unable"
+XkmsSoapFaultReasonMessageNotSupported = "%s message not supported"
+XkmsSoapFaultReasonMessageInvalid = "%s message invalid"
+
+XkmsFormatStrPlain = "plain"
+XkmsFormatStrSoap11 = "soap-1.1"
+XkmsFormatStrSoap12 = "soap-1.2"
+
 
 # *************************************************************************
 # *
@@ -271,6 +312,7 @@ HrefDSAKeyValue = "http://www.w3.org/2000/09/xmldsig#DSAKeyValue"
 NodeDSAP = "P"
 NodeDSAQ = "Q"
 NodeDSAG = "G"
+NodeDSAJ = "J"
 NodeDSAX = "X"
 NodeDSAY = "Y"
 NodeDSASeed = "Seed"
@@ -449,6 +491,39 @@ NodeXPointer = "XPointer"
 # ************************************************************************/
 NameXslt = "xslt"
 HrefXslt = "http://www.w3.org/TR/1999/REC-xslt-19991116"
+
+# *************************************************************************
+# *
+# * SOAP 1.1/1.2 strings
+# *
+# ************************************************************************/
+NodeEnvelope = "Envelope"
+NodeHeader = "Header"
+NodeBody = "Body"
+NodeFault = "Fault"
+NodeFaultCode = "faultcode"
+NodeFaultString = "faultstring"
+NodeFaultActor = "faultactor"
+NodeFaultDetail = "detail"
+NodeCode = "Code"
+NodeReason = "Reason"
+NodeNode = "Node"
+NodeRole = "Role"
+NodeDetail = "Detail"
+NodeValue = "Value"
+NodeSubcode = "Subcode"
+NodeText = "Text"
+
+
+SoapFaultCodeVersionMismatch = "VersionMismatch"
+SoapFaultCodeMustUnderstand = "MustUnderstand"
+SoapFaultCodeClient = "Client"
+SoapFaultCodeServer = "Server"
+SoapFaultCodeReceiver = "Receiver"
+SoapFaultCodeSender = "Sender"
+SoapFaultDataEncodningUnknown = "DataEncodingUnknown"
+
+
 
 # *************************************************************************
 # *
