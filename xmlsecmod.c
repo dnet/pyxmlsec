@@ -124,33 +124,33 @@ static PyMethodDef xmlsec_methods[] = {
   {"keyReqInitialize",    xmlsec_KeyReqInitialize,    METH_VARARGS},
   {"keyReqFinalize",      xmlsec_KeyReqFinalize,      METH_VARARGS},
   {"keyReqReset",         xmlsec_KeyReqReset,         METH_VARARGS},
-  {"keyReqCopy",          xmlsec_KeyReqCopy,          METH_VARARGS}, // New
+  {"keyReqCopy",          xmlsec_KeyReqCopy,          METH_VARARGS},
   {"keyReqMatchKey",      xmlsec_KeyReqMatchKey,      METH_VARARGS},
-  {"keyReqMatchKeyValue", xmlsec_KeyReqMatchKeyValue, METH_VARARGS}, // New
+  {"keyReqMatchKeyValue", xmlsec_KeyReqMatchKeyValue, METH_VARARGS},
   {"keyCreate",           xmlsec_KeyCreate,           METH_VARARGS},
   {"keyDestroy",          xmlsec_KeyDestroy,          METH_VARARGS},
-  {"keyEmpty",            xmlsec_KeyEmpty,            METH_VARARGS}, // New
-  {"keyDuplicate",        xmlsec_KeyDuplicate,        METH_VARARGS}, // New
-  {"keyCopy",             xmlsec_KeyCopy,             METH_VARARGS}, // New
+  {"keyEmpty",            xmlsec_KeyEmpty,            METH_VARARGS},
+  {"keyDuplicate",        xmlsec_KeyDuplicate,        METH_VARARGS},
+  {"keyCopy",             xmlsec_KeyCopy,             METH_VARARGS},
   {"keyGetName",          xmlsec_KeyGetName,          METH_VARARGS},
   {"keySetName",          xmlsec_KeySetName,          METH_VARARGS},
-  {"keyGetType",          xmlsec_KeyGetType,          METH_VARARGS}, // New
-  {"keyGetValue",         xmlsec_KeyGetValue,         METH_VARARGS}, // New
-  {"keySetValue",         xmlsec_KeySetValue,         METH_VARARGS}, // New
-  {"keyGetData",          xmlsec_KeyGetData,          METH_VARARGS}, // New
-  {"keyEnsureData",       xmlsec_KeyEnsureData,       METH_VARARGS}, // New
-  {"keyAdoptData",        xmlsec_KeyAdoptData,        METH_VARARGS}, // New
-  {"keyDebugDump",        xmlsec_KeyDebugDump,        METH_VARARGS}, // New
-  {"keyDebugXmlDump",     xmlsec_KeyDebugXmlDump,     METH_VARARGS}, // New
+  {"keyGetType",          xmlsec_KeyGetType,          METH_VARARGS},
+  {"keyGetValue",         xmlsec_KeyGetValue,         METH_VARARGS},
+  {"keySetValue",         xmlsec_KeySetValue,         METH_VARARGS},
+  {"keyGetData",          xmlsec_KeyGetData,          METH_VARARGS},
+  {"keyEnsureData",       xmlsec_KeyEnsureData,       METH_VARARGS},
+  {"keyAdoptData",        xmlsec_KeyAdoptData,        METH_VARARGS},
+  {"keyDebugDump",        xmlsec_KeyDebugDump,        METH_VARARGS},
+  {"keyDebugXmlDump",     xmlsec_KeyDebugXmlDump,     METH_VARARGS},
   {"keyGenerate",         xmlsec_KeyGenerate,         METH_VARARGS},
   {"keyGenerateByName",   xmlsec_KeyGenerateByName,   METH_VARARGS},
   {"keyMatch",            xmlsec_KeyMatch,            METH_VARARGS},
   {"keyReadBuffer",       xmlsec_KeyReadBuffer,       METH_VARARGS},
   {"keyReadBinaryFile",   xmlsec_KeyReadBinaryFile,   METH_VARARGS},
   {"keyReadMemory",       xmlsec_KeyReadMemory,       METH_VARARGS},
-  {"keyIsValid",          xmlsec_KeyIsValid,          METH_VARARGS}, // New
-  {"keyCheckId",          xmlsec_KeyCheckId,          METH_VARARGS}, // New
-  {"keyPtrListId",        xmlsec_KeyPtrListId,        METH_VARARGS}, // New
+  {"keyIsValid",          xmlsec_KeyIsValid,          METH_VARARGS},
+  {"keyCheckId",          xmlsec_KeyCheckId,          METH_VARARGS},
+  {"keyPtrListId",        xmlsec_KeyPtrListId,        METH_VARARGS},
 
   /* keyinfo.h */
   {"keyInfoNodeRead",  xmlsec_KeyInfoNodeRead,  METH_VARARGS},
@@ -176,12 +176,12 @@ static PyMethodDef xmlsec_methods[] = {
   {"keysMngrCreate",         xmlsec_KeysMngrCreate,         METH_VARARGS},
   {"keysMngrDestroy",        xmlsec_KeysMngrDestroy,        METH_VARARGS},
   {"keysMngrFindKey",        xmlsec_KeysMngrFindKey,        METH_VARARGS},
-  {"keysMngrAdoptKeysStore", xmlsec_KeysMngrAdoptKeysStore, METH_VARARGS}, // New
-  {"keysMngrGetKeysStore",   xmlsec_KeysMngrGetKeysStore,   METH_VARARGS}, // New
-  {"keysMngrAdoptDataStore", xmlsec_KeysMngrAdoptDataStore, METH_VARARGS}, // New
-  {"keysMngrGetDataStore",   xmlsec_KeysMngrGetDataStore,   METH_VARARGS}, // New
-  {"getKeyCallback",         xmlsec_GetKeyCallback,         METH_VARARGS}, // New
-  {"keysMngrGetKey",         xmlsec_KeysMngrGetKey,         METH_VARARGS}, // New
+  {"keysMngrAdoptKeysStore", xmlsec_KeysMngrAdoptKeysStore, METH_VARARGS},
+  {"keysMngrGetKeysStore",   xmlsec_KeysMngrGetKeysStore,   METH_VARARGS},
+  {"keysMngrAdoptDataStore", xmlsec_KeysMngrAdoptDataStore, METH_VARARGS},
+  {"keysMngrGetDataStore",   xmlsec_KeysMngrGetDataStore,   METH_VARARGS},
+  {"getKeyCallback",         xmlsec_GetKeyCallback,         METH_VARARGS},
+  {"keysMngrGetKey",         xmlsec_KeysMngrGetKey,         METH_VARARGS},
   {"keyStoreCreate",    xmlsec_KeyStoreCreate,    METH_VARARGS},
   {"keyStoreDestroy",   xmlsec_KeyStoreDestroy,   METH_VARARGS},
   {"keyStoreFindKey",   xmlsec_KeyStoreFindKey,   METH_VARARGS},
@@ -277,6 +277,8 @@ static PyMethodDef xmlsec_methods[] = {
   {"xmlsec_version_info",     xmlsec_xmlsec_version_info,     METH_VARARGS},
 
   /* xmldsig.h */
+  {"dsigCtxGetAttr", xmlSecDSigCtx_getattr, METH_VARARGS}, // New
+  {"dsigCtxSetAttr", xmlSecDSigCtx_setattr, METH_VARARGS}, // New
   {"dsigCtxCreate",                      xmlsec_DSigCtxCreate,                      METH_VARARGS},
   {"dsigCtxDestroy",                     xmlsec_DSigCtxDestroy,                     METH_VARARGS},
   {"dsigCtxInitialize",                  xmlsec_DSigCtxInitialize,                  METH_VARARGS},
@@ -289,6 +291,8 @@ static PyMethodDef xmlsec_methods[] = {
   {"dsigCtxDebugDump",                   xmlsec_DSigCtxDebugDump,                   METH_VARARGS},
   {"dsigCtxDebugXmlDump",                xmlsec_DSigCtxDebugXmlDump,                METH_VARARGS},
   {"dsigReferenceCtxCreate",             xmlsec_DSigReferenceCtxCreate,             METH_VARARGS},
+  {"dsigReferenceCtxGetAttr", xmlSecDSigReferenceCtx_getattr, METH_VARARGS}, // New
+  {"dsigReferenceCtxSetAttr", xmlSecDSigReferenceCtx_setattr, METH_VARARGS}, // New
   {"dsigReferenceCtxDestroy",            xmlsec_DSigReferenceCtxDestroy,            METH_VARARGS},
   {"dsigReferenceCtxInitialize",         xmlsec_DSigReferenceCtxInitialize,         METH_VARARGS},
   {"dsigReferenceCtxFinalize",           xmlsec_DSigReferenceCtxFinalize,           METH_VARARGS},
@@ -297,11 +301,8 @@ static PyMethodDef xmlsec_methods[] = {
   {"dsigReferenceCtxDebugDump",          xmlsec_DSigReferenceCtxDebugDump,          METH_VARARGS},
   {"dsigReferenceCtxDebugXmlDump",       xmlsec_DSigReferenceCtxDebugXmlDump,       METH_VARARGS},
   {"dsigReferenceCtxListId",             xmlsec_DSigReferenceCtxListId,             METH_VARARGS},
+  /* TODO */
   {"dsigCtxSetSignKey",                  xmldsig_set_signKey,                       METH_VARARGS},
-  {"dsigCtxSetEnabledReferenceUris",     xmldsig_set_enabledReferenceUris,          METH_VARARGS},
-  {"dsigCtxGetStatus",                   xmldsig_get_status,                        METH_VARARGS},
-  {"dsigCtxGetKeyInfoReadCtx",           xmldsig_get_keyInfoReadCtx,                METH_VARARGS},
-  {"dsigCtxGetSignedInfoReferences",     xmldsig_get_signedInfoReferences,          METH_VARARGS},
 
   /* xmlenc.h */
   {"encCtxCreate",                 xmlsec_EncCtxCreate,            METH_VARARGS},
