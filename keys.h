@@ -9,4 +9,5 @@ typedef struct {
 
 PyObject *xmlsec_KeyCreate(PyObject *self, PyObject *args);
 PyObject *xmlsec_KeyDestroy(PyObject *self, PyObject *args);
+PyObject *xmlsec_KeyGetName(PyObject *self, PyObject *args);
 PyObject *xmlsec_KeySetName(PyObject *self, PyObject *args);
