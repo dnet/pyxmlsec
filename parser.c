@@ -25,11 +25,11 @@
 #include "wrap_objs.h"
 
 #include "parser.h"
+#include "transforms.h"
 
 PyObject *xmlsec_ParseFile(PyObject *self, PyObject *args) {
   const char *filename;
   xmlDocPtr doc;
-  PyObject *ret;
 
   if (!PyArg_ParseTuple(args, "s:parseFile", &filename))
     return NULL;
@@ -40,8 +40,7 @@ PyObject *xmlsec_ParseFile(PyObject *self, PyObject *args) {
     return Py_None;
   }
   
-  ret = PyCObject_FromVoidPtrAndDesc((void *) doc, (char *) "xmlDocPtr", NULL);
-  return (ret);
+  return (wrap_xmlDocPtr(doc));
 }
 
 PyObject *xmlsec_ParseMemory(PyObject *self, PyObject *args) {
@@ -49,7 +48,6 @@ PyObject *xmlsec_ParseMemory(PyObject *self, PyObject *args) {
   xmlSecSize size;
   int recovery;
   xmlDocPtr doc;
-  PyObject *ret;
 
   if (!PyArg_ParseTuple(args, "sii:parseMemory", &buffer, &size, &recovery))
     return NULL;
@@ -60,8 +58,7 @@ PyObject *xmlsec_ParseMemory(PyObject *self, PyObject *args) {
     return Py_None;
   }
   
-  ret = PyCObject_FromVoidPtrAndDesc((void *) doc, (char *) "xmlDocPtr", NULL);
-  return (ret);
+  return (wrap_xmlDocPtr(doc));
 }
 
 PyObject *xmlsec_ParseMemoryExt(PyObject *self, PyObject *args) {
@@ -72,7 +69,6 @@ PyObject *xmlsec_ParseMemoryExt(PyObject *self, PyObject *args) {
   const xmlSecByte *postfix;
   xmlSecSize postfixSize;
   xmlDocPtr doc;
-  PyObject *ret;
 
   if (!PyArg_ParseTuple(args, "sisisi:parseMemoryExt", &prefix, &prefixSize,
 			&buffer, &bufferSize, &postfix, &postfixSize))
@@ -86,10 +82,9 @@ PyObject *xmlsec_ParseMemoryExt(PyObject *self, PyObject *args) {
     return Py_None;
   }
   
-  ret = PyCObject_FromVoidPtrAndDesc((void *) doc, (char *) "xmlDocPtr", NULL);
-  return (ret);
+  return (wrap_xmlDocPtr(doc));
 }
 
 PyObject *xmlsec_TransformXmlParserId(PyObject *self, PyObject *args) {
-  return PyCObject_FromVoidPtr((void *) xmlSecTransformXmlParserId, NULL);
+  return (wrap_xmlSecTransformId(xmlSecTransformXmlParserId));
 }
