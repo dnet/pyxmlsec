@@ -421,10 +421,24 @@ class EncCtx:
     def setEncKey(self, key):
         """Sets encKey member."""
         self._o = xmlsecmod.encCtxSetEncKey(self, key)
+    def getResult(self):
+        """Gets result member."""
+        return xmlsecmod.encCtxGetResult(self)
+    def getResultBase64Encoded(self):
+        """Gets resultBase64Encoded member."""
+        return xmlsecmod.encCtxGetResultBase64Encoded(self)
+    def getResultReplaced(self):
+        """Gets resultReplaced member."""
+        return xmlsecmod.encCtxGetResultReplaced(self)
 
 ###############################################################################
 # buffer.h
 ###############################################################################
+# The memory allocation mode (used by Buffer and List).
+# the memory allocation mode that minimizes total allocated memory size.
+AllocModeExact  = 0
+# the memory allocation mode that tries to minimize the number of malloc calls.
+AllocModeDouble = 1
 class Buffer:
     def __init__(self, size=None, _obj=None):
         """
@@ -452,6 +466,111 @@ class Buffer:
     def finalize(self):
         """Frees allocated resource for a buffer intialized with initialize method."""
         xmlsecmod.bufferFinalize(self)
+    def getData(self):
+        """
+        Gets buffer's data.
+        Returns : buffer's data.
+        """
+        return xmlsecmod.bufferGetData(self)
+    def setData(self, data, size):
+        """
+        Sets the value of the buffer to data.
+        data    : the data.
+        size    : the data size.
+        Returns : 0 on success or a negative value if an error occurs.
+        """
+        return xmlsecmod.bufferSetData(self, data, size)
+    def getSize(self):
+        """
+        Gets the current buffer data size.
+        Returns : the current data size.
+        """
+        return xmlsecmod.bufferGetSize(self)
+    def setSize(self, size):
+        """
+        Sets new buffer data size. If necessary, buffer grows to have at least
+        size bytes.
+        size    : the new data size.
+        Returns : 0 on success or a negative value if an error occurs.
+        """
+        return xmlsecmod.bufferSetSize(self, size)
+    def getMaxSize(self):
+        """
+        Gets the maximum (allocated) buffer size.
+        Returns : the maximum (allocated) buffer size.
+        """
+        return xmlsecmod.bufferGetMaxSize(self)
+    def setMaxSize(self, size):
+        """
+        Sets new buffer maximum size. If necessary, buffer grows to have at
+        least size bytes.
+        size    : the new maximum size.
+        Returns : 0 on success or a negative value if an error occurs.
+        """
+        return xmlsecmod.bufferSetMaxSize(self, size)
+    def empty(self):
+        """Empties the buffer."""
+        xmlsecmod.bufferEmpty(self)
+    def append(self, data, size):
+        """
+        Appends the data after the current data stored in the buffer.
+        data    : the data.
+        size    : the data size.
+        Returns : 0 on success or a negative value if an error occurs.
+        """
+        return xmlsecmod.bufferAppend(self, data, size)
+    def prepend(self, data, size):
+        """
+        Prepends the data before the current data stored in the buffer.
+        data    : the data.
+        size    : the data size.
+        Returns : 0 on success or a negative value if an error occurs.
+        """
+        return xmlsecmod.bufferPrepend(self, data, size)
+    def removeHead(self, size):
+        """
+        Removes size bytes from the beginning of the current buffer.
+        size    : the number of bytes to be removed.
+        Returns : 0 on success or a negative value if an error occurs.
+        """
+        return xmlsecmod.bufferRemoveHead(self, size)
+    def removeTail(self, size):
+        """
+        Removes size bytes from the end of current buffer.
+        size    : the number of bytes to be removed.
+        Returns : 0 on success or a negative value if an error occurs.
+        """
+        return xmlsecmod.bufferRemoveTail(self, size)
+    def readFile(self, filename):
+        """
+        Reads the content of the file filename in the buffer.
+        filename : the filename.
+        Returns  : 0 on success or a negative value if an error occurs.
+        """
+        return xmlsecmod.bufferReadFile(self, filename)
+    def base64NodeContentRead(self, node):
+        """
+        Reads the content of the node, base64 decodes it and stores the result
+        in the buffer.
+        node    : the node.
+        Returns : 0 on success or a negative value if an error occurs.
+        """
+        return xmlsecmod.bufferBase64NodeContentRead(self, node)
+    def base64NodeContentWrite(self, node, columns):
+        """
+        Sets the content of the node to the base64 encoded buffer data.
+        node    : the node.
+        columns : the max line size fro base64 encoded data.
+        Returns : 0 on success or a negative value if an error occurs.
+        """
+        return xmlsecmod.bufferBase64NodeContentWrite(self, node)
+    def createOutputBuffer(self):
+        """
+        Creates new LibXML output buffer to store data in the buf. Caller is
+        responsible for destroying buf when processing is done.
+        Returns : newly allocated output buffer or None if an error occurs.
+        """
+        return libxml2.xmlOutputBuffer(_obj=xmlsecmod.bufferCreateOutputBuffer(self))
 
 ###############################################################################
 # xmldsig.h
