@@ -26,7 +26,7 @@
 from distutils.core import setup, Extension
 
 setup(name = "pyxmlsec",
-      version = "0.1",
+      version = "0.20031110",
       description = "Python binding for XML Security Library (XMLSec)",
       long_description = ''' ''',
       author = "Valery Febvre",
