@@ -53,7 +53,7 @@ typedef struct {
 
 #define PyFile_get(v) (((v) == Py_None) ? NULL : (PyFile_Check(v) ? (PyFile_AsFile(v)) : stdout))
 
-PyObject *xmlsec_error;
+extern PyObject *xmlsec_error;
 
 /* wrap functions */
 

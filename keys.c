@@ -41,44 +41,36 @@ static PyObject *xmlSecKeyReq_getattr(PyObject *self, char *attr) {
 
   if (!strcmp(attr, "__members__"))
     return Py_BuildValue("[ssss]", "keyId", "keyType", "keyUsage", "keyBitsSize");
-
-  if (!strcmp(attr, "keyId")) {
+  if (!strcmp(attr, "keyId"))
     return PyCObject_FromVoidPtrAndDesc((void *) key_req.keyId,
 					(char *) "xmlSecKeyDataId", NULL);
-  }
-  if (!strcmp(attr, "keyType")) {
+  if (!strcmp(attr, "keyType"))
     return Py_BuildValue("i", key_req.keyType);
-  }
-  if (!strcmp(attr, "keyUsage")) {
+  if (!strcmp(attr, "keyUsage"))
     return Py_BuildValue("i", key_req.keyUsage);
-  }
-  if (!strcmp(attr, "keyBitsSize")) {
+  if (!strcmp(attr, "keyBitsSize"))
     return Py_BuildValue("i", key_req.keyBitsSize);
-  }
+
+  Py_INCREF(Py_None);
   return (Py_None);
 }
 
-static int xmlSecKeyReq_setattr(PyObject *self, char *attr, PyObject *value) {
+static PyObject *xmlSecKeyReq_setattr(PyObject *self, char *attr, PyObject *value) {
   PyObject *new_value;
 
   if (!strcmp(attr, "keyId")) {
     PyArg_Parse(value, "O", &new_value);
     ((xmlSecKeyReq_object *)self)->obj.keyId = PyCObject_AsVoidPtr(new_value);
-    return 0;
   }
-  if (!strcmp(attr, "keyType")) {
+  else if (!strcmp(attr, "keyType"))
     PyArg_Parse(value, "i", &(((xmlSecKeyReq_object *)self)->obj.keyType));
-    return 0;
-  }
-  if (!strcmp(attr, "keyUsage")) {
+  else if (!strcmp(attr, "keyUsage"))
     PyArg_Parse(value, "i", &(((xmlSecKeyReq_object *)self)->obj.keyUsage));
-    return 0;
-  }
-  if (!strcmp(attr, "keyBitsSize")) {
+  else if (!strcmp(attr, "keyBitsSize"))
     PyArg_Parse(value, "i", &(((xmlSecKeyReq_object *)self)->obj.keyBitsSize));
-    return 0;
-  }
-  return -1;
+
+  Py_INCREF(Py_None);
+  return (Py_None);
 }
 
 static PyTypeObject xmlSecKeyReq_type = {
