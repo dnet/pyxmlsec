@@ -98,6 +98,7 @@ def cryptoAppShutdown():
 ###############################################################################
 # parse.h
 ###############################################################################
+# The XML Parser transform Id method
 transformXmlParserId = xmlsecmod.transformXmlParserId()
 def parseFile(filename):
     """
@@ -234,6 +235,101 @@ TransformUriTypeSameDocument = 0x0002 # The same document ("#...") but not empty
 TransformUriTypeLocal        = 0x0004 # The local URI ("file:///....") type.
 TransformUriTypeRemote       = 0x0008 # The remote URI type.
 TransformUriTypeAny          = 0xFFFF # Any URI type.
+
+###############################################################################
+# xmlenc.h
+###############################################################################
+xmlEncCtxModeEncryptedData = 0 # the <enc:EncryptedData/> element processing.
+xmlEncCtxModeEncryptedKey  = 1 # the <enc:EncryptedKey/> element processing.
+class EncCtx:
+    def __init__(self, keysMngr, _obj=None):
+        """
+        Creates <enc:EncryptedData/> element processing context. The caller is
+        responsible for destroying returned object by calling destroy method.
+        keysMngr : the keys manager.
+        Returns  : newly allocated context object or None if an error occurs.
+        """
+        if _obj != None:
+            self._o = _obj
+            return
+        self._o = xmlsecmod.encCtxCreate(keysMngr)
+        if self._o is None: raise parserError('xmlSecEncCtxCreate() failed')
+    def destroy(self):
+        """Destroys context object."""
+        return xmlsecmod.encCtxDestroy(self)
+    def initialize(self, keysMngr):
+        """
+        Initializes <enc:EncryptedData/> element processing context. The caller
+        is responsible for cleaing up returned object by calling finalize method.
+        keysMngr : the keys manager.
+        Returns  : 0 on success or a negative value if an error occurs.
+        """
+        return xmlsecmod.encCtxInitialize(self, keysMngr)
+    def finalize(self):
+        """Cleans up context object."""
+        return xmlsecmod.encCtxFinalize(self)
+    def copyUserPref(self, src):
+        """
+        Copies user preference from src context.
+        src     : the source context.
+        Returns : 0 on success or a negative value if an error occurs.
+        """
+        return xmlsecmod.encCtxCopyUserPref(self, src)
+    def reset(self):
+        """Resets enc context object, user settings are not touched."""
+        return xmlsecmod.encCtxReset(self)
+    def binaryEncrypt(self, tmpl, data, dataSize):
+        """
+        Encrypts data according to template tmpl.
+        tmpl     : the <enc:EncryptedData/> template node.
+        data     : the binary buffer.
+        dataSize : the data buffer size.
+        Returns  : 0 on success or a negative value if an error occurs.
+        """
+        return xmlsecmod.encCtxBinaryEncrypt(self, tmpl, data, dataSize)
+    def xmlEncrypt(self, tmpl, node):
+        """
+        Encrypts node according to template tmpl. If requested, node is replaced
+        with result <enc:EncryptedData/> node.
+        tmpl    : the <enc:EncryptedData/> template node.
+        node    : the node for encryption.
+        Returns : 0 on success or a negative value if an error occurs.
+        """
+        return xmlsecmod.encCtxXmlEncrypt(self, tmpl, node)
+    def uriEncrypt(self, tmpl, uri):
+        """
+        Encrypts data from uri according to template tmpl.
+        tmpl    : the <enc:EncryptedData/> template node.
+        uri     : the URI.
+        Returns : 0 on success or a negative value if an error occurs.
+        """
+        return xmlsecmod.encCtxUriEncrypt(self, tmpl, uri)
+    def decrypt(self, node):
+        """
+        Decrypts node and if necessary replaces node with decrypted data.
+        node    : the <enc:EncryptedData/> node.
+        Returns : 0 on success or a negative value if an error occurs.
+        """
+        return xmlsecmod.encCtxDecrypt(self, node)
+    def decryptToBuffer(self, node):
+        """
+        Decrypts node data to the encCtx buffer.
+        node    : the <enc:EncryptedData/> node.
+        Returns : 0 on success or a negative value if an error occurs.
+        """
+        return xmlsecmod.encCtxDecryptToBuffer(self, node)
+    def debugDump(self, output):
+        """
+        Prints the debug information about enc context to output.
+        output : the path to output FILE.
+        """
+        xmlsecmod.encCtxDebugDump(self, output)
+    def debugXmlDump(self):
+        """
+        Prints the debug information about enc context to output in XML format.
+        output : the path to output FILE.
+        """
+        xmlsecmod.encCtxDebugXmlDump(self, output)
 
 ###############################################################################
 # buffer.h
@@ -652,7 +748,7 @@ class TmplObject(libxml2.xmlNode):
     def addManifest(self, id=None):
         """
         Adds <dsig:Manifest/> node to the <dsig:Object/> node.
-        id      : the node id (may be NULL).
+        id      : the node id (may be None).
         Returns : the newly created <dsig:Manifest/> node or None if
         an error occurs.
         """
