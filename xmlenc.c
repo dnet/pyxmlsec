@@ -2,7 +2,7 @@
  *
  * pyxmlsec -- A Python binding for the XML Security library (XMLSec)
  *
- * Copyright (C) 2003
+ * Copyright (C) 2003 Easter-eggs, Valery Febvre
  * http://pyxmlsec.labs.libre-entreprise.org/
  * 
  * Author: Valery Febvre <vfebvre@easter-eggs.com>
