@@ -31,7 +31,7 @@
 PyObject *xmlsec_OpenSSLAppInit(PyObject *self, PyObject *args) {
   char *config;
   int result;
-  if (!PyArg_ParseTuple(args, "z", &config))
+  if (!PyArg_ParseTuple(args, "z:openSSLAppInit", &config))
     return NULL;
   result = xmlSecOpenSSLAppInit(config);
   if (result < 0) {

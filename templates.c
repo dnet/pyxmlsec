@@ -36,8 +36,8 @@ PyObject *xmlsec_TmplSignatureCreate(PyObject *self, PyObject *args) {
   const xmlChar *id;
   xmlNodePtr node;
 
-  if (!PyArg_ParseTuple(args, "OOOz", &doc_obj, &c14nMethodId_meth,
-			&signMethodId_meth, &id))
+  if (!PyArg_ParseTuple(args, "OOOz:tmplSignatureCreate", &doc_obj,
+			&c14nMethodId_meth, &signMethodId_meth, &id))
     return NULL;
   
   if (!PyInstance_Check(doc_obj)) {
@@ -45,7 +45,7 @@ PyObject *xmlsec_TmplSignatureCreate(PyObject *self, PyObject *args) {
     return NULL;
   }
 
-  doc = (xmlDocPtr)PyxmlNode_Get(PyObject_GetAttr(doc_obj, PyString_FromString("_o")));
+  doc = (xmlDocPtr)xmlNodePtr_get(PyObject_GetAttr(doc_obj, PyString_FromString("_o")));
   node = xmlSecTmplSignatureCreate((xmlDocPtr)doc,
 				   PyCObject_AsVoidPtr(c14nMethodId_meth),
 				   PyCObject_AsVoidPtr(signMethodId_meth), id);
@@ -61,11 +61,11 @@ PyObject *xmlsec_TmplSignatureAddReference(PyObject *self, PyObject *args) {
   const xmlChar *type;
   xmlNodePtr ref;
 
-  if (!PyArg_ParseTuple(args, "OOzzz", &signNode_obj, &digestMethodId_meth,
-			&id, &uri, &type))
+  if (!PyArg_ParseTuple(args, "OOzzz:tmplSignatureAddReference", &signNode_obj,
+			&digestMethodId_meth, &id, &uri, &type))
     return NULL;
 
-  signNode = PyxmlNode_Get(PyObject_GetAttr(signNode_obj, PyString_FromString("_o")));
+  signNode = xmlNodePtr_get(PyObject_GetAttr(signNode_obj, PyString_FromString("_o")));
   ref = xmlSecTmplSignatureAddReference(signNode,
 					PyCObject_AsVoidPtr(digestMethodId_meth),
 					NULL, NULL, NULL);
@@ -78,10 +78,11 @@ PyObject *xmlsec_TmplReferenceAddTransform(PyObject *self, PyObject *args) {
   xmlNodePtr referenceNode;
   xmlNodePtr trans;
 
-  if (!PyArg_ParseTuple(args, "OO", &referenceNode_obj, &transformId_meth))
+  if (!PyArg_ParseTuple(args, "OO:tmplReferenceAddTransform",
+			&referenceNode_obj, &transformId_meth))
     return NULL;
 
-  referenceNode = PyxmlNode_Get(PyObject_GetAttr(referenceNode_obj, PyString_FromString("_o")));
+  referenceNode = xmlNodePtr_get(PyObject_GetAttr(referenceNode_obj, PyString_FromString("_o")));
   trans = xmlSecTmplReferenceAddTransform(referenceNode,
 					  PyCObject_AsVoidPtr(transformId_meth));
   return PyCObject_FromVoidPtrAndDesc((void *) trans, (char *) "xmlNodePtr", NULL);
@@ -93,10 +94,10 @@ PyObject *xmlsec_TmplSignatureEnsureKeyInfo(PyObject *self, PyObject *args) {
   const xmlChar *id;
   xmlNodePtr eki;
 
-  if (!PyArg_ParseTuple(args, "Oz", &signNode_obj, &id))
+  if (!PyArg_ParseTuple(args, "Oz:tmplSignatureEnsureKeyInfo", &signNode_obj, &id))
     return NULL;
 
-  signNode = PyxmlNode_Get(PyObject_GetAttr(signNode_obj, PyString_FromString("_o")));
+  signNode = xmlNodePtr_get(PyObject_GetAttr(signNode_obj, PyString_FromString("_o")));
   eki = xmlSecTmplSignatureEnsureKeyInfo(signNode, id);
   return PyCObject_FromVoidPtrAndDesc((void *) eki, (char *) "xmlNodePtr", NULL);
 }
@@ -107,10 +108,10 @@ PyObject *xmlsec_TmplKeyInfoAddKeyName(PyObject *self, PyObject *args) {
   const xmlChar *name;
   xmlNodePtr kn;
 
-  if (!PyArg_ParseTuple(args, "Oz", &keyInfoNode_obj, &name))
+  if (!PyArg_ParseTuple(args, "Oz:tmplKeyInfoAddKeyName", &keyInfoNode_obj, &name))
     return NULL;
 
-  keyInfoNode = PyxmlNode_Get(PyObject_GetAttr(keyInfoNode_obj, PyString_FromString("_o")));
+  keyInfoNode = xmlNodePtr_get(PyObject_GetAttr(keyInfoNode_obj, PyString_FromString("_o")));
   kn = xmlSecTmplKeyInfoAddKeyName(keyInfoNode, name);
   return PyCObject_FromVoidPtrAndDesc((void *) kn, (char *) "xmlNodePtr", NULL);
 }
