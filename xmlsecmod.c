@@ -3,7 +3,7 @@
  * pyxmlsec -- A Python binding for XML Security library (XMLSec)
  *
  * Copyright (C) 2003
- * http://
+ * http://pyxmlsec.labs.libre-entreprise.org
  * 
  * Author: Valery Febvre <vfebvre@easter-eggs.com>
  *
@@ -32,15 +32,19 @@
 #include "keys.h"
 #include "keysmngr.h"
 #include "list.h"
-#include "crypto.h"
+#include "app.h"
+#include "buffer.h"
 #include "openssl.h"
 
 static PyMethodDef xmlsec_methods[] = {
   /* xmlsec.h */
-  {"init",     xmlsec_Init,     METH_VARARGS},
-  {"shutdown", xmlsec_Shutdown, METH_VARARGS},
+  {"init",              xmlsec_Init,              METH_VARARGS},
+  {"shutdown",          xmlsec_Shutdown,          METH_VARARGS},
+  {"checkVersionExact", xmlsec_CheckVersionExact, METH_VARARGS},
+  {"checkVersion",      xmlsec_CheckVersion,      METH_VARARGS},
 
   /* xmltree.h */
+  {"nodeGetName",        xmlsec_NodeGetName,        METH_VARARGS},
   {"getNodeNsHref",      xmlsec_GetNodeNsHref,      METH_VARARGS},
   {"checkNodeName",      xmlsec_CheckNodeName,      METH_VARARGS},
   {"getNextElementNode", xmlsec_GetNextElementNode, METH_VARARGS},
@@ -75,21 +79,30 @@ static PyMethodDef xmlsec_methods[] = {
   {"dsigCtxGetKeyInfoReadCtx",        xmldsig_get_keyInfoReadCtx,             METH_VARARGS},
   {"dsigCtxGetSignedInfoReferences",  xmldsig_get_signedInfoReferences,       METH_VARARGS},
 
-  /* crypto.h */
+  /* app.h */
+  {"cryptoInit",         xmlsec_CryptoInit,         METH_VARARGS},
+  {"cryptoShutdown",     xmlsec_CryptoShutdown,     METH_VARARGS},
+  {"cryptoKeysMngrInit", xmlsec_CryptoKeysMngrInit, METH_VARARGS}, // New
   {"cryptoAppInit",                    xmlsec_CryptoAppInit,                    METH_VARARGS},
-  {"cryptoAppKeyLoad",                 xmlsec_CryptoAppKeyLoad,                 METH_VARARGS},
   {"cryptoAppShutdown",                xmlsec_CryptoAppShutdown,                METH_VARARGS},
   {"cryptoAppDefaultKeysMngrInit",     xmlsec_CryptoAppDefaultKeysMngrInit,     METH_VARARGS},
   {"cryptoAppDefaultKeysMngrAdoptKey", xmlsec_CryptoAppDefaultKeysMngrAdoptKey, METH_VARARGS},
+  {"cryptoAppDefaultKeysMngrLoad",     xmlsec_CryptoAppDefaultKeysMngrLoad,     METH_VARARGS}, // New
+  {"cryptoAppDefaultKeysMngrSave",     xmlsec_CryptoAppDefaultKeysMngrSave,     METH_VARARGS}, // New
   {"cryptoAppKeysMngrCertLoad",        xmlsec_CryptoAppKeysMngrCertLoad,        METH_VARARGS},
-  {"cryptoInit",     xmlsec_CryptoInit,     METH_VARARGS},
-  {"cryptoShutdown", xmlsec_CryptoShutdown, METH_VARARGS},
+  {"cryptoAppKeyLoad",                 xmlsec_CryptoAppKeyLoad,                 METH_VARARGS},
   {"transformDsaSha1Id", xmlsec_TransformDsaSha1Id, METH_VARARGS},
   {"transformRsaSha1Id", xmlsec_TransformRsaSha1Id, METH_VARARGS},
   {"transformSha1Id",    xmlsec_TransformSha1Id,    METH_VARARGS},
   {"keyDataDsaId",  xmlsec_KeyDataDsaId,  METH_VARARGS},
   {"keyDataRsaId",  xmlsec_KeyDataRsaId,  METH_VARARGS},
   {"keyDataX509Id", xmlsec_KeyDataX509Id, METH_VARARGS},
+
+  /* buffer.h */
+  {"bufferCreate",     xmlsec_BufferCreate,     METH_VARARGS}, // New
+  {"bufferDestroy",    xmlsec_BufferDestroy,    METH_VARARGS}, // New
+  {"bufferInitialize", xmlsec_BufferInitialize, METH_VARARGS}, // New
+  {"bufferFinalize",   xmlsec_BufferFinalize,   METH_VARARGS}, // New
 
   /* list.h  */
   {"ptrListCreate",  xmlsec_PtrListCreate,  METH_VARARGS},
