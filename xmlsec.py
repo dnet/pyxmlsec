@@ -537,6 +537,71 @@ def transformUriTypeCheck(type, uri):
     occurs.
     """
     return xmlsecmod.transformUriTypeCheck(type, uri)
+class Transform:
+    def __init__(self, _obj=None):
+        """
+        Creates new transform of the id klass. The caller is responsible for
+        destroying returned tansform using destroy method.
+        id      : the transform id to create.
+        Returns : newly created transform or None if an error occurs.
+        """
+        if _obj != None:
+            self._o = _obj
+            return
+        self._o = xmlsecmod.transformCreate()
+        if self._o is None: raise parserError('xmlSecTransformCreate() failed')
+    def destroy(self):
+        """Destroys transform."""
+        xmlsecmod.transformDestroy(self)
+    def nodeRead(self, usage, transformCtx):
+        """
+        Reads transform from the node as follows:
+        1) reads 'Algorithm' attribute;
+        2) checks the lists of known and allowed transforms;
+        3) calls transform's create method;
+        4) calls transform's read transform node method.
+        usage        : the transform usage (signature, encryption, ...).
+        transformCtx : the transform's chaing processing context.
+        Returns      : newly created transform or None if an error occurs.
+        """
+        return Transform(_obj=xmlsecmod.transformNodeRead(self, usage, transformCtx))
+    def setKey(self, key):
+        """
+        Sets the transform's key.
+        key     : the key.
+        Returns : 0 on success or a negative value otherwise.
+        """
+        return xmlsecmod.transformSetKey(self, key)
+    def setKeyReq(self, keyReq):
+        """
+        Sets the key requirements for transform in the keyReq.
+        keyReq  : the keys requirements object.
+        Returns : 0 on success or a negative value otherwise.
+        """
+        return xmlsecmod.transformSetKeyReq(self, keyReq)
+    def base64SetLineSize(self, lineSize):
+        """
+        Sets the max line size to lineSize for an BASE64 encode transform.
+        lineSize  : the new max line size.
+        """
+        xmlsecmod.transformBase64SetLineSize(self, lineSize)
+    def xpointerSetExpr(self, expr, nodeSetType, hereNode):
+        """
+        Sets the XPointer expression for an XPointer transform.
+        expr        : the XPointer expression.
+        nodeSetType : the type of evaluated XPointer expression.
+        hereNode    : the pointer to 'here' node.
+        Returns     : 0 on success or a negative value if an error occurs.
+        """
+        return xmlsecmod.transformXPointerSetExpr(self, expr, nodeSetType,
+                                                  hereNode)
+    def visa3DHackSetID(self, id):
+        """
+        Sets the ID value for an Visa3DHack transform.
+        id      : the ID value.
+        Returns : 0 on success or a negative value if an error occurs.
+        """
+        return xmlsecmod.transformVisa3DHackSetID(self, id)
 class TransformCtx:
     def __init__(self, _obj=None):
         """
@@ -710,7 +775,8 @@ def base64Encode(buf, len, columns):
     Encodes the data from input buffer.
     buf     : the input buffer.
     len     : the input buffer size.
-    columns : the output max line length (if 0 then no line breaks would be inserted)
+    columns : the output max line length (if 0 then no line breaks would be
+    inserted)
     Returns : a string with base64 encoded data or None if an error occurs.
     """
     return xmlsecmod.base64Encode(buf, len, columns)
@@ -730,7 +796,8 @@ class Base64Ctx:
         Allocates and initializes new base64 context.
         encode  : the encode/decode flag (1 - encode, 0 - decode)
         columns : the max line length.
-        Returns : the newly created xmlSecBase64Ctx structure or None if an error occurs.
+        Returns : the newly created Base64 context object or None if an
+        error occurs.
         """
         if _obj != None:
             self._o = _obj
@@ -784,7 +851,7 @@ class EncCtx:
         Creates <enc:EncryptedData/> element processing context. The caller is
         responsible for destroying returned object by calling destroy method.
         keysMngr : the keys manager.
-        Returns  : newly allocated context object or None if an error occurs.
+        Returns  : newly context object or None if an error occurs.
         """
         if _obj != None:
             self._o = _obj
@@ -891,10 +958,10 @@ AllocModeDouble = 1
 class Buffer:
     def __init__(self, size=None, _obj=None):
         """
-        Allocates and initalizes new memory buffer with given size. Caller is
+        Creates and initalizes new memory buffer with given size. Caller is
         responsible for calling destroy method to free the buffer.
         size    : the initial buffer size.
-        Returns : pointer to newly allocated buffer or None if an error occurs.
+        Returns : the buffer or None if an error occurs.
         """
         if _obj != None:
             self._o = _obj
@@ -1045,7 +1112,7 @@ class DSigCtx:
         Creates <dsig:Signature/> element processing context. The caller is
         responsible for destroying returned object by calling destroy method.
         keysMngr : the keys manager.
-        Returns  : newly allocated context object or None if an error occurs.
+        Returns  : newly context object or None if an error occurs.
         """
         if _obj != None:
             self._o = _obj
@@ -1054,9 +1121,6 @@ class DSigCtx:
         if self._o is None: raise parserError('xmlSecDSigCtxCreate() failed')
     def __repr__(self):
         return "<xmlSecDSigCtx object at 0x%x>" % id (self)
-    #def get_flags(self):
-    #    return self._o.flags
-    #flags = property(get_flags, None, None, "the XML Digital Signature processing flags")
     def destroy(self):
         """
         Destroys context object (<dsig:Signature/> element processing context).
@@ -1644,9 +1708,9 @@ def keyReadMemory(dataId, data, dataSize):
 class Key:
     def __init__(self, _obj=None):
         """
-        Allocates and initializes new key. Caller is responsible for freeing
+        Creates and initializes new key. Caller is responsible for freeing
         returned object with destroy method.
-        Returns : the newly allocated key or None if an error occurs.
+        Returns : the newly key or None if an error occurs.
         """
 	if _obj != None:
             self._o = _obj
@@ -1683,8 +1747,6 @@ class Key:
 class KeyReq:
     def __init__(self, keyId, keyType, keyUsage, keyBitsSize):
         self._o = xmlsecmod.keyReqCreate(keyId, keyType, keyUsage, keyBitsSize)
-    def getKeyBitsSize(self):
-        return self._o.keyBitsSize
     def initialize(self):
         """
         Initialize key requirements object. Caller is responsible for cleaning
@@ -1706,17 +1768,23 @@ class KeyReq:
         if an error occurs.
         """
         return xmlsecmod.keyReqMatchKey(self, key)
+    def getKeyBitsSize(self):
+        """Gets keyBitsSize member"""
+        return self._o.keyBitsSize
 
 ###############################################################################
 # keyinfo.h
 ###############################################################################
+# The xmlSecKeyInfoCtx operation mode (read or write).
+KeyInfoModeRead  = 0
+KeyInfoModeWrite = 1
 class KeyInfoCtx:
     def __init__(self, mngr=None, _obj=None):
         """
-        Allocates and initializes <dsig:KeyInfo/> element processing context.
+        Creates and initializes <dsig:KeyInfo/> element processing context.
         Caller is responsible for freeing it by calling destroy method.
-        mngr     : the keys manager (may be None).
-        Returns  : the newly allocated object or None if an error occurs.
+        mngr    : the keys manager (may be None).
+        Returns : the newly object or None if an error occurs.
         """
 	if _obj != None:
             self._o = _obj
@@ -1732,8 +1800,8 @@ class KeyInfoCtx:
         """
         Initializes <dsig:KeyInfo/> element processing context. Caller is
         responsible for cleaning it up by finalize method.
-        mngr     : the keys manager (may be None).
-        Returns  : 0 on success and a negative value if an error occurs.
+        mngr    : the keys manager (may be None).
+        Returns : 0 on success and a negative value if an error occurs.
         """
         return xmlsecmod.keyInfoCtxInitialize(self, mngr)
     def finalize(self):
@@ -1754,7 +1822,7 @@ class KeysMngr:
         """
         Creates new keys manager. Caller is responsible for freeing it with
         destroy method.
-        Returns : the newly allocated keys manager or None if an error occurs.
+        Returns : the newly keys manager or None if an error occurs.
         """
 	if _obj != None:
             self._o = _obj
@@ -1768,8 +1836,7 @@ class KeysMngr:
         xmlsecmod.keysMngrDestroy(self)
     def findKey(self, name, key_info_ctx):
         """
-        Lookups key in the keys manager keys store. The caller is responsible
-        for destroying the returned key using destroy method.
+        Lookups key in the keys manager keys store.
         name       : the desired key name.
         keyInfoCtx : the <dsig:KeyInfo/> node processing context.
         Returns    : a key or None if key is not found or an error occurs.
@@ -1797,7 +1864,7 @@ class KeyStore:
         Creates new store of the specified klass id. Caller is responsible for
         freeing the returned store by calling destroy method.
         id      : the key store klass.
-        Returns : the newly allocated keys store or None if an error occurs.
+        Returns : the newly keys store or None if an error occurs.
         """
 	if _obj != None:
             self._o = _obj
@@ -1811,8 +1878,7 @@ class KeyStore:
         xmlsecmod.keyStoreDestroy(self)
     def findKey(self, name, key_info_ctx):
         """
-        Lookups key in the keys store. The caller is responsible for destroying
-        the returned key using destroy method.
+        Lookups key in the keys store.
         name       : the desired key name.
         keyInfoCtx : the <dsig:KeyInfo/> node processing context.
         Returns    : a key or None if key is not found or an error occurs.
