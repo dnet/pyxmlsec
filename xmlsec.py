@@ -171,13 +171,16 @@ TransformUriTypeRemote       = 0x0008 # The remote URI type.
 TransformUriTypeAny          = 0xFFFF # Any URI type.
 
 class Buffer:
-    def __init__(self, size):
+    def __init__(self, size=None, _obj=None):
         """
         Allocates and initalizes new memory buffer with given size. Caller is
         responsible for calling destroy method to free the buffer.
         size    : the initial buffer size.
         Returns : pointer to newly allocated buffer or None if an error occurs.
         """
+        if _obj != None:
+            self._o = _obj
+            return
         self._o = xmlsecmod.bufferCreate(size)
         if self._o is None: raise parserError('xmlSecBufferCreate() failed')
     def destroy(self):
@@ -230,7 +233,7 @@ class DSigCtx:
     #flags = property(get_flags, None, None, "the XML Digital Signature processing flags")
     def destroy(self):
         """
-        Destroy context object (<dsig:Signature/> element processing context).
+        Destroys context object (<dsig:Signature/> element processing context).
         """
         return xmlsecmod.dsigCtxDestroy(self)
     def initialize(self, mngr):
@@ -273,6 +276,26 @@ class DSigCtx:
         Returns     : 0 on success or a negative value if an error occurs.
         """
         return xmlsecmod.dsigCtxEnableSignatureTransform(self, transformId)
+    def getPreSignBuffer(self):
+        """
+        Gets the buffer with serialized <dsig:SignedInfo/> element just before
+        signature calculation (valid if and only if
+        DSIG_FLAGS_STORE_SIGNATURE context flag is set).
+        Returns : 0 on success or a negative value if an error occurs.
+        """
+        return Buffer(_obj=xmlsecmod.dsigCtxGetPreSignBuffer(self))
+    def debugDump(self, output):
+        """
+        Prints the debug information about dsigCtx to output.
+        output : path of output file.
+        """
+        xmlsecmod.dsigCtxDebugDump(self, output)
+    def debugXmlDump(self, output):
+        """
+        Prints the debug information about dsigCtx to output file in XML format.
+        output : path of output file.
+        """
+        xmlsecmod.dsigCtxDebugXmlDump(self, output)
     def setSignKey(self, key):
         """Sets signKey member."""
         self._o = xmlsecmod.dsigCtxSetSignKey(self, key)
@@ -288,6 +311,81 @@ class DSigCtx:
     def getSignedInfoReferences(self):
         """Return signedInfoReferences member."""
         return PtrList(_obj=xmlsecmod.dsigCtxGetSignedInfoReferences(self))
+
+# The possible <dsig:Reference/> node locations: in the <dsig:SignedInfo/> node
+# or in the <dsig:Manifest/> node.
+DSigReferenceOriginSignedInfo = 0
+DSigReferenceOriginManifest   = 1
+class DSigReferenceCtx:
+    def __init__(self, dsigCtx=None, origin=None, _obj=None):
+        """
+        Creates new <dsig:Reference/> element processing context. Caller is
+        responsible for destroying the returned context by calling destroy
+        method.
+        dsigCtx : the parent <dsig:Signature/> node processing context.
+        origin  : the reference origin (<dsig:SignedInfo/> or <dsig:Manifest/> node).
+        Returns : newly created context or None if an error occurs.
+        """
+        if _obj != None:
+            self._o = _obj
+            return
+        self._o = xmlsecmod.dsigReferenceCtxCreate(dsigCtx, origin)
+        if self._o is None: raise parserError('xmlSecDSigReferenceCtxCreate() failed')
+    def __repr__(self):
+        return "<xmlSecDSigReferenceCtx object at 0x%x>" % id (self)
+    def destroy(self):
+        """Destroys <dsig:Reference/> element processing context object"""
+        return xmlsecmod.dsigReferenceCtxDestroy(self)
+    def initialize(self, dsigCtx, origin):
+        """
+        Initializes new <dsig:Reference/> element processing context. Caller is
+        responsible for cleaning up the returned context by calling finalize method.
+        dsigCtx : the parent <dsig:Signature/> node processing context.
+        origin  : the reference origin (<dsig:SignedInfo/> or <dsig:Manifest/> node).
+        Returns : 0 on succes or a negative value otherwise.
+        """
+        return xmlsecmod.dsigReferenceCtxInitialize(self, dsigCtx, origin)
+    def finalize(self):
+        """Cleans up <dsig:Reference/> element processing object."""
+        xmlsecmod.dsigReferenceCtxFinalize(self)
+    def processNode(self, node):
+        """
+        The Reference Element (http://www.w3.org/TR/xmldsig-core/sec-Reference)
+
+        Reference is an element that may occur one or more times. It specifies a
+        digest algorithm and digest value, and optionally an identifier of the
+        object being signed, the type of the object, and/or a list of transforms
+        to be applied prior to digesting. The identification (URI) and transforms
+        describe how the digested content (i.e., the input to the digest method)
+        was created. The Type attribute facilitates the processing of referenced
+        data. For example, while this specification makes no requirements over
+        external data, an application may wish to signal that the referent is a
+        Manifest. An optional ID attribute permits a Reference to be referenced
+        from elsewhere.
+        node    : the <dsig:Reference/> node.
+        Returns : 0 on succes or aa negative value otherwise.
+        """
+        return xmlsecmod.dsigReferenceCtxProcessNode(self, node)
+    def getPreDigestBuffer(self):
+        """
+        Gets the results of <dsig:Reference/> node processing just before
+        digesting (valid only if DSIG_FLAGS_STORE_SIGNEDINFO_REFERENCES or
+        DSIG_FLAGS_STORE_MANIFEST_REFERENCES flags of signature context is set).
+        Returns : the buffer or None if an error occurs.
+        """
+        return Buffer(_obj=xmlsecmod.dsigReferenceCtxGetPreDigestBuffer(self))
+    def debugDump(self, output):
+        """
+        Prints the debug information about dsigCtx to output.
+        output : path of output file.
+        """
+        xmlsecmod.dsigCtxDebugDump(self, output)
+    def debugXmlDump(self, output):
+        """
+        Prints the debug information about dsigCtx to output file in XML format.
+        output : path of output file.
+        """
+        xmlsecmod.dsigCtxDebugXmlDump(self, output)
 
 class PtrList:
     def __init__(self, id=None, _obj=None):
