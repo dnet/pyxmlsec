@@ -112,6 +112,17 @@ PyObject *wrap_xmlSecPtr(xmlSecPtr ptr) {
   return (ret);
 }
 
+PyObject *wrap_xmlSecBytePtr(xmlSecByte *str) {
+  PyObject *ret;
+
+  if (str == NULL) {
+    Py_INCREF(Py_None);
+    return (Py_None);
+  }
+  ret = PyString_FromString(str);
+  return (ret);
+}
+
 PyObject *wrap_xmlSecBytePtrConst(const xmlSecByte *str) {
   PyObject *ret;
 

@@ -56,13 +56,13 @@ em = Extension("xmlsecmod",
                                 ('XMLSEC_CRYPTO_OPENSSL', '1')],
                include_dirs  = ["/usr/local/include/xmlsec1/",
                                 "/usr/include/libxml2/"],
-               library_dirs  = ["/usr/lib", "/usr/local/lib"],
+               library_dirs  = ["/usr/local/lib", "/usr/lib"],
                libraries     = ["xmlsec1-openssl", "xmlsec1", "crypto",
                                 "xslt", "xml2", "pthread", "z" ,"m"]
                )
 
 setup(name = "pyxmlsec",
-      version = "0.20040113",
+      version = "0.20040115",
       description = "A set of Python bindings for XML Security Library (XMLSec)",
       long_description = "",
       author = "Valery Febvre",
