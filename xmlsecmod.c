@@ -97,6 +97,7 @@ static PyMethodDef xmlsec_methods[] = {
   {"base64Decode",        xmlsec_Base64Decode,        METH_VARARGS},
 
   /* buffer.h */
+  {"bufferSetDefaultAllocMode",    xmlsec_BufferSetDefaultAllocMode,    METH_VARARGS}, // New
   {"bufferCreate",                 xmlsec_BufferCreate,                 METH_VARARGS},
   {"bufferDestroy",                xmlsec_BufferDestroy,                METH_VARARGS},
   {"bufferInitialize",             xmlsec_BufferInitialize,             METH_VARARGS},
@@ -234,11 +235,11 @@ static PyMethodDef xmlsec_methods[] = {
   {"transformVisa3DHackSetID",        xmlsec_TransformVisa3DHackSetID,        METH_VARARGS},
 
   /* version.h */
-  {"xmlsec_version",          xmlsec_xmlsec_version,          METH_VARARGS}, // New
-  {"xmlsec_version_major",    xmlsec_xmlsec_version_major,    METH_VARARGS}, // New
-  {"xmlsec_version_minor",    xmlsec_xmlsec_version_minor,    METH_VARARGS}, // New
-  {"xmlsec_version_subminor", xmlsec_xmlsec_version_subminor, METH_VARARGS}, // New
-  {"xmlsec_version_info",     xmlsec_xmlsec_version_info,     METH_VARARGS}, // New
+  {"xmlsec_version",          xmlsec_xmlsec_version,          METH_VARARGS},
+  {"xmlsec_version_major",    xmlsec_xmlsec_version_major,    METH_VARARGS},
+  {"xmlsec_version_minor",    xmlsec_xmlsec_version_minor,    METH_VARARGS},
+  {"xmlsec_version_subminor", xmlsec_xmlsec_version_subminor, METH_VARARGS},
+  {"xmlsec_version_info",     xmlsec_xmlsec_version_info,     METH_VARARGS},
 
   /* xmldsig.h */
   {"dsigCtxCreate",                      xmlsec_DSigCtxCreate,                      METH_VARARGS},
