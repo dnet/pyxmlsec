@@ -136,11 +136,10 @@ PyObject *xmlsec_CryptoAppKeysMngrCertLoad(PyObject *self, PyObject *args) {
 }
 
 PyObject *xmlsec_CryptoAppKeyLoad(PyObject *self, PyObject *args) {
+  PyObject *pwdCallback_obj, *pwdCallbackCtx_obj;
   const char *filename;
   xmlSecKeyDataFormat format;
   const char *pwd = NULL;
-  PyObject *pwdCallback_obj;
-  PyObject *pwdCallbackCtx_obj;
   void *pwdCallback = NULL;
   void *pwdCallbackCtx = NULL;
   xmlSecKeyPtr key;
@@ -161,19 +160,24 @@ PyObject *xmlsec_CryptoAppKeyLoad(PyObject *self, PyObject *args) {
 }
 
 PyObject *xmlsec_CryptoAppPkcs12Load(PyObject *self, PyObject *args) {
+  PyObject *pwdCallback_obj, *pwdCallbackCtx_obj;
   const char *filename;
   const char *pwd = NULL;
-  PyObject *pwd_callback_obj = NULL;
-  PyObject *pwd_callback_ctx_obj = NULL;
+  void *pwdCallback = NULL;
+  void *pwdCallbackCtx = NULL;
   xmlSecKeyPtr key;
 
   if (!PyArg_ParseTuple(args, "szOO:cryptoAppPkcs12Load", &filename, &pwd,
-			&pwd_callback_obj, &pwd_callback_ctx_obj))
+			&pwdCallback_obj, &pwdCallbackCtx_obj))
     return NULL;
 
-  key = xmlSecCryptoAppPkcs12Load(filename, pwd,
-				  PyCObject_AsVoidPtr(pwd_callback_obj),
-				  PyCObject_AsVoidPtr(pwd_callback_ctx_obj));
+  if (pwdCallback_obj != Py_None) {
+    pwdCallback = PyCObject_AsVoidPtr(pwdCallback_obj);
+  }
+  if (pwdCallbackCtx_obj != Py_None) {
+    pwdCallbackCtx = PyCObject_AsVoidPtr(pwdCallbackCtx_obj);
+  }
+  key = xmlSecCryptoAppPkcs12Load(filename, pwd, pwdCallback, pwdCallbackCtx);
 
   return (wrap_xmlSecKeyPtr(key));
 }
