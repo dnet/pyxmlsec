@@ -80,7 +80,7 @@ def main():
 
 # Callback function
 def getKeyCallback(keyInfoNode, keyInfoCtx):
-    # Convert PyCObject object into xmlNode and KeyInfoCtx Object
+    # Convert PyCObject object into xmlNode and KeyInfoCtx Objects
     node = libxml2.xmlNode(_obj=keyInfoNode)
     ctx = xmlsec.KeyInfoCtx(_obj=keyInfoCtx)
     return xmlsec.keysMngrGetKey(node, ctx)
