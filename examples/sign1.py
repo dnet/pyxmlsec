@@ -84,7 +84,7 @@ def sign_file(tmpl_file, key_file):
     doc = libxml2.parseFile(tmpl_file)
     if doc is None or doc.getRootElement() is None:
 	print "Error: unable to parse file \"%s\"" % tmpl_file
-        return cleanup(doc)
+        return -1
     
     # Find start node
     node = xmlsec.findNode(doc.getRootElement(), xmlsec.NodeSignature,
