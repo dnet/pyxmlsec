@@ -97,7 +97,7 @@ def sign_file(tmpl_file, key_file):
     dsig_ctx = xmlsec.DSigCtx()
     if dsig_ctx is None:
         print "Error: failed to create signature context"
-        return cleanup(doc, dsig_ctx)
+        return cleanup(doc)
 
     # Load private key, assuming that there is not password
     key = xmlsec.cryptoAppKeyLoad(key_file, xmlsec.KeyDataFormatPem,
