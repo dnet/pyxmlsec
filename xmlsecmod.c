@@ -99,6 +99,7 @@ static PyMethodDef xmlsec_methods[] = {
   /* keysmngr.h */
   {"keysMngrCreate",  xmlsec_KeysMngrCreate,  METH_VARARGS},
   {"keysMngrDestroy", xmlsec_KeysMngrDestroy, METH_VARARGS},
+  {"keysMngrFindKey", xmlsec_KeysMngrFindKey, METH_VARARGS},
 
   /* openssl/crypto.h, openssl/app.h */
   {"openSSLAppInit", xmlsec_OpenSSLAppInit, METH_VARARGS},
