@@ -23,8 +23,3 @@ PyObject *xmlsec_EncCtxDecrypt(PyObject *self, PyObject *args);
 PyObject *xmlsec_EncCtxDecryptToBuffer(PyObject *self, PyObject *args);
 PyObject *xmlsec_EncCtxDebugDump(PyObject *self, PyObject *args);
 PyObject *xmlsec_EncCtxDebugXmlDump(PyObject *self, PyObject *args);
-
-PyObject *xmlenc_set_encKey(PyObject *self, PyObject *args);
-PyObject *xmlenc_get_result(PyObject *self, PyObject *args);
-PyObject *xmlenc_get_resultBase64Encoded(PyObject *self, PyObject *args);
-PyObject *xmlenc_get_resultReplaced(PyObject *self, PyObject *args);
