@@ -31,8 +31,11 @@ PyObject *xmlsec_ParseFile(PyObject *self, PyObject *args) {
   const char *filename;
   xmlDocPtr doc;
 
-  if (!PyArg_ParseTuple(args, "s:parseFile", &filename))
-    return NULL;
+  if (CheckArgs(args, "S:parseFile")) {
+    if (!PyArg_ParseTuple(args, "s:parseFile", &filename))
+      return NULL;
+  }
+  else return NULL;
 
   doc = xmlSecParseFile(filename);
   
@@ -45,8 +48,11 @@ PyObject *xmlsec_ParseMemory(PyObject *self, PyObject *args) {
   int recovery;
   xmlDocPtr doc;
 
-  if (!PyArg_ParseTuple(args, "sii:parseMemory", &buffer, &size, &recovery))
-    return NULL;
+  if (CheckArgs(args, "SII:parseMemory")) {
+    if (!PyArg_ParseTuple(args, "sii:parseMemory", &buffer, &size, &recovery))
+      return NULL;
+  }
+  else return NULL;
 
   doc = xmlSecParseMemory(buffer, size, recovery);
   
@@ -62,10 +68,13 @@ PyObject *xmlsec_ParseMemoryExt(PyObject *self, PyObject *args) {
   xmlSecSize postfixSize;
   xmlDocPtr doc;
 
-  if (!PyArg_ParseTuple(args, "sisisi:parseMemoryExt", &prefix, &prefixSize,
-			&buffer, &bufferSize, &postfix, &postfixSize))
-    return NULL;
-
+  if (CheckArgs(args, "SISISI:parseMemoryExt")) {
+    if (!PyArg_ParseTuple(args, "sisisi:parseMemoryExt", &prefix, &prefixSize,
+			  &buffer, &bufferSize, &postfix, &postfixSize))
+      return NULL;
+  }
+  else return NULL;
+  
   doc = xmlSecParseMemoryExt(prefix, prefixSize,
 			     buffer, bufferSize,
 			     postfix, postfixSize);
