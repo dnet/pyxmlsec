@@ -6,6 +6,7 @@
 #include <stdio.h>
 
 #include <libxml/tree.h>
+#include <libxml/xmlmemory.h>
 
 #include <xmlsec/crypto.h>
 #include <xmlsec/base64.h>
