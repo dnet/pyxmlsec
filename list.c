@@ -38,6 +38,18 @@ PyObject *wrap_xmlSecPtrListPtr(xmlSecPtrListPtr list) {
   return (ret);
 }
 
+PyObject *wrap_xmlSecPtrListId(xmlSecPtrListId listId) {
+  PyObject *ret;
+
+  if (listId == NULL) {
+    Py_INCREF(Py_None);
+    return (Py_None);
+  }
+  ret = PyCObject_FromVoidPtrAndDesc((void *) listId,
+				     (char *) "xmlSecPtrListId", NULL);
+  return (ret);
+}
+
 /*****************************************************************************/
 
 PyObject *xmlSecPtrList_getattr(PyObject *self, PyObject *args) {
@@ -318,4 +330,105 @@ PyObject *xmlsec_PtrListIsValid(PyObject *self, PyObject *args) {
   list = xmlSecPtrListPtr_get(list_obj);
 
   return (wrap_int(xmlSecPtrListIsValid(list)));
+}
+
+/*****************************************************************************/
+
+static xmlHashTablePtr PtrListIdDuplicateItemMethods = NULL;
+static xmlHashTablePtr PtrListIdDestroyItemMethods   = NULL;
+static xmlHashTablePtr PtrListIdDebugDumpItemMethods = NULL;
+
+static xmlSecPtr xmlsec_PtrDuplicateItemMethod(xmlSecPtr ptr) {
+  xmlSecPtrListPtr list;
+  PyObject *args, *result;
+  PyObject *func = NULL;
+
+  list = (xmlSecPtrListPtr) ptr;
+  func = xmlHashLookup(PtrListIdDestroyItemMethods, list->id->name);
+
+  args = Py_BuildValue((char *) "O", wrap_xmlSecPtr(ptr));
+
+  /* Protect refcount against reentrant manipulation of callback hash */
+  Py_INCREF(func);
+  result = PyEval_CallObject(func, args);
+  Py_DECREF(func);
+  Py_DECREF(args);
+
+  return (wrap_xmlSecPtr(result));
+}
+
+static void xmlsec_PtrDestroyItemMethod(xmlSecPtr ptr) {
+  xmlSecPtrListPtr list;
+  PyObject *args, *result;
+  PyObject *func = NULL;
+
+  list = (xmlSecPtrListPtr) ptr;
+  func = xmlHashLookup(PtrListIdDestroyItemMethods, list->id->name);
+
+  args = Py_BuildValue((char *) "O", wrap_xmlSecPtr(ptr));
+
+  /* Protect refcount against reentrant manipulation of callback hash */
+  Py_INCREF(func);
+  result = PyEval_CallObject(func, args);
+  Py_DECREF(func);
+  Py_DECREF(args);
+
+  Py_XDECREF(result);
+}
+
+static void xmlsec_PtrDebugDumpItemMethod(xmlSecPtr ptr, FILE *output) {
+  xmlSecPtrListPtr list;
+  PyObject *args, *result;
+  PyObject *func = NULL;
+
+  list = (xmlSecPtrListPtr) ptr;
+  func = xmlHashLookup(PtrListIdDebugDumpItemMethods, list->id->name);
+
+  args = Py_BuildValue((char *) "OO", wrap_xmlSecPtr(ptr),
+		       PyFile_FromFile(output, NULL, NULL, NULL));
+
+  /* Protect refcount against reentrant manipulation of callback hash */
+  Py_INCREF(func);
+  result = PyEval_CallObject(func, args);
+  Py_DECREF(func);
+  Py_DECREF(args);
+
+  Py_XDECREF(result);
+}
+
+PyObject *xmlsec_PtrListIdCreate(PyObject *self, PyObject *args) {
+  PyObject *duplicateItem_obj, *destroyItem_obj;
+  PyObject *debugDumpItem_obj, *debugXmlDumpItem_obj;
+  const xmlChar *name;
+  xmlSecPtrListId listId;
+
+  if(!PyArg_ParseTuple(args, (char *) "sOOOO:ptrListIdCreate", &name,
+		       &duplicateItem_obj, &destroyItem_obj, &debugDumpItem_obj,
+		       &debugXmlDumpItem_obj))
+    return NULL;
+  
+  if (PtrListIdDuplicateItemMethods == NULL)
+    PtrListIdDuplicateItemMethods = xmlHashCreate(10);
+  if (PtrListIdDestroyItemMethods == NULL)
+    PtrListIdDestroyItemMethods = xmlHashCreate(10);
+  if (PtrListIdDebugDumpItemMethods == NULL)
+    PtrListIdDebugDumpItemMethods = xmlHashCreate(10);
+  xmlHashAddEntry(PtrListIdDuplicateItemMethods, name, duplicateItem_obj);
+  xmlHashAddEntry(PtrListIdDestroyItemMethods,   name, destroyItem_obj);
+  xmlHashAddEntry(PtrListIdDebugDumpItemMethods, name, debugDumpItem_obj);
+  xmlHashAddEntry(PtrListIdDebugDumpItemMethods, name, debugXmlDumpItem_obj);
+
+  listId = (xmlSecPtrListId) xmlMalloc(sizeof(xmlSecPtrListKlass));
+  listId->name = name;
+  listId->duplicateItem    = xmlsec_PtrDuplicateItemMethod;
+  listId->destroyItem      = xmlsec_PtrDestroyItemMethod;
+  listId->debugDumpItem    = xmlsec_PtrDebugDumpItemMethod;
+  listId->debugXmlDumpItem = xmlsec_PtrDebugDumpItemMethod;
+
+  Py_XINCREF(duplicateItem_obj);
+  Py_XINCREF(destroyItem_obj);
+  Py_XINCREF(debugDumpItem_obj);
+  Py_XINCREF(debugXmlDumpItem_obj);
+
+  return (wrap_xmlSecPtrListId(listId));
 }

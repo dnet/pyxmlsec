@@ -3,7 +3,13 @@ typedef struct {
     xmlSecPtrListPtr obj;
 } xmlSecPtrListPtr_object;
 
+typedef struct {
+    PyObject_HEAD
+    xmlSecPtrListId obj;
+} xmlSecPtrListId_object;
+
 #define xmlSecPtrListPtr_get(v) (((v) == Py_None) ? NULL : (((xmlSecPtrListPtr_object *)(PyObject_GetAttr(v, PyString_FromString("_o"))))->obj))
+#define xmlSecPtrListId_get(v) (((v) == Py_None) ? NULL : (((xmlSecPtrListId_object *)(PyObject_GetAttr(v, PyString_FromString("_o"))))->obj))
 
 PyObject *wrap_xmlSecPtrListPtr(xmlSecPtrListPtr list);
 
@@ -26,3 +32,5 @@ PyObject *xmlsec_PtrListDebugDump(PyObject *self, PyObject *args);
 PyObject *xmlsec_PtrListDebugXmlDump(PyObject *self, PyObject *args);
 PyObject *xmlsec_PtrListGetName(PyObject *self, PyObject *args);
 PyObject *xmlsec_PtrListIsValid(PyObject *self, PyObject *args);
+
+PyObject *xmlsec_PtrListIdCreate(PyObject *self, PyObject *args);
