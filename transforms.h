@@ -50,3 +50,5 @@ PyObject *xmlsec_TransformXsltId(PyObject *self, PyObject *args);
 PyObject *xmlsec_TransformRemoveXmlTagsC14NId(PyObject *self, PyObject *args);
 PyObject *xmlsec_TransformVisa3DHackId(PyObject *self, PyObject *args);
 PyObject *xmlsec_TransformVisa3DHackSetID(PyObject *self, PyObject *args);
+
+PyObject *transforms_TransformIdCreate(PyObject *self, PyObject *args);
