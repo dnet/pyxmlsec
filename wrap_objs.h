@@ -50,6 +50,8 @@ typedef struct {
 #define xmlOutputBufferPtr_get(v) (((v) == Py_None) ? NULL : (((xmlOutputBufferPtr_object *)(PyObject_GetAttr(v, PyString_FromString("_o"))))->obj))
 #define xmlNodeSetPtr_get(v) (((v) == Py_None) ? NULL : (((xmlNodeSetPtr_object *)(PyObject_GetAttr(v, PyString_FromString("_o"))))->obj))
 
+#define PyFile_get(v) (((v) == Py_None) ? NULL : (PyFile_Check(v) ? (PyFile_AsFile(v)) : stdout))
+
 PyObject *xmlsec_error;
 
 PyObject *wrap_int(int val);

@@ -190,18 +190,16 @@ PyObject *xmlsec_NodeSetDumpTextNodes(PyObject *self, PyObject *args) {
 }
 
 PyObject *xmlsec_NodeSetDebugDump(PyObject *self, PyObject *args) {
-  PyObject *nset_obj;
+  PyObject *nset_obj, *output_obj;
   xmlSecNodeSetPtr nset;
-  const char *output_path;
   FILE *output;
 
-  if (!PyArg_ParseTuple(args, "Os:nodeSetDebugDump", &nset_obj, &output_path))
+  if (!PyArg_ParseTuple(args, "Os:nodeSetDebugDump", &nset_obj, &output_obj))
     return NULL;
 
   nset = xmlSecNodeSetPtr_get(nset_obj);
-  output = fopen(output_path, "a+");
+  output = (FILE *) PyFile_get(output_obj);
   xmlSecNodeSetDebugDump(nset, output);
-  fclose(output);
 
   Py_INCREF(Py_None);
   return Py_None;
