@@ -29,6 +29,7 @@
 #include "buffer.h"
 #include "keyinfo.h"
 #include "keys.h"
+#include "keysdata.h"
 #include "keysmngr.h"
 #include "list.h"
 #include "membuf.h"
@@ -119,44 +120,68 @@ static PyMethodDef xmlsec_methods[] = {
   {"bufferCreateOutputBuffer",     xmlsec_BufferCreateOutputBuffer,     METH_VARARGS},
 
   /* keys.h */
-  {"keyReqCreate",      keys_KeyReqCreate,        METH_VARARGS},
-  {"keyReqInitialize",  xmlsec_KeyReqInitialize,  METH_VARARGS},
-  {"keyReqFinalize",    xmlsec_KeyReqFinalize,    METH_VARARGS},
-  {"keyReqReset",       xmlsec_KeyReqReset,       METH_VARARGS},
-  {"keyReqMatchKey",    xmlsec_KeyReqMatchKey,    METH_VARARGS},
-  {"keyCreate",         xmlsec_KeyCreate,         METH_VARARGS},
-  {"keyDestroy",        xmlsec_KeyDestroy,        METH_VARARGS},
-  {"keyGetName",        xmlsec_KeySetName,        METH_VARARGS},
-  {"keySetName",        xmlsec_KeySetName,        METH_VARARGS},
-  {"keyGenerate",       xmlsec_KeyGenerate,       METH_VARARGS},
-  {"keyGenerateByName", xmlsec_KeyGenerateByName, METH_VARARGS},
-  {"keyMatch",          xmlsec_KeyMatch,          METH_VARARGS},
-  {"keyReadBuffer",     xmlsec_KeyReadBuffer,     METH_VARARGS},
-  {"keyReadBinaryFile", xmlsec_KeyReadBinaryFile, METH_VARARGS},
-  {"keyReadMemory",     xmlsec_KeyReadMemory,     METH_VARARGS},
+  {"keyReqCreate",        keys_KeyReqCreate,          METH_VARARGS},
+  {"keyReqInitialize",    xmlsec_KeyReqInitialize,    METH_VARARGS},
+  {"keyReqFinalize",      xmlsec_KeyReqFinalize,      METH_VARARGS},
+  {"keyReqReset",         xmlsec_KeyReqReset,         METH_VARARGS},
+  {"keyReqCopy",          xmlsec_KeyReqCopy,          METH_VARARGS}, // New
+  {"keyReqMatchKey",      xmlsec_KeyReqMatchKey,      METH_VARARGS},
+  {"keyReqMatchKeyValue", xmlsec_KeyReqMatchKeyValue, METH_VARARGS}, // New
+  {"keyCreate",           xmlsec_KeyCreate,           METH_VARARGS},
+  {"keyDestroy",          xmlsec_KeyDestroy,          METH_VARARGS},
+  {"keyEmpty",            xmlsec_KeyEmpty,            METH_VARARGS}, // New
+  {"keyDuplicate",        xmlsec_KeyDuplicate,        METH_VARARGS}, // New
+  {"keyCopy",             xmlsec_KeyCopy,             METH_VARARGS}, // New
+  {"keyGetName",          xmlsec_KeyGetName,          METH_VARARGS},
+  {"keySetName",          xmlsec_KeySetName,          METH_VARARGS},
+  {"keyGetType",          xmlsec_KeyGetType,          METH_VARARGS}, // New
+  {"keyGetValue",         xmlsec_KeyGetValue,         METH_VARARGS}, // New
+  {"keySetValue",         xmlsec_KeySetValue,         METH_VARARGS}, // New
+  {"keyGetData",          xmlsec_KeyGetData,          METH_VARARGS}, // New
+  {"keyEnsureData",       xmlsec_KeyEnsureData,       METH_VARARGS}, // New
+  {"keyAdoptData",        xmlsec_KeyAdoptData,        METH_VARARGS}, // New
+  {"keyDebugDump",        xmlsec_KeyDebugDump,        METH_VARARGS}, // New
+  {"keyDebugXmlDump",     xmlsec_KeyDebugXmlDump,     METH_VARARGS}, // New
+  {"keyGenerate",         xmlsec_KeyGenerate,         METH_VARARGS},
+  {"keyGenerateByName",   xmlsec_KeyGenerateByName,   METH_VARARGS},
+  {"keyMatch",            xmlsec_KeyMatch,            METH_VARARGS},
+  {"keyReadBuffer",       xmlsec_KeyReadBuffer,       METH_VARARGS},
+  {"keyReadBinaryFile",   xmlsec_KeyReadBinaryFile,   METH_VARARGS},
+  {"keyReadMemory",       xmlsec_KeyReadMemory,       METH_VARARGS},
+  {"keyIsValid",          xmlsec_KeyIsValid,          METH_VARARGS}, // New
+  {"keyCheckId",          xmlsec_KeyCheckId,          METH_VARARGS}, // New
+  {"keyPtrListId",        xmlsec_KeyPtrListId,        METH_VARARGS}, // New
 
   /* keyinfo.h */
-  {"keyInfoNodeRead",  xmlsec_KeyInfoNodeRead,  METH_VARARGS}, // New
-  {"keyInfoNodeWrite", xmlsec_KeyInfoNodeWrite, METH_VARARGS}, // New
+  {"keyInfoNodeRead",  xmlsec_KeyInfoNodeRead,  METH_VARARGS},
+  {"keyInfoNodeWrite", xmlsec_KeyInfoNodeWrite, METH_VARARGS},
   {"keyInfoCtxCreate",       xmlsec_KeyInfoCtxCreate,       METH_VARARGS},
   {"keyInfoCtxDestroy",      xmlsec_KeyInfoCtxDestroy,      METH_VARARGS},
   {"keyInfoCtxInitialize",   xmlsec_KeyInfoCtxInitialize,   METH_VARARGS},
   {"keyInfoCtxFinalize",     xmlsec_KeyInfoCtxFinalize,     METH_VARARGS},
   {"keyInfoCtxReset",        xmlsec_KeyInfoCtxReset,        METH_VARARGS},
-  {"keyInfoCtxCopyUserPref", xmlsec_KeyInfoCtxCopyUserPref, METH_VARARGS}, // New
-  {"keyInfoCtxCreateEncCtx", xmlsec_KeyInfoCtxCreateEncCtx, METH_VARARGS}, // New
-  {"keyInfoCtxDebugDump",    xmlsec_KeyInfoCtxDebugDump,    METH_VARARGS}, // New
-  {"keyInfoCtxDebugXmlDump", xmlsec_KeyInfoCtxDebugXmlDump, METH_VARARGS}, // New
-  {"keyDataNameId",            xmlsec_KeyDataNameId,            METH_VARARGS}, // New
-  {"keyDataValueId",           xmlsec_KeyDataValueId,           METH_VARARGS}, // New
-  {"keyDataRetrievalMethodId", xmlsec_KeyDataRetrievalMethodId, METH_VARARGS}, // New
-  {"keyDataEncryptedKeyId",    xmlsec_KeyDataEncryptedKeyId,    METH_VARARGS}, // New
+  {"keyInfoCtxCopyUserPref", xmlsec_KeyInfoCtxCopyUserPref, METH_VARARGS},
+  {"keyInfoCtxCreateEncCtx", xmlsec_KeyInfoCtxCreateEncCtx, METH_VARARGS},
+  {"keyInfoCtxDebugDump",    xmlsec_KeyInfoCtxDebugDump,    METH_VARARGS},
+  {"keyInfoCtxDebugXmlDump", xmlsec_KeyInfoCtxDebugXmlDump, METH_VARARGS},
+  {"keyDataNameId",            xmlsec_KeyDataNameId,            METH_VARARGS},
+  {"keyDataValueId",           xmlsec_KeyDataValueId,           METH_VARARGS},
+  {"keyDataRetrievalMethodId", xmlsec_KeyDataRetrievalMethodId, METH_VARARGS},
+  {"keyDataEncryptedKeyId",    xmlsec_KeyDataEncryptedKeyId,    METH_VARARGS},
   {"getEnabledKeyData", keyinfo_get_enabledKeyData, METH_VARARGS},
 
+  /* keysdata.h */
+
   /* keysmngr.h */
-  {"keysMngrCreate",    xmlsec_KeysMngrCreate,    METH_VARARGS},
-  {"keysMngrDestroy",   xmlsec_KeysMngrDestroy,   METH_VARARGS},
-  {"keysMngrFindKey",   xmlsec_KeysMngrFindKey,   METH_VARARGS},
+  {"keysMngrCreate",         xmlsec_KeysMngrCreate,         METH_VARARGS},
+  {"keysMngrDestroy",        xmlsec_KeysMngrDestroy,        METH_VARARGS},
+  {"keysMngrFindKey",        xmlsec_KeysMngrFindKey,        METH_VARARGS},
+  {"keysMngrAdoptKeysStore", xmlsec_KeysMngrAdoptKeysStore, METH_VARARGS}, // New
+  {"keysMngrGetKeysStore",   xmlsec_KeysMngrGetKeysStore,   METH_VARARGS}, // New
+  {"keysMngrAdoptDataStore", xmlsec_KeysMngrAdoptDataStore, METH_VARARGS}, // New
+  {"keysMngrGetDataStore",   xmlsec_KeysMngrGetDataStore,   METH_VARARGS}, // New
+  {"getKeyCallback",         xmlsec_GetKeyCallback,         METH_VARARGS}, // New
+  {"keysMngrGetKey",         xmlsec_KeysMngrGetKey,         METH_VARARGS}, // New
   {"keyStoreCreate",    xmlsec_KeyStoreCreate,    METH_VARARGS},
   {"keyStoreDestroy",   xmlsec_KeyStoreDestroy,   METH_VARARGS},
   {"keyStoreFindKey",   xmlsec_KeyStoreFindKey,   METH_VARARGS},
