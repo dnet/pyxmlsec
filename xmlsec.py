@@ -2,8 +2,8 @@
 #
 # $Id$
 #
-# Copyright (C) 2003
-# http://
+# Copyright (C) 2003 Easter-eggs, Valery Febvre
+# http://pyxmlsec.labs.libre-entreprise.org
 #
 # Author: Valery Febvre <vfebvre@easter-eggs.com>
 #
@@ -23,7 +23,17 @@
 
 """
 PyXMLSec - A Python binding for XML Security library (XMLSec)
-Author: Valery Febvre <vfebvre@easter-eggs.com>
+Copyright (C) 2003 Easter-eggs, Valery Febvre
+
+Author   : Valery Febvre <vfebvre@easter-eggs.com>
+Homepage : http://pyxmlsec.labs.libre-entreprise.org
+
+PyXMLSec was originally developped for Glasnost project.
+http://glasnost.entrouvert.org
+
+In 2003, the development of Glasnost is supported by the French Department of
+Economy, Finance and Industry, as part of the UCIP - Collective Use of Internet
+by SMEs - programme.
 """
 
 import libxml2
