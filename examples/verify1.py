@@ -99,7 +99,7 @@ def verify_file(xml_file, key_file):
     if key is None:
         print "Error: failed to load private pem key from \"%s\"" % key_file
         return cleanup(doc, dsig_ctx)
-    dsig_ctx.setSignKey(key)
+    dsig_ctx.signKey = key
 
     # Set key name to the file name, this is just an example!
     if key.setName(key_file) < 0:

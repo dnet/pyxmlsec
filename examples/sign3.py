@@ -25,8 +25,7 @@
 # This is free software; see COPYING file in the source
 # distribution for preciese wording.
 # 
-# Copyright (C) 2002-2003 Aleksey Sanin <aleksey@aleksey.com>
-# Copyright (C) 2003 Valery Febvre <vfebvre@easter-eggs.com>
+# Copyright (C) 2003-2004 Valery Febvre <vfebvre@easter-eggs.com>
 #
 
 import os, sys
@@ -144,7 +143,7 @@ def sign_file(xml_file, key_file, cert_file):
     if key is None:
         print "Error: failed to load private pem key from \"%s\"" % key_file
         return cleanup(doc, dsig_ctx)
-    dsig_ctx.setSignKey(key)
+    dsig_ctx.signKey = key
 
     # Load certificate and add to the key
     if not check_filename(cert_file):
