@@ -25,6 +25,7 @@
 #include <Python.h>
 
 #include "xmlsecmod.h"
+#include "keyinfo.h"
 #include "keysmngr.h"
 
 PyObject *xmlsec_KeysMngrCreate(PyObject *self, PyObject *args) {
@@ -47,4 +48,23 @@ PyObject *xmlsec_KeysMngrDestroy(PyObject *self, PyObject *args) {
   xmlSecKeysMngrDestroy(mngr);
 
   return Py_BuildValue("i", 0);
+}
+
+PyObject *xmlsec_KeysMngrFindKey(PyObject *self, PyObject *args) {
+  PyObject *mngr_obj, *keyInfoCtx_obj;
+  const xmlChar *name;
+  xmlSecKeysMngrPtr mngr;
+  xmlSecKeyInfoCtxPtr keyInfoCtx;
+  xmlSecKeyPtr key;
+  PyObject *ret;
+
+  if (!PyArg_ParseTuple(args, "OsO:keysMngrFindKey", &mngr_obj, &name, &keyInfoCtx_obj))
+    return NULL;
+ 
+  mngr = xmlSecKeysMngrPtr_get(PyObject_GetAttr(mngr_obj, PyString_FromString("_o")));
+  keyInfoCtx = xmlSecKeyInfoCtxPtr_get(PyObject_GetAttr(keyInfoCtx_obj, PyString_FromString("_o")));
+  key = xmlSecKeysMngrFindKey(mngr, name, keyInfoCtx);
+
+  ret = PyCObject_FromVoidPtrAndDesc((void *) key, (char *) "xmlSecKeyPtr", NULL);
+  return (ret);
 }

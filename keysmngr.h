@@ -9,3 +9,4 @@ typedef struct {
 
 PyObject *xmlsec_KeysMngrCreate(PyObject *self, PyObject *args);
 PyObject *xmlsec_KeysMngrDestroy(PyObject *self, PyObject *args);
+PyObject *xmlsec_KeysMngrFindKey(PyObject *self, PyObject *args);
