@@ -32,6 +32,9 @@ PyObject *xmlsec_TransformCtxInitialize(PyObject *self, PyObject *args);
 PyObject *xmlsec_TransformCtxFinalize(PyObject *self, PyObject *args);
 PyObject *xmlsec_TransformCtxReset(PyObject *self, PyObject *args);
 
+PyObject *xmlSecTransform_getattr(PyObject *self, PyObject *args);
+PyObject *xmlSecTransform_setattr(PyObject *self, PyObject *args);
+
 PyObject *xmlsec_TransformCreate(PyObject *self, PyObject *args);
 PyObject *xmlsec_TransformDestroy(PyObject *self, PyObject *args);
 PyObject *xmlsec_TransformNodeRead(PyObject *self, PyObject *args);

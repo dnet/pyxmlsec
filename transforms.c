@@ -263,6 +263,84 @@ PyObject *xmlsec_TransformCtxReset(PyObject *self, PyObject *args) {
 /* Transform                                                                  */
 /******************************************************************************/
 
+PyObject *xmlSecTransform_getattr(PyObject *self, PyObject *args) {
+  PyObject *transform_obj;
+  xmlSecTransformPtr transform;
+  const char *attr;
+
+  if (!PyArg_ParseTuple(args, "Os:transformGetAttr",
+			&transform_obj, &attr))
+    return NULL;
+
+  transform = xmlSecTransformPtr_get(transform_obj);
+
+  if (!strcmp(attr, "__members__"))
+    return Py_BuildValue("[ssssssssss]", "id", "operation", "status",
+			 "hereNode", "next", "prev", "inBuf", "outBuf",
+			 "inNodes", "outNodes");
+  if (!strcmp(attr, "id"))
+    return (wrap_xmlSecTransformId(transform->id));
+  if (!strcmp(attr, "operation"))
+    return (wrap_int(transform->operation));
+  if (!strcmp(attr, "status"))
+    return (wrap_int(transform->status));
+  if (!strcmp(attr, "hereNode"))
+    return (wrap_xmlNodePtr(transform->hereNode));
+  if (!strcmp(attr, "next"))
+    return (wrap_xmlSecTransformPtr(transform->next));
+  if (!strcmp(attr, "prev"))
+    return (wrap_xmlSecTransformPtr(transform->prev));
+  if (!strcmp(attr, "inBuf"))
+    return (wrap_xmlSecBufferPtr(&(transform->inBuf)));
+  if (!strcmp(attr, "outBuf"))
+    return (wrap_xmlSecBufferPtr(&(transform->outBuf)));
+  if (!strcmp(attr, "inNodes"))
+    return (wrap_xmlSecNodeSetPtr(transform->inNodes));
+  if (!strcmp(attr, "outNodes"))
+    return (wrap_xmlSecNodeSetPtr(transform->outNodes));
+
+  Py_INCREF(Py_None);
+  return (Py_None);
+}
+
+PyObject *xmlSecTransform_setattr(PyObject *self, PyObject *args) {
+  PyObject *transform_obj, *value_obj;
+  xmlSecTransformPtr transform;
+  const char *name;
+
+  if (!PyArg_ParseTuple(args, "OsO:transformSetAttr",
+			&transform_obj, &name, &value_obj))
+    return NULL;
+
+  transform = xmlSecTransformPtr_get(transform_obj);
+    
+  if (!strcmp(name, "id"))
+    transform->id = xmlSecTransformId_get(value_obj);
+  else if (!strcmp(name, "operation"))
+    transform->operation = PyInt_AsLong(value_obj);
+  else if (!strcmp(name, "status"))
+    transform->status = PyInt_AsLong(value_obj);
+  else if (!strcmp(name, "hereNode"))
+    transform->hereNode = xmlNodePtr_get(value_obj);
+  else if (!strcmp(name, "next"))
+    transform->next = xmlSecTransformPtr_get(value_obj);
+  else if (!strcmp(name, "prev"))
+    transform->prev = xmlSecTransformPtr_get(value_obj);
+  else if (!strcmp(name, "inBuf"))
+    transform->inBuf = *(xmlSecBufferPtr_get(value_obj));
+  else if (!strcmp(name, "outBuf"))
+    transform->outBuf = *(xmlSecBufferPtr_get(value_obj));
+  else if (!strcmp(name, "inNodes"))
+    transform->inNodes = xmlSecNodeSetPtr_get(value_obj);
+  else if (!strcmp(name, "outNodes"))
+    transform->outNodes = xmlSecNodeSetPtr_get(value_obj);
+
+  Py_INCREF(Py_None);
+  return (Py_None);
+}
+
+/******************************************************************************/
+
 PyObject *xmlsec_TransformCreate(PyObject *self, PyObject *args) {
   PyObject *id_obj;
   xmlSecTransformId id;
