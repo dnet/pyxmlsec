@@ -28,6 +28,8 @@ PyObject *wrap_charPtrConst(const char *str) {
   return (ret);
 }
 
+/* Functions for libxml objects */
+
 PyObject *wrap_xmlCharPtr(xmlChar *str) {
   PyObject *ret;
 
@@ -51,8 +53,6 @@ PyObject *wrap_xmlCharPtrConst(const xmlChar *str) {
   ret = PyString_FromString((char *) str);
   return (ret);
 }
-
-/* Functions for libxml objects */
 
 PyObject *wrap_xmlDocPtr(xmlDocPtr doc) {
   PyObject *ret;
@@ -100,6 +100,17 @@ PyObject *wrap_xmlOutputBufferPtr(xmlOutputBufferPtr buf) {
 }
 
 /* Functions for xmlsec objects */
+
+PyObject *wrap_xmlSecPtr(xmlSecPtr ptr) {
+  PyObject *ret;
+
+  if (ptr == NULL) {
+    Py_INCREF(Py_None);
+    return (Py_None);
+  }
+  ret = (PyCObject_FromVoidPtr((void *) ptr, NULL));
+  return (ret);
+}
 
 PyObject *wrap_xmlSecBytePtrConst(const xmlSecByte *str) {
   PyObject *ret;

@@ -68,6 +68,7 @@ PyObject *wrap_xmlNodePtr(xmlNodePtr node);
 PyObject *wrap_xmlNodeSetPtr(xmlNodeSetPtr nset);
 PyObject *wrap_xmlOutputBufferPtr(xmlOutputBufferPtr buf);
 
+PyObject *wrap_xmlSecPtr(xmlSecPtr ptr);
 PyObject *wrap_xmlSecBytePtrConst(const xmlSecByte *c);
 
 #endif /* __PYXMLSEC_WRAP_OBJS_H__ */
