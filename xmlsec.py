@@ -311,6 +311,23 @@ class Buffer:
             return
         self._o = xmlsecmod.bufferCreate(size)
         if self._o is None: raise parserError('xmlSecBufferCreate() failed')
+    def __isprivate(self, name):
+        return name == '_o'
+    def __getattr__(self, name):
+        if self.__isprivate(name):
+            return self.__dict__[name]
+        if name[:2] == "__" and name[-2:] == "__" and name != "__members__":
+            raise AttributeError, name
+        ret = xmlsecmod.bufferGetAttr(self, name)
+        if ret is None:
+            raise AttributeError, name
+        # data, size, maxSize, allocMode
+        return ret
+    def __setattr__(self, name, value):
+        if self.__isprivate(name):
+            self.__dict__[name] = value
+        else:
+            xmlsecmod.bufferSetAttr(self, name, value)
     def destroy(self):
         """Destroys buffer object."""
         return xmlsecmod.bufferDestroy(self)
@@ -522,7 +539,7 @@ class KeyInfoCtx:
     def __getattr__(self, name):
         if self.__isprivate(name):
             return self.__dict__[name]
-        if name[:2] == "__" and name[-2:] == "__":
+        if name[:2] == "__" and name[-2:] == "__" and name != "__members__":
             raise AttributeError, name
         ret = xmlsecmod.keyInfoCtxGetAttr(self, name)
         if ret is None:
@@ -665,6 +682,27 @@ class Key:
             return
         self._o = xmlsecmod.keyCreate()
         if self._o is None: raise parserError('xmlSecKeyCreate() failed')
+    def __isprivate(self, name):
+        return name == '_o'
+    def __getattr__(self, name):
+        if self.__isprivate(name):
+            return self.__dict__[name]
+        if name[:2] == "__" and name[-2:] == "__" and name != "__members__":
+            raise AttributeError, name
+        ret = xmlsecmod.keyGetAttr(self, name)
+        if ret is None:
+            raise AttributeError, name
+        if name == "dataList":
+            return PtrList(_obj=ret)
+        else:
+            # name, usage, notValidBefore, notValidAfter
+            # FIXME -> value (KeyData)
+            return ret
+    def __setattr__(self, name, value):
+        if self.__isprivate(name):
+            self.__dict__[name] = value
+        else:
+            xmlsecmod.keySetAttr(self, name, value)
     def destroy(self):
         """Destroys the key"""
         xmlsecmod.keyDestroy(self)
@@ -802,7 +840,7 @@ class KeyReq:
     def __getattr__(self, name):
         if self.__isprivate(name):
             return self.__dict__[name]
-        if name[:2] == "__" and name[-2:] == "__":
+        if name[:2] == "__" and name[-2:] == "__" and name != "__members__":
             raise AttributeError, name
         ret = xmlsecmod.keyReqGetAttr(self, name)
         if ret is None:
@@ -927,7 +965,7 @@ class KeysMngr:
     def __getattr__(self, name):
         if self.__isprivate(name):
             return self.__dict__[name]
-        if name[:2] == "__" and name[-2:] == "__":
+        if name[:2] == "__" and name[-2:] == "__" and name != "__members__":
             raise AttributeError, name
         ret = xmlsecmod.keysMngrGetAttr(self, name)
         if ret is None:
@@ -1028,8 +1066,8 @@ class KeyStore:
     
 simpleKeysStoreId = xmlsecmod.simpleKeysStoreId()
 class KeyStoreId:
-    def __init__(self, klassSize, objSize, name, initialize=None, finalize=None,
-                 findKey=None, _obj=None):
+    def __init__(self, klassSize=None, objSize=None, name=None, initialize=None,
+                 finalize=None, findKey=None, _obj=None):
         """
         Creates new store klass id.
         klassSize  : the store klass size.
@@ -1077,7 +1115,7 @@ class PtrList:
     def __getattr__(self, name):
         if self.__isprivate(name):
             return self.__dict__[name]
-        if name[:2] == "__" and name[-2:] == "__":
+        if name[:2] == "__" and name[-2:] == "__" and name != "__members__":
             raise AttributeError, name
         ret = xmlsecmod.ptrListGetAttr(self, name)
         if ret is None:
@@ -1178,6 +1216,24 @@ class PtrList:
         Returns 1 if list is not None and list.id is not None or 0 otherwise.
         """
         return xmlsecmod.ptrListIsValid(self)
+
+class PtrListId:
+    def __init__(self, name=None, duplicateItem=None, destroyItem=None,
+                 debugDumpItem=None, debugXmlDumpItem=None, _obj=None):
+        """
+        Creates new list klass id.
+        name             : the list klass name.
+        duplicateItem    : the duplciate item method.
+        destroyItem      : the destroy item method.
+        debugDumpItem    : the debug dump item method.
+        debugXmlDumpItem : the debug dump item in xml format method.
+        Returns          : the newly list klass id or None if an error occurs.
+        """
+	if _obj != None:
+            self._o = _obj
+            return
+        self._o = xmlsecmod.ptrListIdCreate(name, duplicateItem, destroyItem,
+                                            debugDumpItem, debugXmlDumpItem)
 
 ###############################################################################
 # membuf.h
@@ -1866,7 +1922,7 @@ class DSigCtx:
     def __getattr__(self, name):
         if self.__isprivate(name):
             return self.__dict__[name]
-        if name[:2] == "__" and name[-2:] == "__":
+        if name[:2] == "__" and name[-2:] == "__" and name != "__members__":
             raise AttributeError, name
         ret = xmlsecmod.dsigCtxGetAttr(self, name)
         if ret is None:
@@ -1897,7 +1953,7 @@ class DSigCtx:
             return PtrList(_obj=ret)
         else:
             # flags, flags2, enabledReferenceUris
-            # defSignMethodId, defC14NMethodId, defDigestMethodId
+            # FIXME -> defSignMethodId, defC14NMethodId, defDigestMethodId
             # operation, status, id
             return ret
     def __setattr__(self, name, value):
@@ -1995,7 +2051,7 @@ class DSigReferenceCtx:
     def __getattr__(self, name):
         if self.__isprivate(name):
             return self.__dict__[name]
-        if name[:2] == "__" and name[-2:] == "__":
+        if name[:2] == "__" and name[-2:] == "__" and name != "__members__":
             raise AttributeError, name
         ret = xmlsecmod.dsigReferenceCtxGetAttr(self, name)
         if ret is None:
@@ -2097,7 +2153,7 @@ class EncCtx:
     def __getattr__(self, name):
         if self.__isprivate(name):
             return self.__dict__[name]
-        if name[:2] == "__" and name[-2:] == "__":
+        if name[:2] == "__" and name[-2:] == "__" and name != "__members__":
             raise AttributeError, name
         ret = xmlsecmod.encCtxGetAttr(self, name)
         if ret is None:
