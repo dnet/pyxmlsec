@@ -54,6 +54,9 @@ static PyMethodDef xmlsec_methods[] = {
   {"replaceContent",     xmlsec_ReplaceContent,     METH_VARARGS},
   {"replaceNodeBuffer",  xmlsec_ReplaceNodeBuffer,  METH_VARARGS},
   {"addIDs",             xmlsec_AddIDs,             METH_VARARGS},
+  {"createTree",         xmlsec_CreateTree,         METH_VARARGS},
+  {"isEmptyNode",        xmlsec_IsEmptyNode,        METH_VARARGS},
+  {"isEmptyString",      xmlsec_IsEmptyString,      METH_VARARGS},
   {"isHex",              xmlsec_IsHex,              METH_VARARGS},
   {"getHex",             xmlsec_GetHex,             METH_VARARGS},
 
