@@ -120,6 +120,8 @@ static PyMethodDef xmlsec_methods[] = {
   {"bufferCreateOutputBuffer",     xmlsec_BufferCreateOutputBuffer,     METH_VARARGS},
 
   /* keys.h */
+  {"keyReqGetAttr", xmlSecKeyReq_getattr, METH_VARARGS}, // New
+  {"keyReqSetAttr", xmlSecKeyReq_setattr, METH_VARARGS}, // New
   {"keyReqCreate",        keys_KeyReqCreate,          METH_VARARGS},
   {"keyReqInitialize",    xmlsec_KeyReqInitialize,    METH_VARARGS},
   {"keyReqFinalize",      xmlsec_KeyReqFinalize,      METH_VARARGS},
@@ -153,6 +155,8 @@ static PyMethodDef xmlsec_methods[] = {
   {"keyPtrListId",        xmlsec_KeyPtrListId,        METH_VARARGS},
 
   /* keyinfo.h */
+  {"keyInfoCtxGetAttr", xmlSecKeyInfoCtx_getattr, METH_VARARGS}, // New
+  {"keyInfoCtxSetAttr", xmlSecKeyInfoCtx_setattr, METH_VARARGS}, // New
   {"keyInfoNodeRead",  xmlsec_KeyInfoNodeRead,  METH_VARARGS},
   {"keyInfoNodeWrite", xmlsec_KeyInfoNodeWrite, METH_VARARGS},
   {"keyInfoCtxCreate",       xmlsec_KeyInfoCtxCreate,       METH_VARARGS},
@@ -168,11 +172,12 @@ static PyMethodDef xmlsec_methods[] = {
   {"keyDataValueId",           xmlsec_KeyDataValueId,           METH_VARARGS},
   {"keyDataRetrievalMethodId", xmlsec_KeyDataRetrievalMethodId, METH_VARARGS},
   {"keyDataEncryptedKeyId",    xmlsec_KeyDataEncryptedKeyId,    METH_VARARGS},
-  {"getEnabledKeyData", keyinfo_get_enabledKeyData, METH_VARARGS},
 
   /* keysdata.h */
 
   /* keysmngr.h */
+  {"keysMngrGetAttr", xmlSecKeysMngr_getattr, METH_VARARGS}, // New
+  {"keysMngrSetAttr", xmlSecKeysMngr_setattr, METH_VARARGS}, // New
   {"keysMngrCreate",         xmlsec_KeysMngrCreate,         METH_VARARGS},
   {"keysMngrDestroy",        xmlsec_KeysMngrDestroy,        METH_VARARGS},
   {"keysMngrFindKey",        xmlsec_KeysMngrFindKey,        METH_VARARGS},
@@ -180,30 +185,32 @@ static PyMethodDef xmlsec_methods[] = {
   {"keysMngrGetKeysStore",   xmlsec_KeysMngrGetKeysStore,   METH_VARARGS},
   {"keysMngrAdoptDataStore", xmlsec_KeysMngrAdoptDataStore, METH_VARARGS},
   {"keysMngrGetDataStore",   xmlsec_KeysMngrGetDataStore,   METH_VARARGS},
-  {"getKeyCallback",         xmlsec_GetKeyCallback,         METH_VARARGS},
   {"keysMngrGetKey",         xmlsec_KeysMngrGetKey,         METH_VARARGS},
-  {"keyStoreCreate",    xmlsec_KeyStoreCreate,    METH_VARARGS},
-  {"keyStoreDestroy",   xmlsec_KeyStoreDestroy,   METH_VARARGS},
-  {"keyStoreFindKey",   xmlsec_KeyStoreFindKey,   METH_VARARGS},
-  {"simpleKeysStoreId", xmlsec_SimpleKeysStoreId, METH_VARARGS},
+  {"keyStoreCreate",    xmlsec_KeyStoreCreate,     METH_VARARGS},
+  {"keyStoreDestroy",   xmlsec_KeyStoreDestroy,    METH_VARARGS},
+  {"keyStoreFindKey",   xmlsec_KeyStoreFindKey,    METH_VARARGS},
+  {"keyStoreIdCreate",  keysmngr_KeyStoreIdCreate, METH_VARARGS}, // New
+  {"simpleKeysStoreId", xmlsec_SimpleKeysStoreId,  METH_VARARGS},
 
   /* list.h  */
-  {"ptrListGetAttr", xmlSecPtrList_getattr, METH_VARARGS}, // New
-  {"ptrListSetAttr", xmlSecPtrList_setattr, METH_VARARGS}, // New
+  {"ptrListGetAttr", xmlSecPtrList_getattr, METH_VARARGS},
+  {"ptrListSetAttr", xmlSecPtrList_setattr, METH_VARARGS},
   {"ptrListCreate",       xmlsec_PtrListCreate,       METH_VARARGS},
   {"ptrListDestroy",      xmlsec_PtrListDestroy,      METH_VARARGS},
-  {"ptrListInitialize",   xmlsec_PtrListInitialize,   METH_VARARGS}, // New
-  {"ptrListFinalize",     xmlsec_PtrListFinalize,     METH_VARARGS}, // New
-  {"ptrListEmpty",        xmlsec_PtrListEmpty,        METH_VARARGS}, // New
-  {"ptrListCopy",         xmlsec_PtrListCopy,         METH_VARARGS}, // New
-  {"ptrListDuplicate",    xmlsec_PtrListDuplicate,    METH_VARARGS}, // New
+  {"ptrListInitialize",   xmlsec_PtrListInitialize,   METH_VARARGS},
+  {"ptrListFinalize",     xmlsec_PtrListFinalize,     METH_VARARGS},
+  {"ptrListEmpty",        xmlsec_PtrListEmpty,        METH_VARARGS},
+  {"ptrListCopy",         xmlsec_PtrListCopy,         METH_VARARGS},
+  {"ptrListDuplicate",    xmlsec_PtrListDuplicate,    METH_VARARGS},
   {"ptrListGetSize",      xmlsec_PtrListGetSize,      METH_VARARGS},
-  {"ptrListGetItem",      xmlsec_PtrListGetItem,      METH_VARARGS}, // New
+  {"ptrListGetItem",      xmlsec_PtrListGetItem,      METH_VARARGS},
   {"ptrListAdd",          xmlsec_PtrListAdd,          METH_VARARGS},
-  {"ptrListSet",          xmlsec_PtrListSet,          METH_VARARGS}, // New
-  {"ptrListRemove",       xmlsec_PtrListRemove,       METH_VARARGS}, // New
-  {"ptrListDebugDump",    xmlsec_PtrListDebugDump,    METH_VARARGS}, // New
-  {"ptrListDebugXmlDump", xmlsec_PtrListDebugXmlDump, METH_VARARGS}, // New
+  {"ptrListSet",          xmlsec_PtrListSet,          METH_VARARGS},
+  {"ptrListRemove",       xmlsec_PtrListRemove,       METH_VARARGS},
+  {"ptrListDebugDump",    xmlsec_PtrListDebugDump,    METH_VARARGS},
+  {"ptrListDebugXmlDump", xmlsec_PtrListDebugXmlDump, METH_VARARGS},
+  {"ptrListGetName",      xmlsec_PtrListGetName,      METH_VARARGS}, // New
+  {"ptrListIsValid",      xmlsec_PtrListIsValid,      METH_VARARGS}, // New
 
   /* membuf.h */
   {"transformMemBufId",        xmlsec_TransformMemBufId,        METH_VARARGS},
