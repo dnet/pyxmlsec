@@ -26,8 +26,7 @@
 # This is free software; see COPYING file in the source
 # distribution for preciese wording.
 # 
-# Copyright (C) 2003 Valery Febvre <vfebvre@easter-eggs.com>
-# Copyright (C) 2002-2003 Aleksey Sanin <aleksey@aleksey.com>
+# Copyright (C) 2003-2004 Valery Febvre <vfebvre@easter-eggs.com>
 #
 
 import sys, os
@@ -151,7 +150,7 @@ def verify_file(mngr, xml_file):
     # Limit the Reference URI attributes to empty or None
     dsig_ctx.enabledReferenceUris = xmlsec.TransformUriTypeEmpty
 
-    # Limit allowed transforms for siganture and reference processing
+    # Limit allowed transforms for signature and reference processing
     if (dsig_ctx.enableSignatureTransform(xmlsec.transformInclC14NId) < 0 or
         dsig_ctx.enableSignatureTransform(xmlsec.transformExclC14NId) < 0 or
         dsig_ctx.enableSignatureTransform(xmlsec.transformSha1Id)     < 0 or

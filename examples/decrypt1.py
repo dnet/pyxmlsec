@@ -16,8 +16,7 @@
 # This is free software; see COPYING file in the source
 # distribution for preciese wording.
 # 
-# Copyright (C) 2002-2003 Aleksey Sanin <aleksey@aleksey.com>
-# Copyright (C) 2003 Valery Febvre <vfebvre@easter-eggs.com>
+# Copyright (C) 2003-2004 Valery Febvre <vfebvre@easter-eggs.com>
 #
 
 import sys
@@ -109,20 +108,20 @@ def decrypt_file(enc_file, key_file):
         print "Error: failed to set key name for key from \"%s\"" % key_file
         return cleanup(doc, enc_ctx)
 
-    enc_ctx.setEncKey(key)
+    enc_ctx.encKey = key
 
     # Decrypt the data
-    if enc_ctx.decrypt(node) < 0 or enc_ctx.getResult() is None:
+    if enc_ctx.decrypt(node) < 0 or enc_ctx.result is None:
         print "Error: decryption failed"
         return cleanup(doc, enc_ctx)
 
     # Print decrypted data to stdout
-    if enc_ctx.getResultReplaced() != 0:
+    if enc_ctx.resultReplaced != 0:
         print "Decrypted XML data:"
         doc.dump("-")
     else:
-        print "Decrypted binary data (%d bytes):" % enc_ctx.getResult().getSize()
-        print enc_ctx.getResult().getData()
+        print "Decrypted binary data (%d bytes):" % enc_ctx.result.getSize()
+        print enc_ctx.result.getData()
 
     # Success
     return cleanup(doc, enc_ctx, 1)
