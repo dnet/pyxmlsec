@@ -1,3 +1,35 @@
+2004-11-14  Valery Febvre  <vfebvre@easter-eggs.com>
+
+	* keys.c: Fixed a small bug in xmlSecKey_getattr()
+	"name" attribute was wrapped with wrap_xmlCharPtr() instead of wrap_xmlCharPtrConst()
+
+	* xmlsec.py: Fixed a small bug in getData() method of Key class
+
+2004-10-03  Valery Febvre  <vfebvre@easter-eggs.com>
+
+	* xmlsec_strings.py: Synchronized with XMLSec 1.2.6
+
+	* setup.py, xmlsec.py, xmlsecmod.c, xmlsecmod.h, errors.c, errors.h:
+	Added errorsSetCallback() funtion and XMLSec error codes
+
+2004-08-19  Valery Febvre  <vfebvre@easter-eggs.com>
+
+	* templates.c: Fixed a 'CheckArgs' bug in xmlsec_TmplSignatureCreate()
+	doc param can be None
+
+	* setup.py: Changed version
+
+	* keysdata.c: Fixed 2 'CheckArgs' bugs in xmlsec_KeyDataDebugDump()
+	and xmlsec_KeyDataDebugXmlDump()
+	output params were missed
+
+2004-02-08  Valery Febvre  <vfebvre@easter-eggs.com>
+
+	* xmlsec.py:  dsigReferenceCtxListId was transformed into a function
+
+	* transforms.c, xmldsig.c:
+	Basic args checking added in all xmlsec functions
+
 2004-02-08  Valery Febvre  <vfebvre@easter-eggs.com>
 
 	* xmlsec.py: dsigReferenceCtxListId was transformed into a function
@@ -144,6 +176,7 @@
 	Added callback management for walkFunc attribut of xmlsec_NodeSetWalk() function
 
 2004-01-20  Valery Febvre  <vfebvre@easter-eggs.com>
+
 	* xmlsec.py:
 	Added 9 functions: keyDataIdsGet, keyDataIdsInit, keyDataIdsShutdown,
 	keyDataIdsRegisterDefault, keyDataIdsRegister, keyDataXmlRead,
@@ -190,11 +223,13 @@
 	* setup.py: Crypto engine 'nss' added.
 
 2004-01-16  Valery Febvre  <vfebvre@easter-eggs.com>
+
 	* setup.py:
 	Linker, pre-processor and compiler flags are now automatically detected
 	The crypto engine name can be selected
 
 2004-01-15  Valery Febvre  <vfebvre@easter-eggs.com>
+
         *: 0.1.0 release
 
 	* xmlsec.py:
