@@ -5,10 +5,10 @@
 #
 # PyXMLSec - Python bindings for XML Security library (XMLSec)
 #
-# Copyright (C) 2003-2004 Easter-eggs, ValÃ©ry Febvre
+# Copyright (C) 2003-2004 Easter-eggs, Valéry Febvre
 # http://pyxmlsec.labs.libre-entreprise.org
 #
-# Author: ValÃ©ry Febvre <vfebvre@easter-eggs.com>
+# Author: Valéry Febvre <vfebvre@easter-eggs.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,9 +26,9 @@
 
 """
 PyXMLSec - Python bindings for XML Security library (XMLSec)
-Copyright (C) 2003-2004 Easter-eggs, ValÃ©ry Febvre
+Copyright (C) 2003-2004 Easter-eggs, Valéry Febvre
 
-Author   : ValÃ©ry Febvre <vfebvre@easter-eggs.com>
+Author   : Valéry Febvre <vfebvre@easter-eggs.com>
 Homepage : http://pyxmlsec.labs.libre-entreprise.org
 
 PyXMLSec was originally developped for Glasnost project.
@@ -393,6 +393,7 @@ def base64Decode(str):
     Returns : a string with decoded data or None if an error occurs.
     """
     return xmlsecmod.base64Decode(str)
+
 class Base64Ctx:
     def __init__(self, encode, columns, _obj=None):
         """
@@ -461,6 +462,7 @@ def bufferSetDefaultAllocMode(defAllocMode, defInitialSize):
     defInitialSize : the new default buffer minimal intial size.
     """
     xmlsecmod.bufferSetDefaultAllocMode(defAllocMode, defInitialSize)
+
 class Buffer:
     def __init__(self, size=None, _obj=None):
         """
@@ -653,6 +655,7 @@ KEYINFO_FLAGS_ENCKEY_DONT_STOP_ON_FAILED_DECRYPTION = 0x00001000
 KEYINFO_FLAGS_STOP_ON_EMPTY_NODE                    = 0x00002000
 # If the flag is set then we'll skip strict checking of certs and CRLs
 KEYINFO_FLAGS_X509DATA_SKIP_STRICT_CHECKS           = 0x00004000
+
 def keyInfoNodeRead(keyInfoNode, key, keyInfoCtx):
     """
     Parses the <dsig:KeyInfo/> element keyInfoNode, extracts the key data and
@@ -1042,6 +1045,7 @@ def keyReqCopy(dst, src):
     Returns : 0 on success and a negative value if an error occurs.
     """
     return KeyReq(_obj=xmlsecmod.keyReqCopy(dst, src))
+
 class KeyReq:
     def __init__(self, keyId=None, keyType=None, keyUsage=None,
                  keyBitsSize=None, _obj=None):
@@ -1164,6 +1168,7 @@ KeyDataFormatPkcs8Pem = 4 # the PKCS#8 PEM private key.
 KeyDataFormatPkcs8Der = 5 # the PKCS#8 DER private key.
 # The "unknown" id.
 KeyDataIdUnknown = None
+
 def keyDataIdsGet():
     """
     Gets global registered key data klasses list.
@@ -1240,6 +1245,7 @@ def keyDataBinWrite(id, key, buf, bufSize, keyInfoCtx):
     Returns    : 0 on success or a negative value if an error occurs.
     """
     return xmlsecmod.keyDataBinWrite(id, key, buf, bufSize, keyInfoCtx)
+
 class KeyData:
     def __init__(self, id=None, _obj=None):
         """
@@ -1402,6 +1408,7 @@ def keysMngrGetKey(keyInfoNode, keyInfoCtx):
     Returns     : the key or None if the key is not found or an error occurs.
     """
     return Key(_obj=xmlsecmod.keysMngrGetKey(keyInfoNode, keyInfoCtx))
+
 class KeysMngr:
     def __init__(self, _obj=None):
         """
@@ -1521,6 +1528,7 @@ class KeyStore:
 def simpleKeysStoreId():
     """Returns a simple keys store klass id."""
     return KeyStoreId(_obj=xmlsecmod.simpleKeysStoreId())
+
 class KeyStoreId:
     def __init__(self, klassSize=None, objSize=None, name=None, initialize=None,
                  finalize=None, findKey=None, _obj=None):
@@ -1544,6 +1552,7 @@ class KeyStoreId:
 # list.h
 ###############################################################################
 PtrListIdUnknown = None
+
 def ptrListCopy(dst, src):
     """
     Copies src list items to dst list using duplicateItem method of the list klass.
@@ -1553,6 +1562,7 @@ def ptrListCopy(dst, src):
     Returns : 0 on success or a negative value if an error occurs.
     """
     return xmlsecmod.ptrListCopy(dst, src)
+
 class PtrList:
     def __init__(self, id=None, _obj=None):
         """
@@ -1723,6 +1733,7 @@ NodeSetList                      = 6
 NodeSetIntersection = 0
 NodeSetSubtraction  = 1
 NodeSetUnion        = 2
+
 def nodeSetGetChildren(doc, parent, withComments, invert):
     """
     Creates a new nodes set that contains:
@@ -1758,6 +1769,7 @@ def nodeSetAddList(nset, newNSet, op):
     Returns : the combined nodes set or None if an error occurs.
     """
     return xmlsecmod.nodeSetAddList(nset, newNSet, op)
+
 class NodeSet:
     def __init__(self, doc=None, nodes=None, type=None, _obj=None):
         """
@@ -2663,6 +2675,13 @@ DSIG_FLAGS_USE_VISA3D_HACK =             0x00000010
 DSigStatusUnknown   = 0
 DSigStatusSucceeded = 1
 DSigStatusInvalid   = 2
+
+def dsigReferenceCtxListId():
+    """
+    Returns : <dsig:Reference/> element processing context list id.
+    """
+    return PtrListId(_obj=xmlsecmod.dsigReferenceCtxListId())
+
 class DSigCtx:
     def __init__(self, keysMngr=None, _obj=None):
         """
