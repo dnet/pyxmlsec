@@ -30,8 +30,6 @@ import libxml2
 import xmlsec
 
 def main():
-    secret_data = "Big secret"
-
     assert(sys.argv)
     if len(sys.argv) < 3:
         print "Error: wrong number of arguments."
@@ -123,6 +121,8 @@ def encrypt_file(xml_file, key_file):
         cleanup(doc, enc_data_node)
 
     # Load DES key, assuming that there is not password
+    if not check_filename(key_file):
+        cleanup(doc, enc_data_node, enc_ctx)
     key = xmlsec.keyReadBinaryFile(xmlsec.keyDataDesId, key_file)
     if key is None:
         print "Error failed to load DES key from binary file \"%s\"" % key_file
