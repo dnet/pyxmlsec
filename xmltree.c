@@ -42,7 +42,7 @@ PyObject *xmlsec_FindNode(PyObject *self, PyObject *args) {
     return NULL;
   }
 
-  parent = PyxmlNode_Get(PyObject_GetAttr(obj_parent, PyString_FromString("_o")));
+  parent = xmlNodePtr_get(PyObject_GetAttr(obj_parent, PyString_FromString("_o")));
   node = xmlSecFindNode((xmlNodePtr)parent, name, ns);
   return PyCObject_FromVoidPtrAndDesc((void *) node, (char *) "xmlNodePtr", NULL);
 }
