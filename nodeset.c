@@ -45,9 +45,12 @@ PyObject *xmlSecNodeSet_getattr(PyObject *self, PyObject *args) {
   xmlSecNodeSetPtr nset;
   const char *attr;
 
-  if (!PyArg_ParseTuple(args, "Os:nodeSetGetAttr",
-			&nset_obj, &attr))
-    return NULL;
+  if (CheckArgs(args, "OS:nodeSetGetAttr")) {
+    if (!PyArg_ParseTuple(args, "Os:nodeSetGetAttr",
+			  &nset_obj, &attr))
+      return NULL;
+  }
+  else return NULL;
 
   nset = xmlSecNodeSetPtr_get(nset_obj);
 
@@ -80,9 +83,12 @@ PyObject *xmlSecNodeSet_setattr(PyObject *self, PyObject *args) {
   xmlSecNodeSetPtr nset;
   const char *name;
 
-  if (!PyArg_ParseTuple(args, "OsO:nodeSetSetAttr",
-			&nset_obj, &name, &value_obj))
-    return NULL;
+  if (CheckArgs(args, "OS?:nodeSetSetAttr")) {
+    if (!PyArg_ParseTuple(args, "OsO:nodeSetSetAttr",
+			  &nset_obj, &name, &value_obj))
+      return NULL;
+  }
+  else return NULL;
 
   nset = xmlSecNodeSetPtr_get(nset_obj);
     
@@ -115,8 +121,12 @@ PyObject *xmlsec_NodeSetCreate(PyObject *self, PyObject *args) {
   xmlNodeSetPtr nodes;
   xmlSecNodeSetType type;
 
-  if (!PyArg_ParseTuple(args, "OOi:nodeSetCreate", &doc_obj, &nodes_obj, &type))
-    return NULL;
+  if (CheckArgs(args, "OOI:nodeSetCreate")) {
+    if (!PyArg_ParseTuple(args, "OOi:nodeSetCreate", &doc_obj, &nodes_obj,
+			  &type))
+      return NULL;
+  }
+  else return NULL;
 
   doc = xmlDocPtr_get(doc_obj);
   nodes = xmlNodeSetPtr_get(nodes_obj);
@@ -128,8 +138,11 @@ PyObject *xmlsec_NodeSetDestroy(PyObject *self, PyObject *args) {
   PyObject *nset_obj;
   xmlSecNodeSetPtr nset;
 
-  if (!PyArg_ParseTuple(args, "O:nodeSetDestroy", &nset_obj))
-    return NULL;
+  if (CheckArgs(args, "O:nodeSetDestroy")) {
+    if (!PyArg_ParseTuple(args, "O:nodeSetDestroy", &nset_obj))
+      return NULL;
+  }
+  else return NULL;
 
   nset = xmlSecNodeSetPtr_get(nset_obj);
   xmlSecNodeSetDestroy(nset);
@@ -142,8 +155,11 @@ PyObject *xmlsec_NodeSetDocDestroy(PyObject *self, PyObject *args) {
   PyObject *nset_obj;
   xmlSecNodeSetPtr nset;
 
-  if (!PyArg_ParseTuple(args, "O:nodeSetDocDestroy", &nset_obj))
-    return NULL;
+  if (CheckArgs(args, "O:nodeSetDocDestroy")) {
+    if (!PyArg_ParseTuple(args, "O:nodeSetDocDestroy", &nset_obj))
+      return NULL;
+  }
+  else return NULL;
 
   nset = xmlSecNodeSetPtr_get(nset_obj);
   xmlSecNodeSetDocDestroy(nset);
@@ -158,9 +174,12 @@ PyObject *xmlsec_NodeSetContains(PyObject *self, PyObject *args) {
   xmlNodePtr node;
   xmlNodePtr parent;
 
-  if (!PyArg_ParseTuple(args, "OOO:nodeSetContains", &nset_obj, &node_obj,
-			&parent_obj))
-    return NULL;
+  if (CheckArgs(args, "OOO:nodeSetContains")) {
+    if (!PyArg_ParseTuple(args, "OOO:nodeSetContains", &nset_obj, &node_obj,
+			  &parent_obj))
+      return NULL;
+  }
+  else return NULL;
 
   nset = xmlSecNodeSetPtr_get(nset_obj);
   node = xmlNodePtr_get(node_obj);
@@ -175,8 +194,12 @@ PyObject *xmlsec_NodeSetAdd(PyObject *self, PyObject *args) {
   xmlSecNodeSetPtr newNSet;
   xmlSecNodeSetOp op;
 
-  if (!PyArg_ParseTuple(args, "OOi:nodeSetAdd", &nset_obj, &newNSet_obj, &op))
-    return NULL;
+  if (CheckArgs(args, "OOI:nodeSetAdd")) {
+    if (!PyArg_ParseTuple(args, "OOi:nodeSetAdd", &nset_obj, &newNSet_obj,
+			  &op))
+      return NULL;
+  }
+  else return NULL;
 
   nset = xmlSecNodeSetPtr_get(nset_obj);
   newNSet = xmlSecNodeSetPtr_get(newNSet_obj);
@@ -190,8 +213,12 @@ PyObject *xmlsec_NodeSetAddList(PyObject *self, PyObject *args) {
   xmlSecNodeSetPtr newNSet;
   xmlSecNodeSetOp op;
 
-  if (!PyArg_ParseTuple(args, "OOi:nodeSetAddList", &nset_obj, &newNSet_obj, &op))
-    return NULL;
+  if (CheckArgs(args, "OOI:nodeSetAddList")) {
+    if (!PyArg_ParseTuple(args, "OOi:nodeSetAddList", &nset_obj, &newNSet_obj,
+			  &op))
+      return NULL;
+  }
+  else return NULL;
 
   nset = xmlSecNodeSetPtr_get(nset_obj);
   newNSet = xmlSecNodeSetPtr_get(newNSet_obj);
@@ -206,15 +233,15 @@ PyObject *xmlsec_NodeSetGetChildren(PyObject *self, PyObject *args) {
   int withComments, invert;
   xmlSecNodeSetPtr cnset;
 
-  if (!PyArg_ParseTuple(args, "OOii:nodeSetGetChildren", &doc_obj, &parent_obj,
-			&withComments, &invert))
-    return NULL;
+  if (CheckArgs(args, "OoII:nodeSetGetChildren")) {
+    if (!PyArg_ParseTuple(args, "OOii:nodeSetGetChildren", &doc_obj,
+			  &parent_obj, &withComments, &invert))
+      return NULL;
+  }
+  else return NULL;
 
   doc = xmlDocPtr_get(doc_obj);
-  /* parent may be NULL */
-  if (parent_obj != Py_None) {
-    parent = xmlNodePtr_get(parent_obj);
-  }
+  parent = xmlNodePtr_get(parent_obj);
   cnset = xmlSecNodeSetGetChildren(doc, parent, withComments, invert);
 
   return (wrap_xmlSecNodeSetPtr(cnset));
@@ -247,9 +274,12 @@ PyObject *xmlsec_NodeSetWalk(PyObject *self, PyObject *args) {
   xmlSecNodeSetPtr nset;
   int ret;
 
-  if (!PyArg_ParseTuple(args, "OOO:nodeSetWalk", &nset_obj, &walkFunc_obj,
-			&data_obj))
-    return NULL;
+  if (CheckArgs(args, "OC?:nodeSetWalk")) {
+    if (!PyArg_ParseTuple(args, "OOO:nodeSetWalk", &nset_obj, &walkFunc_obj,
+			  &data_obj))
+      return NULL;
+  }
+  else return NULL;
 
   nset = xmlSecNodeSetPtr_get(nset_obj);
 
@@ -272,8 +302,11 @@ PyObject *xmlsec_NodeSetDumpTextNodes(PyObject *self, PyObject *args) {
   xmlOutputBufferPtr out;
   int ret;
 
-  if (!PyArg_ParseTuple(args, "OO:nodeSetDumpTextNodes", &nset_obj, &out_obj))
-    return NULL;
+  if (CheckArgs(args, "OO:nodeSetDumpTextNodes")) {
+    if (!PyArg_ParseTuple(args, "OO:nodeSetDumpTextNodes", &nset_obj, &out_obj))
+      return NULL;
+  }
+  else return NULL;
 
   nset = xmlSecNodeSetPtr_get(nset_obj);
   out = xmlOutputBufferPtr_get(out_obj);
@@ -287,8 +320,11 @@ PyObject *xmlsec_NodeSetDebugDump(PyObject *self, PyObject *args) {
   xmlSecNodeSetPtr nset;
   FILE *output;
 
-  if (!PyArg_ParseTuple(args, "OO:nodeSetDebugDump", &nset_obj, &output_obj))
-    return NULL;
+  if (CheckArgs(args, "OO:nodeSetDebugDump")) {
+    if (!PyArg_ParseTuple(args, "OO:nodeSetDebugDump", &nset_obj, &output_obj))
+      return NULL;
+  }
+  else return NULL;
 
   nset = xmlSecNodeSetPtr_get(nset_obj);
   output = PythonFile_get(output_obj);
