@@ -97,7 +97,7 @@ static PyMethodDef xmlsec_methods[] = {
   {"base64Decode",        xmlsec_Base64Decode,        METH_VARARGS},
 
   /* buffer.h */
-  {"bufferSetDefaultAllocMode",    xmlsec_BufferSetDefaultAllocMode,    METH_VARARGS}, // New
+  {"bufferSetDefaultAllocMode",    xmlsec_BufferSetDefaultAllocMode,    METH_VARARGS},
   {"bufferCreate",                 xmlsec_BufferCreate,                 METH_VARARGS},
   {"bufferDestroy",                xmlsec_BufferDestroy,                METH_VARARGS},
   {"bufferInitialize",             xmlsec_BufferInitialize,             METH_VARARGS},
@@ -136,12 +136,22 @@ static PyMethodDef xmlsec_methods[] = {
   {"keyReadMemory",     xmlsec_KeyReadMemory,     METH_VARARGS},
 
   /* keyinfo.h */
-  {"keyInfoCtxCreate",     xmlsec_KeyInfoCtxCreate,     METH_VARARGS},
-  {"keyInfoCtxDestroy",    xmlsec_KeyInfoCtxDestroy,    METH_VARARGS},
-  {"keyInfoCtxInitialize", xmlsec_KeyInfoCtxInitialize, METH_VARARGS},
-  {"keyInfoCtxFinalize",   xmlsec_KeyInfoCtxFinalize,   METH_VARARGS},
-  {"keyInfoCtxReset",      xmlsec_KeyInfoCtxReset,      METH_VARARGS},
-  {"getEnabledKeyData",    keyinfo_get_enabledKeyData,  METH_VARARGS},
+  {"keyInfoNodeRead",  xmlsec_KeyInfoNodeRead,  METH_VARARGS}, // New
+  {"keyInfoNodeWrite", xmlsec_KeyInfoNodeWrite, METH_VARARGS}, // New
+  {"keyInfoCtxCreate",       xmlsec_KeyInfoCtxCreate,       METH_VARARGS},
+  {"keyInfoCtxDestroy",      xmlsec_KeyInfoCtxDestroy,      METH_VARARGS},
+  {"keyInfoCtxInitialize",   xmlsec_KeyInfoCtxInitialize,   METH_VARARGS},
+  {"keyInfoCtxFinalize",     xmlsec_KeyInfoCtxFinalize,     METH_VARARGS},
+  {"keyInfoCtxReset",        xmlsec_KeyInfoCtxReset,        METH_VARARGS},
+  {"keyInfoCtxCopyUserPref", xmlsec_KeyInfoCtxCopyUserPref, METH_VARARGS}, // New
+  {"keyInfoCtxCreateEncCtx", xmlsec_KeyInfoCtxCreateEncCtx, METH_VARARGS}, // New
+  {"keyInfoCtxDebugDump",    xmlsec_KeyInfoCtxDebugDump,    METH_VARARGS}, // New
+  {"keyInfoCtxDebugXmlDump", xmlsec_KeyInfoCtxDebugXmlDump, METH_VARARGS}, // New
+  {"keyDataNameId",            xmlsec_KeyDataNameId,            METH_VARARGS}, // New
+  {"keyDataValueId",           xmlsec_KeyDataValueId,           METH_VARARGS}, // New
+  {"keyDataRetrievalMethodId", xmlsec_KeyDataRetrievalMethodId, METH_VARARGS}, // New
+  {"keyDataEncryptedKeyId",    xmlsec_KeyDataEncryptedKeyId,    METH_VARARGS}, // New
+  {"getEnabledKeyData", keyinfo_get_enabledKeyData, METH_VARARGS},
 
   /* keysmngr.h */
   {"keysMngrCreate",    xmlsec_KeysMngrCreate,    METH_VARARGS},
