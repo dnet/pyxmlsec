@@ -237,6 +237,93 @@ TransformUriTypeRemote       = 0x0008 # The remote URI type.
 TransformUriTypeAny          = 0xFFFF # Any URI type.
 
 ###############################################################################
+# membuf.h
+###############################################################################
+# The Memory Buffer transform Id method
+transformMemBufId = xmlsecmod.transformMemBufId()
+def transformMemBufGetBuffer(transform):
+    """
+    Gets the memory buffer transform buffer.
+    transform : the memory buffer transform.
+    Returns   : the transform's buffer. 
+    """
+    return xmlsecmod.transformMemBufGetBuffer(transform)
+
+###############################################################################
+# base64.h
+###############################################################################
+BASE64_LINESIZE = 64 # The default maximum base64 encoded line size.
+# Standalone functions to do base64 encode/decode "at once"
+def base64Encode(buf, len, columns):
+    # TODO : xmlfree on return buf ???
+    """
+    Encodes the data from input buffer.
+    buf     : the input buffer.
+    len     : the input buffer size.
+    columns : the output max line length (if 0 then no line breaks would be inserted)
+    Returns : a string with base64 encoded data or None if an error occurs.
+    """
+    return xmlsecmod.base64Encode(buf, len, columns)
+def base64Decode(str, buf, len):
+    """
+    Decodes input base64 encoded string and puts result into the output buffer.
+    str     : the input buffer with base64 encoded string
+    buf     : the output buffer
+    len     : the output buffer size
+    Returns : the number of bytes written to the output buffer or a negative
+    value if an error occurs 
+    """
+    return xmlsecmod.base64Decode(str, buf, len)
+class Base64Ctx:
+    def __init__(self, encode, columns, _obj=None):
+        """
+        Allocates and initializes new base64 context.
+        encode  : the encode/decode flag (1 - encode, 0 - decode)
+        columns : the max line length.
+        Returns : the newly created xmlSecBase64Ctx structure or None if an error occurs.
+        """
+        if _obj != None:
+            self._o = _obj
+            return
+        self._o = xmlsecmod.base64CtxCreate(encode, columns)
+        if self._o is None: raise parserError('xmlSecBase64CtxCreate() failed')
+    def destroy(self):
+        """Destroys base64 context."""
+        xmlsecmod.base64CtxDestroy(self)
+    def initialize(self, encode, columns):
+        """
+        Initializes new base64 context.
+        encode  : the encode/decode flag (1 - encode, 0 - decode)
+        columns : the max line length.
+        Returns : 0 on success and a negative value otherwise.
+        """
+        return xmlsecmod.base64CtxDestroy(self, encode, columns)
+    def finalize(self):
+        """Frees all the resources allocated by Base64 context."""
+        xmlsecmod.base64CtxDestroy(self)
+    def update(self, inBuf, inBufSize, outBuf, outBufSize):
+        """
+        Encodes or decodes the next piece of data from input buffer.
+        inBuf      : the input buffer
+        inBufSize  : the input buffer size
+        outBuf     : the output buffer
+        outBufSize : the output buffer size
+        Returns    : the number of bytes written to output buffer
+        or -1 if an error occurs.
+        """
+        return xmlsecmod.base64CtxUpdate(self, inBuf, inBufSize, outBuf, outBufSize)
+    def final(self, outBuf, outBufSize):
+        """
+        Encodes or decodes the last piece of data stored in the context and
+        finalizes the result.
+        outBuf     : the output buffer
+        outBufSize : the output buffer size
+        Returns    : the number of bytes written to output buffer
+        or -1 if an error occurs.
+        """
+        return xmlsecmod.base64CtxFinal(self, outBuf, outBufSize)
+
+###############################################################################
 # xmlenc.h
 ###############################################################################
 xmlEncCtxModeEncryptedData = 0 # the <enc:EncryptedData/> element processing.
@@ -256,7 +343,7 @@ class EncCtx:
         if self._o is None: raise parserError('xmlSecEncCtxCreate() failed')
     def destroy(self):
         """Destroys context object."""
-        return xmlsecmod.encCtxDestroy(self)
+        xmlsecmod.encCtxDestroy(self)
     def initialize(self, keysMngr):
         """
         Initializes <enc:EncryptedData/> element processing context. The caller
@@ -406,7 +493,7 @@ class DSigCtx:
     def initialize(self, mngr):
         """
         Initializes <dsig:Signature/> element processing context. The caller is
-        responsible for cleaing up returend object by calling finalize method.
+        responsible for cleaing up returned object by calling finalize method.
         keysMngr : the keys manager.
         Returns  : 0 on success or a negative value if an error occurs.
         """
