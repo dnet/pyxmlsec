@@ -51,10 +51,16 @@ class DSigCtx:
 ##     def get_flags(self):
 ##         return self._o.flags
     #flags = property(get_flags, None, None, "the XML Digital Signature processing flags")
+    def destroy(self):
+        return xmlsecmod.dsigCtxDestroy(self)
     def sign(self, tmpl):
         return xmlsecmod.dsigCtxSign(self, tmpl)
+    def verify(self, node):
+        return xmlsecmod.dsigCtxVerify(self, node)
     def setSignKey(self, signKey):
         self._o = xmlsecmod.dsigCtxSetSignKey(self, signKey)
+    def getStatus(self):
+        return xmlsecmod.dsigCtxGetStatus(self)
 
 class TmplSignature(libxml2.xmlNode):
     def __init__(self, _obj=None):
