@@ -31,16 +31,13 @@ import libxslt
 import xmlsecmod
 from xmlsec_strings import *
 
+## xmlsec.h
 def init():
     return xmlsecmod.init()
-def findNode(parent, name, ns):
-    ret = xmlsecmod.findNode(parent, name, ns)
-    if ret == None:
-        return None
-    return libxml2.xmlNode(_obj=ret)
 def shutdown():
     return xmlsecmod.shutdown()
 
+## crypto.h
 def cryptoAppInit(config=None):
     return xmlsecmod.cryptoAppInit(config)
 def cryptoAppKeyLoad(filename, format, pwd, pwdCallback, pwdCallbackCtx):
@@ -62,6 +59,65 @@ def cryptoInit():
     return xmlsecmod.cryptoInit()
 def cryptoShutdown():
     return xmlsecmod.cryptoShutdown()
+
+## xmltree.h
+def getNodeNsHref(cur):
+    return xmlsecmod.getNodeNsHref(cur)
+def checkNodeName(cur, name, ns=None):
+    return xmlsecmod.checkNodeName(cur, name, ns)
+def getNextElementNode(cur):
+    _obj = xmlsecmod.getNextElementNode(cur)
+    if _obj == None:
+        return None
+    return libxml2.xmlNode(_obj=_obj)
+def findChild(parent, name, ns=None):
+    _obj = xmlsecmod.findChild(parent, name, ns)
+    if _obj == None:
+        return None
+    return libxml2.xmlNode(_obj=_obj)
+def findParent(cur, name, ns=None):
+    _obj = xmlsecmod.findParent(cur, name, ns)
+    if _obj == None:
+        return None
+    return libxml2.xmlNode(_obj=_obj)
+def findNode(parent, name, ns=None):
+    _obj = xmlsecmod.findNode(parent, name, ns)
+    if _obj == None:
+        return None
+    return libxml2.xmlNode(_obj=_obj)
+def addChild(parent, name, ns=None):
+    _obj = xmlsecmod.addChild(parent, name, ns)
+    if _obj == None:
+        return None
+    return libxml2.xmlNode(_obj=_obj)
+def addNextSibling(node, name, ns=None):
+    _obj = xmlsecmod.addNextSibling(node, name, ns)
+    if _obj == None:
+        return None
+    return libxml2.xmlNode(_obj=_obj)
+def addPrevSibling(node, name, ns=None):
+    _obj = xmlsecmod.addPrevSibling(node, name, ns)
+    if _obj == None:
+        return None
+    return libxml2.xmlNode(_obj=_obj)
+def replaceNode(node, newNode):
+    return xmlsecmod.replaceNode(node, newNode)
+def replaceContent(node, newNode):
+    return xmlsecmod.replaceContent(node, newNode)
+def replaceNodeBuffer(node, buffer, size):
+    return xmlsecmod.replaceNodeBuffer(node, buffer, size)
+def addIDs(doc, cur, ids):
+    xmlsecmod.addIDs(doc, cur, ids)
+def createTree(rootNodeName, rootNodeNs):
+    return libxml2.xmlDoc(_obj=xmlsecmod.createTree(rootNodeName, rootNodeNs))
+def isEmptyNode(node):
+    return xmlsecmod.isEmptyNode(node)
+def isEmptyString(str):
+    return xmlsecmod.isEmptyString(str)
+def isHex(c):
+    return xmlsecmod.isHex(c)
+def getHex(c):
+    return xmlsecmod.getHex(c)
 
 ## Transforms Ids methods
 transformInclC14NId  = xmlsecmod.transformInclC14NId()
