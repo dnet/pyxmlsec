@@ -12,6 +12,9 @@
 	TransformId class was added.
 	'defSignMethodId', 'defC14NMethodId' and 'defDigestMethodId' attributs
 	of class DSigCtx are now returned as TransformId object.
+	Function addRetrievalMethod was added in class TmplKeyInfo
+	New class TmplTransform was created with 7 methods.
+	New class TmplRetrievalMethod was created with 1 method.
 
 2004-01-24  Valery Febvre  <vfebvre@easter-eggs.com>
 
