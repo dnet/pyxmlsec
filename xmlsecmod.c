@@ -23,6 +23,7 @@
  */
 
 #include "xmlsecmod.h"
+#include "xmlenc.h"
 #include "xmlsec.h"
 #include "xmltree.h"
 #include "xmldsig.h"
@@ -42,6 +43,21 @@ static PyMethodDef xmlsec_methods[] = {
   {"shutdown",          xmlsec_Shutdown,          METH_VARARGS},
   {"checkVersionExact", xmlsec_CheckVersionExact, METH_VARARGS},
   {"checkVersion",      xmlsec_CheckVersion,      METH_VARARGS},
+
+  /* xmlenc.h */
+  {"encCtxCreate",          xmlsec_EncCtxCreate,          METH_VARARGS}, // New
+  {"encCtxDestroy",         xmlsec_EncCtxDestroy,         METH_VARARGS}, // New
+  {"encCtxInitialize",      xmlsec_EncCtxInitialize,      METH_VARARGS}, // New
+  {"encCtxFinalize",        xmlsec_EncCtxFinalize,        METH_VARARGS}, // New
+  {"encCtxCopyUserPref",    xmlsec_EncCtxCopyUserPref,    METH_VARARGS}, // New
+  {"encCtxReset",           xmlsec_EncCtxReset,           METH_VARARGS}, // New
+  {"encCtxBinaryEncrypt",   xmlsec_EncCtxBinaryEncrypt,   METH_VARARGS}, // New
+  {"encCtxXmlEncrypt",      xmlsec_EncCtxXmlEncrypt,      METH_VARARGS}, // New
+  {"encCtxUriEncrypt",      xmlsec_EncCtxUriEncrypt,      METH_VARARGS}, // New
+  {"encCtxDecrypt",         xmlsec_EncCtxDecrypt,         METH_VARARGS}, // New
+  {"encCtxDecryptToBuffer", xmlsec_EncCtxDecryptToBuffer, METH_VARARGS}, // New
+  {"encCtxDebugDump",       xmlsec_EncCtxDebugDump,       METH_VARARGS}, // New
+  {"encCtxDebugXmlDump",    xmlsec_EncCtxDebugXmlDump,    METH_VARARGS}, // New
 
   /* xmltree.h */
   {"nodeGetName",        xmlsec_NodeGetName,        METH_VARARGS},
@@ -73,18 +89,18 @@ static PyMethodDef xmlsec_methods[] = {
   {"dsigCtxVerify",                      xmlsec_DSigCtxVerify,                      METH_VARARGS},
   {"dsigCtxEnableReferenceTransform",    xmlsec_DSigCtxEnableReferenceTransform,    METH_VARARGS},
   {"dsigCtxEnableSignatureTransform",    xmlsec_DSigCtxEnableSignatureTransform,    METH_VARARGS},
-  {"dsigCtxGetPreSignBuffer",            xmlsec_DSigCtxGetPreSignBuffer,            METH_VARARGS}, // New
-  {"dsigCtxDebugDump",                   xmlsec_DSigCtxDebugDump,                   METH_VARARGS}, // New
-  {"dsigCtxDebugXmlDump",                xmlsec_DSigCtxDebugXmlDump,                METH_VARARGS}, // New
-  {"dsigReferenceCtxCreate",             xmlsec_DSigReferenceCtxCreate,             METH_VARARGS}, // New
-  {"dsigReferenceCtxDestroy",            xmlsec_DSigReferenceCtxDestroy,            METH_VARARGS}, // New
-  {"dsigReferenceCtxInitialize",         xmlsec_DSigReferenceCtxInitialize,         METH_VARARGS}, // New
-  {"dsigReferenceCtxFinalize",           xmlsec_DSigReferenceCtxFinalize,           METH_VARARGS}, // New
-  {"dsigReferenceCtxProcessNode",        xmlsec_DSigReferenceCtxProcessNode,        METH_VARARGS}, // New
-  {"dsigReferenceCtxGetPreDigestBuffer", xmlsec_DSigReferenceCtxGetPreDigestBuffer, METH_VARARGS}, // New
-  {"dsigReferenceCtxDebugDump",          xmlsec_DSigReferenceCtxDebugDump,          METH_VARARGS}, // New
-  {"dsigReferenceCtxDebugXmlDump",       xmlsec_DSigReferenceCtxDebugXmlDump,       METH_VARARGS}, // New
-  {"dsigReferenceCtxListId",             xmlsec_DSigReferenceCtxListId,             METH_VARARGS}, // New
+  {"dsigCtxGetPreSignBuffer",            xmlsec_DSigCtxGetPreSignBuffer,            METH_VARARGS},
+  {"dsigCtxDebugDump",                   xmlsec_DSigCtxDebugDump,                   METH_VARARGS},
+  {"dsigCtxDebugXmlDump",                xmlsec_DSigCtxDebugXmlDump,                METH_VARARGS},
+  {"dsigReferenceCtxCreate",             xmlsec_DSigReferenceCtxCreate,             METH_VARARGS},
+  {"dsigReferenceCtxDestroy",            xmlsec_DSigReferenceCtxDestroy,            METH_VARARGS},
+  {"dsigReferenceCtxInitialize",         xmlsec_DSigReferenceCtxInitialize,         METH_VARARGS},
+  {"dsigReferenceCtxFinalize",           xmlsec_DSigReferenceCtxFinalize,           METH_VARARGS},
+  {"dsigReferenceCtxProcessNode",        xmlsec_DSigReferenceCtxProcessNode,        METH_VARARGS},
+  {"dsigReferenceCtxGetPreDigestBuffer", xmlsec_DSigReferenceCtxGetPreDigestBuffer, METH_VARARGS},
+  {"dsigReferenceCtxDebugDump",          xmlsec_DSigReferenceCtxDebugDump,          METH_VARARGS},
+  {"dsigReferenceCtxDebugXmlDump",       xmlsec_DSigReferenceCtxDebugXmlDump,       METH_VARARGS},
+  {"dsigReferenceCtxListId",             xmlsec_DSigReferenceCtxListId,             METH_VARARGS},
   {"dsigCtxSetSignKey",                  xmldsig_set_signKey,                       METH_VARARGS},
   {"dsigCtxSetEnabledReferenceUris",     xmldsig_set_enabledReferenceUris,          METH_VARARGS},
   {"dsigCtxGetStatus",                   xmldsig_get_status,                        METH_VARARGS},
