@@ -200,16 +200,16 @@ static PyMethodDef xmlsec_methods[] = {
   {"transformMemBufGetBuffer", xmlsec_TransformMemBufGetBuffer, METH_VARARGS},
 
   /* nodeset.h */
-  {"nodeSetCreate",        xmlsec_NodeSetCreate,        METH_VARARGS}, // New
-  {"nodeSetDestroy",       xmlsec_NodeSetDestroy,       METH_VARARGS}, // New
-  {"nodeSetDocDestroy",    xmlsec_NodeSetDocDestroy,    METH_VARARGS}, // New
-  {"nodeSetContains",      xmlsec_NodeSetContains,      METH_VARARGS}, // New
-  {"nodeSetAdd",           xmlsec_NodeSetAdd,           METH_VARARGS}, // New
-  {"nodeSetAddList",       xmlsec_NodeSetAddList,       METH_VARARGS}, // New
-  {"nodeSetGetChildren",   xmlsec_NodeSetGetChildren,   METH_VARARGS}, // New
-  {"nodeSetWalk",          xmlsec_NodeSetWalk,          METH_VARARGS}, // New
-  {"nodeSetDumpTextNodes", xmlsec_NodeSetDumpTextNodes, METH_VARARGS}, // New
-  {"nodeSetDebugDump",     xmlsec_NodeSetDebugDump,     METH_VARARGS}, // New
+  {"nodeSetCreate",        xmlsec_NodeSetCreate,        METH_VARARGS},
+  {"nodeSetDestroy",       xmlsec_NodeSetDestroy,       METH_VARARGS},
+  {"nodeSetDocDestroy",    xmlsec_NodeSetDocDestroy,    METH_VARARGS},
+  {"nodeSetContains",      xmlsec_NodeSetContains,      METH_VARARGS},
+  {"nodeSetAdd",           xmlsec_NodeSetAdd,           METH_VARARGS},
+  {"nodeSetAddList",       xmlsec_NodeSetAddList,       METH_VARARGS},
+  {"nodeSetGetChildren",   xmlsec_NodeSetGetChildren,   METH_VARARGS},
+  {"nodeSetWalk",          xmlsec_NodeSetWalk,          METH_VARARGS},
+  {"nodeSetDumpTextNodes", xmlsec_NodeSetDumpTextNodes, METH_VARARGS},
+  {"nodeSetDebugDump",     xmlsec_NodeSetDebugDump,     METH_VARARGS},
 
   /* list.h  */
   {"ptrListCreate",  xmlsec_PtrListCreate,  METH_VARARGS},
@@ -244,27 +244,32 @@ static PyMethodDef xmlsec_methods[] = {
   {"tmplKeyInfoAddEncryptedKey",        xmlsec_TmplKeyInfoAddEncryptedKey,        METH_VARARGS},
 
   /* transforms.h */
-  {"transformUriTypeCheck",           xmlsec_TransformUriTypeCheck,           METH_VARARGS}, // New
-  {"transformCtxCreate",              xmlsec_TransformCtxCreate,              METH_VARARGS}, // New
-  {"transformCtxDestroy",             xmlsec_TransformCtxDestroy,             METH_VARARGS}, // New
-  {"transformCtxInitialize",          xmlsec_TransformCtxInitialize,          METH_VARARGS}, // New
-  {"transformCtxFinalize",            xmlsec_TransformCtxFinalize,            METH_VARARGS}, // New
-  {"transformCtxReset",               xmlsec_TransformCtxReset,               METH_VARARGS}, // New
-  {"transformBase64Id",               xmlsec_TransformBase64Id,               METH_VARARGS}, // New
-  {"transformBase64SetLineSize",      xmlsec_TransformBase64SetLineSize,      METH_VARARGS}, // New
+  {"transformUriTypeCheck",           xmlsec_TransformUriTypeCheck,           METH_VARARGS},
+  {"transformCtxCreate",              xmlsec_TransformCtxCreate,              METH_VARARGS},
+  {"transformCtxDestroy",             xmlsec_TransformCtxDestroy,             METH_VARARGS},
+  {"transformCtxInitialize",          xmlsec_TransformCtxInitialize,          METH_VARARGS},
+  {"transformCtxFinalize",            xmlsec_TransformCtxFinalize,            METH_VARARGS},
+  {"transformCtxReset",               xmlsec_TransformCtxReset,               METH_VARARGS},
+  {"transformCreate",                 xmlsec_TransformCreate,                 METH_VARARGS}, // New
+  {"transformDestroy",                xmlsec_TransformDestroy,                METH_VARARGS}, // New
+  {"transformNodeRead",               xmlsec_TransformNodeRead,               METH_VARARGS}, // New
+  {"transformSetKey",                 xmlsec_TransformSetKey,                 METH_VARARGS}, // New
+  {"transformSetKeyReq",              xmlsec_TransformSetKeyReq,              METH_VARARGS}, // New
+  {"transformBase64Id",               xmlsec_TransformBase64Id,               METH_VARARGS},
+  {"transformBase64SetLineSize",      xmlsec_TransformBase64SetLineSize,      METH_VARARGS},
   {"transformInclC14NId",             xmlsec_TransformInclC14NId,             METH_VARARGS},
-  {"transformInclC14NWithCommentsId", xmlsec_TransformInclC14NWithCommentsId, METH_VARARGS}, // New
+  {"transformInclC14NWithCommentsId", xmlsec_TransformInclC14NWithCommentsId, METH_VARARGS},
   {"transformExclC14NId",             xmlsec_TransformExclC14NId,             METH_VARARGS},
-  {"transformExclC14NWithCommentsId", xmlsec_TransformExclC14NWithCommentsId, METH_VARARGS}, // New
+  {"transformExclC14NWithCommentsId", xmlsec_TransformExclC14NWithCommentsId, METH_VARARGS},
   {"transformEnvelopedId",            xmlsec_TransformEnvelopedId,            METH_VARARGS},
-  {"transformXPathId",                xmlsec_TransformXPathId,                METH_VARARGS}, // New
-  {"transformXPath2Id",               xmlsec_TransformXPath2Id,               METH_VARARGS}, // New
-  {"transformXPointerId",             xmlsec_TransformXPointerId,             METH_VARARGS}, // New
-  {"transformXPointerSetExpr",        xmlsec_TransformXPointerSetExpr,        METH_VARARGS}, // New
-  {"transformXsltId",                 xmlsec_TransformXsltId,                 METH_VARARGS}, // New
-  {"transformRemoveXmlTagsC14NId",    xmlsec_TransformRemoveXmlTagsC14NId,    METH_VARARGS}, // New
-  {"transformVisa3DHackId",           xmlsec_TransformVisa3DHackId,           METH_VARARGS}, // New
-  {"transformVisa3DHackSetID",        xmlsec_TransformVisa3DHackSetID,        METH_VARARGS}, // New
+  {"transformXPathId",                xmlsec_TransformXPathId,                METH_VARARGS},
+  {"transformXPath2Id",               xmlsec_TransformXPath2Id,               METH_VARARGS},
+  {"transformXPointerId",             xmlsec_TransformXPointerId,             METH_VARARGS},
+  {"transformXPointerSetExpr",        xmlsec_TransformXPointerSetExpr,        METH_VARARGS},
+  {"transformXsltId",                 xmlsec_TransformXsltId,                 METH_VARARGS},
+  {"transformRemoveXmlTagsC14NId",    xmlsec_TransformRemoveXmlTagsC14NId,    METH_VARARGS},
+  {"transformVisa3DHackId",           xmlsec_TransformVisa3DHackId,           METH_VARARGS},
+  {"transformVisa3DHackSetID",        xmlsec_TransformVisa3DHackSetID,        METH_VARARGS},
 
   /* keys.h */
   {"keyReqCreate",      keys_KeyReqCreate,        METH_VARARGS},
