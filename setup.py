@@ -1,11 +1,11 @@
-#!/usr/bin/env python2.2
+#!/usr/bin/env python
 
 # $Id$
 #
-# pyxmlsec -- A Python binding for XML Security library (XMLSec)
+# PyXMLSec - A Python binding for XML Security library (XMLSec)
 #
-# Copyright (C) 2003
-# http://
+# Copyright (C) 2003 Easter-eggs, Valery Febvre
+# http://pyxmlsec.labs.libre-entreprise.org
 #
 # Author: Valery Febvre <vfebvre@easter-eggs.com>
 #
@@ -13,12 +13,12 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
@@ -34,13 +34,13 @@ setup(name = "pyxmlsec",
       url = "http://",
       ext_modules = [Extension("xmlsecmod",
                                sources = ["xmlsecmod.c", "xmlsec.c", "xmltree.c",
-                                          "xmldsig.c", "crypto.c", "openssl.c",
+                                          "xmldsig.c", "app.c", "buffer.c", "openssl.c",
                                           "templates.c", "transforms.c", "keys.c",
                                           "keyinfo.c", "keysmngr.c", "list.c"],
                                define_macros = [('XMLSEC_NO_XKMS', '1'),
                                                 ('XMLSEC_CRYPTO', 'openssl'),
                                                 ('XMLSEC_CRYPTO_OPENSSL', '1')],
-                               include_dirs = ["/usr/include/xmlsec1/",
+                               include_dirs = ["/usr/local/include/xmlsec1/",
                                                "/usr/include/libxml2/"],
                                library_dirs = ["/usr/lib"],
                                libraries = ["xmlsec1-openssl", "xmlsec1", "crypto",
