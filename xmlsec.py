@@ -1153,7 +1153,13 @@ class KeyDataId:
 	if _obj != None:
             self._o = _obj
             return
-        self._o = xmlsecmod.keyDataIdCreate()
+        self._o = xmlsecmod.keyDataIdCreate(klassSize, objSize, name, usage,
+                                            href, dataNodeName, dataNodeNs,
+                                            initialize, duplicate, finalize,
+                                            generate, getType, getSize,
+                                            getIdentifier, xmlRead, xmlWrite,
+                                            binRead, binWrite, debugDump,
+                                            debugXmlDump)
     def getName(self):
         """Returns data klass name."""
         return xmlsecmod.keyDataIdGetName(self)
