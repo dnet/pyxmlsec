@@ -28,6 +28,7 @@
 #include "keyinfo.h"
 #include "keys.h"
 #include "keysdata.h"
+#include "list.h"
 
 PyObject *wrap_xmlSecKeysMngrPtr(xmlSecKeysMngrPtr mngr) {
   PyObject *ret;
@@ -63,6 +64,67 @@ PyObject *wrap_xmlSecKeyStoreId(xmlSecKeyStoreId storeId) {
   ret = PyCObject_FromVoidPtrAndDesc((void *) storeId,
 				     (char *) "xmlSecKeyStoreId", NULL);
   return (ret);
+}
+
+/*****************************************************************************/
+
+PyObject *xmlSecKeysMngr_getattr(PyObject *self, PyObject *args) {
+  PyObject *mngr_obj;
+  xmlSecKeysMngrPtr mngr;
+  const char *attr;
+
+  if (!PyArg_ParseTuple(args, "Os:keysMngrGetAttr", &mngr_obj, &attr))
+    return NULL;
+
+  mngr = xmlSecKeysMngrPtr_get(mngr_obj);
+
+  if (!strcmp(attr, "__members__"))
+    return Py_BuildValue("[sss]", "keysStore", "storesList", "getKey");
+  if (!strcmp(attr, "keysStore"))
+    return (wrap_xmlSecKeyStorePtr(mngr->keysStore));
+  if (!strcmp(attr, "storesList"))
+    return (wrap_xmlSecPtrListPtr(&(mngr->storesList)));
+  if (!strcmp(attr, "getKey"))
+    return PyCObject_FromVoidPtr((void *) mngr->getKey, NULL);
+
+  Py_INCREF(Py_None);
+  return (Py_None);
+}
+
+static xmlHashTablePtr GetKeyCallbacks = NULL;
+static xmlSecKeyPtr xmlsec_GetKeyCallback(xmlNodePtr keyInfoNode,
+					  xmlSecKeyInfoCtxPtr keyInfoCtx);
+
+PyObject *xmlSecKeysMngr_setattr(PyObject *self, PyObject *args) {
+  PyObject *mngr_obj, *value_obj;
+  xmlSecKeysMngrPtr mngr;
+  const char *name;
+
+  if (!PyArg_ParseTuple(args, "OsO:keysMngrSetAttr",
+			&mngr_obj, &name, &value_obj))
+    return NULL;
+
+  mngr = xmlSecKeysMngrPtr_get(mngr_obj);
+    
+  if (!strcmp(name, "keysStore"))
+    mngr->keysStore = xmlSecKeyStorePtr_get(value_obj);
+  else if (!strcmp(name, "storesList"))
+    mngr->storesList = *(xmlSecPtrListPtr_get(value_obj));
+  else if (!strcmp(name, "getKey")) {
+    if (value_obj != Py_None) {
+      if (GetKeyCallbacks == NULL)
+	GetKeyCallbacks = xmlHashCreate(10);
+      xmlHashAddEntry(GetKeyCallbacks,
+		      mngr->keysStore->id->name, value_obj);
+      Py_XINCREF(value_obj);
+      mngr->getKey = xmlsec_GetKeyCallback;
+    }
+    else
+      mngr->getKey = NULL;
+  }
+
+  Py_INCREF(Py_None);
+  return (Py_None);
 }
 
 /*****************************************************************************/
@@ -159,16 +221,30 @@ PyObject *xmlsec_KeysMngrGetDataStore(PyObject *self, PyObject *args) {
   return (wrap_xmlSecKeyDataStorePtr(store));
 }
 
-PyObject *xmlsec_GetKeyCallback(PyObject *self, PyObject *args) {
-  /* TODO : Not yet implemented */
-  Py_INCREF(Py_None);
-  return (Py_None);
+static xmlSecKeyPtr xmlsec_GetKeyCallback(xmlNodePtr keyInfoNode,
+					  xmlSecKeyInfoCtxPtr keyInfoCtx) {
+  PyObject *args, *result;
+  PyObject *func = NULL;
+
+  func = xmlHashLookup(GetKeyCallbacks,
+		       keyInfoCtx->keysMngr->keysStore->id->name);
+
+  args = Py_BuildValue((char *) "OO", wrap_xmlNodePtr(keyInfoNode),
+		       wrap_xmlSecKeyInfoCtxPtr(keyInfoCtx));
+
+  Py_INCREF(func);
+  result = PyEval_CallObject(func, args);
+  Py_DECREF(func);
+  Py_DECREF(args);
+
+  return (xmlSecKeyPtr_get(result));
 }
 
 PyObject *xmlsec_KeysMngrGetKey(PyObject *self, PyObject *args) {
   PyObject *keyInfoNode_obj, *keyInfoCtx_obj;
   xmlNodePtr keyInfoNode;
   xmlSecKeyInfoCtxPtr keyInfoCtx;
+  xmlSecKeyPtr key;
 
   if (!PyArg_ParseTuple(args, "OO:keysMngrGetKey",
 			&keyInfoNode_obj, &keyInfoCtx_obj))
@@ -177,19 +253,23 @@ PyObject *xmlsec_KeysMngrGetKey(PyObject *self, PyObject *args) {
   keyInfoNode = xmlNodePtr_get(keyInfoNode_obj);
   keyInfoCtx = xmlSecKeyInfoCtxPtr_get(keyInfoCtx_obj);
 
-  return (wrap_xmlSecKeyPtr(xmlSecKeysMngrGetKey(keyInfoNode, keyInfoCtx)));
+  key = xmlSecKeysMngrGetKey(keyInfoNode, keyInfoCtx);
+
+  return (wrap_xmlSecKeyPtr(key));
 }
 
 /*****************************************************************************/
 
 PyObject *xmlsec_KeyStoreCreate(PyObject *self, PyObject *args) {
-  PyObject *id_meth;
+  PyObject *id_obj;
+  xmlSecKeyStoreId id;
   xmlSecKeyStorePtr keyStore;
 
-  if (!PyArg_ParseTuple(args, "O:keyStoreCreate", &id_meth))
+  if (!PyArg_ParseTuple(args, "O:keyStoreCreate", &id_obj))
     return NULL;
 
-  keyStore = xmlSecKeyStoreCreate((xmlSecKeyStoreId) PyCObject_AsVoidPtr(id_meth));
+  id = xmlSecKeyStoreId_get(id_obj);
+  keyStore = xmlSecKeyStoreCreate(id);
 
   return (wrap_xmlSecKeyStorePtr(keyStore));
 }
@@ -231,15 +311,15 @@ PyObject *xmlsec_SimpleKeysStoreId(PyObject *self, PyObject *args) {
 
 /*****************************************************************************/
 
-static xmlHashTablePtr KeyStoreIdInitializeMethods = NULL;
-static xmlHashTablePtr KeyStoreIdFinalizeMethods   = NULL;
-static xmlHashTablePtr KeyStoreIdFindKeyMethods    = NULL;
+static xmlHashTablePtr KeyStoreInitializeMethods = NULL;
+static xmlHashTablePtr KeyStoreFinalizeMethods   = NULL;
+static xmlHashTablePtr KeyStoreFindKeyMethods    = NULL;
 
 static int xmlsec_KeyStoreInitializeMethod(xmlSecKeyStorePtr store) {
   PyObject *args, *result;
   PyObject *func = NULL;
 
-  func = xmlHashLookup(KeyStoreIdInitializeMethods, store->id->name);
+  func = xmlHashLookup(KeyStoreInitializeMethods, store->id->name);
 
   args = Py_BuildValue((char *) "O", wrap_xmlSecKeyStorePtr(store));
 
@@ -256,7 +336,7 @@ static void xmlsec_KeyStoreFinalizeMethod(xmlSecKeyStorePtr store) {
   PyObject *args, *result;
   PyObject *func = NULL;
 
-  func = xmlHashLookup(KeyStoreIdFinalizeMethods, store->id->name);
+  func = xmlHashLookup(KeyStoreFinalizeMethods, store->id->name);
 
   args = Py_BuildValue((char *) "O", wrap_xmlSecKeyStorePtr(store));
 
@@ -269,57 +349,75 @@ static void xmlsec_KeyStoreFinalizeMethod(xmlSecKeyStorePtr store) {
 }
 
 static xmlSecKeyPtr xmlsec_KeyStoreFindKeyMethod(xmlSecKeyStorePtr store,
-					 const xmlChar *name,
-					 xmlSecKeyInfoCtxPtr keyInfoCtx) {
+						 xmlChar *name,
+						 xmlSecKeyInfoCtxPtr keyInfoCtx) {
   PyObject *args, *result;
   PyObject *func = NULL;
 
-  func = xmlHashLookup(KeyStoreIdFindKeyMethods, store->id->name);
+  func = xmlHashLookup(KeyStoreFindKeyMethods, store->id->name);
 
-  args = Py_BuildValue((char *) "OsO", wrap_xmlSecKeyStorePtr(store),
-		       wrap_xmlCharPtrConst(name),
+  args = Py_BuildValue((char *) "OsO", wrap_xmlSecKeyStorePtr(store), name,
 		       wrap_xmlSecKeyInfoCtxPtr(keyInfoCtx));
 
   Py_INCREF(func);
   result = PyEval_CallObject(func, args);
-  if (result == NULL)
+  if (result == NULL) {
     return (NULL);
+  }
   Py_DECREF(func);
   Py_DECREF(args);
 
-  //return (wrap_xmlSecKeyPtr(result));
   return (xmlSecKeyPtr_get(result));
 }
 
-PyObject *xmlsec_KeyStoreIdCreate(PyObject *self, PyObject *args) {
+PyObject *keysmngr_KeyStoreIdCreate(PyObject *self, PyObject *args) {
   PyObject *initialize_obj, *finalize_obj, *findKey_obj;
   xmlSecSize klassSize;
   xmlSecSize objSize;
   const xmlChar *name;    
   xmlSecKeyStoreId storeId;
 
-  if(!PyArg_ParseTuple(args, (char *) "iisOOO:ptrListIdCreate", &klassSize,
+  if(!PyArg_ParseTuple(args, (char *) "iisOOO:keyStoreIdCreate", &klassSize,
 		       &objSize, &name, &initialize_obj, &finalize_obj,
 		       &findKey_obj))
     return NULL;
   
-  if (KeyStoreIdInitializeMethods == NULL)
-    KeyStoreIdInitializeMethods = xmlHashCreate(10);
-  if (KeyStoreIdFinalizeMethods == NULL)
-    KeyStoreIdFinalizeMethods = xmlHashCreate(10);
-  if (KeyStoreIdFindKeyMethods == NULL)
-    KeyStoreIdFindKeyMethods = xmlHashCreate(10);
-  xmlHashAddEntry(KeyStoreIdInitializeMethods, name, initialize_obj);
-  xmlHashAddEntry(KeyStoreIdFinalizeMethods,   name, finalize_obj);
-  xmlHashAddEntry(KeyStoreIdFindKeyMethods,    name, findKey_obj);
+  if (KeyStoreInitializeMethods == NULL && initialize_obj != Py_None)
+    KeyStoreInitializeMethods = xmlHashCreate(10);
+  if (KeyStoreFinalizeMethods == NULL && finalize_obj != Py_None)
+    KeyStoreFinalizeMethods = xmlHashCreate(10);
+  if (KeyStoreFindKeyMethods == NULL && findKey_obj != Py_None)
+    KeyStoreFindKeyMethods = xmlHashCreate(10);
+
+  if (initialize_obj != Py_None)
+    xmlHashAddEntry(KeyStoreInitializeMethods, name, initialize_obj);
+  if (finalize_obj != Py_None)
+    xmlHashAddEntry(KeyStoreFinalizeMethods,   name, finalize_obj);
+  if (findKey_obj != Py_None)
+    xmlHashAddEntry(KeyStoreFindKeyMethods,    name, findKey_obj);
 
   storeId = (xmlSecKeyStoreId) xmlMalloc(sizeof(xmlSecKeyStoreKlass));
-  storeId->klassSize = klassSize;
-  storeId->objSize = objSize;
+
+  /* FIXME
+    storeId->klassSize = klassSize;
+    storeId->objSize = objSize;
+  */
+  storeId->klassSize = sizeof(xmlSecKeyStoreKlass);
+  storeId->objSize = sizeof(xmlSecKeyStore);
+
   storeId->name = name;
-  storeId->initialize = xmlsec_KeyStoreInitializeMethod;
-  storeId->finalize   = xmlsec_KeyStoreFinalizeMethod;
-  storeId->findKey    = xmlsec_KeyStoreFindKeyMethod;
+  if (initialize_obj != Py_None)
+    storeId->initialize = xmlsec_KeyStoreInitializeMethod;
+  else
+    storeId->initialize = NULL;
+  if (finalize_obj != Py_None)
+    storeId->finalize = xmlsec_KeyStoreFinalizeMethod;
+  else
+    storeId->finalize = NULL;
+  if (findKey_obj != Py_None)
+    storeId->findKey = xmlsec_KeyStoreFindKeyMethod;
+  else
+    storeId->findKey = NULL;
 
   Py_XINCREF(initialize_obj);
   Py_XINCREF(finalize_obj);
