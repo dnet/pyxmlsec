@@ -479,9 +479,36 @@ def getHex(c):
 ###############################################################################
 # transforms.h
 ###############################################################################
-transformInclC14NId  = xmlsecmod.transformInclC14NId()
-transformExclC14NId  = xmlsecmod.transformExclC14NId()
-transformEnvelopedId = xmlsecmod.transformEnvelopedId()
+transformBase64Id               = xmlsecmod.transformBase64Id()
+transformInclC14NId             = xmlsecmod.transformInclC14NId()
+transformInclC14NWithCommentsId = xmlsecmod.transformInclC14NWithCommentsId()
+transformExclC14NId             = xmlsecmod.transformExclC14NId()
+transformExclC14NWithCommentsId = xmlsecmod.transformExclC14NWithCommentsId()
+transformEnvelopedId            = xmlsecmod.transformEnvelopedId()
+transformXPathId                = xmlsecmod.transformXPathId()
+transformXPath2Id               = xmlsecmod.transformXPath2Id()
+transformXPointerId             = xmlsecmod.transformXPointerId()
+transformXsltId                 = xmlsecmod.transformXsltId()
+transformRemoveXmlTagsC14NId    = xmlsecmod.transformRemoveXmlTagsC14NId()
+transformVisa3DHackId           = xmlsecmod.transformVisa3DHackId()
+# The transform execution status
+TransformStatusNone     = 0 # the status unknown.
+TransformStatusWorking  = 1 # the transform is executed.
+TransformStatusFinished = 2 # the transform finished
+TransformStatusOk       = 3 # the transform succeeded.
+TransformStatusFail     = 4 # the transform failed (an error occur).
+# The transform operation mode
+TransformModeNone = 0 # the mode is unknown.
+TransformModePush = 1 # pushing data thru transform.
+TransformModePop  = 2 # popping data from transform.
+# The transform operation.
+TransformOperationNone    = 0 # the operation is unknown.
+TransformOperationEncode  = 1 # the encode operation (for base64 transform).
+TransformOperationDecode  = 2 # the decode operation (for base64 transform).
+TransformOperationSign    = 3 # the sign or digest operation.
+TransformOperationVerify  = 4 # the verification of signature or digest operation.
+TransformOperationEncrypt = 5 # the encryption operation.
+TransformOperationDecrypt = 6 # the decryption operation.
 # Transform URIs types
 TransformUriTypeNone         = 0x0000 # The URI type is unknown or not set.
 TransformUriTypeEmpty        = 0x0001 # The empty URI ("") type.
@@ -489,7 +516,56 @@ TransformUriTypeSameDocument = 0x0002 # The same document ("#...") but not empty
 TransformUriTypeLocal        = 0x0004 # The local URI ("file:///....") type.
 TransformUriTypeRemote       = 0x0008 # The remote URI type.
 TransformUriTypeAny          = 0xFFFF # Any URI type.
-
+# Transform data type bit mask.
+TransformDataTypeUnknown = 0x0000 # The transform data type is unknown or nor data expected.
+TransformDataTypeBin     = 0x0001 # The binary transform data.
+TransformDataTypeXml     = 0x0002 # The xml transform data.
+# The transform usage bit mask.
+TransformUsageUnknown          = 0x0000 # Transforms usage is unknown or undefined.
+TransformUsageDSigTransform    = 0x0001 # Transform could be used in <dsig:Transform>.
+TransformUsageC14NMethod       = 0x0002 # Transform could be used in <dsig:CanonicalizationMethod>.
+TransformUsageDigestMethod     = 0x0004 # Transform could be used in <dsig:DigestMethod>.
+TransformUsageSignatureMethod  = 0x0008 # Transform could be used in <dsig:SignatureMethod>.
+TransformUsageEncryptionMethod = 0x0010 # Transform could be used in <enc:EncryptionMethod>.
+TransformUsageAny              = 0xFFFF # Transform could be used for operation.
+def transformUriTypeCheck(type, uri):
+    """
+    Checks if uri matches expected type type.
+    type    : the expected URI type.
+    uri     : the uri for checking.
+    Returns : 1 if uri matches type, 0 if not or a negative value if an error
+    occurs.
+    """
+    return xmlsecmod.transformUriTypeCheck(type, uri)
+class TransformCtx:
+    def __init__(self, _obj=None):
+        """
+        Creates transforms chain processing context. The caller is responsible
+        for destroying returned object by calling destroy method.
+        Returns : newly context object or None if an error occurs.
+        """
+        if _obj != None:
+            self._o = _obj
+            return
+        self._o = xmlsecmod.transformCtxCreate()
+        if self._o is None: raise parserError('xmlSecTransformCtxCreate() failed')
+    def destroy(self):
+        """Destroy context object"""
+        xmlsecmod.transformCtxDestroy(self)
+    def initialize(self):
+        """
+        Initializes transforms chain processing context. The caller is responsible
+        for cleaing up returned object by calling finalize method.
+        Returns : 0 on success or a negative value if an error occurs.
+        """
+        return xmlsecmod.transformCtxInitialize(self)
+    def finalize(self):
+        """Cleans up ctx object initialized."""
+        xmlsecmod.transformCtxFinalize(self)
+    def reset(self):
+        """Resets transfroms context for new processing."""
+        xmlsecmod.transformCtxReset(self)
+        
 ###############################################################################
 # membuf.h
 ###############################################################################
@@ -502,6 +578,126 @@ def transformMemBufGetBuffer(transform):
     Returns   : the transform's buffer. 
     """
     return xmlsecmod.transformMemBufGetBuffer(transform)
+
+###############################################################################
+# nodeset.h
+###############################################################################
+# The simple nodes sets operations
+NodeSetIntersection = 0
+NodeSetSubtraction  = 1
+NodeSetUnion        = 2
+# The basic nodes sets types
+NodeSetNormal                    = 0
+NodeSetInvert                    = 1
+NodeSetTree                      = 2
+NodeSetTreeWithoutComments       = 3
+NodeSetTreeInvert                = 4
+NodeSetTreeWithoutCommentsInvert = 5
+NodeSetList                      = 6
+def nodeSetGetChildren(doc, parent, withComments, invert):
+    """
+    Creates a new nodes set that contains: - if withComments is not 0 and invert
+    is 0: all nodes in the parent subtree; - if withComments is 0 and invert is 0:
+    all nodes in the parent subtree except comment nodes; - if withComments is not
+    0 and invert not is 0: all nodes in the doc except nodes in the parent subtree;
+    - if withComments is 0 and invert is 0: all nodes in the doc except nodes in
+    the parent subtree and comment nodes.
+    doc          : the XML document.
+    parent       : the parent XML node or None if we want to include all document nodes.
+    withComments : the flag include comments or not.
+    invert       : the 'invert' flag.
+    Returns      : the newly created NodeSet or None if an error occurs.
+    """
+    return NodeSet(_obj=xmlsecmod.nodeSetGetChildren(doc, parent, withComments, invert))
+def nodeSetAdd(nset, newNSet, op):
+    """
+    Adds newNSet to the nset using operation op.
+    nset    : the currrent nodes set (or None).
+    newNSet : the new nodes set.
+    op      : the operation type.
+    Returns : the combined nodes set or None if an error occurs.
+    """
+    return xmlsecmod.nodeSetAdd(nset, newNSet, op)
+def nodeSetAddList(nset, newNSet, op):
+    """
+    Adds newNSet to the nset as child using operation op.
+    nset    : the currrent nodes set (or None).
+    newNSet : the new nodes set.
+    op      : the operation type.
+    Returns : the combined nodes set or None if an error occurs.
+    """
+    return xmlsecmod.nodeSetAddList(nset, newNSet, op)
+class NodeSet:
+    def __init__(self, doc, nodes, types, _obj=None):
+        """
+        Creates new nodes set. Caller is responsible for freeing returned object
+        by calling destroy method.
+        doc     : the parent XML document.
+        nodes   : the list of nodes.
+        type    : the nodes set type.
+        Returns : a newly node set or None if an error occurs.
+        """
+        if _obj != None:
+            self._o = _obj
+            return
+        self._o = xmlsecmod.nodeSetCreate(doc, nodes, type)
+        if self._o is None: raise parserError('xmlSecNodeSetCreate() failed')
+    def destroy(self):
+        """Destroys the nodes set."""
+        xmlsecmod.nodeSetDestroy(self)
+    def docDestroy(self):
+        """
+        Instructs node set to destroy nodes parent doc when node set is destroyed.        
+        """
+        xmlsecmod.nodeSetDocDestroy(self)
+    def contains(self, node, parent):
+        """
+        Checks whether the node is in the nodes set or not.
+        node    : the XML node to check.
+        parent  : the node parent node.
+        Returns : 1 if the node is in the nodes set nset, 0 if it is not and a
+        negative value if an error occurs.
+        """
+        return xmlsecmod.nodeSetContains(self, node, parent)
+    def add(self, newNSet, op):
+        """
+        Adds newNSet to the nset using operation op.
+        newNSet : the new nodes set.
+        op      : the operation type.
+        Returns : the combined nodes set or None if an error occurs.
+        """
+        return NodeSet(_obj=xmlsecmod.nodeSetAdd(self, newNSet, op))
+    def addList(self, newNSet, op):
+        """
+        Adds newNSet to the nset as child using operation op.
+        newNSet : the new nodes set.
+        op      : the operation type.
+        Returns : the combined nodes set or None if an error occurs.
+        """
+        return NodeSet(_obj=xmlsecmod.nodeSetAddList(self, newNSet, op))
+    def setWalk(self, walkFunc, data):
+        """
+        Calls the function walkFunc once per each node in the nodes set nset.
+        If the walkFunc returns a negative value, then the walk procedure is
+        interrupted.
+        walkFunc : the callback functions.
+        data     : the application specific data passed to the walkFunc.
+        Returns  : 0 on success or a negative value if an error occurs.
+        """
+        return xmlsecmod.nodeSetWalk(self, walkFunc, data)
+    def dumpTextNodes(self, out):
+        """
+        Dumps content of all the text nodes from nset to out.
+        out     : the output buffer.
+        Returns : 0 on success or a negative value otherwise.
+        """
+        return xmlsecmod.nodeSetDumpTextNodes(self, out)
+    def debugDump(self, output):
+        """
+        Prints information about nset to the output.
+        output : the output file.
+        """
+        xmlsecmod.nodeSetDebugDump(self, output)
 
 ###############################################################################
 # base64.h
@@ -662,13 +858,13 @@ class EncCtx:
     def debugDump(self, output):
         """
         Prints the debug information about enc context to output.
-        output : the path to output FILE.
+        output : the output file.
         """
         xmlsecmod.encCtxDebugDump(self, output)
     def debugXmlDump(self):
         """
         Prints the debug information about enc context to output in XML format.
-        output : the path to output FILE.
+        output : the output file.
         """
         xmlsecmod.encCtxDebugXmlDump(self, output)
     def setEncKey(self, key):
@@ -917,13 +1113,13 @@ class DSigCtx:
     def debugDump(self, output):
         """
         Prints the debug information about dsigCtx to output.
-        output : path of output file.
+        output : the output file.
         """
         xmlsecmod.dsigCtxDebugDump(self, output)
     def debugXmlDump(self, output):
         """
         Prints the debug information about dsigCtx to output file in XML format.
-        output : path of output file.
+        output : the output file.
         """
         xmlsecmod.dsigCtxDebugXmlDump(self, output)
     def setSignKey(self, key):
@@ -1007,13 +1203,13 @@ class DSigReferenceCtx:
     def debugDump(self, output):
         """
         Prints the debug information about dsigCtx to output.
-        output : path of output file.
+        output : the output file.
         """
         xmlsecmod.dsigCtxDebugDump(self, output)
     def debugXmlDump(self, output):
         """
         Prints the debug information about dsigCtx to output file in XML format.
-        output : path of output file.
+        output : the output file.
         """
         xmlsecmod.dsigCtxDebugXmlDump(self, output)
         
