@@ -2309,6 +2309,7 @@ def transformVisa3DHackId():
     Returns : Visa3DHack transform id.
     """
     return TransformId(_obj=xmlsecmod.transformVisa3DHackId())
+
 # The transform execution status
 TransformStatusNone     = 0 # the status unknown.
 TransformStatusWorking  = 1 # the transform is executed.
@@ -2357,6 +2358,62 @@ def transformUriTypeCheck(type, uri):
     """
     return xmlsecmod.transformUriTypeCheck(type, uri)
 
+class TransformCtx:
+    def __init__(self, _obj=None):
+        """
+        Creates transforms chain processing context. The caller is responsible
+        for destroying returned object by calling destroy method.
+        Returns : newly context object or None if an error occurs.
+        """
+        if _obj != None:
+            self._o = _obj
+            return
+        self._o = xmlsecmod.transformCtxCreate()
+        if self._o is None: raise Error('xmlSecTransformCtxCreate() failed')
+    def __isprivate(self, name):
+        return name == '_o'
+    def __getattr__(self, name):
+        if self.__isprivate(name):
+            return self.__dict__[name]
+        if name[:2] == "__" and name[-2:] == "__" and name != "__members__":
+            raise AttributeError, name
+        ret = xmlsecmod.transformCtxGetAttr(self, name)
+        if ret is None:
+            raise AttributeError, name
+        if name == "enabledTransforms":
+            return PtrList(_obj=ret)
+        elif name == "result":
+            return Buffer(_obj=ret)
+        elif name == "first":
+            return Transform(_obj=ret)
+        elif name == "last":
+            return Transform(_obj=ret)
+        else:
+            # "flags", "flags2", "enabledUris", "preExecCallback", "xptrExpr",
+            # "first", "last"
+            return ret
+    def __setattr__(self, name, value):
+        if self.__isprivate(name):
+            self.__dict__[name] = value
+        else:
+            xmlsecmod.transformCtxSetAttr(self, name, value)
+    def destroy(self):
+        """Destroy context object"""
+        xmlsecmod.transformCtxDestroy(self)
+    def initialize(self):
+        """
+        Initializes transforms chain processing context. The caller is responsible
+        for cleaing up returned object by calling finalize method.
+        Returns : 0 on success or a negative value if an error occurs.
+        """
+        return xmlsecmod.transformCtxInitialize(self)
+    def finalize(self):
+        """Cleans up ctx object initialized."""
+        xmlsecmod.transformCtxFinalize(self)
+    def reset(self):
+        """Resets transfroms context for new processing."""
+        xmlsecmod.transformCtxReset(self)
+
 class Transform:
     def __init__(self, _obj=None):
         """
@@ -2370,6 +2427,40 @@ class Transform:
             return
         self._o = xmlsecmod.transformCreate()
         if self._o is None: raise Error('xmlSecTransformCreate() failed')
+    def __isprivate(self, name):
+        return name == '_o'
+    def __getattr__(self, name):
+        if self.__isprivate(name):
+            return self.__dict__[name]
+        if name[:2] == "__" and name[-2:] == "__" and name != "__members__":
+            raise AttributeError, name
+        ret = xmlsecmod.transformGetAttr(self, name)
+        if ret is None:
+            raise AttributeError, name
+        if name == "id":
+            return TransformId(_obj=ret)
+        elif name == "hereNode":
+            return libxml2.xmlNode(_obj=ret)
+        elif name == "next":
+            return Transform(_obj=ret)
+        elif name == "prev":
+            return Transform(_obj=ret)
+        elif name == "inBuf":
+            return Buffer(_obj=ret)
+        elif name == "outBuf":
+            return Buffer(_obj=ret)
+        elif name == "inNodes":
+            return NodeSet(_obj=ret)
+        elif name == "outNodes":
+            return NodeSet(_obj=ret)
+        else:
+            # operation, status,
+            return ret
+    def __setattr__(self, name, value):
+        if self.__isprivate(name):
+            self.__dict__[name] = value
+        else:
+            xmlsecmod.transformSetAttr(self, name, value)
     def destroy(self):
         """Destroys transform."""
         xmlsecmod.transformDestroy(self)
@@ -2402,7 +2493,7 @@ class Transform:
     def base64SetLineSize(self, lineSize):
         """
         Sets the max line size to lineSize for an BASE64 encode transform.
-        lineSize  : the new max line size.
+        lineSize : the new max line size.
         """
         xmlsecmod.transformBase64SetLineSize(self, lineSize)
     def xpointerSetExpr(self, expr, nodeSetType, hereNode):
@@ -2422,35 +2513,6 @@ class Transform:
         Returns : 0 on success or a negative value if an error occurs.
         """
         return xmlsecmod.transformVisa3DHackSetID(self, id)
-
-class TransformCtx:
-    def __init__(self, _obj=None):
-        """
-        Creates transforms chain processing context. The caller is responsible
-        for destroying returned object by calling destroy method.
-        Returns : newly context object or None if an error occurs.
-        """
-        if _obj != None:
-            self._o = _obj
-            return
-        self._o = xmlsecmod.transformCtxCreate()
-        if self._o is None: raise Error('xmlSecTransformCtxCreate() failed')
-    def destroy(self):
-        """Destroy context object"""
-        xmlsecmod.transformCtxDestroy(self)
-    def initialize(self):
-        """
-        Initializes transforms chain processing context. The caller is responsible
-        for cleaing up returned object by calling finalize method.
-        Returns : 0 on success or a negative value if an error occurs.
-        """
-        return xmlsecmod.transformCtxInitialize(self)
-    def finalize(self):
-        """Cleans up ctx object initialized."""
-        xmlsecmod.transformCtxFinalize(self)
-    def reset(self):
-        """Resets transfroms context for new processing."""
-        xmlsecmod.transformCtxReset(self)
 
 class TransformId:
     def __init__(self, klassSize=None, objSize=None, name=None, href=None,
