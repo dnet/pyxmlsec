@@ -48,12 +48,29 @@ from xmlsec_strings import *
 # xmlsec.h
 ###############################################################################
 def init():
+    """
+    Initializes XML Security Library. The depended libraries (LibXML and LibXSLT)
+    must be initialized before.
+    Returns : 0 on success or a negative value otherwise.
+    """
     return xmlsecmod.init()
 def shutdown():
+    """
+    Clean ups the XML Security Library.
+    Returns : 0 on success or a negative value otherwise.
+    """
     return xmlsecmod.shutdown()
 def checkVersionExact():
+    """
+    Returns 1 if the loaded xmlsec library version exactly matches the one used
+    to compile the caller, 0 if it does not or a negative value if an error occurs.
+    """
     return xmlsecmod.checkVersionExact()
 def checkVersion():
+    """
+    Returns 1 if the loaded xmlsec library version ABI compatible with the one
+    used to compile the caller, 0 if it does not or a negative value if an error occurs.
+    """
     return xmlsecmod.checkVersion()
 
 ###############################################################################
@@ -61,10 +78,23 @@ def checkVersion():
 ###############################################################################
 # Crypto Init/Shutdown
 def cryptoInit():
+    """
+    XMLSec library specific crypto engine initialization.
+    Returns : 0 on success or a negative value otherwise.
+    """
     return xmlsecmod.cryptoInit()
 def cryptoShutdown():
+    """
+    XMLSec library specific crypto engine shutdown.
+    Returns : 0 on success or a negative value otherwise.
+    """
     return xmlsecmod.cryptoShutdown()
 def cryptoKeysMngrInit(mngr):
+    """
+    Adds crypto specific key data stores in keys manager.
+    mngr    : the keys manager.
+    Returns : 0 on success or a negative value otherwise.
+    """
     return xmlsecmod.cryptoKeysMngrInit(mngr)
 # Key data ids methods
 keyDataDesId  = xmlsecmod.keyDataDesId()
@@ -91,24 +121,80 @@ transformRsaOaepId       = xmlsecmod.transformRsaOaepId()
 transformSha1Id          = xmlsecmod.transformSha1Id()
 # High level routines form xmlsec command line utility
 def cryptoAppInit(config=None):
+    """
+    General crypto engine initialization. This function is used by XMLSec
+    command line utility and called before init function.
+    config  : the path to crypto library configuration.
+    Returns : 0 on success or a negative value otherwise.
+    """
     return xmlsecmod.cryptoAppInit(config)
+def cryptoAppShutdown():
+    """
+    General crypto engine shutdown. This function is used by XMLSec command
+    line utility and called after shutdown function.
+    Returns : 0 on success or a negative value otherwise.
+    """
+    return xmlsecmod.cryptoAppShutdown()
+def cryptoAppDefaultKeysMngrInit(mngr):
+    """
+    Initializes mngr with simple keys store simpleKeysStoreId and a default
+    crypto key data stores.
+    mngr    : the keys manager.
+    Returns : 0 on success or a negative value otherwise.
+    """
+    return xmlsecmod.cryptoAppDefaultKeysMngrInit(mngr)
+def cryptoAppDefaultKeysMngrAdoptKey(mngr, key):
+    """
+    Adds key to the keys manager mngr created with cryptoAppDefaultKeysMngrInit
+    function.
+    mngr    : the keys manager.
+    key     : the key.
+    Returns : 0 on success or a negative value otherwise.
+    """
+    return xmlsecmod.cryptoAppDefaultKeysMngrAdoptKey(mngr, key)
+def cryptoAppDefaultKeysMngrLoad(mngr, uri):
+    """
+    Loads XML keys file from uri to the keys manager mngr created with
+    cryptoAppDefaultKeysMngrInit function.
+    mngr    : the keys manager.
+    uri     : the uri.
+    Returns : 0 on success or a negative value otherwise.
+    """
+    return xmlsecmod.cryptoAppDefaultKeysMngrLoad(mngr, uri)
+def cryptoAppDefaultKeysMngrSave(mngr, filename, type):
+    """
+    Saves keys from mngr to XML keys file.
+    mngr     : the keys manager.
+    filename : the destination filename.
+    type     : the type of keys to save (public/private/symmetric).
+    Returns  : 0 on success or a negative value otherwise.
+    """
+    return xmlsecmod.cryptoAppDefaultKeysMngrSave(mngr, filename, type)
+def cryptoAppKeysMngrCertLoad(mngr, filename, format, type):
+    """
+    Reads cert from filename and adds to the list of trusted or known untrusted
+    certs in store.
+    mngr     : the keys manager.
+    filename : the certificate file.
+    format   : the certificate file format.
+    type     : the flag that indicates if the certificate in filename trusted or not.
+    Returns  : 0 on success or a negative value otherwise.
+    """
+    return xmlsecmod.cryptoAppKeysMngrCertLoad(mngr, filename, format, type)
 def cryptoAppKeyLoad(filename, format, pwd, pwdCallback, pwdCallbackCtx):
+    """
+    Reads key from the a file.
+    filename       : the key filename.
+    format         : the key file format.
+    pwd            : the key file password.
+    pwdCallback    : the key password callback.
+    pwdCallbackCtx : the user context for password callback.
+    Returns        : the key or None if an error occurs.
+    """
     ret = xmlsecmod.cryptoAppKeyLoad(filename, format, pwd,
                                      pwdCallback, pwdCallbackCtx)
     if ret is None: raise parserError('xmlSecCryptoAppKeyLoad() failed')
     return Key(_obj=ret)
-def cryptoAppDefaultKeysMngrInit(mngr):
-    return xmlsecmod.cryptoAppDefaultKeysMngrInit(mngr)
-def cryptoAppDefaultKeysMngrLoad(mngr, uri):
-    return xmlsecmod.cryptoAppDefaultKeysMngrLoad(mngr, uri)
-def cryptoAppDefaultKeysMngrSave(mngr, filename, type):
-    return xmlsecmod.cryptoAppDefaultKeysMngrSave(mngr, filename, type)
-def cryptoAppDefaultKeysMngrAdoptKey(mngr, key):
-    return xmlsecmod.cryptoAppDefaultKeysMngrAdoptKey(mngr, key)
-def cryptoAppKeysMngrCertLoad(mngr, filename, format, type):
-    return xmlsecmod.cryptoAppKeysMngrCertLoad(mngr, filename, format, type)
-def cryptoAppShutdown():
-    return xmlsecmod.cryptoAppShutdown()
 
 ###############################################################################
 # parse.h
@@ -178,63 +264,183 @@ def x509DataGetNodeContent(node, deleteChildren, keyInfoCtx):
 # xmltree.h
 ###############################################################################
 def nodeGetName(node):
+    """
+    Gets node's name.
+    node    : the node.
+    Returns : the node's name.
+    """
     return xmlsecmod.nodeGetName(node)
 def getNodeNsHref(cur):
+    """
+    Gets node's namespace href.
+    cur     : the node.
+    Returns : node's namespace href.
+    """
     return xmlsecmod.getNodeNsHref(cur)
 def checkNodeName(cur, name, ns=None):
+    """
+    Checks that the node has a given name and a given namespace href.
+    cur     : the XML node.
+    name    : the name,
+    ns      : the namespace href.
+    Returns : 1 if the node matches or 0 otherwise.
+    """
     return xmlsecmod.checkNodeName(cur, name, ns)
 def getNextElementNode(cur):
+    """
+    Seraches for the next element node.
+    cur     : the XML node.
+    Returns : the next element node or None if it is not found.
+    """
     _obj = xmlsecmod.getNextElementNode(cur)
     if _obj == None:
         return None
     return libxml2.xmlNode(_obj=_obj)
 def findChild(parent, name, ns=None):
+    """
+    Searches a direct child of the parent node having given name and namespace
+    href.
+    parent  : the XML node.
+    name    : the name.
+    ns      : the namespace href (may be None).
+    Returns : the found node or None if an error occurs or node is not found.
+    """
     _obj = xmlsecmod.findChild(parent, name, ns)
     if _obj == None:
         return None
     return libxml2.xmlNode(_obj=_obj)
 def findParent(cur, name, ns=None):
+    """
+    Searches the ancestors axis of the cur node for a node having given name
+    and namespace href.
+    cur     : the XML node.
+    name    : the name.
+    ns      : the namespace href (may be None).
+    Returns : the found node or None if an error occurs or node is not found.
+    """
     _obj = xmlsecmod.findParent(cur, name, ns)
     if _obj == None:
         return None
     return libxml2.xmlNode(_obj=_obj)
 def findNode(parent, name, ns=None):
+    """
+    Searches all children of the parent node having given name and namespace href.
+    parent  : the XML node.
+    name    : the name.
+    ns      : the namespace href (may be None).
+    Returns : the found node or None if an error occurs or node is not found.
+    """
     _obj = xmlsecmod.findNode(parent, name, ns)
     if _obj == None:
         return None
     return libxml2.xmlNode(_obj=_obj)
 def addChild(parent, name, ns=None):
+    """
+    Adds a child to the node parent with given name and namespace ns.
+    parent  : the XML node.
+    name    : the new node name.
+    ns      : the new node namespace.
+    Returns : the new node or None if an error occurs.
+    """
     _obj = xmlsecmod.addChild(parent, name, ns)
     if _obj == None:
         return None
     return libxml2.xmlNode(_obj=_obj)
 def addNextSibling(node, name, ns=None):
+    """
+    Adds next sibling to the node node with given name and namespace ns.
+    node    : the XML node.
+    name    : the new node name.
+    ns      : the new node namespace.
+    Returns : the new node or None if an error occurs.
+    """
     _obj = xmlsecmod.addNextSibling(node, name, ns)
     if _obj == None:
         return None
     return libxml2.xmlNode(_obj=_obj)
 def addPrevSibling(node, name, ns=None):
+    """
+    Adds prev sibling to the node node with given name and namespace ns.
+    node    : the XML node.
+    name    : the new node name.
+    ns      : the new node namespace.
+    Returns : the new node or None if an error occurs.
+    """
     _obj = xmlsecmod.addPrevSibling(node, name, ns)
     if _obj == None:
         return None
     return libxml2.xmlNode(_obj=_obj)
 def replaceNode(node, newNode):
+    """
+    Swaps the node and newNode in the XML tree.
+    node    : the current node.
+    newNode : the new node.
+    Returns : 0 on success or a negative value if an error occurs.
+    """
     return xmlsecmod.replaceNode(node, newNode)
 def replaceContent(node, newNode):
+    """
+    Swaps the content of node and newNode.
+    node    : the current node.
+    newNode : the new node.
+    Returns : 0 on success or a negative value if an error occurs.
+    """
     return xmlsecmod.replaceContent(node, newNode)
 def replaceNodeBuffer(node, buffer, size):
+    """
+    Swaps the node and the parsed XML data from the buffer in the XML tree.
+    node    : the current node.
+    buffer  : the XML data.
+    size    : the XML data size.
+    Returns : 0 on success or a negative value if an error occurs.
+    """
     return xmlsecmod.replaceNodeBuffer(node, buffer, size)
 def addIDs(doc, cur, ids):
+    """
+    Walks thru all children of the cur node and adds all attributes from the
+    ids list to the doc document IDs attributes hash.
+    doc : the XML document.
+    cur : the XML node.
+    ids : the list of ID attributes.
+    """
     xmlsecmod.addIDs(doc, cur, ids)
 def createTree(rootNodeName, rootNodeNs):
+    """
+    Creates a new XML tree with one root node rootNodeName.
+    rootNodeName : the root node name.
+    rootNodeNs   : the root node namespace (otpional).
+    Returns      : the newly created tree or None if an error occurs.
+    """
     return libxml2.xmlDoc(_obj=xmlsecmod.createTree(rootNodeName, rootNodeNs))
 def isEmptyNode(node):
+    """
+    Checks whethere the node is empty (i.e. has only whitespaces children).
+    node    : the node to check
+    Returns : 1 if node is empty, 0 otherwise or a negative value if an error
+    occurs.
+    """
     return xmlsecmod.isEmptyNode(node)
 def isEmptyString(str):
+    """
+    Checks whethere the str is empty (i.e. has only whitespaces children).
+    str     : the string to check
+    Returns : 1 if str is empty, 0 otherwise or a negative value if an error
+    occurs.
+    """
     return xmlsecmod.isEmptyString(str)
 def isHex(c):
+    """
+    Returns 1 if a character is a hex digit or 0 otherwise.
+    c       : the character.
+    Returns : 1 if c is a hex digit or 0 otherwise.
+    """
     return xmlsecmod.isHex(c)
 def getHex(c):
+    """
+    Gets the hex value of a character.
+    c       : the character.
+    Returns : the hex value of the c.
+    """
     return xmlsecmod.getHex(c)
 
 ###############################################################################
@@ -1033,7 +1239,7 @@ class TmplEncData(libxml2.xmlNode):
         id      : the Id attrbibute (optional).
         Returns : the newly created <dsig:KeyInfo/> node or None if an error occurs.
         """
-        return xmlsecmod.tmplEncDataEnsureKeyInfo(self, id)
+        return TmplKeyInfo(_obj=xmlsecmod.tmplEncDataEnsureKeyInfo(self, id))
     def ensureEncProperties(self, id=None):
         """
         Adds <enc:EncryptionProperties/> node to the <enc:EncryptedData/> node
@@ -1042,7 +1248,8 @@ class TmplEncData(libxml2.xmlNode):
         Returns : the newly created <enc:EncryptionProperties/> node or None if
         an error occurs.
         """
-        return xmlsecmod.tmplEncDataEnsureEncProperties(self, id)
+        _obj = xmlsecmod.tmplEncDataEnsureEncProperties(self, id)
+        return libxml2.xmlNode(_obj=_obj)
     def addEncProperty(self, id=None, target=None):
         """
         Adds <enc:EncryptionProperty/> node (and the parent
@@ -1053,14 +1260,16 @@ class TmplEncData(libxml2.xmlNode):
         Returns : the newly created <enc:EncryptionProperty/> node or None if
         an error occurs.
         """
-        return xmlsecmod.tmplEncDataAddEncProperty(self, id, target)
+        _obj = xmlsecmod.tmplEncDataAddEncProperty(self, id, target)
+        return libxml2.xmlNode(_obj=_obj)
     def ensureCipherValue(self):
         """
         Adds <enc:CipherValue/> to the <enc:EncryptedData/> node encNode.
         Returns : the newly created <enc:CipherValue/> node or None if an error
         occurs.
         """
-        return xmlsecmod.tmplEncDataEnsureCipherValue(self)
+        _obj = xmlsecmod.tmplEncDataEnsureCipherValue(self)
+        return libxml2.xmlNode(_obj=_obj)
     def ensureCipherReference(self, uri=None):
         """
         Adds <enc:CipherReference/> node with specified URI attribute uri to
@@ -1069,13 +1278,15 @@ class TmplEncData(libxml2.xmlNode):
         Returns : the newly created <enc:CipherReference/> node or None if an
         error occurs.
         """
-        return TmplCipherReference(_obj=xmlsecmod.tmplEncDataEnsureCipherReference(self, uri))
+        _obj = xmlsecmod.tmplEncDataEnsureCipherReference(self, uri)
+        return TmplCipherReference(_obj=_obj)
     def getEncMethodNode(self):
         """
         Gets the <enc:EncrytpionMethod/> node.
         Returns : the <enc:EncryptionMethod /> node or None if an error occurs.
         """
-        return xmlsecmod.tmplEncDataGetEncMethodNode(self)
+        _obj = xmlsecmod.tmplEncDataGetEncMethodNode(self)
+        return libxml2.xmlNode(_obj=_obj)
     def addDataReference(self, uri=None):
         """
         Adds <enc:DataReference/> and the parent <enc:ReferenceList/> node
@@ -1084,7 +1295,8 @@ class TmplEncData(libxml2.xmlNode):
         Returns : the newly created <enc:DataReference/> node or None if an
         error occurs.
         """
-        return xmlsecmod.tmplReferenceListAddDataReference(self, uri)
+        _obj = xmlsecmod.tmplReferenceListAddDataReference(self, uri)
+        return libxml2.xmlNode(_obj=_obj)
     def addKeyReference(self, uri=None):
         """
         Adds <enc:KeyReference/> and the parent <enc:ReferenceList/> node
@@ -1093,7 +1305,8 @@ class TmplEncData(libxml2.xmlNode):
         Returns : the newly created <enc:KeyReference/> node or None if an error
         occurs.
         """
-        return xmlsecmod.tmplReferenceListAddKeyReference(self, uri)
+        _obj = xmlsecmod.tmplReferenceListAddKeyReference(self, uri)
+        return libxml2.xmlNode(_obj=_obj)
 
 class TmplCipherReference(libxml2.xmlNode):
     def __init__(self, _obj=None):
@@ -1111,7 +1324,8 @@ class TmplCipherReference(libxml2.xmlNode):
         Returns             : the newly created <dsig:Transform/> node or None
         if an error occurs.
         """
-        return xmlsecmod.tmplCipherReferenceAddTransform(self, transformId)
+        _obj = xmlsecmod.tmplCipherReferenceAddTransform(self, transformId)
+        return libxml2.xmlNode(_obj=_obj)
 
 ###############################################################################
 # keys.h
