@@ -17,8 +17,6 @@ xmlsec.cryptoAppInit(None)
 xmlsec.cryptoInit()
 
 doc = libxml2.parseFile("./sign2-doc.xml")
-#signNode = xmlsec.tmplSignatureCreate(doc, xmlsec.transformExclC14NId,
-#                                      xmlsec.transformRsaSha1Id, None)
 signNode = xmlsec.TmplSignature(doc, xmlsec.transformExclC14NId,
                                 xmlsec.transformRsaSha1Id, None)
 doc.getRootElement().addChild(signNode)

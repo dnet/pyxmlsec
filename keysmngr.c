@@ -47,7 +47,8 @@ PyObject *xmlsec_KeysMngrDestroy(PyObject *self, PyObject *args) {
   mngr = xmlSecKeysMngrPtr_get(PyObject_GetAttr(mngr_obj, PyString_FromString("_o")));
   xmlSecKeysMngrDestroy(mngr);
 
-  return Py_BuildValue("i", 0);
+  Py_INCREF(Py_None);
+  return Py_None;
 }
 
 PyObject *xmlsec_KeysMngrFindKey(PyObject *self, PyObject *args) {

@@ -18,6 +18,7 @@ xmlsec.cryptoInit()
 
 doc = libxml2.parseFile("./sign1-tmpl.xml")
 node = xmlsec.findNode(doc.getRootElement(), xmlsec.NodeSignature, xmlsec.DSigNs)
+
 dsig_ctx = xmlsec.DSigCtx()
 key = xmlsec.cryptoAppKeyLoad("./rsakey.pem", xmlsec.KeyDataFormatPem, None, None, None)
 dsig_ctx.setSignKey(key)

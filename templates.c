@@ -41,12 +41,13 @@ PyObject *xmlsec_TmplSignatureCreate(PyObject *self, PyObject *args) {
     return NULL;
   
   if (!PyInstance_Check(doc_obj)) {
-    printf("doc isn't an Instance !!!\n");
+    PyErr_SetString(xmlsec_error,
+		    "tmplSignatureCreate() argument 1 must be an instance");
     return NULL;
   }
 
-  doc = (xmlDocPtr)xmlNodePtr_get(PyObject_GetAttr(doc_obj, PyString_FromString("_o")));
-  node = xmlSecTmplSignatureCreate((xmlDocPtr)doc,
+  doc = xmlDocPtr_get(PyObject_GetAttr(doc_obj, PyString_FromString("_o")));
+  node = xmlSecTmplSignatureCreate(doc,
 				   PyCObject_AsVoidPtr(c14nMethodId_meth),
 				   PyCObject_AsVoidPtr(signMethodId_meth), id);
   return PyCObject_FromVoidPtrAndDesc((void *) node, (char *) "xmlNodePtr", NULL);
