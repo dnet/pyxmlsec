@@ -53,6 +53,18 @@ PyObject *wrap_xmlSecKeyStorePtr(xmlSecKeyStorePtr store) {
   return (ret);
 }
 
+PyObject *wrap_xmlSecKeyStoreId(xmlSecKeyStoreId storeId) {
+  PyObject *ret;
+
+  if (storeId == NULL) {
+    Py_INCREF(Py_None);
+    return (Py_None);
+  }
+  ret = PyCObject_FromVoidPtrAndDesc((void *) storeId,
+				     (char *) "xmlSecKeyStoreId", NULL);
+  return (ret);
+}
+
 /*****************************************************************************/
 
 PyObject *xmlsec_KeysMngrCreate(PyObject *self, PyObject *args) {
@@ -215,4 +227,103 @@ PyObject *xmlsec_KeyStoreFindKey(PyObject *self, PyObject *args) {
 
 PyObject *xmlsec_SimpleKeysStoreId(PyObject *self, PyObject *args) {
   return PyCObject_FromVoidPtr((void *) xmlSecSimpleKeysStoreId, NULL);
+}
+
+/*****************************************************************************/
+
+static xmlHashTablePtr KeyStoreIdInitializeMethods = NULL;
+static xmlHashTablePtr KeyStoreIdFinalizeMethods   = NULL;
+static xmlHashTablePtr KeyStoreIdFindKeyMethods    = NULL;
+
+static int xmlsec_KeyStoreInitializeMethod(xmlSecKeyStorePtr store) {
+  PyObject *args, *result;
+  PyObject *func = NULL;
+
+  func = xmlHashLookup(KeyStoreIdInitializeMethods, store->id->name);
+
+  args = Py_BuildValue((char *) "O", wrap_xmlSecKeyStorePtr(store));
+
+  /* Protect refcount against reentrant manipulation of callback hash */
+  Py_INCREF(func);
+  result = PyEval_CallObject(func, args);
+  Py_DECREF(func);
+  Py_DECREF(args);
+
+  return (PyInt_AsLong(result));
+}
+
+static void xmlsec_KeyStoreFinalizeMethod(xmlSecKeyStorePtr store) {
+  PyObject *args, *result;
+  PyObject *func = NULL;
+
+  func = xmlHashLookup(KeyStoreIdFinalizeMethods, store->id->name);
+
+  args = Py_BuildValue((char *) "O", wrap_xmlSecKeyStorePtr(store));
+
+  Py_INCREF(func);
+  result = PyEval_CallObject(func, args);
+  Py_DECREF(func);
+  Py_DECREF(args);
+
+  Py_XDECREF(result);
+}
+
+static xmlSecKeyPtr xmlsec_KeyStoreFindKeyMethod(xmlSecKeyStorePtr store,
+					 const xmlChar *name,
+					 xmlSecKeyInfoCtxPtr keyInfoCtx) {
+  PyObject *args, *result;
+  PyObject *func = NULL;
+
+  func = xmlHashLookup(KeyStoreIdFindKeyMethods, store->id->name);
+
+  args = Py_BuildValue((char *) "OsO", wrap_xmlSecKeyStorePtr(store),
+		       wrap_xmlCharPtrConst(name),
+		       wrap_xmlSecKeyInfoCtxPtr(keyInfoCtx));
+
+  Py_INCREF(func);
+  result = PyEval_CallObject(func, args);
+  if (result == NULL)
+    return (NULL);
+  Py_DECREF(func);
+  Py_DECREF(args);
+
+  //return (wrap_xmlSecKeyPtr(result));
+  return (xmlSecKeyPtr_get(result));
+}
+
+PyObject *xmlsec_KeyStoreIdCreate(PyObject *self, PyObject *args) {
+  PyObject *initialize_obj, *finalize_obj, *findKey_obj;
+  xmlSecSize klassSize;
+  xmlSecSize objSize;
+  const xmlChar *name;    
+  xmlSecKeyStoreId storeId;
+
+  if(!PyArg_ParseTuple(args, (char *) "iisOOO:ptrListIdCreate", &klassSize,
+		       &objSize, &name, &initialize_obj, &finalize_obj,
+		       &findKey_obj))
+    return NULL;
+  
+  if (KeyStoreIdInitializeMethods == NULL)
+    KeyStoreIdInitializeMethods = xmlHashCreate(10);
+  if (KeyStoreIdFinalizeMethods == NULL)
+    KeyStoreIdFinalizeMethods = xmlHashCreate(10);
+  if (KeyStoreIdFindKeyMethods == NULL)
+    KeyStoreIdFindKeyMethods = xmlHashCreate(10);
+  xmlHashAddEntry(KeyStoreIdInitializeMethods, name, initialize_obj);
+  xmlHashAddEntry(KeyStoreIdFinalizeMethods,   name, finalize_obj);
+  xmlHashAddEntry(KeyStoreIdFindKeyMethods,    name, findKey_obj);
+
+  storeId = (xmlSecKeyStoreId) xmlMalloc(sizeof(xmlSecKeyStoreKlass));
+  storeId->klassSize = klassSize;
+  storeId->objSize = objSize;
+  storeId->name = name;
+  storeId->initialize = xmlsec_KeyStoreInitializeMethod;
+  storeId->finalize   = xmlsec_KeyStoreFinalizeMethod;
+  storeId->findKey    = xmlsec_KeyStoreFindKeyMethod;
+
+  Py_XINCREF(initialize_obj);
+  Py_XINCREF(finalize_obj);
+  Py_XINCREF(findKey_obj);
+
+  return (wrap_xmlSecKeyStoreId(storeId));
 }
