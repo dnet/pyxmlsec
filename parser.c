@@ -35,10 +35,6 @@ PyObject *xmlsec_ParseFile(PyObject *self, PyObject *args) {
     return NULL;
 
   doc = xmlSecParseFile(filename);
-  if (doc == NULL) {
-    Py_INCREF(Py_None);
-    return Py_None;
-  }
   
   return (wrap_xmlDocPtr(doc));
 }
@@ -53,10 +49,6 @@ PyObject *xmlsec_ParseMemory(PyObject *self, PyObject *args) {
     return NULL;
 
   doc = xmlSecParseMemory(buffer, size, recovery);
-  if (doc == NULL) {
-    Py_INCREF(Py_None);
-    return Py_None;
-  }
   
   return (wrap_xmlDocPtr(doc));
 }
@@ -77,10 +69,6 @@ PyObject *xmlsec_ParseMemoryExt(PyObject *self, PyObject *args) {
   doc = xmlSecParseMemoryExt(prefix, prefixSize,
 			     buffer, bufferSize,
 			     postfix, postfixSize);
-  if (doc == NULL) {
-    Py_INCREF(Py_None);
-    return Py_None;
-  }
   
   return (wrap_xmlDocPtr(doc));
 }
