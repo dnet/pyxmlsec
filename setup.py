@@ -26,12 +26,12 @@
 from distutils.core import setup, Extension
 
 setup(name = "pyxmlsec",
-      version = "0.20031110",
+      version = "0.20031113",
       description = "Python binding for XML Security Library (XMLSec)",
       long_description = ''' ''',
       author = "Valery Febvre",
       author_email = "vfebvre@easter-eggs.com",
-      license = "GPL",
+      license = "GNU GPL",
       url = "http://pyxmlsec.labs.libre-entreprise.org",
       ext_modules = [Extension("xmlsecmod",
                                sources = ["xmlsecmod.c", "xmlsec.c", "xmltree.c",
