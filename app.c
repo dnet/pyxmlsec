@@ -205,6 +205,9 @@ PyObject *xmlsec_TransformSha1Id(PyObject *self, PyObject *args) {
   return PyCObject_FromVoidPtr((void  *)xmlSecTransformSha1Id, NULL);
 }
 /* Key data ids */
+PyObject *xmlsec_KeyDataDesId(PyObject *self, PyObject *args) {
+  return PyCObject_FromVoidPtr((void  *)xmlSecKeyDataDesId, NULL);
+}
 PyObject *xmlsec_KeyDataDsaId(PyObject *self, PyObject *args) {
   return PyCObject_FromVoidPtr((void  *)xmlSecKeyDataDsaId, NULL);
 }

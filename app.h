@@ -18,6 +18,7 @@ PyObject *xmlsec_TransformDsaSha1Id(PyObject *self, PyObject *args);
 PyObject *xmlsec_TransformRsaSha1Id(PyObject *self, PyObject *args);
 PyObject *xmlsec_TransformSha1Id(PyObject *self, PyObject *args);
 
+PyObject *xmlsec_KeyDataDesId(PyObject *self, PyObject *args);
 PyObject *xmlsec_KeyDataDsaId(PyObject *self, PyObject *args);
 PyObject *xmlsec_KeyDataRsaId(PyObject *self, PyObject *args);
 PyObject *xmlsec_KeyDataX509Id(PyObject *self, PyObject *args);
