@@ -63,6 +63,8 @@ static PyMethodDef xmlsec_methods[] = {
   /* xmldsig.h */
   {"dsigCtxCreate",                   xmlsec_DSigCtxCreate,                   METH_VARARGS},
   {"dsigCtxDestroy",                  xmlsec_DSigCtxDestroy,                  METH_VARARGS},
+  {"dsigCtxInitialize",               xmlsec_DSigCtxInitialize,               METH_VARARGS},
+  {"dsigCtxFinalize",                 xmlsec_DSigCtxFinalize,                 METH_VARARGS},
   {"dsigCtxSign",                     xmlsec_DSigCtxSign,                     METH_VARARGS},
   {"dsigCtxVerify",                   xmlsec_DSigCtxVerify,                   METH_VARARGS},
   {"dsigCtxEnableReferenceTransform", xmlsec_DSigCtxEnableReferenceTransform, METH_VARARGS},
@@ -128,9 +130,13 @@ static PyMethodDef xmlsec_methods[] = {
   {"keyInfoCtxReset",      xmlsec_KeyInfoCtxReset,      METH_VARARGS},
   {"getEnabledKeyData",    keyinfo_get_enabledKeyData,  METH_VARARGS},
   /* keysmngr.h */
-  {"keysMngrCreate",  xmlsec_KeysMngrCreate,  METH_VARARGS},
-  {"keysMngrDestroy", xmlsec_KeysMngrDestroy, METH_VARARGS},
-  {"keysMngrFindKey", xmlsec_KeysMngrFindKey, METH_VARARGS},
+  {"keysMngrCreate",    xmlsec_KeysMngrCreate,    METH_VARARGS},
+  {"keysMngrDestroy",   xmlsec_KeysMngrDestroy,   METH_VARARGS},
+  {"keysMngrFindKey",   xmlsec_KeysMngrFindKey,   METH_VARARGS},
+  {"keyStoreCreate",    xmlsec_KeyStoreCreate,    METH_VARARGS},
+  {"keyStoreDestroy",   xmlsec_KeyStoreDestroy,   METH_VARARGS},
+  {"keyStoreFindKey",   xmlsec_KeyStoreFindKey,   METH_VARARGS},
+  {"simpleKeysStoreId", xmlsec_SimpleKeysStoreId, METH_VARARGS},
 
   /* openssl/crypto.h, openssl/app.h */
   {"openSSLAppInit", xmlsec_OpenSSLAppInit, METH_VARARGS},
