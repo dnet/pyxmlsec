@@ -539,7 +539,8 @@ class KeyInfoCtx:
             return KeyReq(_obj=ret)
         else:
             # flags, flags2, mode, base64LineSize, maxRetrievalMethodLevel
-            # maxEncryptedKeyLevel
+            # maxEncryptedKeyLevel, certsVerificationTime, certsVerificationDepth
+            # curRetrievalMethodLevel, curEncryptedKeyLevel
             return ret
     def __setattr__(self, name, value):
         if self.__isprivate(name):
@@ -780,7 +781,17 @@ def keyReqCopy(dst, src):
     """
     return KeyReq(_obj=xmlsecmod.keyReqCopy(dst, src))
 class KeyReq:
-    def __init__(self, keyId=None, keyType=None, keyUsage=None, keyBitsSize=None, _obj=None):
+    def __init__(self, keyId=None, keyType=None, keyUsage=None,
+                 keyBitsSize=None, _obj=None):
+        """
+        Creates new key requirements information.
+        keyId       : the desired key value klass.
+        keyType     : the desired key type.
+        keyUsage    : the desired key usage.
+        keyBitsSize : the desired key size (in bits!).
+        Returns     : the newly key requirements information or None if an error
+        occurs.
+        """
 	if _obj != None:
             self._o = _obj
             return

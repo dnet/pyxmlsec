@@ -34,6 +34,7 @@ def main():
         print "Usage: %s <enc-file>" % sys.argv[0]
         return sys.exit(1)
     
+    res = 0
     # Init libxml library
     libxml2.initParser()
     libxml2.substituteEntitiesDefault(1)
@@ -59,7 +60,6 @@ def main():
     # Create keys manager and load keys */
     mngr = create_files_keys_mngr()
 
-    res = -1
     if mngr is not None:
         res = decrypt_file(mngr, sys.argv[1])
 
@@ -77,10 +77,14 @@ def main():
 
     sys.exit(res)
 
+
+# Callback function
 def getKeyCallback(keyInfoNode, keyInfoCtx):
+    # Convert PyCObject object into xmlNode and KeyInfoCtx Object
     node = libxml2.xmlNode(_obj=keyInfoNode)
     ctx = xmlsec.KeyInfoCtx(_obj=keyInfoCtx)
     return xmlsec.keysMngrGetKey(node, ctx)
+
 
 # Creates a files based keys manager
 # we assume that key name is the key file name

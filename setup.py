@@ -28,7 +28,7 @@ Development Status :: 1 - Pre-Alpha
 Intended Audience :: Developers
 License :: OSI Approved :: GNU General Public License (GPL)
 Operating System :: MacOS :: MacOS X
-Operating System :: POSIX :: Linux
+Operating System :: POSIX
 Programming Language :: C
 Programming Language :: Python
 Topic :: Software Development :: Libraries :: Python Modules
