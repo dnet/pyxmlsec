@@ -19,7 +19,7 @@
 # Copyright (C) 2003-2004 Valery Febvre <vfebvre@easter-eggs.com>
 #
 
-import sys
+import sys, os
 sys.path.insert(0, '../')
 
 import libxml2
@@ -78,6 +78,8 @@ def verify_file(xml_file, key_file):
     assert(key_file)
 
     # Load XML file
+    if not check_filename(xml_file):
+        return -1
     doc = libxml2.parseFile(xml_file)
     if doc is None or doc.getRootElement() is None:
 	print "Error: unable to parse file \"%s\"" % tmpl_file
@@ -94,7 +96,7 @@ def verify_file(xml_file, key_file):
         return cleanup(doc)
 
     # Load private key, assuming that there is not password
-    key = xmlsec.cryptoAppKeyLoad("./rsapub.pem", xmlsec.KeyDataFormatPem,
+    key = xmlsec.cryptoAppKeyLoad(key_file, xmlsec.KeyDataFormatPem,
                                   None, None, None)
     if key is None:
         print "Error: failed to load private pem key from \"%s\"" % key_file
@@ -102,6 +104,8 @@ def verify_file(xml_file, key_file):
     dsig_ctx.signKey = key
 
     # Set key name to the file name, this is just an example!
+    if not check_filename(key_file):
+        return cleanup(doc, dsig_ctx)
     if key.setName(key_file) < 0:
         print "Error: failed to set key name for key from \"%s\"" % key_file
         return cleanup(doc, dsig_ctx)
@@ -127,6 +131,14 @@ def cleanup(doc=None, dsig_ctx=None, res=-1):
     if doc is not None:
         doc.freeDoc()
     return res
+
+
+def check_filename(filename):
+    if os.access(filename, os.R_OK):
+        return 1
+    else:
+        print "Error: XML file \"%s\" not found OR no read access" % filename
+        return 0
 
 
 if __name__ == "__main__":

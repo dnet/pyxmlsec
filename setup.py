@@ -1,14 +1,14 @@
 #!/usr/bin/env python
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 #
 # $Id$
 #
 # PyXMLSec - Python bindings for XML Security library (XMLSec)
 #
-# Copyright (C) 2003-2004 Easter-eggs, Valéry Febvre
+# Copyright (C) 2003-2004 Easter-eggs, ValÃ©ry Febvre
 # http://pyxmlsec.labs.libre-entreprise.org
 #
-# Author: Valéry Febvre <vfebvre@easter-eggs.com>
+# Author: ValÃ©ry Febvre <vfebvre@easter-eggs.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
