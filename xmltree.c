@@ -243,6 +243,39 @@ PyObject *xmlsec_AddIDs(PyObject *self, PyObject *args) {
   return Py_None;
 }
 
+PyObject *xmlsec_CreateTree(PyObject *self, PyObject *args) {
+  const xmlChar *rootNodeName;
+  const xmlChar *rootNodeNs;
+  xmlDocPtr tree;
+
+  if (!PyArg_ParseTuple(args, (char *) "sz:createTree", &rootNodeName, &rootNodeNs))
+    return NULL;
+
+  tree = xmlSecCreateTree(rootNodeName, rootNodeNs);
+  return PyCObject_FromVoidPtrAndDesc((void *) tree, (char *) "xmlDocPtr", NULL);
+}
+
+PyObject *xmlsec_IsEmptyNode(PyObject *self, PyObject *args) {
+  PyObject *node_obj;
+  xmlNodePtr node;
+
+  if (!PyArg_ParseTuple(args, (char *) "O:isEmptyNode", &node_obj))
+    return NULL;
+
+  node = xmlNodePtr_get(PyObject_GetAttr(node_obj, PyString_FromString("_o")));
+
+  return Py_BuildValue("i", xmlSecIsEmptyNode(node));
+}
+
+PyObject *xmlsec_IsEmptyString(PyObject *self, PyObject *args) {
+  const xmlChar *str;
+
+  if (!PyArg_ParseTuple(args, (char *) "s:isEmptyString", &str))
+    return NULL;
+
+  return Py_BuildValue("i", xmlSecIsEmptyString(str));
+}
+
 PyObject *xmlsec_IsHex(PyObject *self, PyObject *args) {
   char c;
 

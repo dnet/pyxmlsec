@@ -11,5 +11,8 @@ PyObject *xmlsec_ReplaceNode(PyObject *self, PyObject *args);
 PyObject *xmlsec_ReplaceContent(PyObject *self, PyObject *args);
 PyObject *xmlsec_ReplaceNodeBuffer(PyObject *self, PyObject *args);
 PyObject *xmlsec_AddIDs(PyObject *self, PyObject *args);
+PyObject *xmlsec_CreateTree(PyObject *self, PyObject *args);
+PyObject *xmlsec_IsEmptyNode(PyObject *self, PyObject *args);
+PyObject *xmlsec_IsEmptyString(PyObject *self, PyObject *args);
 PyObject *xmlsec_IsHex(PyObject *self, PyObject *args);
 PyObject *xmlsec_GetHex(PyObject *self, PyObject *args);
