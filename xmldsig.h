@@ -40,5 +40,3 @@ PyObject *xmlsec_DSigReferenceCtxGetPreDigestBuffer(PyObject *self, PyObject *ar
 PyObject *xmlsec_DSigReferenceCtxDebugDump(PyObject *self, PyObject *args);
 PyObject *xmlsec_DSigReferenceCtxDebugXmlDump(PyObject *self, PyObject *args);
 PyObject *xmlsec_DSigReferenceCtxListId(PyObject *self, PyObject *args);
-
-PyObject *xmldsig_set_signKey(PyObject *self, PyObject *args);

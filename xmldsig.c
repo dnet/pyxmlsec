@@ -129,8 +129,10 @@ PyObject *xmlSecDSigCtx_setattr(PyObject *self, PyObject *args) {
 
   dsigCtx = xmlSecDSigCtxPtr_get(dsigCtx_obj);
     
-  if (!strcmp(name, "flags")) dsigCtx->flags = PyInt_AsLong(value_obj);
-  else if (!strcmp(name, "flags2")) dsigCtx->flags2 = PyInt_AsLong(value_obj);
+  if (!strcmp(name, "flags"))
+    dsigCtx->flags = PyInt_AsLong(value_obj);
+  else if (!strcmp(name, "flags2"))
+    dsigCtx->flags2 = PyInt_AsLong(value_obj);
   else if (!strcmp(name, "keyInfoReadCtx"))
     dsigCtx->keyInfoReadCtx = *(xmlSecKeyInfoCtxPtr_get(value_obj));
   else if (!strcmp(name, "keyInfoWriteCtx"))
@@ -147,6 +149,29 @@ PyObject *xmlSecDSigCtx_setattr(PyObject *self, PyObject *args) {
     dsigCtx->defC14NMethodId = PyCObject_AsVoidPtr(value_obj);
   else if (!strcmp(name, "defDigestMethodId"))
     dsigCtx->defDigestMethodId = PyCObject_AsVoidPtr(value_obj);
+  else if (!strcmp(name, "signKey"))
+    dsigCtx->signKey = xmlSecKeyPtr_get(value_obj);
+  else if (!strcmp(name, "operation"))
+    dsigCtx->operation = PyInt_AsLong(value_obj);
+  else if (!strcmp(name, "result"))
+    dsigCtx->result = xmlSecBufferPtr_get(value_obj);
+  else if (!strcmp(name, "status"))
+    dsigCtx->status = PyInt_AsLong(value_obj);
+  else if (!strcmp(name, "signMethod"))
+    dsigCtx->signMethod = xmlSecTransformPtr_get(value_obj);
+  else if (!strcmp(name, "c14nMethod"))
+    dsigCtx->c14nMethod = xmlSecTransformPtr_get(value_obj);
+  else if (!strcmp(name, "preSignMemBufMethod"))
+    dsigCtx->preSignMemBufMethod = xmlSecTransformPtr_get(value_obj);
+  else if (!strcmp(name, "signValueNode"))
+    dsigCtx->signValueNode = xmlNodePtr_get(value_obj);
+  else if (!strcmp(name, "id"))
+    dsigCtx->id = PyString_AsString(value_obj);
+  else if (!strcmp(name, "signedInfoReferences"))
+    dsigCtx->signedInfoReferences = *(xmlSecPtrListPtr_get(value_obj));
+  else if (!strcmp(name, "manifestReferences"))
+    dsigCtx->manifestReferences = *(xmlSecPtrListPtr_get(value_obj));
+
   Py_INCREF(Py_None);
   return (Py_None);
 }
@@ -208,7 +233,6 @@ PyObject *xmlSecDSigReferenceCtx_setattr(PyObject *self, PyObject *args) {
   Py_INCREF(Py_None);
   return (Py_None);
 }
-
 
 /******************************************************************************/
 
@@ -506,19 +530,4 @@ PyObject *xmlsec_DSigReferenceCtxDebugXmlDump(PyObject *self, PyObject *args) {
 
 PyObject *xmlsec_DSigReferenceCtxListId(PyObject *self, PyObject *args) {
   return PyCObject_FromVoidPtr((void *) xmlSecDSigReferenceCtxListId, NULL);
-}
-
-/******************************************************************************/
-
-PyObject *xmldsig_set_signKey(PyObject *self, PyObject *args) {
-  PyObject *dsigCtx_obj, *signKey_obj;
-  xmlSecDSigCtxPtr dsigCtx;
-
-  if (!PyArg_ParseTuple(args, "OO:dsigCtxSetSignKey", &dsigCtx_obj, &signKey_obj))
-    return NULL;
-
-  dsigCtx = xmlSecDSigCtxPtr_get(dsigCtx_obj);
-  dsigCtx->signKey = xmlSecKeyPtr_get(signKey_obj);
-
-  return (wrap_xmlSecDSigCtxPtr(dsigCtx));
 }
