@@ -188,18 +188,30 @@ static PyMethodDef xmlsec_methods[] = {
   {"simpleKeysStoreId", xmlsec_SimpleKeysStoreId, METH_VARARGS},
 
   /* list.h  */
-  {"ptrListCreate",  xmlsec_PtrListCreate,  METH_VARARGS},
-  {"ptrListDestroy", xmlsec_PtrListDestroy, METH_VARARGS},
-  {"ptrListAdd",     xmlsec_PtrListAdd,     METH_VARARGS},
-  {"ptrListGetSize", xmlsec_PtrListGetSize, METH_VARARGS},
+  {"ptrListGetAttr", xmlSecPtrList_getattr, METH_VARARGS}, // New
+  {"ptrListSetAttr", xmlSecPtrList_setattr, METH_VARARGS}, // New
+  {"ptrListCreate",       xmlsec_PtrListCreate,       METH_VARARGS},
+  {"ptrListDestroy",      xmlsec_PtrListDestroy,      METH_VARARGS},
+  {"ptrListInitialize",   xmlsec_PtrListInitialize,   METH_VARARGS}, // New
+  {"ptrListFinalize",     xmlsec_PtrListFinalize,     METH_VARARGS}, // New
+  {"ptrListEmpty",        xmlsec_PtrListEmpty,        METH_VARARGS}, // New
+  {"ptrListCopy",         xmlsec_PtrListCopy,         METH_VARARGS}, // New
+  {"ptrListDuplicate",    xmlsec_PtrListDuplicate,    METH_VARARGS}, // New
+  {"ptrListGetSize",      xmlsec_PtrListGetSize,      METH_VARARGS},
+  {"ptrListGetItem",      xmlsec_PtrListGetItem,      METH_VARARGS}, // New
+  {"ptrListAdd",          xmlsec_PtrListAdd,          METH_VARARGS},
+  {"ptrListSet",          xmlsec_PtrListSet,          METH_VARARGS}, // New
+  {"ptrListRemove",       xmlsec_PtrListRemove,       METH_VARARGS}, // New
+  {"ptrListDebugDump",    xmlsec_PtrListDebugDump,    METH_VARARGS}, // New
+  {"ptrListDebugXmlDump", xmlsec_PtrListDebugXmlDump, METH_VARARGS}, // New
 
   /* membuf.h */
   {"transformMemBufId",        xmlsec_TransformMemBufId,        METH_VARARGS},
   {"transformMemBufGetBuffer", xmlsec_TransformMemBufGetBuffer, METH_VARARGS},
 
   /* nodeset.h */
-  {"nodeSetGetAttr", xmlSecNodeSet_getattr, METH_VARARGS}, // New
-  {"nodeSetSetAttr", xmlSecNodeSet_setattr, METH_VARARGS}, // New
+  {"nodeSetGetAttr", xmlSecNodeSet_getattr, METH_VARARGS},
+  {"nodeSetSetAttr", xmlSecNodeSet_setattr, METH_VARARGS},
   {"nodeSetCreate",        xmlsec_NodeSetCreate,        METH_VARARGS},
   {"nodeSetDestroy",       xmlsec_NodeSetDestroy,       METH_VARARGS},
   {"nodeSetDocDestroy",    xmlsec_NodeSetDocDestroy,    METH_VARARGS},
@@ -358,6 +370,8 @@ static PyMethodDef xmlsec_methods[] = {
 
   {NULL, NULL} /* End of Methods Sentinel */
 };
+
+PyObject *xmlsec_error;
 
 void initxmlsecmod(void) {
   PyObject *m, *d;
