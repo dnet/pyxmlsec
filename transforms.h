@@ -19,6 +19,12 @@ PyObject *xmlsec_TransformCtxInitialize(PyObject *self, PyObject *args);
 PyObject *xmlsec_TransformCtxFinalize(PyObject *self, PyObject *args);
 PyObject *xmlsec_TransformCtxReset(PyObject *self, PyObject *args);
 
+PyObject *xmlsec_TransformCreate(PyObject *self, PyObject *args);
+PyObject *xmlsec_TransformDestroy(PyObject *self, PyObject *args);
+PyObject *xmlsec_TransformNodeRead(PyObject *self, PyObject *args);
+PyObject *xmlsec_TransformSetKey(PyObject *self, PyObject *args);
+PyObject *xmlsec_TransformSetKeyReq(PyObject *self, PyObject *args);
+
 PyObject *xmlsec_TransformBase64Id(PyObject *self, PyObject *args);
 PyObject *xmlsec_TransformBase64SetLineSize(PyObject *self, PyObject *args);
 PyObject *xmlsec_TransformInclC14NId(PyObject *self, PyObject *args);

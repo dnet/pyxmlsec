@@ -25,6 +25,7 @@
 #include "wrap_objs.h"
 
 #include "transforms.h"
+#include "keys.h"
 
 PyObject *xmlsec_TransformUriTypeCheck(PyObject *self, PyObject *args) {
   xmlSecTransformUriType type;
@@ -100,6 +101,84 @@ PyObject *xmlsec_TransformCtxReset(PyObject *self, PyObject *args) {
 
   Py_INCREF(Py_None);
   return (Py_None);
+}
+
+PyObject *xmlsec_TransformCreate(PyObject *self, PyObject *args) {
+  PyObject *id_meth;
+  xmlSecTransformPtr transform;
+
+  if(!PyArg_ParseTuple(args, (char *) "O:transformCreate", &id_meth))
+    return NULL;
+
+  transform = xmlSecTransformCreate(PyCObject_AsVoidPtr(id_meth));
+
+  return (wrap_xmlSecTransformPtr(transform));
+}
+
+PyObject *xmlsec_TransformDestroy(PyObject *self, PyObject *args) {
+  PyObject *transform_obj;
+  xmlSecTransformPtr transform;
+
+  if(!PyArg_ParseTuple(args, (char *) "O:transformDestroy", &transform_obj))
+    return NULL;
+
+  transform = xmlSecTransformPtr_get(transform_obj);
+  xmlSecTransformDestroy(transform);
+
+  Py_INCREF(Py_None);
+  return (Py_None);
+}
+
+PyObject *xmlsec_TransformNodeRead(PyObject *self, PyObject *args) {
+  PyObject *node_obj, *transformCtx_obj;
+  xmlNodePtr node;
+  xmlSecTransformUsage usage;
+  xmlSecTransformCtxPtr transformCtx;
+  xmlSecTransformPtr transform;
+
+  if(!PyArg_ParseTuple(args, (char *) "OiO:transformNodeRead", &node_obj,
+		       &usage, &transformCtx_obj))
+    return NULL;
+
+  node = xmlNodePtr_get(node_obj);
+  transformCtx = xmlSecTransformCtxPtr_get(transformCtx_obj);
+  transform = xmlSecTransformNodeRead(node, usage, transformCtx);
+
+  return (wrap_xmlSecTransformPtr(transform));
+}
+
+PyObject *xmlsec_TransformSetKey(PyObject *self, PyObject *args) {
+  PyObject *transform_obj, *key_obj;
+  xmlSecTransformPtr transform;
+  xmlSecKeyPtr key;
+  int ret;
+
+  if(!PyArg_ParseTuple(args, (char *) "OO:transformSetKey", &transform_obj,
+		       &key_obj))
+    return NULL;
+
+  transform = xmlSecTransformPtr_get(transform_obj);
+  key = xmlSecKeyPtr_get(key_obj);
+  ret = xmlSecTransformSetKey(transform, key);
+
+  return (wrap_int(ret));
+}
+
+PyObject *xmlsec_TransformSetKeyReq(PyObject *self, PyObject *args) {
+  PyObject *transform_obj, *keyReq_obj;
+  xmlSecTransformPtr transform;
+  xmlSecKeyReqPtr keyReq;
+  int ret;
+
+  if(!PyArg_ParseTuple(args, (char *) "OO:transformSetKeyReq", &transform_obj,
+		       &keyReq_obj))
+    return NULL;
+
+  transform = xmlSecTransformPtr_get(transform_obj);
+  keyReq = xmlSecKeyReqPtr_get(keyReq_obj);
+  ret = xmlSecTransformSetKeyReq(transform, keyReq);
+
+  return (wrap_int(ret));
 }
 
 PyObject *xmlsec_TransformBase64Id(PyObject *self, PyObject *args) {
