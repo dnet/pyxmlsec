@@ -1478,10 +1478,6 @@ def transformMemBufGetBuffer(transform):
 ###############################################################################
 # nodeset.h
 ###############################################################################
-# The simple nodes sets operations
-NodeSetIntersection = 0
-NodeSetSubtraction  = 1
-NodeSetUnion        = 2
 # The basic nodes sets types
 NodeSetNormal                    = 0
 NodeSetInvert                    = 1
@@ -1490,6 +1486,10 @@ NodeSetTreeWithoutComments       = 3
 NodeSetTreeInvert                = 4
 NodeSetTreeWithoutCommentsInvert = 5
 NodeSetList                      = 6
+# The simple nodes sets operations
+NodeSetIntersection = 0
+NodeSetSubtraction  = 1
+NodeSetUnion        = 2
 def nodeSetGetChildren(doc, parent, withComments, invert):
     """
     Creates a new nodes set that contains:
@@ -1540,6 +1540,34 @@ class NodeSet:
             return
         self._o = xmlsecmod.nodeSetCreate(doc, nodes, type)
         if self._o is None: raise parserError('xmlSecNodeSetCreate() failed')
+    def __isprivate(self, name):
+        return name == '_o'
+    def __getattr__(self, name):
+        if self.__isprivate(name):
+            return self.__dict__[name]
+        if name[:2] == "__" and name[-2:] == "__" and name != "__members__":
+            raise AttributeError, name
+        ret = xmlsecmod.nodeSetGetAttr(self, name)
+        if ret is None:
+            raise AttributeError, name
+        if name == "nodes":
+            return NodeSet(_obj=ret)
+        elif name == "doc":
+            return libxml2.xmlDoc(_obj=ret)
+        elif name == "next":
+            return NodeSet(_obj=ret)
+        elif name == "prev":
+            return NodeSet(_obj=ret)
+        elif name == "children":
+            return NodeSet(_obj=ret)
+        else:
+            # destroyDoc, type, op
+            return ret
+    def __setattr__(self, name, value):
+        if self.__isprivate(name):
+            self.__dict__[name] = value
+        else:
+            xmlsecmod.nodeSetSetAttr(self, name, value)
     def destroy(self):
         """Destroys the nodes set."""
         xmlsecmod.nodeSetDestroy(self)
