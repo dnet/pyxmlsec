@@ -3,7 +3,7 @@
 # $Id$
 #
 # PyXMLSec example: Signing a file with a dynamicaly created template and
-# anX509 certificate.
+# an X509 certificate.
 #
 # Signs a file using a dynamicaly created template, key from PEM file and
 # an X509 certificate. The signature has one reference with one enveloped 
