@@ -47,6 +47,9 @@ from xmlsec_strings import *
 ###############################################################################
 # xmlsec.h
 ###############################################################################
+# The xmlsec library version mode.
+CheckVersionExact         = 0 # the version should match exactly.
+CheckVersionABICompatible = 1 # the version should be ABI compatible.
 def init():
     """
     Initializes XML Security Library. The depended libraries (LibXML and LibXSLT)
@@ -72,6 +75,17 @@ def checkVersion():
     used to compile the caller, 0 if it does not or a negative value if an error occurs.
     """
     return xmlsecmod.checkVersion()
+def checkVersionExt(major, minor, subminor, mode):
+    """
+    Checks if the loaded version of xmlsec library could be used.
+    major    : the major version number.
+    minor    : the minor version number.
+    subminor : the subminor version number.
+    mode     : the version check mode.
+    Returns  : 1 if the loaded xmlsec library version is OK to use 0 if it is
+    not or a negative value if an error occurs.
+    """
+    return xmlsecmod.checkVersionExt(major, minor, subminor, mode)
 
 ###############################################################################
 # app.h
@@ -843,6 +857,7 @@ class Base64Ctx:
 ###############################################################################
 # xmlenc.h
 ###############################################################################
+# The EncCtx mode
 xmlEncCtxModeEncryptedData = 0 # the <enc:EncryptedData/> element processing.
 xmlEncCtxModeEncryptedKey  = 1 # the <enc:EncryptedKey/> element processing.
 class EncCtx:
@@ -1102,6 +1117,10 @@ DSIG_FLAGS_STORE_MANIFEST_REFERENCES =   0x00000004
 # If this flag is set then pre-signature buffer for <dsig:SignedInfo/>
 # element processing will be stored in #xmlSecDSigCtx.
 DSIG_FLAGS_STORE_SIGNATURE =             0x00000008
+# If this flag is set then URI ID references are resolved directly without using
+# XPointers. This allows one to sign/verify Visa3D documents that don't follow
+# XML, XPointer and XML DSig specifications.
+DSIG_FLAGS_USE_VISA3D_HACK =             0x00000010
 # DSig processing status.
 DSigStatusUnknown   = 0
 DSigStatusSucceeded = 1
