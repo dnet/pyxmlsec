@@ -277,8 +277,8 @@ static PyMethodDef xmlsec_methods[] = {
   {"xmlsec_version_info",     xmlsec_xmlsec_version_info,     METH_VARARGS},
 
   /* xmldsig.h */
-  {"dsigCtxGetAttr", xmlSecDSigCtx_getattr, METH_VARARGS}, // New
-  {"dsigCtxSetAttr", xmlSecDSigCtx_setattr, METH_VARARGS}, // New
+  {"dsigCtxGetAttr", xmlSecDSigCtx_getattr, METH_VARARGS},
+  {"dsigCtxSetAttr", xmlSecDSigCtx_setattr, METH_VARARGS},
   {"dsigCtxCreate",                      xmlsec_DSigCtxCreate,                      METH_VARARGS},
   {"dsigCtxDestroy",                     xmlsec_DSigCtxDestroy,                     METH_VARARGS},
   {"dsigCtxInitialize",                  xmlsec_DSigCtxInitialize,                  METH_VARARGS},
@@ -291,8 +291,8 @@ static PyMethodDef xmlsec_methods[] = {
   {"dsigCtxDebugDump",                   xmlsec_DSigCtxDebugDump,                   METH_VARARGS},
   {"dsigCtxDebugXmlDump",                xmlsec_DSigCtxDebugXmlDump,                METH_VARARGS},
   {"dsigReferenceCtxCreate",             xmlsec_DSigReferenceCtxCreate,             METH_VARARGS},
-  {"dsigReferenceCtxGetAttr", xmlSecDSigReferenceCtx_getattr, METH_VARARGS}, // New
-  {"dsigReferenceCtxSetAttr", xmlSecDSigReferenceCtx_setattr, METH_VARARGS}, // New
+  {"dsigReferenceCtxGetAttr", xmlSecDSigReferenceCtx_getattr, METH_VARARGS},
+  {"dsigReferenceCtxSetAttr", xmlSecDSigReferenceCtx_setattr, METH_VARARGS},
   {"dsigReferenceCtxDestroy",            xmlsec_DSigReferenceCtxDestroy,            METH_VARARGS},
   {"dsigReferenceCtxInitialize",         xmlsec_DSigReferenceCtxInitialize,         METH_VARARGS},
   {"dsigReferenceCtxFinalize",           xmlsec_DSigReferenceCtxFinalize,           METH_VARARGS},
@@ -305,6 +305,8 @@ static PyMethodDef xmlsec_methods[] = {
   {"dsigCtxSetSignKey",                  xmldsig_set_signKey,                       METH_VARARGS},
 
   /* xmlenc.h */
+  {"encCtxGetAttr", xmlSecEncCtx_getattr, METH_VARARGS}, // New
+  {"encCtxSetAttr", xmlSecEncCtx_setattr, METH_VARARGS}, // New
   {"encCtxCreate",                 xmlsec_EncCtxCreate,            METH_VARARGS},
   {"encCtxDestroy",                xmlsec_EncCtxDestroy,           METH_VARARGS},
   {"encCtxInitialize",             xmlsec_EncCtxInitialize,        METH_VARARGS},
@@ -318,10 +320,6 @@ static PyMethodDef xmlsec_methods[] = {
   {"encCtxDecryptToBuffer",        xmlsec_EncCtxDecryptToBuffer,   METH_VARARGS},
   {"encCtxDebugDump",              xmlsec_EncCtxDebugDump,         METH_VARARGS},
   {"encCtxDebugXmlDump",           xmlsec_EncCtxDebugXmlDump,      METH_VARARGS},
-  {"encCtxSetEncKey",              xmlenc_set_encKey,              METH_VARARGS},
-  {"encCtxGetResult",              xmlenc_get_result,              METH_VARARGS},
-  {"encCtxGetResultBase64Encoded", xmlenc_get_resultBase64Encoded, METH_VARARGS},
-  {"encCtxGetResultReplaced",      xmlenc_get_resultReplaced,      METH_VARARGS},
 
   /* xmlsec.h */
   {"init",              xmlsec_Init,              METH_VARARGS},
