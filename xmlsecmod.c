@@ -45,22 +45,6 @@
 #include "openssl.h"
 
 static PyMethodDef xmlsec_methods[] = {
-  /* base64.h */
-  {"base64CtxCreate",     xmlsec_Base64CtxCreate,     METH_VARARGS},
-  {"base64CtxDestroy",    xmlsec_Base64CtxDestroy,    METH_VARARGS},
-  {"base64CtxInitialize", xmlsec_Base64CtxInitialize, METH_VARARGS},
-  {"base64CtxFinalize",   xmlsec_Base64CtxFinalize,   METH_VARARGS},
-  {"base64CtxUpdate",     xmlsec_Base64CtxUpdate,     METH_VARARGS},
-  {"base64CtxFinal",      xmlsec_Base64CtxFinal,      METH_VARARGS},
-  {"base64Encode",        xmlsec_Base64Encode,        METH_VARARGS},
-  {"base64Decode",        xmlsec_Base64Decode,        METH_VARARGS},
-
-  /* parser.h */
-  {"parseFile",            xmlsec_ParseFile,            METH_VARARGS},
-  {"parseMemory",          xmlsec_ParseMemory,          METH_VARARGS},
-  {"parseMemoryExt",       xmlsec_ParseMemoryExt,       METH_VARARGS},
-  {"transformXmlParserId", xmlsec_TransformXmlParserId, METH_VARARGS},
-
   /* app.h */
   {"cryptoInit",         xmlsec_CryptoInit,         METH_VARARGS},
   {"cryptoShutdown",     xmlsec_CryptoShutdown,     METH_VARARGS},
@@ -101,6 +85,16 @@ static PyMethodDef xmlsec_methods[] = {
   {"keyDataX509Id",        xmlsec_KeyDataX509Id,        METH_VARARGS},
   {"keyDataRawX509CertId", xmlsec_KeyDataRawX509CertId, METH_VARARGS},
   {"x509StoreId",          xmlsec_X509StoreId,          METH_VARARGS},
+
+  /* base64.h */
+  {"base64CtxCreate",     xmlsec_Base64CtxCreate,     METH_VARARGS},
+  {"base64CtxDestroy",    xmlsec_Base64CtxDestroy,    METH_VARARGS},
+  {"base64CtxInitialize", xmlsec_Base64CtxInitialize, METH_VARARGS},
+  {"base64CtxFinalize",   xmlsec_Base64CtxFinalize,   METH_VARARGS},
+  {"base64CtxUpdate",     xmlsec_Base64CtxUpdate,     METH_VARARGS},
+  {"base64CtxFinal",      xmlsec_Base64CtxFinal,      METH_VARARGS},
+  {"base64Encode",        xmlsec_Base64Encode,        METH_VARARGS},
+  {"base64Decode",        xmlsec_Base64Decode,        METH_VARARGS},
 
   /* buffer.h */
   {"bufferCreate",                 xmlsec_BufferCreate,                 METH_VARARGS},
@@ -179,6 +173,12 @@ static PyMethodDef xmlsec_methods[] = {
   {"nodeSetDumpTextNodes", xmlsec_NodeSetDumpTextNodes, METH_VARARGS},
   {"nodeSetDebugDump",     xmlsec_NodeSetDebugDump,     METH_VARARGS},
 
+  /* parser.h */
+  {"parseFile",            xmlsec_ParseFile,            METH_VARARGS},
+  {"parseMemory",          xmlsec_ParseMemory,          METH_VARARGS},
+  {"parseMemoryExt",       xmlsec_ParseMemoryExt,       METH_VARARGS},
+  {"transformXmlParserId", xmlsec_TransformXmlParserId, METH_VARARGS},
+
   /* templates.h */
   {"tmplSignatureCreate",               xmlsec_TmplSignatureCreate,               METH_VARARGS},
   {"tmplSignatureEnsureKeyInfo",        xmlsec_TmplSignatureEnsureKeyInfo,        METH_VARARGS},
@@ -232,10 +232,6 @@ static PyMethodDef xmlsec_methods[] = {
   {"transformRemoveXmlTagsC14NId",    xmlsec_TransformRemoveXmlTagsC14NId,    METH_VARARGS},
   {"transformVisa3DHackId",           xmlsec_TransformVisa3DHackId,           METH_VARARGS},
   {"transformVisa3DHackSetID",        xmlsec_TransformVisa3DHackSetID,        METH_VARARGS},
-
-  /* openssl/crypto.h, openssl/app.h */
-  {"openSSLAppInit", xmlsec_OpenSSLAppInit, METH_VARARGS},
-  {"openSSLInit",    xmlsec_OpenSSLInit,    METH_VARARGS},
 
   /* version.h */
   {"xmlsec_version",          xmlsec_xmlsec_version,          METH_VARARGS}, // New
@@ -320,6 +316,10 @@ static PyMethodDef xmlsec_methods[] = {
 
   /* x509.h */
   {"x509DataGetNodeContent", xmlsec_X509DataGetNodeContent, METH_VARARGS},
+
+  /* openssl/crypto.h, openssl/app.h */
+  {"openSSLAppInit", xmlsec_OpenSSLAppInit, METH_VARARGS},
+  {"openSSLInit",    xmlsec_OpenSSLInit,    METH_VARARGS},
 
   {NULL, NULL} /* End of Methods Sentinel */
 };
