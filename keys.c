@@ -230,6 +230,7 @@ PyObject *xmlsec_KeyGetName(PyObject *self, PyObject *args) {
     return NULL;
   
   key = (xmlSecKeyPtr)xmlSecKeyPtr_get(PyObject_GetAttr(key_obj, PyString_FromString("_o")));
+
   return Py_BuildValue("s", key->name);
 }
 
@@ -237,14 +238,72 @@ PyObject *xmlsec_KeySetName(PyObject *self, PyObject *args) {
   PyObject *key_obj;
   xmlSecKeyPtr key;
   const xmlChar *name;
-  int result;
+  int ret;
   
   if (!PyArg_ParseTuple(args, "Os:keySetName", &key_obj, &name))
     return NULL;
 
   key = (xmlSecKeyPtr)xmlSecKeyPtr_get(PyObject_GetAttr(key_obj, PyString_FromString("_o")));
-  result = xmlSecKeySetName(key, name);
-  return Py_BuildValue("i", result);
+  ret = xmlSecKeySetName(key, name);
+
+  return Py_BuildValue("i", ret);
+}
+
+PyObject *xmlsec_KeyGenerate(PyObject *self, PyObject *args) {
+  PyObject *dataId_meth;
+  xmlSecSize sizeBits;
+  xmlSecKeyDataType type;
+  xmlSecKeyPtr key;
+  PyObject *ret;
+
+  if (!PyArg_ParseTuple(args, "Oii:keyGenerate", &dataId_meth, &sizeBits, &type))
+    return NULL;
+
+  key = xmlSecKeyGenerate(PyCObject_AsVoidPtr(dataId_meth), sizeBits, type);
+  if (key == NULL) {
+    Py_INCREF(Py_None);
+    return (Py_None);
+  }
+
+  ret = PyCObject_FromVoidPtrAndDesc((void *) key, (char *) "xmlSecKeyPtr", NULL);
+  return (ret);
+}
+
+PyObject *xmlsec_KeyGenerateByName(PyObject *self, PyObject *args) {
+  const xmlChar *name;
+  xmlSecSize sizeBits;
+  xmlSecKeyDataType type;
+  xmlSecKeyPtr key;
+  PyObject *ret;
+
+  if (!PyArg_ParseTuple(args, "sii:keyGenerateByName", &name, &sizeBits, &type))
+    return NULL;
+
+  key = xmlSecKeyGenerateByName(name, sizeBits, type);
+  if (key == NULL) {
+    Py_INCREF(Py_None);
+    return (Py_None);
+  }
+
+  ret = PyCObject_FromVoidPtrAndDesc((void *) key, (char *) "xmlSecKeyPtr", NULL);
+  return (ret);
+}
+
+PyObject *xmlsec_KeyMatch(PyObject *self, PyObject *args) {
+  PyObject *key_obj, *keyReq_obj;
+  xmlSecKeyPtr key;
+  const xmlChar *name = NULL;
+  xmlSecKeyReqPtr keyReq;
+  int ret;
+
+  if (!PyArg_ParseTuple(args, "OzO:keyMatch", &key_obj, &name, &keyReq_obj))
+    return NULL;
+
+  key = xmlSecKeyPtr_get(PyObject_GetAttr(key_obj, PyString_FromString("_o")));
+  keyReq = xmlSecKeyReqPtr_get(PyObject_GetAttr(keyReq_obj, PyString_FromString("_o")));
+  ret = xmlSecKeyMatch(key, name, keyReq);
+
+  return Py_BuildValue("i", ret);
 }
 
 PyObject *xmlsec_KeyReadBuffer(PyObject *self, PyObject *args) {
