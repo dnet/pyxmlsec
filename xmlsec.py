@@ -67,6 +67,7 @@ def cryptoShutdown():
 def cryptoKeysMngrInit(mngr):
     return xmlsecmod.cryptoKeysMngrInit(mngr)
 # Key data ids methods
+keyDataDesId  = xmlsecmod.keyDataDesId()
 keyDataDsaId  = xmlsecmod.keyDataDsaId()
 keyDataRsaId  = xmlsecmod.keyDataRsaId()
 keyDataX509Id = xmlsecmod.keyDataX509Id()
@@ -329,7 +330,7 @@ class Base64Ctx:
 xmlEncCtxModeEncryptedData = 0 # the <enc:EncryptedData/> element processing.
 xmlEncCtxModeEncryptedKey  = 1 # the <enc:EncryptedKey/> element processing.
 class EncCtx:
-    def __init__(self, keysMngr, _obj=None):
+    def __init__(self, keysMngr=None, _obj=None):
         """
         Creates <enc:EncryptedData/> element processing context. The caller is
         responsible for destroying returned object by calling destroy method.
@@ -417,6 +418,9 @@ class EncCtx:
         output : the path to output FILE.
         """
         xmlsecmod.encCtxDebugXmlDump(self, output)
+    def setEncKey(self, key):
+        """Sets encKey member."""
+        self._o = xmlsecmod.encCtxSetEncKey(self, key)
 
 ###############################################################################
 # buffer.h
@@ -890,6 +894,31 @@ KeyDataFormatPem      = 2 # the PEM key data (cert or public/private key).
 KeyDataFormatDer      = 3 # the DER key data (cert or public/private key).
 KeyDataFormatPkcs8Pem = 4 # the PKCS#8 PEM private key.
 KeyDataFormatPkcs8Der = 5 # the PKCS#8 DER private key.
+def keyReadBuffer(dataId, buffer):
+    """
+    Reads the key value of klass dataId from a buffer.
+    dataId  : the key value data klass.
+    buffer  : the buffer that contains the binary data.
+    Returns : newly created key or None if an error occurs.
+    """
+    return Key(_obj=xmlsecmod.keyReadBuffer(dataId, buffer))
+def keyReadBinaryFile(dataId, filename):
+    """
+    Reads the key value of klass dataId from a binary file filename.
+    dataId   : the key value data klass.
+    filename : the key binary filename.
+    Returns  : newly created key or None if an error occurs.
+    """
+    return Key(_obj=xmlsecmod.keyReadBinaryFile(dataId, filename))
+def keyReadMemory(dataId, data, dataSize):
+    """
+    Reads the key value of klass dataId from a memory block data.
+    dataId   : the key value data klass.
+    data     : the memory containing the key
+    dataSize : the size of the memory block
+    Returns  : newly created key or None if an error occurs.
+    """
+    return Key(_obj=xmlsecmod.keyReadMemory(dataId, data, dataSize))
 class Key:
     def __init__(self, _obj=None):
         """
