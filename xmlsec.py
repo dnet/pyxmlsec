@@ -1,13 +1,14 @@
 #! /usr/bin/env python
+# -*- coding: UTF-8 -*-
 #
 # $Id$
 #
 # PyXMLSec - Python bindings for XML Security library (XMLSec)
 #
-# Copyright (C) 2003-2004 Easter-eggs, Valery Febvre
+# Copyright (C) 2003-2004 Easter-eggs, Valéry Febvre
 # http://pyxmlsec.labs.libre-entreprise.org
 #
-# Author: Valery Febvre <vfebvre@easter-eggs.com>
+# Author: Valéry Febvre <vfebvre@easter-eggs.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,9 +26,9 @@
 
 """
 PyXMLSec - Python bindings for XML Security library (XMLSec)
-Copyright (C) 2003-2004 Easter-eggs, Valery Febvre
+Copyright (C) 2003-2004 Easter-eggs, Valéry Febvre
 
-Author   : Valery Febvre <vfebvre@easter-eggs.com>
+Author   : Valéry Febvre <vfebvre@easter-eggs.com>
 Homepage : http://pyxmlsec.labs.libre-entreprise.org
 
 PyXMLSec was originally developped for Glasnost project.
@@ -45,11 +46,11 @@ import libxml2
 import xmlsecmod
 from xmlsec_strings import *
 
-class parserError:
+class Error(Exception):
     def __init__(self, msg):
         self.msg = msg
     def __str__(self):
-        return self.msg
+        return repr(self.msg)
 
 ###############################################################################
 # app.h
@@ -175,7 +176,7 @@ def cryptoAppKeyLoad(filename, format, pwd, pwdCallback, pwdCallbackCtx):
     """
     ret = xmlsecmod.cryptoAppKeyLoad(filename, format, pwd,
                                      pwdCallback, pwdCallbackCtx)
-    if ret is None: raise parserError('xmlSecCryptoAppKeyLoad() failed')
+    if ret is None: raise Error('xmlSecCryptoAppKeyLoad() failed')
     return Key(_obj=ret)
 def cryptoAppPkcs12Load(filename, pwd, pwdCallback, pwdCallbackCtx):
     """
@@ -190,7 +191,7 @@ def cryptoAppPkcs12Load(filename, pwd, pwdCallback, pwdCallbackCtx):
     """
     ret = xmlsecmod.cryptoAppPkcs12Load(filename, pwd,
                                         pwdCallback, pwdCallbackCtx)
-    if ret is None: raise parserError('xmlSecCryptoAppKeyLoad() failed')
+    if ret is None: raise Error('xmlSecCryptoAppKeyLoad() failed')
     return Key(_obj=ret)
 def cryptoAppKeyCertLoad(key, filename, format):
     """
@@ -246,7 +247,7 @@ class Base64Ctx:
             self._o = _obj
             return
         self._o = xmlsecmod.base64CtxCreate(encode, columns)
-        if self._o is None: raise parserError('xmlSecBase64CtxCreate() failed')
+        if self._o is None: raise Error('xmlSecBase64CtxCreate() failed')
     def destroy(self):
         """Destroys base64 context."""
         xmlsecmod.base64CtxDestroy(self)
@@ -310,7 +311,7 @@ class Buffer:
             self._o = _obj
             return
         self._o = xmlsecmod.bufferCreate(size)
-        if self._o is None: raise parserError('xmlSecBufferCreate() failed')
+        if self._o is None: raise Error('xmlSecBufferCreate() failed')
     def __isprivate(self, name):
         return name == '_o'
     def __getattr__(self, name):
@@ -533,7 +534,7 @@ class KeyInfoCtx:
             self._o = _obj
             return
         self._o = xmlsecmod.keyInfoCtxCreate(mngr)
-        if self._o is None: raise parserError('xmlSecKeyInfoCtxCreate() failed')
+        if self._o is None: raise Error('xmlSecKeyInfoCtxCreate() failed')
     def __isprivate(self, name):
         return name == '_o'
     def __getattr__(self, name):
@@ -681,7 +682,7 @@ class Key:
             self._o = _obj
             return
         self._o = xmlsecmod.keyCreate()
-        if self._o is None: raise parserError('xmlSecKeyCreate() failed')
+        if self._o is None: raise Error('xmlSecKeyCreate() failed')
     def __isprivate(self, name):
         return name == '_o'
     def __getattr__(self, name):
@@ -834,7 +835,7 @@ class KeyReq:
             self._o = _obj
             return
         self._o = xmlsecmod.keyReqCreate(keyId, keyType, keyUsage, keyBitsSize)
-        if self._o is None: raise parserError('xmlSecKeyReqCreate() failed')
+        if self._o is None: raise Error('xmlSecKeyReqCreate() failed')
     def __isprivate(self, name):
         return name == '_o'
     def __getattr__(self, name):
@@ -1025,7 +1026,7 @@ class KeyData:
             self._o = _obj
             return
         self._o = xmlsecmod.keyDataCreate(id)
-        if self._o is None: raise parserError('xmlSecKeyDataCreate() failed')
+        if self._o is None: raise Error('xmlSecKeyDataCreate() failed')
     def __isprivate(self, name):
         return name == '_o'
     def __getattr__(self, name):
@@ -1186,7 +1187,7 @@ class KeysMngr:
             self._o = _obj
             return
         self._o = xmlsecmod.keysMngrCreate()
-        if self._o is None: raise parserError('xmlSecKeysMngrCreate() failed')
+        if self._o is None: raise Error('xmlSecKeysMngrCreate() failed')
     def __isprivate(self, name):
         return name == '_o'
     def __getattr__(self, name):
@@ -1220,7 +1221,7 @@ class KeysMngr:
         Returns    : a key or None if key is not found or an error occurs.
         """
         _obj = xmlsecmod.keysMngrFindKey(self, name, key_info_ctx)
-        if _obj is None: raise parserError('xmlSecKeysMngrFindKey() failed')
+        if _obj is None: raise Error('xmlSecKeysMngrFindKey() failed')
         return Key(_obj=_obj)
     def adoptKeysStore(self, store):
         """
@@ -1276,7 +1277,7 @@ class KeyStore:
             self._o = _obj
             return
         self._o = xmlsecmod.keyStoreCreate(id)
-        if self._o is None: raise parserError('xmlSecKeyStoreCreate() failed')
+        if self._o is None: raise Error('xmlSecKeyStoreCreate() failed')
     def destroy(self):
         """Destroys the keys store"""
         xmlsecmod.keyStoreDestroy(self)
@@ -1288,7 +1289,7 @@ class KeyStore:
         Returns    : a key or None if key is not found or an error occurs.
         """
         _obj = xmlsecmod.keyStoreFindKey(self, name, key_info_ctx)
-        if _obj is None: raise parserError('xmlSecKeyStoreFindKey() failed')
+        if _obj is None: raise Error('xmlSecKeyStoreFindKey() failed')
         return Key(_obj=_obj)
     
 simpleKeysStoreId = xmlsecmod.simpleKeysStoreId()
@@ -1336,7 +1337,7 @@ class PtrList:
             self._o = _obj
             return
         self._o = xmlsecmod.ptrListCreate(id)
-        if self._o is None: raise parserError('xmlSecPtrListCreate() failed')
+        if self._o is None: raise Error('xmlSecPtrListCreate() failed')
     def __isprivate(self, name):
         return name == '_o'
     def __getattr__(self, name):
@@ -1539,7 +1540,7 @@ class NodeSet:
             self._o = _obj
             return
         self._o = xmlsecmod.nodeSetCreate(doc, nodes, type)
-        if self._o is None: raise parserError('xmlSecNodeSetCreate() failed')
+        if self._o is None: raise Error('xmlSecNodeSetCreate() failed')
     def __isprivate(self, name):
         return name == '_o'
     def __getattr__(self, name):
@@ -1687,7 +1688,7 @@ class TmplSignature(libxml2.xmlNode):
             return
         _obj = xmlsecmod.tmplSignatureCreate(doc, c14nMethodId,
                                              signMethodId, id)
-        if _obj is None: raise parserError('xmlSecTmplSignatureCreate() failed')
+        if _obj is None: raise Error('xmlSecTmplSignatureCreate() failed')
         libxml2.xmlNode.__init__(self, _obj=_obj)
     def addReference(self, digestMethodId, id=None, uri=None, type=None):
         """
@@ -1722,7 +1723,7 @@ class TmplSignature(libxml2.xmlNode):
         """
         _obj = xmlsecmod.tmplSignatureGetSignMethodNode(self)
         if _obj is None:
-            raise parserError('xmlSecTmplSignatureGetSignMethodNode() failed')
+            raise Error('xmlSecTmplSignatureGetSignMethodNode() failed')
         return libxml2.xmlNode(_obj=_obj)
     def getC14NMethodNode(self):
         """
@@ -1731,7 +1732,7 @@ class TmplSignature(libxml2.xmlNode):
         """
         _obj = xmlsecmod.tmplSignatureGetC14NMethodNode(self)
         if _obj is None:
-            raise parserError('xmlSecTmplSignatureGetC14NMethodNode() failed')
+            raise Error('xmlSecTmplSignatureGetC14NMethodNode() failed')
         return libxml2.xmlNode(_obj=_obj)
     def ensureKeyInfo(self, id=None):
         """
@@ -1755,7 +1756,7 @@ class TmplKeyInfo(libxml2.xmlNode):
         """
         _obj = xmlsecmod.tmplKeyInfoAddKeyName(self, name)
         if _obj is None:
-            raise parserError('xmlSecTmplKeyInfoAddKeyName() failed')
+            raise Error('xmlSecTmplKeyInfoAddKeyName() failed')
         return libxml2.xmlNode(_obj=_obj)
     def addKeyValue(self):
         """
@@ -1765,7 +1766,7 @@ class TmplKeyInfo(libxml2.xmlNode):
         """
         _obj = xmlsecmod.tmplKeyInfoAddKeyValue(self)
         if _obj is None:
-            raise parserError('xmlSecTmplKeyInfoAddKeyValue() failed')
+            raise Error('xmlSecTmplKeyInfoAddKeyValue() failed')
         return libxml2.xmlNode(_obj=_obj)
     def addX509Data(self):
         """
@@ -1775,7 +1776,7 @@ class TmplKeyInfo(libxml2.xmlNode):
         """
         _obj = xmlsecmod.tmplKeyInfoAddX509Data(self)
         if _obj is None:
-            raise parserError('xmlSecTmplKeyInfoAddX509Data() failed')
+            raise Error('xmlSecTmplKeyInfoAddX509Data() failed')
         return libxml2.xmlNode(_obj=_obj)
     def addEncryptedKey(self, encMethodId, id, type, recipient):
         """
@@ -1791,7 +1792,7 @@ class TmplKeyInfo(libxml2.xmlNode):
         _obj = xmlsecmod.tmplKeyInfoAddEncryptedKey(self, encMethodId, id, type,
                                                     recipient)
         if _obj is None:
-            raise parserError('xmlSecTmplKeyInfoAddEncryptedKey() failed')
+            raise Error('xmlSecTmplKeyInfoAddEncryptedKey() failed')
         return TmplEncData(_obj=_obj)
 
 class TmplReference(libxml2.xmlNode):
@@ -1822,7 +1823,7 @@ class TmplObject(libxml2.xmlNode):
         """
         _obj = xmlsecmod.tmplObjectAddSignProperties(self, id, target)
         if _obj is None:
-            raise parserError('xmlSecTmplObjectAddSignProperties() failed')
+            raise Error('xmlSecTmplObjectAddSignProperties() failed')
         return libxml2.xmlNode(_obj=_obj)
     def addManifest(self, id=None):
         """
@@ -1874,7 +1875,7 @@ class TmplEncData(libxml2.xmlNode):
             return
         _obj = xmlsecmod.tmplEncDataCreate(doc, encMethodId, id, type,
                                            mimeType, encoding)
-        if _obj is None: raise parserError('xmlSecTmplEncDataCreate() failed')
+        if _obj is None: raise Error('xmlSecTmplEncDataCreate() failed')
         libxml2.xmlNode.__init__(self, _obj=_obj)
     def ensureKeyInfo(self, id=None):
         """
@@ -2040,7 +2041,7 @@ class Transform:
             self._o = _obj
             return
         self._o = xmlsecmod.transformCreate()
-        if self._o is None: raise parserError('xmlSecTransformCreate() failed')
+        if self._o is None: raise Error('xmlSecTransformCreate() failed')
     def destroy(self):
         """Destroys transform."""
         xmlsecmod.transformDestroy(self)
@@ -2104,7 +2105,7 @@ class TransformCtx:
             self._o = _obj
             return
         self._o = xmlsecmod.transformCtxCreate()
-        if self._o is None: raise parserError('xmlSecTransformCtxCreate() failed')
+        if self._o is None: raise Error('xmlSecTransformCtxCreate() failed')
     def destroy(self):
         """Destroy context object"""
         xmlsecmod.transformCtxDestroy(self)
@@ -2172,7 +2173,7 @@ class DSigCtx:
             self._o = _obj
             return
         self._o = xmlsecmod.dsigCtxCreate(keysMngr)
-        if self._o is None: raise parserError('xmlSecDSigCtxCreate() failed')
+        if self._o is None: raise Error('xmlSecDSigCtxCreate() failed')
     def __isprivate(self, name):
         return name == '_o'
     def __getattr__(self, name):
@@ -2301,7 +2302,7 @@ class DSigReferenceCtx:
             self._o = _obj
             return
         self._o = xmlsecmod.dsigReferenceCtxCreate(dsigCtx, origin)
-        if self._o is None: raise parserError('xmlSecDSigReferenceCtxCreate() failed')
+        if self._o is None: raise Error('xmlSecDSigReferenceCtxCreate() failed')
     def __isprivate(self, name):
         return name == '_o'
     def __getattr__(self, name):
@@ -2403,7 +2404,7 @@ class EncCtx:
             self._o = _obj
             return
         self._o = xmlsecmod.encCtxCreate(keysMngr)
-        if self._o is None: raise parserError('xmlSecEncCtxCreate() failed')
+        if self._o is None: raise Error('xmlSecEncCtxCreate() failed')
     def __isprivate(self, name):
         return name == '_o'
     def __getattr__(self, name):
