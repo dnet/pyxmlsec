@@ -1,2 +1,39 @@
 2004-01-15  Valery Febvre  <vfebvre@easter-eggs.com>
         *: 0.1.0 release
+	* xmlsec.py: Added methods __getattr__ and __setattr__ in classes
+	DSigCtx, DSigReferenceCtx, EncCtx, KeyInfoCtx, Buffer, Key, KeyReq,
+	KeysMngr and PtrList
+	Added new classes PtrListId and KeyStoreId
+	Removed method setSignKey in class DSigCtx
+	4 methods removed in class EncCtx: setEncKey, getResult,
+	getResultBase64Encoded, getResultReplaced
+	4 methods removed in class DSigCtx: setEnabledReferenceUris, getStatus,
+	getKeyInfoReadCtx, getSignedInfoReferences
+	* buffer.c: Added functions xmlSecBuffer_getattr, xmlSecBuffer_setattr
+	* keyinfo.c: Added functions xmlSecKeyInfoCtx_getattr,
+	xmlSecKeyInfoCtx_setattr and removed function keyinfo_get_enabledKeyData
+	* keys.c: Added functions xmlSecKey_getattr and xmlSecKey_setattr
+	All KeyReq section rewritten
+	* keysmngr.c: Added functions xmlSecKeysMngr_getattr,
+	xmlSecKeysMngr_setattr, xmlsec_GetKeyCallback and fixed function
+	keysmngr_KeyStoreIdCreate
+	* list.c: Added functions xmlsec_PtrListInitialize,
+	xmlsec_PtrListFinalize, xmlsec_PtrListEmpty, xmlsec_PtrListCopy,
+	xmlsec_PtrListDuplicate, xmlsec_PtrListGetItem, xmlsec_PtrListSet,
+	xmlsec_PtrListRemove, xmlsec_PtrListDebugDump, xmlsec_PtrListDebugXmlDump
+	xmlsec_PtrListGetName, xmlsec_PtrListIsValid, xmlSecPtrList_getattr
+	xmlSecPtrList_setattr
+	* nodeset.c: Added functions xmlSecNodeSet_getattr, xmlSecNodeSet_setattr
+	* xmldsig.c: Added functions xmlSecDSigCtx_getattr,
+	xmlSecDSigCtx_setattr, xmlSecDSigReferenceCtx_getattr,
+	xmlSecDSigReferenceCtx_setattr
+	Removed functions xmldsig_set_enabledReferenceUris, xmldsig_get_status,
+	xmldsig_get_keyInfoReadCtx, xmldsig_get_signedInfoReferences,
+	xmldsig_set_signKey
+	Updated functions: xmlSecDSigCtx_getattr, xmlSecDSigCtx_setattr,
+	xmlSecDSigReferenceCtx_setattr
+	* xmlenc.c: Added functions xmlSecEncCtx_getattr, xmlSecEncCtx_setattr
+	Removed functions xmlenc_set_encKey, xmlenc_get_result,
+	xmlenc_get_resultBase64Encoded, xmlenc_get_resultReplaced
+	* examples/decrypt3.py: new example
+	* examples/pyxmlsec-demo.py: updated
