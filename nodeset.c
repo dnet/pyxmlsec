@@ -40,6 +40,75 @@ PyObject *wrap_xmlSecNodeSetPtr(xmlSecNodeSetPtr nset) {
 
 /*****************************************************************************/
 
+PyObject *xmlSecNodeSet_getattr(PyObject *self, PyObject *args) {
+  PyObject *nset_obj;
+  xmlSecNodeSetPtr nset;
+  const char *attr;
+
+  if (!PyArg_ParseTuple(args, "Os:nodeSetGetAttr",
+			&nset_obj, &attr))
+    return NULL;
+
+  nset = xmlSecNodeSetPtr_get(nset_obj);
+
+  if (!strcmp(attr, "__members__"))
+    return Py_BuildValue("[ssssssss]", "nodes", "doc", "destroyDoc", "type",
+			 "op", "next", "prev", "children");
+  if (!strcmp(attr, "nodes"))
+    return (wrap_xmlNodeSetPtr(nset->nodes));
+  if (!strcmp(attr, "doc"))
+    return (wrap_xmlDocPtr(nset->doc));
+  if (!strcmp(attr, "destroyDoc"))
+    return (wrap_int(nset->destroyDoc));
+  if (!strcmp(attr, "type"))
+    return (wrap_int(nset->type));
+  if (!strcmp(attr, "op"))
+    return (wrap_int(nset->op));
+  if (!strcmp(attr, "next"))
+    return (wrap_xmlSecNodeSetPtr(nset->next));
+  if (!strcmp(attr, "prev"))
+    return (wrap_xmlSecNodeSetPtr(nset->prev));
+  if (!strcmp(attr, "children"))
+    return (wrap_xmlSecNodeSetPtr(nset->children));
+
+  Py_INCREF(Py_None);
+  return (Py_None);
+}
+
+PyObject *xmlSecNodeSet_setattr(PyObject *self, PyObject *args) {
+  PyObject *nset_obj, *value_obj;
+  xmlSecNodeSetPtr nset;
+  const char *name;
+
+  if (!PyArg_ParseTuple(args, "OsO:nodeSetSetAttr",
+			&nset_obj, &name, &value_obj))
+    return NULL;
+
+  nset = xmlSecNodeSetPtr_get(nset_obj);
+    
+  if (!strcmp(name, "nodes"))
+    nset->nodes = xmlNodeSetPtr_get(value_obj);
+  else if (!strcmp(name, "doc"))
+    nset->doc = xmlDocPtr_get(value_obj);
+  else if (!strcmp(name, "destroyDoc"))
+    nset->destroyDoc = PyInt_AsLong(value_obj);
+  else if (!strcmp(name, "type"))
+    nset->type = PyInt_AsLong(value_obj);
+  else if (!strcmp(name, "op"))
+    nset->op = PyInt_AsLong(value_obj);
+  else if (!strcmp(name, "next"))
+    nset->next = xmlSecNodeSetPtr_get(value_obj);
+  else if (!strcmp(name, "prev"))
+    nset->prev = xmlSecNodeSetPtr_get(value_obj);
+  else if (!strcmp(name, "children"))
+    nset->children = xmlSecNodeSetPtr_get(value_obj);
+
+  Py_INCREF(Py_None);
+  return (Py_None);
+}
+
+/*****************************************************************************/
+
 PyObject *xmlsec_NodeSetCreate(PyObject *self, PyObject *args) {
   PyObject *doc_obj, *nodes_obj;
   xmlDocPtr doc;

@@ -7,6 +7,9 @@ typedef struct {
 
 PyObject *wrap_xmlSecNodeSetPtr(xmlSecNodeSetPtr nset);
 
+PyObject *xmlSecNodeSet_getattr(PyObject *self, PyObject *args);
+PyObject *xmlSecNodeSet_setattr(PyObject *self, PyObject *args);
+
 PyObject *xmlsec_NodeSetCreate(PyObject *self, PyObject *args);
 PyObject *xmlsec_NodeSetDestroy(PyObject *self, PyObject *args);
 PyObject *xmlsec_NodeSetDocDestroy(PyObject *self, PyObject *args);
