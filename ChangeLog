@@ -132,12 +132,6 @@
 	* setup.py: Crypto engine 'nss' added.
 
 2004-01-16  Valery Febvre  <vfebvre@easter-eggs.com>
-
-	* setup.py:
-	Linker, pre-processor and compiler flags are now automatically detected
-	The crypto engine name can be selected
-
-2004-01-16  Valery Febvre  <vfebvre@easter-eggs.com>
 	* setup.py:
 	Linker, pre-processor and compiler flags are now automatically detected
 	The crypto engine name can be selected
