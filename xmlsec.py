@@ -1722,7 +1722,9 @@ class DSigCtx:
         elif name == "manifestReferences":
             return PtrList(_obj=ret)
         else:
-            # flags, flags2, enabledReferenceUris, operation, status, id
+            # flags, flags2, enabledReferenceUris
+            # defSignMethodId, defC14NMethodId, defDigestMethodId
+            # operation, status, id
             return ret
     def __setattr__(self, name, value):
         if self.__isprivate(name):
@@ -1916,6 +1918,44 @@ class EncCtx:
             return
         self._o = xmlsecmod.encCtxCreate(keysMngr)
         if self._o is None: raise parserError('xmlSecEncCtxCreate() failed')
+    def __repr__(self):
+        return "<xmlSecEncCtx object at 0x%x>" % id (self)
+    def __isprivate(self, name):
+        return name == '_o'
+    def __getattr__(self, name):
+        if self.__isprivate(name):
+            return self.__dict__[name]
+        ret = xmlsecmod.encCtxGetAttr(self, name)
+        if name == "keyInfoReadCtx":
+            return KeyInfoCtx(_obj=ret)
+        elif name == "keyInfoWriteCtx":
+            return KeyInfoCtx(_obj=ret)
+        elif name == "transformCtx":
+            return TransformCtx(_obj=ret)
+        elif name == "encKey":
+            return Key(_obj=ret)
+        elif name == "result":
+            return Buffer(_obj=ret)
+        elif name == "encMethod":
+            return Transform(_obj=ret)
+        elif name == "encDataNode":
+            return libxml2.Node(_obj=ret)
+        elif name == "encMethodNode":
+            return libxml2.Node(_obj=ret)
+        elif name == "keyInfoNode":
+            return libxml2.Node(_obj=ret)
+        elif name == "cipherValueNode":
+            return libxml2.Node(_obj=ret)
+        else:
+            # flags, flags2, mode, defEncMethodId, operation
+            # resultBase64Encoded, resultReplaced
+            # id, type, mimeType, encoding, recipient, carriedKeyName
+            return ret
+    def __setattr__(self, name, value):
+        if self.__isprivate(name):
+            self.__dict__[name] = value
+        else:
+            xmlsecmod.encCtxSetAttr(self, name, value)
     def destroy(self):
         """Destroys context object."""
         xmlsecmod.encCtxDestroy(self)
@@ -1992,18 +2032,6 @@ class EncCtx:
         output : the output file.
         """
         xmlsecmod.encCtxDebugXmlDump(self, output)
-    def setEncKey(self, key):
-        """Sets encKey member."""
-        xmlsecmod.encCtxSetEncKey(self, key)
-    def getResult(self):
-        """Gets result member (Buffer)."""
-        return Buffer(_obj=xmlsecmod.encCtxGetResult(self))
-    def getResultBase64Encoded(self):
-        """Gets resultBase64Encoded member."""
-        return xmlsecmod.encCtxGetResultBase64Encoded(self)
-    def getResultReplaced(self):
-        """Gets resultReplaced member."""
-        return xmlsecmod.encCtxGetResultReplaced(self)
 
 ###############################################################################
 # xmlsec.h
