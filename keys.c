@@ -71,8 +71,7 @@ PyObject *xmlSecKeyReq_getattr(PyObject *self, PyObject *args) {
     return Py_BuildValue("[ssss]", "keyId", "keyType",
 			 "keyUsage", "keyBitsSize");
   if (!strcmp(attr, "keyId"))
-    return PyCObject_FromVoidPtrAndDesc((void *) keyReq->keyId,
-                                        (char *) "xmlSecKeyDataId", NULL);
+    return wrap_xmlSecKeyDataId(keyReq->keyId);
   if (!strcmp(attr, "keyType"))
     return wrap_int(keyReq->keyType);
   if (!strcmp(attr, "keyUsage"))
@@ -96,7 +95,7 @@ PyObject *xmlSecKeyReq_setattr(PyObject *self, PyObject *args) {
   keyReq = xmlSecKeyReqPtr_get(keyReq_obj);
 
   if (!strcmp(name, "keyId"))
-    keyReq->keyId = PyCObject_AsVoidPtr(value_obj);
+    keyReq->keyId = xmlSecKeyDataId_get(value_obj);
   else if (!strcmp(name, "keyType"))
     keyReq->keyType = PyInt_AsLong(value_obj);
   else if (!strcmp(name, "keyUsage"))
@@ -122,7 +121,7 @@ PyObject *keys_KeyReqCreate(PyObject *self, PyObject *args) {
     return NULL;
 
   keyReq = (xmlSecKeyReqPtr) xmlMalloc(sizeof(xmlSecKeyReq));
-  keyReq->keyId       = PyCObject_AsVoidPtr(keyId_obj);
+  keyReq->keyId       = xmlSecKeyDataId_get(keyId_obj);
   keyReq->keyType     = keyType;
   keyReq->keyUsage    = keyUsage;
   keyReq->keyBitsSize = keyBitsSize;
@@ -404,29 +403,33 @@ PyObject *xmlsec_KeySetValue(PyObject *self, PyObject *args) {
 }
 
 PyObject *xmlsec_KeyGetData(PyObject *self, PyObject *args) {
-  PyObject *key_obj, *dataId_meth;
+  PyObject *key_obj, *dataId_obj;
   xmlSecKeyPtr key;
+  xmlSecKeyDataId dataId;
   xmlSecKeyDataPtr data;
 
-  if (!PyArg_ParseTuple(args, "OO:keyGetData", &key_obj, &dataId_meth))
+  if (!PyArg_ParseTuple(args, "OO:keyGetData", &key_obj, &dataId_obj))
     return NULL;
   
   key = xmlSecKeyPtr_get(key_obj);
-  data = xmlSecKeyGetData(key, PyCObject_AsVoidPtr(dataId_meth));
+  dataId = xmlSecKeyDataId_get(dataId_obj);
+  data = xmlSecKeyGetData(key, dataId);
 
   return (wrap_xmlSecKeyDataPtr(data));
 }
 
 PyObject *xmlsec_KeyEnsureData(PyObject *self, PyObject *args) {
-  PyObject *key_obj, *dataId_meth;
+  PyObject *key_obj, *dataId_obj;
   xmlSecKeyPtr key;
+  xmlSecKeyDataId dataId;
   xmlSecKeyDataPtr data;
 
-  if (!PyArg_ParseTuple(args, "OO:keyEnsureData", &key_obj, &dataId_meth))
+  if (!PyArg_ParseTuple(args, "OO:keyEnsureData", &key_obj, &dataId_obj))
     return NULL;
   
   key = xmlSecKeyPtr_get(key_obj);
-  data = xmlSecKeyEnsureData(key, PyCObject_AsVoidPtr(dataId_meth));
+  dataId = xmlSecKeyDataId_get(dataId_obj);
+  data = xmlSecKeyEnsureData(key, dataId);
 
   return (wrap_xmlSecKeyDataPtr(data));
 }
@@ -478,15 +481,17 @@ PyObject *xmlsec_KeyDebugXmlDump(PyObject *self, PyObject *args) {
 }
 
 PyObject *xmlsec_KeyGenerate(PyObject *self, PyObject *args) {
-  PyObject *dataId_meth;
+  PyObject *dataId_obj;
+  xmlSecKeyDataId dataId;
   xmlSecSize sizeBits;
   xmlSecKeyDataType type;
   xmlSecKeyPtr key;
 
-  if (!PyArg_ParseTuple(args, "Oii:keyGenerate", &dataId_meth, &sizeBits, &type))
+  if (!PyArg_ParseTuple(args, "Oii:keyGenerate", &dataId_obj, &sizeBits, &type))
     return NULL;
 
-  key = xmlSecKeyGenerate(PyCObject_AsVoidPtr(dataId_meth), sizeBits, type);
+  dataId = xmlSecKeyDataId_get(dataId_obj);
+  key = xmlSecKeyGenerate(dataId, sizeBits, type);
 
   return (wrap_xmlSecKeyPtr(key));
 }
@@ -521,42 +526,48 @@ PyObject *xmlsec_KeyMatch(PyObject *self, PyObject *args) {
 }
 
 PyObject *xmlsec_KeyReadBuffer(PyObject *self, PyObject *args) {
-  PyObject *dataId_meth, *buffer_obj;
+  PyObject *dataId_obj, *buffer_obj;
+  xmlSecKeyDataId dataId;
   xmlSecBuffer *buffer;
   xmlSecKeyPtr key;
 
-  if (!PyArg_ParseTuple(args, "OO:keyReadBuffer", &dataId_meth, &buffer_obj))
+  if (!PyArg_ParseTuple(args, "OO:keyReadBuffer", &dataId_obj, &buffer_obj))
     return NULL;
 
+  dataId = xmlSecKeyDataId_get(dataId_obj);
   buffer = xmlSecBufferPtr_get(buffer_obj);
-  key = xmlSecKeyReadBuffer(PyCObject_AsVoidPtr(dataId_meth), buffer);
+  key = xmlSecKeyReadBuffer(dataId, buffer);
 
   return (wrap_xmlSecKeyPtr(key));
 }
 
 PyObject *xmlsec_KeyReadBinaryFile(PyObject *self, PyObject *args) {
-  PyObject *dataId_meth;
+  PyObject *dataId_obj;
+  xmlSecKeyDataId dataId;
   const char *filename;
   xmlSecKeyPtr key;
 
-  if (!PyArg_ParseTuple(args, "Os:keyReadBinaryFile", &dataId_meth, &filename))
+  if (!PyArg_ParseTuple(args, "Os:keyReadBinaryFile", &dataId_obj, &filename))
     return NULL;
 
-  key = xmlSecKeyReadBinaryFile(PyCObject_AsVoidPtr(dataId_meth), filename);
+  dataId = xmlSecKeyDataId_get(dataId_obj);
+  key = xmlSecKeyReadBinaryFile(dataId, filename);
 
   return (wrap_xmlSecKeyPtr(key));
 }
 
 PyObject *xmlsec_KeyReadMemory(PyObject *self, PyObject *args) {
-  PyObject *dataId_meth;
+  PyObject *dataId_obj;
+  xmlSecKeyDataId dataId;
   const xmlSecByte *data;
   xmlSecSize dataSize;
   xmlSecKeyPtr key;
 
-  if (!PyArg_ParseTuple(args, "Osi:keyReadMemory", &dataId_meth, &data, &dataSize))
+  if (!PyArg_ParseTuple(args, "Osi:keyReadMemory", &dataId_obj, &data, &dataSize))
     return NULL;
 
-  key = xmlSecKeyReadMemory(PyCObject_AsVoidPtr(dataId_meth), data, dataSize);
+  dataId = xmlSecKeyDataId_get(dataId_obj);
+  key = xmlSecKeyReadMemory(dataId, data, dataSize);
 
   return (wrap_xmlSecKeyPtr(key));
 }
@@ -574,15 +585,15 @@ PyObject *xmlsec_KeyIsValid(PyObject *self, PyObject *args) {
 }
 
 PyObject *xmlsec_KeyCheckId(PyObject *self, PyObject *args) {
-  PyObject *key_obj, *keyId_meth;
+  PyObject *key_obj, *keyId_obj;
   xmlSecKeyPtr key;
 
-  if (!PyArg_ParseTuple(args, "O:keyCheckId", &key_obj, &keyId_meth))
+  if (!PyArg_ParseTuple(args, "O:keyCheckId", &key_obj, &keyId_obj))
     return NULL;
   
   key = xmlSecKeyPtr_get(key_obj);
  
-  return (wrap_int(xmlSecKeyCheckId(key, PyCObject_AsVoidPtr(keyId_meth))));
+  return (wrap_int(xmlSecKeyCheckId(key, xmlSecKeyDataId_get(keyId_obj))));
 }
 
 PyObject *xmlsec_KeyPtrListId(PyObject *self, PyObject *args) {
