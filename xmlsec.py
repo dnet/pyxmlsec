@@ -422,7 +422,7 @@ class EncCtx:
         """Sets encKey member."""
         xmlsecmod.encCtxSetEncKey(self, key)
     def getResult(self):
-        """Gets result member."""
+        """Gets result member (Buffer)."""
         return Buffer(_obj=xmlsecmod.encCtxGetResult(self))
     def getResultBase64Encoded(self):
         """Gets resultBase64Encoded member."""
@@ -1166,6 +1166,18 @@ class KeysMngr:
         _obj = xmlsecmod.keysMngrFindKey(self, name, key_info_ctx)
         if _obj is None: raise parserError('xmlSecKeysMngrFindKey() failed')
         return Key(_obj=_obj)
+    # !!! come from app.h (not keysmngr.h) !!!
+    def certLoad(self, filename, format, type):
+        """
+        Reads cert from filename and adds to the list of trusted
+        or known untrusted certs in store.
+        filename : the certificate file.
+        format   : the certificate file format.
+        type     : the flag that indicates is the certificate in filename
+        trusted or not.
+        Returns  : 0 on success or a negative value otherwise.
+        """
+        return xmlsecmod.cryptoAppKeysMngrCertLoad(self, filename, format, type)
 
 simpleKeysStoreId = xmlsecmod.simpleKeysStoreId()
 class KeyStore:
