@@ -36,9 +36,12 @@ static PyMethodDef xmlsec_methods[] = {
   {"findNode", xmlsec_FindNode, METH_VARARGS},
 
   /* xmldsig.h */
-  {"dsigCtxCreate",     xmlsec_DSigCtxCreate, METH_VARARGS},
-  {"dsigCtxSign",       xmlsec_DSigCtxSign,   METH_VARARGS},
-  {"dsigCtxSetSignKey", xmldsig_set_signKey,  METH_VARARGS},
+  {"dsigCtxCreate",     xmlsec_DSigCtxCreate,  METH_VARARGS},
+  {"dsigCtxDestroy",    xmlsec_DSigCtxDestroy, METH_VARARGS},
+  {"dsigCtxSign",       xmlsec_DSigCtxSign,    METH_VARARGS},
+  {"dsigCtxVerify",     xmlsec_DSigCtxVerify,  METH_VARARGS},
+  {"dsigCtxSetSignKey", xmldsig_set_signKey,   METH_VARARGS},
+  {"dsigCtxGetStatus",  xmldsig_get_status,    METH_VARARGS},
 
   /* crypto.h */
   {"cryptoAppInit",     xmlsec_CryptoAppInit,     METH_VARARGS},
