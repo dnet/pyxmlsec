@@ -29,13 +29,13 @@
 
 PyObject *xmlsec_TmplSignatureCreate(PyObject *self, PyObject *args) {
   PyObject *doc_obj, *c14nMethodId_obj, *signMethodId_obj;
-  xmlDocPtr doc;
+  xmlDocPtr doc = NULL;
   xmlSecTransformId c14nMethodId;
   xmlSecTransformId signMethodId;
   const xmlChar *id = NULL;
   xmlNodePtr node;
   
-  if (CheckArgs(args, "OOOs:tmplSignatureCreate")) {
+  if (CheckArgs(args, "oOOs:tmplSignatureCreate")) {
     if (!PyArg_ParseTuple(args, "OOOz:tmplSignatureCreate", &doc_obj,
 			  &c14nMethodId_obj, &signMethodId_obj, &id))
       return NULL;
