@@ -429,9 +429,76 @@ class Buffer:
 ###############################################################################
 # keyinfo.h
 ###############################################################################
-# The xmlSecKeyInfoCtx operation mode (read or write).
+# The KeyInfoCtx operation mode (read or write).
 KeyInfoModeRead  = 0
 KeyInfoModeWrite = 1
+# If flag is set then we will continue reading <dsig:KeyInfo /> element even
+# when key is already found.
+KEYINFO_FLAGS_DONT_STOP_ON_KEY_FOUND                = 0x00000001
+# If flag is set then we abort if an unknown <dsig:KeyInfo /> child is found.
+KEYINFO_FLAGS_STOP_ON_UNKNOWN_CHILD                 = 0x00000002
+# If flags is set then we abort if an unknown key name
+# (content of <dsig:KeyName /> element) is found.
+KEYINFO_FLAGS_KEYNAME_STOP_ON_UNKNOWN               = 0x00000004
+# If flags is set then we abort if an unknown <dsig:KeyValue /> child is found.
+KEYINFO_FLAGS_KEYVALUE_STOP_ON_UNKNOWN_CHILD        = 0x00000008
+# If flag is set then we abort if an unknown href attribute of
+# <dsig:RetrievalMethod /> element is found.
+KEYINFO_FLAGS_RETRMETHOD_STOP_ON_UNKNOWN_HREF       = 0x00000010
+# If flag is set then we abort if an href attribute <dsig:RetrievalMethod />
+# element does not match the real key data type.
+KEYINFO_FLAGS_RETRMETHOD_STOP_ON_MISMATCH_HREF      = 0x00000020
+# If flags is set then we abort if an unknown <dsig:X509Data /> child is found.
+KEYINFO_FLAGS_X509DATA_STOP_ON_UNKNOWN_CHILD        = 0x00000100
+# If flag is set then we'll load certificates from <dsig:X509Data /> element
+# without verification.
+KEYINFO_FLAGS_X509DATA_DONT_VERIFY_CERTS            = 0x00000200
+# If flag is set then we'll stop when we could not resolve reference to
+# certificate from <dsig:X509IssuerSerial />, <dsig:X509SKI /> or
+# <dsig:X509SubjectName /> elements.
+KEYINFO_FLAGS_X509DATA_STOP_ON_UNKNOWN_CERT         = 0x00000400
+# If the flag is set then we'll stop when <dsig:X509Data /> element processing
+# does not return a verified certificate.
+KEYINFO_FLAGS_X509DATA_STOP_ON_INVALID_CERT         = 0x00000800
+# If the flag is set then we'll stop when <enc:EncryptedKey /> element
+# processing fails.
+KEYINFO_FLAGS_ENCKEY_DONT_STOP_ON_FAILED_DECRYPTION = 0x00001000
+# If the flag is set then we'll stop when we found an empty node. Otherwise we
+# just ignore it.
+KEYINFO_FLAGS_STOP_ON_EMPTY_NODE                    = 0x00002000
+# If the flag is set then we'll skip strict checking of certs and CRLs
+KEYINFO_FLAGS_X509DATA_SKIP_STRICT_CHECKS           = 0x00004000
+def keyInfoNodeRead(keyInfoNode, key, keyInfoCtx):
+    """
+    Parses the <dsig:KeyInfo/> element keyInfoNode, extracts the key data and stores into key.
+    keyInfoNode : the <dsig:KeyInfo/> node.
+    key         : the result key object.
+    keyInfoCtx  : the <dsig:KeyInfo/> element processing context.
+    Returns     : 0 on success or -1 if an error occurs.
+    """
+    return xmlsecmod.keyInfoNodeRead(keyInfoNode, key, keyInfoCtx)
+def keyInfoNodeWrite(keyInfoNode, key, keyInfoCtx):
+    """
+    Writes the key into the <dsig:KeyInfo/> element template keyInfoNode.
+    keyInfoNode : the <dsig:KeyInfo/> node.
+    key         : the result key object.
+    keyInfoCtx  : the <dsig:KeyInfo/> element processing context.
+    Returns     : 0 on success or -1 if an error occurs.
+    """
+    return xmlsecmod.keyInfoNodeWrite(keyInfoNode, key, keyInfoCtx)
+def keyInfoCtxCopyUserPref(dst, src):
+    """
+    Copies user preferences from src context to dst context.
+    dst     : the destination context object.
+    src     : the source context object.
+    Returns : 0 on success and a negative value if an error occurs.
+    """
+    return xmlsecmod.keyInfoCtxCopyUserPref(dst, src)
+# Key data Ids methods
+keyDataNameId            = xmlsecmod.keyDataNameId()
+keyDataValueId           = xmlsecmod.keyDataValueId()
+keyDataRetrievalMethodId = xmlsecmod.keyDataRetrievalMethodId()
+keyDataEncryptedKeyId    = xmlsecmod.keyDataEncryptedKeyId()
 class KeyInfoCtx:
     def __init__(self, mngr=None, _obj=None):
         """
@@ -464,6 +531,32 @@ class KeyInfoCtx:
     def reset(self):
         """Resets the keyInfoCtx state. User settings are not changed."""
         xmlsecmod.keyInfoCtxReset(self)
+    def copyUserPref(self, dst):
+        """
+        Copies user preferences context to dst context.
+        dst     : the destination context object.
+        Returns : 0 on success and a negative value if an error occurs.
+        """
+        return xmlsecmod.keyInfoCtxCopyUserPref(dst, self)
+    def createEncCtx(self):
+        """
+        Creates encryption context form processing <enc:EncryptedKey/> child of
+        <dsig:KeyInfo/> element.
+        Returns : 0 on success and a negative value if an error occurs.
+        """
+        return xmlsecmod.keyInfoCtxCreateEncCtx(self)
+    def debugDump(self, output):
+        """
+        Prints user settings and current context state to output.
+        output : the output file.
+        """
+        xmlsecmod.keyInfoCtxDebugDump(self, output)
+    def debugXmlDump(self, output):
+        """
+        Prints user settings and current context state in XML format to output.
+        output : the output file.
+        """
+        xmlsecmod.keyInfoCtxDebugXmlDump(self, output)
     def getEnabledKeyData(self):
         """Return enabledKeyData member."""
         return PtrList(None, _obj=xmlsecmod.getEnabledKeyData(self))
@@ -1605,13 +1698,13 @@ class EncCtx:
     def finalize(self):
         """Cleans up context object."""
         return xmlsecmod.encCtxFinalize(self)
-    def copyUserPref(self, src):
+    def copyUserPref(self, dst):
         """
         Copies user preference from src context.
-        src     : the source context.
+        dst     : the destination context.
         Returns : 0 on success or a negative value if an error occurs.
         """
-        return xmlsecmod.encCtxCopyUserPref(self, src)
+        return xmlsecmod.encCtxCopyUserPref(dst, self)
     def reset(self):
         """Resets enc context object, user settings are not touched."""
         return xmlsecmod.encCtxReset(self)
