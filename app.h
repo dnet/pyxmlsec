@@ -12,6 +12,9 @@ PyObject *xmlsec_CryptoAppDefaultKeysMngrLoad(PyObject *self, PyObject *args);
 PyObject *xmlsec_CryptoAppDefaultKeysMngrSave(PyObject *self, PyObject *args);
 PyObject *xmlsec_CryptoAppKeysMngrCertLoad(PyObject *self, PyObject *args);
 PyObject *xmlsec_CryptoAppKeyLoad(PyObject *self, PyObject *args);
+PyObject *xmlsec_CryptoAppPkcs12Load(PyObject *self, PyObject *args);
+PyObject *xmlsec_CryptoAppKeyCertLoad(PyObject *self, PyObject *args);
+PyObject *xmlsec_CryptoAppGetDefaultPwdCallback(PyObject *self, PyObject *args);
 
 // symbols
 PyObject *xmlsec_TransformAes128CbcId(PyObject *self, PyObject *args);
@@ -32,7 +35,11 @@ PyObject *xmlsec_TransformRsaPkcs1Id(PyObject *self, PyObject *args);
 PyObject *xmlsec_TransformRsaOaepId(PyObject *self, PyObject *args);
 PyObject *xmlsec_TransformSha1Id(PyObject *self, PyObject *args);
 
+PyObject *xmlsec_KeyDataAesId(PyObject *self, PyObject *args);
 PyObject *xmlsec_KeyDataDesId(PyObject *self, PyObject *args);
 PyObject *xmlsec_KeyDataDsaId(PyObject *self, PyObject *args);
+PyObject *xmlsec_KeyDataHmacId(PyObject *self, PyObject *args);
 PyObject *xmlsec_KeyDataRsaId(PyObject *self, PyObject *args);
 PyObject *xmlsec_KeyDataX509Id(PyObject *self, PyObject *args);
+PyObject *xmlsec_KeyDataRawX509CertId(PyObject *self, PyObject *args);
+PyObject *xmlsec_X509StoreId(PyObject *self, PyObject *args);
