@@ -165,8 +165,7 @@ def verify_file(mngr, xml_file):
         return cleanup(doc, dsig_ctx)
 
     # In addition, limit possible key data to valid X509 certificates only
-    enable_key_data = dsig_ctx.keyInfoReadCtx.getEnabledKeyData()
-    if enable_key_data.add(xmlsec.keyDataX509Id) < 0:
+    if dsig_ctx.keyInfoReadCtx.enabledKeyData.add(xmlsec.keyDataX509Id) < 0:
         print "Error: failed to limit allowed key data"
         return cleanup(doc, dsig_ctx)
 

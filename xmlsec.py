@@ -527,10 +527,19 @@ class KeyInfoCtx:
         ret = xmlsecmod.keyInfoCtxGetAttr(self, name)
         if ret is None:
             raise AttributeError, name
-        if name == "keyReq":
+        if name == "keysMngr":
+            return KeysMngr(_obj=ret)
+        elif name == "enabledKeyData":
+            return PtrList(_obj=ret)
+        elif name == "retrievalMethodCtx":
+            return TransformCtx(_obj=ret)
+        elif name == "encCtx":
+            return EncCtx(_obj=ret)
+        elif name == "keyReq":
             return KeyReq(_obj=ret)
         else:
-            # flags, flags2
+            # flags, flags2, mode, base64LineSize, maxRetrievalMethodLevel
+            # maxEncryptedKeyLevel
             return ret
     def __setattr__(self, name, value):
         if self.__isprivate(name):
@@ -580,9 +589,6 @@ class KeyInfoCtx:
         output : the output file.
         """
         xmlsecmod.keyInfoCtxDebugXmlDump(self, output)
-    def getEnabledKeyData(self):
-        """Return enabledKeyData member."""
-        return PtrList(None, _obj=xmlsecmod.getEnabledKeyData(self))
 
 ###############################################################################
 # keys.h
