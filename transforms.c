@@ -27,18 +27,6 @@
 #include "transforms.h"
 #include "keys.h"
 
-PyObject *wrap_xmlSecTransformPtr(xmlSecTransformPtr transform) {
-  PyObject *ret;
-
-  if (transform == NULL) {
-    Py_INCREF(Py_None);
-    return (Py_None);
-  }
-  ret = PyCObject_FromVoidPtrAndDesc((void *) transform,
-				     (char *) "xmlSecTransformPtr", NULL);
-  return (ret);
-}
-
 PyObject *wrap_xmlSecTransformCtxPtr(xmlSecTransformCtxPtr ctx) {
   PyObject *ret;
 
@@ -48,6 +36,18 @@ PyObject *wrap_xmlSecTransformCtxPtr(xmlSecTransformCtxPtr ctx) {
   }
   ret = PyCObject_FromVoidPtrAndDesc((void *) ctx,
 				     (char *) "xmlSecTransformCtxPtr", NULL);
+  return (ret);
+}
+
+PyObject *wrap_xmlSecTransformPtr(xmlSecTransformPtr transform) {
+  PyObject *ret;
+
+  if (transform == NULL) {
+    Py_INCREF(Py_None);
+    return (Py_None);
+  }
+  ret = PyCObject_FromVoidPtrAndDesc((void *) transform,
+				     (char *) "xmlSecTransformPtr", NULL);
   return (ret);
 }
 
