@@ -59,8 +59,11 @@ PyObject *xmlSecPtrList_getattr(PyObject *self, PyObject *args) {
   xmlSecPtrListPtr list;
   const char *attr;
 
-  if (!PyArg_ParseTuple(args, "Os:ptrListGetAttr", &list_obj, &attr))
-    return NULL;
+  if (CheckArgs(args, "OS:ptrListGetAttr")) {
+    if (!PyArg_ParseTuple(args, "Os:ptrListGetAttr", &list_obj, &attr))
+      return NULL;
+  }
+  else return NULL;
 
   list = xmlSecPtrListPtr_get(list_obj);
 
@@ -86,9 +89,12 @@ PyObject *xmlSecPtrList_setattr(PyObject *self, PyObject *args) {
   xmlSecPtrListPtr list;
   const char *name;
 
-  if (!PyArg_ParseTuple(args, "OsO:ptrListSetAttr",
-			&list_obj, &name, &value_obj))
-    return NULL;
+  if (CheckArgs(args, "OSO:ptrListSetAttr")) {
+    if (!PyArg_ParseTuple(args, "OsO:ptrListSetAttr",
+			  &list_obj, &name, &value_obj))
+      return NULL;
+  }
+  else return NULL;
 
   list = xmlSecPtrListPtr_get(list_obj);
     
@@ -116,11 +122,13 @@ PyObject *xmlsec_PtrListCreate(PyObject *self, PyObject *args) {
   xmlSecPtrListPtr list;
   xmlSecPtrListId id = NULL;
   
-  if(!PyArg_ParseTuple(args, (char *) "O:ptrListCreate", &id_obj))
-    return NULL;
+  if (CheckArgs(args, "O:ptrListCreate")) {
+    if(!PyArg_ParseTuple(args, (char *) "O:ptrListCreate", &id_obj))
+      return NULL;
+  }
+  else return NULL;
 
-  if (id_obj != Py_None)
-    id = xmlSecPtrListId_get(id_obj);
+  id = xmlSecPtrListId_get(id_obj);
   list = xmlSecPtrListCreate(id);
   
   return (wrap_xmlSecPtrListPtr(list));
@@ -130,8 +138,11 @@ PyObject *xmlsec_PtrListDestroy(PyObject *self, PyObject *args) {
   PyObject *list_obj;
   xmlSecPtrListPtr list;
 
-  if (!PyArg_ParseTuple(args, "O:ptrListDestroy", &list_obj))
-    return NULL;
+  if (CheckArgs(args, "O:ptrListDestroy")) {
+    if (!PyArg_ParseTuple(args, "O:ptrListDestroy", &list_obj))
+      return NULL;
+  }
+  else return NULL;
 
   list = xmlSecPtrListPtr_get(list_obj);
   xmlSecPtrListDestroy(list);
@@ -143,15 +154,17 @@ PyObject *xmlsec_PtrListDestroy(PyObject *self, PyObject *args) {
 PyObject *xmlsec_PtrListInitialize(PyObject *self, PyObject *args) {
   PyObject *list_obj, *id_obj;
   xmlSecPtrListPtr list;
-  xmlSecPtrListId id = NULL;
+  xmlSecPtrListId id;
 
-  if(!PyArg_ParseTuple(args, (char *) "OO:ptrListInitialize",
-		       &list_obj, &id_obj))
-    return NULL;
+  if (CheckArgs(args, "OO:ptrListInitialize")) {
+    if(!PyArg_ParseTuple(args, (char *) "OO:ptrListInitialize",
+			 &list_obj, &id_obj))
+      return NULL;
+  }
+  else return NULL;
 
   list = xmlSecPtrListPtr_get(list_obj);
-  if (id_obj != Py_None)
-    id = xmlSecPtrListId_get(id_obj);
+  id = xmlSecPtrListId_get(id_obj);
 
   return (wrap_int(xmlSecPtrListInitialize(list, id)));
 }
@@ -160,8 +173,11 @@ PyObject *xmlsec_PtrListFinalize(PyObject *self, PyObject *args) {
   PyObject *list_obj;
   xmlSecPtrListPtr list;
 
-  if (!PyArg_ParseTuple(args, "O:ptrListFinalize", &list_obj))
-    return NULL;
+  if (CheckArgs(args, "O:ptrListFinalize")) {
+    if (!PyArg_ParseTuple(args, "O:ptrListFinalize", &list_obj))
+      return NULL;
+  }
+  else return NULL;
 
   list = xmlSecPtrListPtr_get(list_obj);
   xmlSecPtrListFinalize(list);
@@ -174,8 +190,11 @@ PyObject *xmlsec_PtrListEmpty(PyObject *self, PyObject *args) {
   PyObject *list_obj;
   xmlSecPtrListPtr list;
 
-  if (!PyArg_ParseTuple(args, "O:ptrListEmpty", &list_obj))
-    return NULL;
+  if (CheckArgs(args, "O:ptrListEmpty")) {
+    if (!PyArg_ParseTuple(args, "O:ptrListEmpty", &list_obj))
+      return NULL;
+  }
+  else return NULL;
 
   list = xmlSecPtrListPtr_get(list_obj);
   xmlSecPtrListEmpty(list);
@@ -189,8 +208,11 @@ PyObject *xmlsec_PtrListCopy(PyObject *self, PyObject *args) {
   xmlSecPtrListPtr dst;
   xmlSecPtrListPtr src;
 
-  if (!PyArg_ParseTuple(args, "OO:ptrListCopy", &dst_obj, &src_obj))
-    return NULL;
+  if (CheckArgs(args, "OO:ptrListCopy")) {
+    if (!PyArg_ParseTuple(args, "OO:ptrListCopy", &dst_obj, &src_obj))
+      return NULL;
+  }
+  else return NULL;
 
   dst = xmlSecPtrListPtr_get(dst_obj);
   src = xmlSecPtrListPtr_get(src_obj);
@@ -202,8 +224,11 @@ PyObject *xmlsec_PtrListDuplicate(PyObject *self, PyObject *args) {
   PyObject *list_obj;
   xmlSecPtrListPtr list;
 
-  if (!PyArg_ParseTuple(args, "O:ptrListDuplicate", &list_obj))
-    return NULL;
+  if (CheckArgs(args, "O:ptrListDuplicate")) {
+    if (!PyArg_ParseTuple(args, "O:ptrListDuplicate", &list_obj))
+      return NULL;
+  }
+  else return NULL;
 
   list = xmlSecPtrListPtr_get(list_obj);
 
@@ -214,8 +239,11 @@ PyObject *xmlsec_PtrListGetSize(PyObject *self, PyObject *args) {
   PyObject *list_obj;
   xmlSecPtrListPtr list;
 
-  if (!PyArg_ParseTuple(args, "O:ptrListGetSize", &list_obj))
-    return NULL;
+  if (CheckArgs(args, "O:ptrListGetSize")) {
+    if (!PyArg_ParseTuple(args, "O:ptrListGetSize", &list_obj))
+      return NULL;
+  }
+  else return NULL;
 
   list = xmlSecPtrListPtr_get(list_obj);
 
@@ -227,8 +255,11 @@ PyObject *xmlsec_PtrListGetItem(PyObject *self, PyObject *args) {
   xmlSecPtrListPtr list;
   xmlSecSize pos;
 
-  if (!PyArg_ParseTuple(args, "Oi:ptrListGetItem", &list_obj, &pos))
-    return NULL;
+  if (CheckArgs(args, "O:ptrListGetItem")) {
+    if (!PyArg_ParseTuple(args, "Oi:ptrListGetItem", &list_obj, &pos))
+      return NULL;
+  }
+  else return NULL;
 
   list = xmlSecPtrListPtr_get(list_obj);
 
@@ -240,8 +271,11 @@ PyObject *xmlsec_PtrListAdd(PyObject *self, PyObject *args) {
   xmlSecPtrListPtr list;
   int ret;
 
-  if (!PyArg_ParseTuple(args, "OO:ptrListAdd", &list_obj, &item_obj))
-    return NULL;
+  if (CheckArgs(args, "OO:ptrListAdd")) {
+    if (!PyArg_ParseTuple(args, "OO:ptrListAdd", &list_obj, &item_obj))
+      return NULL;
+  }
+  else return NULL;
 
   list = xmlSecPtrListPtr_get(list_obj);
   ret = xmlSecPtrListAdd(list, xmlSecPtr_get(item_obj));
@@ -255,8 +289,11 @@ PyObject *xmlsec_PtrListSet(PyObject *self, PyObject *args) {
   xmlSecSize pos;
   int ret;
 
-  if (!PyArg_ParseTuple(args, "OOi:ptrListSet", &list_obj, &item_obj, &pos))
-    return NULL;
+  if (CheckArgs(args, "OOI:ptrListSet")) {
+    if (!PyArg_ParseTuple(args, "OOi:ptrListSet", &list_obj, &item_obj, &pos))
+      return NULL;
+  }
+  else return NULL;
 
   list = xmlSecPtrListPtr_get(list_obj);
   ret = xmlSecPtrListSet(list, xmlSecPtr_get(item_obj), pos);
@@ -270,8 +307,11 @@ PyObject *xmlsec_PtrListRemove(PyObject *self, PyObject *args) {
   xmlSecSize pos;
   int ret;
 
-  if (!PyArg_ParseTuple(args, "Oi:ptrListRemove", &list_obj, &pos))
-    return NULL;
+  if (CheckArgs(args, "OI:ptrListRemove")) {
+    if (!PyArg_ParseTuple(args, "Oi:ptrListRemove", &list_obj, &pos))
+      return NULL;
+  }
+  else return NULL;
 
   list = xmlSecPtrListPtr_get(list_obj);
   ret = xmlSecPtrListRemove(list, pos);
@@ -284,8 +324,11 @@ PyObject *xmlsec_PtrListDebugDump(PyObject *self, PyObject *args) {
   FILE *output;
   xmlSecPtrListPtr list;
 
-  if (!PyArg_ParseTuple(args, "OO:ptrListDebugDump", &list_obj, &output_obj))
-    return NULL;
+  if (CheckArgs(args, "OO:ptrListDebugDump")) {
+    if (!PyArg_ParseTuple(args, "OO:ptrListDebugDump", &list_obj, &output_obj))
+      return NULL;
+  }
+  else return NULL;
 
   list = xmlSecPtrListPtr_get(list_obj);
   output = PythonFile_get(output_obj);
@@ -300,8 +343,12 @@ PyObject *xmlsec_PtrListDebugXmlDump(PyObject *self, PyObject *args) {
   FILE *output;
   xmlSecPtrListPtr list;
 
-  if (!PyArg_ParseTuple(args, "OO:ptrListDebugXmlDump", &list_obj, &output_obj))
-    return NULL;
+  if (CheckArgs(args, "OO:ptrListDebugXmlDump")) {
+    if (!PyArg_ParseTuple(args, "OO:ptrListDebugXmlDump", &list_obj,
+			  &output_obj))
+      return NULL;
+  }
+  else return NULL;
 
   list = xmlSecPtrListPtr_get(list_obj);
   output = PythonFile_get(output_obj);
@@ -315,8 +362,11 @@ PyObject *xmlsec_PtrListGetName(PyObject *self, PyObject *args) {
   PyObject *list_obj;
   xmlSecPtrListPtr list;
 
-  if (!PyArg_ParseTuple(args, "O:ptrListGetName", &list_obj))
-    return NULL;
+  if (CheckArgs(args, "O:ptrListGetName")) {
+    if (!PyArg_ParseTuple(args, "O:ptrListGetName", &list_obj))
+      return NULL;
+  }
+  else return NULL;
 
   list = xmlSecPtrListPtr_get(list_obj);
 
@@ -327,8 +377,11 @@ PyObject *xmlsec_PtrListIsValid(PyObject *self, PyObject *args) {
   PyObject *list_obj;
   xmlSecPtrListPtr list;
 
-  if (!PyArg_ParseTuple(args, "O:ptrListIsValid", &list_obj))
-    return NULL;
+  if (CheckArgs(args, "O:ptrListIsValid")) {
+    if (!PyArg_ParseTuple(args, "O:ptrListIsValid", &list_obj))
+      return NULL;
+  }
+  else return NULL;
 
   list = xmlSecPtrListPtr_get(list_obj);
 
@@ -430,10 +483,13 @@ PyObject *xmlsec_PtrListIdCreate(PyObject *self, PyObject *args) {
   const xmlChar *name;
   struct _xmlSecPtrListKlass *listId;
 
-  if(!PyArg_ParseTuple(args, (char *) "sOOOO:ptrListIdCreate", &name,
-		       &duplicateItem_obj, &destroyItem_obj, &debugDumpItem_obj,
-		       &debugXmlDumpItem_obj))
-    return NULL;
+  if (CheckArgs(args, "Scccc:ptrListIdCreate")) {
+    if(!PyArg_ParseTuple(args, (char *) "sOOOO:ptrListIdCreate", &name,
+			 &duplicateItem_obj, &destroyItem_obj,
+			 &debugDumpItem_obj, &debugXmlDumpItem_obj))
+      return NULL;
+  }
+  else return NULL;
   
   if (PtrDuplicateItemMethods == NULL && duplicateItem_obj != Py_None)
     PtrDuplicateItemMethods = xmlHashCreate(HASH_TABLE_SIZE);

@@ -37,5 +37,5 @@ PyObject *xmlsec_KeyStoreCreate(PyObject *self, PyObject *args);
 PyObject *xmlsec_KeyStoreDestroy(PyObject *self, PyObject *args);
 PyObject *xmlsec_KeyStoreFindKey(PyObject *self, PyObject *args);
 
-PyObject *keysmngr_KeyStoreIdCreate(PyObject *self, PyObject *args);
 PyObject *xmlsec_SimpleKeysStoreId(PyObject *self, PyObject *args);
+PyObject *keysmngr_KeyStoreIdCreate(PyObject *self, PyObject *args);

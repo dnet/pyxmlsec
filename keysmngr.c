@@ -73,8 +73,11 @@ PyObject *xmlSecKeysMngr_getattr(PyObject *self, PyObject *args) {
   xmlSecKeysMngrPtr mngr;
   const char *attr;
 
-  if (!PyArg_ParseTuple(args, "Os:keysMngrGetAttr", &mngr_obj, &attr))
-    return NULL;
+  if (CheckArgs(args, "OS:keysMngrGetAttr")) {
+    if (!PyArg_ParseTuple(args, "Os:keysMngrGetAttr", &mngr_obj, &attr))
+      return NULL;
+  }
+  else return NULL;
 
   mngr = xmlSecKeysMngrPtr_get(mngr_obj);
 
@@ -100,9 +103,12 @@ PyObject *xmlSecKeysMngr_setattr(PyObject *self, PyObject *args) {
   xmlSecKeysMngrPtr mngr;
   const char *name;
 
-  if (!PyArg_ParseTuple(args, "OsO:keysMngrSetAttr",
-			&mngr_obj, &name, &value_obj))
-    return NULL;
+  if (CheckArgs(args, "OS?:keysMngrSetAttr")) {
+    if (!PyArg_ParseTuple(args, "OsO:keysMngrSetAttr",
+			  &mngr_obj, &name, &value_obj))
+      return NULL;
+  }
+  else return NULL;
 
   mngr = xmlSecKeysMngrPtr_get(mngr_obj);
     
@@ -137,8 +143,11 @@ PyObject *xmlsec_KeysMngrDestroy(PyObject *self, PyObject *args) {
   PyObject *mngr_obj;
   xmlSecKeysMngrPtr mngr;
 
-  if (!PyArg_ParseTuple(args, "O:keysMngrDestroy", &mngr_obj))
-    return NULL;
+  if (CheckArgs(args, "O:keysMngrDestroy")) {
+    if (!PyArg_ParseTuple(args, "O:keysMngrDestroy", &mngr_obj))
+      return NULL;
+  }
+  else return NULL;
 
   mngr = xmlSecKeysMngrPtr_get(mngr_obj);
   xmlSecKeysMngrDestroy(mngr);
@@ -154,9 +163,12 @@ PyObject *xmlsec_KeysMngrFindKey(PyObject *self, PyObject *args) {
   xmlSecKeyInfoCtxPtr keyInfoCtx;
   xmlSecKeyPtr key;
 
-  if (!PyArg_ParseTuple(args, "OsO:keysMngrFindKey",
-			&mngr_obj, &name, &keyInfoCtx_obj))
-    return NULL;
+  if (CheckArgs(args, "OSO:keysMngrFindKey")) {
+    if (!PyArg_ParseTuple(args, "OsO:keysMngrFindKey",
+			  &mngr_obj, &name, &keyInfoCtx_obj))
+      return NULL;
+  }
+  else return NULL;
  
   mngr = xmlSecKeysMngrPtr_get(mngr_obj);
   keyInfoCtx = xmlSecKeyInfoCtxPtr_get(keyInfoCtx_obj);
@@ -170,8 +182,12 @@ PyObject *xmlsec_KeysMngrAdoptKeysStore(PyObject *self, PyObject *args) {
   xmlSecKeysMngrPtr mngr;
   xmlSecKeyStorePtr store;
 
-  if (!PyArg_ParseTuple(args, "OO:keysMngrAdoptKeysStore", &mngr_obj, &store_obj))
-    return NULL;
+  if (CheckArgs(args, "OO:keysMngrAdoptKeysStore")) {
+    if (!PyArg_ParseTuple(args, "OO:keysMngrAdoptKeysStore", &mngr_obj,
+			  &store_obj))
+      return NULL;
+  }
+  else return NULL;
 
   mngr = xmlSecKeysMngrPtr_get(mngr_obj);
   store = xmlSecKeyStorePtr_get(store_obj);
@@ -183,8 +199,11 @@ PyObject *xmlsec_KeysMngrGetKeysStore(PyObject *self, PyObject *args) {
   PyObject *mngr_obj;
   xmlSecKeysMngrPtr mngr;
 
-  if (!PyArg_ParseTuple(args, "O:keysMngrGetKeysStore", &mngr_obj))
-    return NULL;
+  if (CheckArgs(args, "O:keysMngrGetKeysStore")) {
+    if (!PyArg_ParseTuple(args, "O:keysMngrGetKeysStore", &mngr_obj))
+      return NULL;
+  }
+  else return NULL;
 
   mngr = xmlSecKeysMngrPtr_get(mngr_obj);
 
@@ -196,8 +215,12 @@ PyObject *xmlsec_KeysMngrAdoptDataStore(PyObject *self, PyObject *args) {
   xmlSecKeysMngrPtr mngr;
   xmlSecKeyDataStorePtr store;
 
-  if (!PyArg_ParseTuple(args, "OO:keysMngrAdoptDataStore", &mngr_obj, &store_obj))
-    return NULL;
+  if (CheckArgs(args, "OO:keysMngrAdoptDataStore")) {
+    if (!PyArg_ParseTuple(args, "OO:keysMngrAdoptDataStore", &mngr_obj,
+			  &store_obj))
+      return NULL;
+  }
+  else return NULL;
 
   mngr = xmlSecKeysMngrPtr_get(mngr_obj);
   store = xmlSecKeyDataStorePtr_get(store_obj);
@@ -211,8 +234,12 @@ PyObject *xmlsec_KeysMngrGetDataStore(PyObject *self, PyObject *args) {
   xmlSecKeyDataStoreId id;
   xmlSecKeyDataStorePtr store;
 
-  if (!PyArg_ParseTuple(args, "OO:keysMngrGetDataStore", &mngr_obj, &id_meth))
-    return NULL;
+  if (CheckArgs(args, "OO:keysMngrGetDataStore")) {
+    if (!PyArg_ParseTuple(args, "OO:keysMngrGetDataStore", &mngr_obj,
+			  &id_meth))
+      return NULL;
+  }
+  else return NULL;
 
   mngr = xmlSecKeysMngrPtr_get(mngr_obj);
   id = (xmlSecKeyDataStoreId) PyCObject_AsVoidPtr(id_meth); // FIXME
@@ -246,9 +273,12 @@ PyObject *xmlsec_KeysMngrGetKey(PyObject *self, PyObject *args) {
   xmlSecKeyInfoCtxPtr keyInfoCtx;
   xmlSecKeyPtr key;
 
-  if (!PyArg_ParseTuple(args, "OO:keysMngrGetKey",
-			&keyInfoNode_obj, &keyInfoCtx_obj))
-    return NULL;
+  if (CheckArgs(args, "OO:keysMngrGetKey")) {
+    if (!PyArg_ParseTuple(args, "OO:keysMngrGetKey",
+			  &keyInfoNode_obj, &keyInfoCtx_obj))
+      return NULL;
+  }
+  else return NULL;
 
   keyInfoNode = xmlNodePtr_get(keyInfoNode_obj);
   keyInfoCtx = xmlSecKeyInfoCtxPtr_get(keyInfoCtx_obj);
@@ -265,8 +295,11 @@ PyObject *xmlsec_KeyStoreCreate(PyObject *self, PyObject *args) {
   xmlSecKeyStoreId id;
   xmlSecKeyStorePtr keyStore;
 
-  if (!PyArg_ParseTuple(args, "O:keyStoreCreate", &id_obj))
-    return NULL;
+  if (CheckArgs(args, "O:keyStoreCreate")) {
+    if (!PyArg_ParseTuple(args, "O:keyStoreCreate", &id_obj))
+      return NULL;
+  }
+  else return NULL;
 
   id = xmlSecKeyStoreId_get(id_obj);
   keyStore = xmlSecKeyStoreCreate(id);
@@ -278,8 +311,11 @@ PyObject *xmlsec_KeyStoreDestroy(PyObject *self, PyObject *args) {
   PyObject *store_obj;
   xmlSecKeyStorePtr store;
 
-  if (!PyArg_ParseTuple(args, "O:keyStoreDestroy", &store_obj))
-    return NULL;
+  if (CheckArgs(args, "O:keyStoreDestroy")) {
+    if (!PyArg_ParseTuple(args, "O:keyStoreDestroy", &store_obj))
+      return NULL;
+  }
+  else return NULL;
 
   store = xmlSecKeyStorePtr_get(store_obj);
   xmlSecKeyStoreDestroy(store);
@@ -295,8 +331,12 @@ PyObject *xmlsec_KeyStoreFindKey(PyObject *self, PyObject *args) {
   xmlSecKeyInfoCtxPtr keyInfoCtx;
   xmlSecKeyPtr key;
 
-  if (!PyArg_ParseTuple(args, "OsO:keyStoreFindKey", &store_obj, &name, &keyInfoCtx_obj))
-    return NULL;
+  if (CheckArgs(args, "OSO:keyStoreFindKey")) {
+    if (!PyArg_ParseTuple(args, "OsO:keyStoreFindKey", &store_obj, &name,
+			  &keyInfoCtx_obj))
+      return NULL;
+  }
+  else return NULL;
  
   store = xmlSecKeyStorePtr_get(store_obj);
   keyInfoCtx = xmlSecKeyInfoCtxPtr_get(keyInfoCtx_obj);
@@ -305,13 +345,13 @@ PyObject *xmlsec_KeyStoreFindKey(PyObject *self, PyObject *args) {
   return (wrap_xmlSecKeyPtr(key));
 }
 
-PyObject *xmlsec_SimpleKeysStoreId(PyObject *self, PyObject *args) {
-  return PyCObject_FromVoidPtr((void *) xmlSecSimpleKeysStoreId, NULL);
-}
-
 /******************************************************************************/
 /* KeyStoreId                                                                 */
 /******************************************************************************/
+
+PyObject *xmlsec_SimpleKeysStoreId(PyObject *self, PyObject *args) {
+  return (wrap_xmlSecKeyStoreId(xmlSecSimpleKeysStoreId));
+}
 
 static xmlHashTablePtr KeyStoreInitializeMethods = NULL;
 static xmlHashTablePtr KeyStoreFinalizeMethods   = NULL;
@@ -379,10 +419,13 @@ PyObject *keysmngr_KeyStoreIdCreate(PyObject *self, PyObject *args) {
   const xmlChar *name;    
   struct _xmlSecKeyStoreKlass *storeId;
 
-  if(!PyArg_ParseTuple(args, (char *) "iisOOO:keyStoreIdCreate", &klassSize,
-		       &objSize, &name, &initialize_obj, &finalize_obj,
-		       &findKey_obj))
-    return NULL;
+  if (CheckArgs(args, "IISccc:keyStoreIdCreate")) {
+    if(!PyArg_ParseTuple(args, (char *) "iisOOO:keyStoreIdCreate", &klassSize,
+			 &objSize, &name, &initialize_obj, &finalize_obj,
+			 &findKey_obj))
+      return NULL;
+  }
+  else return NULL;
   
   if (KeyStoreInitializeMethods == NULL && initialize_obj != Py_None)
     KeyStoreInitializeMethods = xmlHashCreate(HASH_TABLE_SIZE);

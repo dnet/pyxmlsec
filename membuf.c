@@ -29,7 +29,7 @@
 #include "buffer.h"
 
 PyObject *xmlsec_TransformMemBufId(PyObject *self, PyObject *args) {
-  return PyCObject_FromVoidPtr((void *) xmlSecTransformMemBufId, NULL);
+  return (wrap_xmlSecTransformId(xmlSecTransformMemBufId));
 }
 
 PyObject *xmlsec_TransformMemBufGetBuffer(PyObject *self, PyObject *args) {
@@ -37,8 +37,11 @@ PyObject *xmlsec_TransformMemBufGetBuffer(PyObject *self, PyObject *args) {
   xmlSecTransformPtr transform;
   xmlSecBufferPtr buf;
 
-  if (!PyArg_ParseTuple(args, "O:transformMemBufGetBuffer", &transform_obj))
-    return NULL;
+  if (CheckArgs(args, "O:transformMemBufGetBuffer")) {
+    if (!PyArg_ParseTuple(args, "O:transformMemBufGetBuffer", &transform_obj))
+      return NULL;
+  }
+  else return NULL;
 
   transform = xmlSecTransformPtr_get(transform_obj);
   buf = xmlSecTransformMemBufGetBuffer(transform);
