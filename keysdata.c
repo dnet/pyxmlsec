@@ -22,7 +22,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "wrap_objs.h"
+#include "xmlsecmod.h"
 
 #include "keysdata.h"
 #include "keys.h"
@@ -239,7 +239,7 @@ PyObject *xmlsec_KeyDataDebugDump(PyObject *self, PyObject *args) {
     return NULL;
 
   data = xmlSecKeyDataPtr_get(data_obj);
-  output = PyFile_get(output_obj);
+  output = PythonFile_get(output_obj);
 
   xmlSecKeyDataDebugDump(data, output);
 
@@ -256,7 +256,7 @@ PyObject *xmlsec_KeyDataDebugXmlDump(PyObject *self, PyObject *args) {
     return NULL;
 
   data = xmlSecKeyDataPtr_get(data_obj);
-  output = PyFile_get(output_obj);
+  output = PythonFile_get(output_obj);
 
   xmlSecKeyDataDebugXmlDump(data, output);
 

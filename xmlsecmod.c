@@ -22,7 +22,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "wrap_objs.h"
+#include "xmlsecmod.h"
 
 #include "app.h"
 #include "base64.h"
@@ -43,7 +43,7 @@
 #include "xmlsec.h"
 #include "xmltree.h"
 #include "x509.h"
-#include "openssl.h"
+//#include "openssl.h"
 
 static PyMethodDef xmlsec_methods[] = {
   /* app.h */

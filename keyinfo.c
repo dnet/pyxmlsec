@@ -22,7 +22,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "wrap_objs.h"
+#include "xmlsecmod.h"
 
 #include "keyinfo.h"
 #include "keys.h"
@@ -290,7 +290,7 @@ PyObject *xmlsec_KeyInfoCtxDebugDump(PyObject *self, PyObject *args) {
     return NULL;
 
   keyInfoCtx = xmlSecKeyInfoCtxPtr_get(keyInfoCtx_obj);
-  output = PyFile_get(output_obj);
+  output = PythonFile_get(output_obj);
   xmlSecKeyInfoCtxDebugDump(keyInfoCtx, output);
 
   Py_INCREF(Py_None);
@@ -307,7 +307,7 @@ PyObject *xmlsec_KeyInfoCtxDebugXmlDump(PyObject *self, PyObject *args) {
     return NULL;
 
   keyInfoCtx = xmlSecKeyInfoCtxPtr_get(keyInfoCtx_obj);
-  output = PyFile_get(output_obj);
+  output = PythonFile_get(output_obj);
   xmlSecKeyInfoCtxDebugXmlDump(keyInfoCtx, output);
 
   Py_INCREF(Py_None);

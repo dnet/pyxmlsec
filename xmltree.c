@@ -22,7 +22,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "wrap_objs.h"
+#include "xmlsecmod.h"
 
 #include "xmltree.h"
 
@@ -266,7 +266,7 @@ PyObject *xmlsec_AddIDs(PyObject *self, PyObject *args) {
 
   doc = xmlDocPtr_get(doc_obj);
   cur = xmlNodePtr_get(cur_obj);
-  ids = PyStringList_AsCharPtrPtr(ids_obj);
+  ids = PythonStringList_get(ids_obj);
 
   xmlSecAddIDs(doc, cur, (const xmlChar **)ids);
   xmlFree(ids);

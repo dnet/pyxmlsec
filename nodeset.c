@@ -22,7 +22,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "wrap_objs.h"
+#include "xmlsecmod.h"
 
 #include "nodeset.h"
 
@@ -291,7 +291,7 @@ PyObject *xmlsec_NodeSetDebugDump(PyObject *self, PyObject *args) {
     return NULL;
 
   nset = xmlSecNodeSetPtr_get(nset_obj);
-  output = PyFile_get(output_obj);
+  output = PythonFile_get(output_obj);
   xmlSecNodeSetDebugDump(nset, output);
 
   Py_INCREF(Py_None);

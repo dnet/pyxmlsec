@@ -22,7 +22,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "wrap_objs.h"
+#include "xmlsecmod.h"
 
 #include "list.h"
 
@@ -288,7 +288,7 @@ PyObject *xmlsec_PtrListDebugDump(PyObject *self, PyObject *args) {
     return NULL;
 
   list = xmlSecPtrListPtr_get(list_obj);
-  output = PyFile_get(output_obj);
+  output = PythonFile_get(output_obj);
   xmlSecPtrListDebugDump(list, output);
 
   Py_INCREF(Py_None);
@@ -304,7 +304,7 @@ PyObject *xmlsec_PtrListDebugXmlDump(PyObject *self, PyObject *args) {
     return NULL;
 
   list = xmlSecPtrListPtr_get(list_obj);
-  output = PyFile_get(output_obj);
+  output = PythonFile_get(output_obj);
   xmlSecPtrListDebugXmlDump(list, output);
 
   Py_INCREF(Py_None);

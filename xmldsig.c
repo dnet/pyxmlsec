@@ -22,7 +22,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "wrap_objs.h"
+#include "xmlsecmod.h"
 
 #include "xmldsig.h"
 #include "buffer.h"
@@ -329,7 +329,7 @@ PyObject *xmlsec_DSigCtxDebugDump(PyObject *self, PyObject *args) {
     return NULL;
 
   dsigCtx = xmlSecDSigCtxPtr_get(dsigCtx_obj);
-  output = PyFile_get(output_obj);
+  output = PythonFile_get(output_obj);
   xmlSecDSigCtxDebugDump(dsigCtx, output);
 
   Py_INCREF(Py_None);
@@ -345,7 +345,7 @@ PyObject *xmlsec_DSigCtxDebugXmlDump(PyObject *self, PyObject *args) {
     return NULL;
 
   dsigCtx = xmlSecDSigCtxPtr_get(dsigCtx_obj);
-  output = PyFile_get(output_obj);
+  output = PythonFile_get(output_obj);
   xmlSecDSigCtxDebugXmlDump(dsigCtx, output);
 
   Py_INCREF(Py_None);
@@ -528,7 +528,7 @@ PyObject *xmlsec_DSigReferenceCtxDebugDump(PyObject *self, PyObject *args) {
     return NULL;
 
   dsigRefCtx = xmlSecDSigReferenceCtxPtr_get(dsigRefCtx_obj);
-  output = PyFile_get(output_obj);
+  output = PythonFile_get(output_obj);
   xmlSecDSigReferenceCtxDebugDump(dsigRefCtx, output);
 
   Py_INCREF(Py_None);
@@ -544,7 +544,7 @@ PyObject *xmlsec_DSigReferenceCtxDebugXmlDump(PyObject *self, PyObject *args) {
     return NULL;
 
   dsigRefCtx = xmlSecDSigReferenceCtxPtr_get(dsigRefCtx_obj);
-  output = (FILE *) PyFile_get(output_obj);
+  output = PythonFile_get(output_obj);
   xmlSecDSigReferenceCtxDebugXmlDump(dsigRefCtx, output);
 
   Py_INCREF(Py_None);

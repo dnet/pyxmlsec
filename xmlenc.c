@@ -22,14 +22,14 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "wrap_objs.h"
+#include "xmlsecmod.h"
 
+#include "xmlenc.h"
 #include "buffer.h"
 #include "keyinfo.h"
 #include "keys.h"
 #include "keysmngr.h"
 #include "transforms.h"
-#include "xmlenc.h"
 
 PyObject *wrap_xmlSecEncCtxPtr(xmlSecEncCtxPtr ctx) {
   PyObject *ret;
@@ -351,7 +351,7 @@ PyObject *xmlsec_EncCtxDebugDump(PyObject *self, PyObject *args) {
     return NULL;
 
   encCtx = xmlSecEncCtxPtr_get(encCtx_obj);
-  output = PyFile_get(output_obj);
+  output = PythonFile_get(output_obj);
   xmlSecEncCtxDebugDump(encCtx, output);
 
   Py_INCREF(Py_None);
@@ -367,7 +367,7 @@ PyObject *xmlsec_EncCtxDebugXmlDump(PyObject *self, PyObject *args) {
     return NULL;
 
   encCtx = xmlSecEncCtxPtr_get(encCtx_obj);
-  output = PyFile_get(output_obj);
+  output = PythonFile_get(output_obj);
   xmlSecEncCtxDebugXmlDump(encCtx, output);
 
   Py_INCREF(Py_None);

@@ -22,7 +22,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "wrap_objs.h"
+#include "xmlsecmod.h"
 
 #include "templates.h"
 #include "transforms.h"
@@ -34,20 +34,18 @@ PyObject *xmlsec_TmplSignatureCreate(PyObject *self, PyObject *args) {
   xmlSecTransformId signMethodId;
   const xmlChar *id = NULL;
   xmlNodePtr node;
-
-  if (!PyArg_ParseTuple(args, "OOOz:tmplSignatureCreate", &doc_obj,
-			&c14nMethodId_obj, &signMethodId_obj, &id))
-    return NULL;
   
-  if (!PyInstance_Check(doc_obj)) {
-    PyErr_SetString(xmlsec_error,
-		    "tmplSignatureCreate() argument 1 must be an instance");
-    return NULL;
+  if (CheckArgs(args, "OOOs:tmplSignatureCreate")) {
+    if (!PyArg_ParseTuple(args, "OOOz:tmplSignatureCreate", &doc_obj,
+			  &c14nMethodId_obj, &signMethodId_obj, &id))
+      return NULL;
   }
-
+  else return NULL;
+    
   doc = xmlDocPtr_get(doc_obj);
   c14nMethodId = xmlSecTransformId_get(c14nMethodId_obj);
   signMethodId = xmlSecTransformId_get(signMethodId_obj);
+
   node = xmlSecTmplSignatureCreate(doc, c14nMethodId, signMethodId, id);
 
   return (wrap_xmlNodePtr(node));
@@ -59,8 +57,12 @@ PyObject *xmlsec_TmplSignatureEnsureKeyInfo(PyObject *self, PyObject *args) {
   const xmlChar *id = NULL;
   xmlNodePtr eki;
 
-  if (!PyArg_ParseTuple(args, "Oz:tmplSignatureEnsureKeyInfo", &signNode_obj, &id))
-    return NULL;
+  if (CheckArgs(args, "Os:tmplSignatureEnsureKeyInfo")) {
+    if (!PyArg_ParseTuple(args, "Oz:tmplSignatureEnsureKeyInfo",
+			  &signNode_obj, &id))
+      return NULL;
+  }
+  else return NULL;
 
   signNode = xmlNodePtr_get(signNode_obj);
   eki = xmlSecTmplSignatureEnsureKeyInfo(signNode, id);
@@ -77,9 +79,13 @@ PyObject *xmlsec_TmplSignatureAddReference(PyObject *self, PyObject *args) {
   const xmlChar *type = NULL;
   xmlNodePtr ref;
 
-  if (!PyArg_ParseTuple(args, "OOzzz:tmplSignatureAddReference", &signNode_obj,
-			&digestMethodId_obj, &id, &uri, &type))
-    return NULL;
+  if (CheckArgs(args, "OOsss:tmplSignatureAddReference")) {
+    if (!PyArg_ParseTuple(args, "OOzzz:tmplSignatureAddReference",
+			  &signNode_obj, &digestMethodId_obj,
+			  &id, &uri, &type))
+      return NULL;
+  }
+  else return NULL;
 
   signNode = xmlNodePtr_get(signNode_obj);
   digestMethodId = xmlSecTransformId_get(digestMethodId_obj);
@@ -97,9 +103,12 @@ PyObject *xmlsec_TmplSignatureAddObject(PyObject *self, PyObject *args) {
   const xmlChar *encoding = NULL;
   xmlNodePtr obj;
 
-  if (!PyArg_ParseTuple(args, "Ozzz:tmplSignatureAddObject", &signNode_obj,
+  if (CheckArgs(args, "Osss:tmplSignatureAddObject")) {
+    if (!PyArg_ParseTuple(args, "Ozzz:tmplSignatureAddObject", &signNode_obj,
 			&id, &mimeType, &encoding))
-    return NULL;
+      return NULL;
+  }
+  else return NULL;
 
   signNode = xmlNodePtr_get(signNode_obj);
   obj = xmlSecTmplSignatureAddObject(signNode, id, mimeType, encoding);
@@ -112,8 +121,12 @@ PyObject *xmlsec_TmplSignatureGetSignMethodNode(PyObject *self, PyObject *args) 
   xmlNodePtr signNode;
   xmlNodePtr node;
 
-  if (!PyArg_ParseTuple(args, "O:tmplSignatureGetSignMethodNode", &signNode_obj))
-    return NULL;
+  if (CheckArgs(args, "O:tmplSignatureGetSignMethodNode")) {
+    if (!PyArg_ParseTuple(args, "O:tmplSignatureGetSignMethodNode",
+			  &signNode_obj))
+      return NULL;
+  }
+  else return NULL;
 
   signNode = xmlNodePtr_get(signNode_obj);
   node = xmlSecTmplSignatureGetSignMethodNode(signNode);
@@ -126,8 +139,12 @@ PyObject *xmlsec_TmplSignatureGetC14NMethodNode(PyObject *self, PyObject *args) 
   xmlNodePtr signNode;
   xmlNodePtr node;
   
-  if (!PyArg_ParseTuple(args, "O:tmplSignatureGetC14NMethodNode", &signNode_obj))
-    return NULL;
+  if (CheckArgs(args, "O:tmplSignatureGetC14NMethodNode")) {
+    if (!PyArg_ParseTuple(args, "O:tmplSignatureGetC14NMethodNode",
+			  &signNode_obj))
+      return NULL;
+  }
+  else return NULL;
 
   signNode = xmlNodePtr_get(signNode_obj);
   node = xmlSecTmplSignatureGetC14NMethodNode(signNode);
@@ -141,9 +158,12 @@ PyObject *xmlsec_TmplReferenceAddTransform(PyObject *self, PyObject *args) {
   xmlSecTransformId transformId;
   xmlNodePtr transform;
 
-  if (!PyArg_ParseTuple(args, "OO:tmplReferenceAddTransform",
-			&referenceNode_obj, &transformId_obj))
-    return NULL;
+  if (CheckArgs(args, "OO:tmplReferenceAddTransform")) {
+    if (!PyArg_ParseTuple(args, "OO:tmplReferenceAddTransform",
+			  &referenceNode_obj, &transformId_obj))
+      return NULL;
+  }
+  else return NULL;
 
   referenceNode = xmlNodePtr_get(referenceNode_obj);
   transformId = xmlSecTransformId_get(transformId_obj);
@@ -159,8 +179,12 @@ PyObject *xmlsec_TmplObjectAddSignProperties(PyObject *self, PyObject *args) {
   const xmlChar *target = NULL;
   xmlNodePtr signProperties;
 
-  if (!PyArg_ParseTuple(args, "Ozz:tmplObjectAddSignProperties", &objectNode_obj, &id, &target))
+  if (CheckArgs(args, "Oss:tmplObjectAddSignProperties")) {
+    if (!PyArg_ParseTuple(args, "Ozz:tmplObjectAddSignProperties",
+			  &objectNode_obj, &id, &target))
     return NULL;
+  }
+  else return NULL;
 
   objectNode = xmlNodePtr_get(objectNode_obj);
   signProperties = xmlSecTmplObjectAddSignProperties(objectNode, id, target);
@@ -174,8 +198,12 @@ PyObject *xmlsec_TmplObjectAddManifest(PyObject *self, PyObject *args) {
   const xmlChar *id = NULL;
   xmlNodePtr manifest;
 
-  if (!PyArg_ParseTuple(args, "Oz:tmplObjectAddManifest", &objectNode_obj, &id))
-    return NULL;
+  if (CheckArgs(args, "Os:tmplObjectAddManifest")) {
+    if (!PyArg_ParseTuple(args, "Oz:tmplObjectAddManifest", &objectNode_obj,
+			  &id))
+      return NULL;
+  }
+  else return NULL;
 
   objectNode = xmlNodePtr_get(objectNode_obj);
   manifest = xmlSecTmplObjectAddManifest(objectNode, id);
@@ -192,9 +220,13 @@ PyObject *xmlsec_TmplManifestAddReference(PyObject *self, PyObject *args) {
   const xmlChar *type = NULL;
   xmlNodePtr reference;
 
-  if (!PyArg_ParseTuple(args, "OOzzz:tmplManifestAddReference", &manifestNode_obj,
-			&digestMethodId_obj, &id, &uri, &type))
-    return NULL;
+  if (CheckArgs(args, "OOsss:tmplManifestAddReference")) {
+    if (!PyArg_ParseTuple(args, "OOzzz:tmplManifestAddReference",
+			  &manifestNode_obj, &digestMethodId_obj,
+			  &id, &uri, &type))
+      return NULL;
+  }
+  else return NULL;
 
   manifestNode = xmlNodePtr_get(manifestNode_obj);
   digestMethodId = xmlSecTransformId_get(digestMethodId_obj);
@@ -214,14 +246,15 @@ PyObject *xmlsec_TmplEncDataCreate(PyObject *self, PyObject *args) {
   const xmlChar *encoding = NULL;
   xmlNodePtr encDataNode;
 
-  if (!PyArg_ParseTuple(args, "OOzzzz:tmplEncDataCreate", &doc_obj,
-			&encMethodId_obj, &id, &type, &mimeType, &encoding))
-    return NULL;
+  if (CheckArgs(args, "oossss:tmplEncDataCreate")) {
+    if (!PyArg_ParseTuple(args, "OOzzzz:tmplEncDataCreate", &doc_obj,
+			  &encMethodId_obj, &id, &type, &mimeType, &encoding))
+      return NULL;
+  }
+  else return NULL;
 
-  if (doc_obj != Py_None)
-    doc = xmlDocPtr_get(doc_obj);
-  if (encMethodId_obj != Py_None)
-    encMethodId = xmlSecTransformId_get(encMethodId_obj);
+  doc = xmlDocPtr_get(doc_obj);
+  encMethodId = xmlSecTransformId_get(encMethodId_obj);
   encDataNode = xmlSecTmplEncDataCreate(doc, encMethodId,
 					id, type, mimeType, encoding);
 
@@ -234,8 +267,12 @@ PyObject *xmlsec_TmplEncDataEnsureKeyInfo(PyObject *self, PyObject *args) {
   const xmlChar *id = NULL;
   xmlNodePtr keyInfoNode;
 
-  if (!PyArg_ParseTuple(args, "Oz:tmplEncDataEnsureKeyInfo", &encNode_obj, &id))
-    return NULL;
+  if (CheckArgs(args, "Os:tmplEncDataEnsureKeyInfo")) {
+    if (!PyArg_ParseTuple(args, "Oz:tmplEncDataEnsureKeyInfo", &encNode_obj,
+			  &id))
+      return NULL;
+  }
+  else return NULL;
 
   encNode = xmlNodePtr_get(encNode_obj);
   keyInfoNode = xmlSecTmplEncDataEnsureKeyInfo(encNode, id);
@@ -249,8 +286,12 @@ PyObject *xmlsec_TmplEncDataEnsureEncProperties(PyObject *self, PyObject *args) 
   const xmlChar *id = NULL;
   xmlNodePtr encPropNode;
 
-  if (!PyArg_ParseTuple(args, "Oz:tmplEncDataEnsureEncProperties", &encNode_obj, &id))
-    return NULL;
+  if (CheckArgs(args, "Os:tmplEncDataEnsureEncProperties")) {
+    if (!PyArg_ParseTuple(args, "Oz:tmplEncDataEnsureEncProperties",
+			  &encNode_obj, &id))
+      return NULL;
+  }
+  else return NULL;
 
   encNode = xmlNodePtr_get(encNode_obj);
   encPropNode = xmlSecTmplEncDataEnsureEncProperties(encNode, id);
@@ -265,9 +306,12 @@ PyObject *xmlsec_TmplEncDataAddEncProperty(PyObject *self, PyObject *args) {
   const xmlChar *target = NULL;
   xmlNodePtr encPropNode;
 
-  if (!PyArg_ParseTuple(args, "Ozz:tmplEncDataAddEncProperty", &encNode_obj,
-			&id, &target))
-    return NULL;
+  if (CheckArgs(args, "Oss:tmplEncDataAddEncProperty")) {
+    if (!PyArg_ParseTuple(args, "Ozz:tmplEncDataAddEncProperty", &encNode_obj,
+			  &id, &target))
+      return NULL;
+  }
+  else return NULL;
 
   encNode = xmlNodePtr_get(encNode_obj);
   encPropNode = xmlSecTmplEncDataAddEncProperty(encNode, id, target);
@@ -280,8 +324,11 @@ PyObject *xmlsec_TmplEncDataEnsureCipherValue(PyObject *self, PyObject *args) {
   xmlNodePtr encNode;
   xmlNodePtr cipherValNode;
 
-  if (!PyArg_ParseTuple(args, "O:tmplEncDataEnsureCipherValue", &encNode_obj))
-    return NULL;
+  if (CheckArgs(args, "O:tmplEncDataEnsureCipherValue")) {
+    if (!PyArg_ParseTuple(args, "O:tmplEncDataEnsureCipherValue", &encNode_obj))
+      return NULL;
+  }
+  else return NULL;
 
   encNode = xmlNodePtr_get(encNode_obj);
   cipherValNode = xmlSecTmplEncDataEnsureCipherValue(encNode);
@@ -295,8 +342,12 @@ PyObject *xmlsec_TmplEncDataEnsureCipherReference(PyObject *self, PyObject *args
   const xmlChar *uri = NULL;
   xmlNodePtr cipherRefNode;
 
-  if (!PyArg_ParseTuple(args, "Oz:tmplEncDataEnsureCipherReference", &encNode_obj, &uri))
-    return NULL;
+  if (CheckArgs(args, "Os:tmplEncDataEnsureCipherReference")) {
+    if (!PyArg_ParseTuple(args, "Oz:tmplEncDataEnsureCipherReference",
+			  &encNode_obj, &uri))
+      return NULL;
+  }
+  else return NULL;
 
   encNode = xmlNodePtr_get(encNode_obj);
   cipherRefNode = xmlSecTmplEncDataEnsureCipherReference(encNode, uri);
@@ -309,8 +360,11 @@ PyObject *xmlsec_TmplEncDataGetEncMethodNode(PyObject *self, PyObject *args) {
   xmlNodePtr encNode;
   xmlNodePtr encMethNode;
 
-  if (!PyArg_ParseTuple(args, "O:tmplEncDataGetEncMethodNode", &encNode_obj))
-    return NULL;
+  if (CheckArgs(args, "O:tmplEncDataGetEncMethodNode")) {
+    if (!PyArg_ParseTuple(args, "O:tmplEncDataGetEncMethodNode", &encNode_obj))
+      return NULL;
+  }
+  else return NULL;
 
   encNode = xmlNodePtr_get(encNode_obj);
   encMethNode = xmlSecTmplEncDataGetEncMethodNode(encNode);
@@ -324,9 +378,12 @@ PyObject *xmlsec_TmplCipherReferenceAddTransform(PyObject *self, PyObject *args)
   xmlSecTransformId transformId;
   xmlNodePtr dsigTransNode;
 
-  if (!PyArg_ParseTuple(args, "OO:tmplCipherReferenceAddTransform",
-			&cipherReferenceNode_obj, &transformId_obj))
-    return NULL;
+  if (CheckArgs(args, "OO:tmplCipherReferenceAddTransform")) {
+    if (!PyArg_ParseTuple(args, "OO:tmplCipherReferenceAddTransform",
+			  &cipherReferenceNode_obj, &transformId_obj))
+      return NULL;
+  }
+  else return NULL;
 
   cipherReferenceNode = xmlNodePtr_get(cipherReferenceNode_obj);
   transformId = xmlSecTransformId_get(transformId_obj);
@@ -342,9 +399,12 @@ PyObject *xmlsec_TmplReferenceListAddDataReference(PyObject *self, PyObject *arg
   const xmlChar *uri = NULL;
   xmlNodePtr dataRefNode;
 
-  if (!PyArg_ParseTuple(args, "Oz:tmplReferenceListAddDataReference",
-			&encNode_obj, &uri))
-    return NULL;
+  if (CheckArgs(args, "Os:tmplReferenceListAddDataReference")) {
+    if (!PyArg_ParseTuple(args, "Oz:tmplReferenceListAddDataReference",
+			  &encNode_obj, &uri))
+      return NULL;
+  }
+  else return NULL;
 
   encNode = xmlNodePtr_get(encNode_obj);
   dataRefNode = xmlSecTmplReferenceListAddDataReference(encNode, uri);
@@ -358,9 +418,12 @@ PyObject *xmlsec_TmplReferenceListAddKeyReference(PyObject *self, PyObject *args
   const xmlChar *uri = NULL;
   xmlNodePtr keyRefNode;
 
-  if (!PyArg_ParseTuple(args, "Oz:tmplReferenceListAddKeyReference",
-			&encNode_obj, &uri))
-    return NULL;
+  if (CheckArgs(args, "Os:tmplReferenceListAddKeyReference")) {
+    if (!PyArg_ParseTuple(args, "Oz:tmplReferenceListAddKeyReference",
+			  &encNode_obj, &uri))
+      return NULL;
+  }
+  else return NULL;
 
   encNode = xmlNodePtr_get(encNode_obj);
   keyRefNode = xmlSecTmplReferenceListAddKeyReference(encNode, uri);
@@ -374,9 +437,12 @@ PyObject *xmlsec_TmplKeyInfoAddKeyName(PyObject *self, PyObject *args) {
   const xmlChar *name;
   xmlNodePtr keyName;
 
-  if (!PyArg_ParseTuple(args, "Oz:tmplKeyInfoAddKeyName",
-			&keyInfoNode_obj, &name))
-    return NULL;
+  if (CheckArgs(args, "Os:tmplKeyInfoAddKeyName")) {
+    if (!PyArg_ParseTuple(args, "Oz:tmplKeyInfoAddKeyName",
+			  &keyInfoNode_obj, &name))
+      return NULL;
+  }
+  else return NULL;
 
   keyInfoNode = xmlNodePtr_get(keyInfoNode_obj);
   keyName = xmlSecTmplKeyInfoAddKeyName(keyInfoNode, name);
@@ -389,8 +455,11 @@ PyObject *xmlsec_TmplKeyInfoAddKeyValue(PyObject *self, PyObject *args) {
   xmlNodePtr keyInfoNode;
   xmlNodePtr keyValue;
 
-  if (!PyArg_ParseTuple(args, "O:tmplKeyInfoAddKeyValue", &keyInfoNode_obj))
-    return NULL;
+  if (CheckArgs(args, "O:tmplKeyInfoAddKeyValue")) {
+    if (!PyArg_ParseTuple(args, "O:tmplKeyInfoAddKeyValue", &keyInfoNode_obj))
+      return NULL;
+  }
+  else return NULL;
 
   keyInfoNode = xmlNodePtr_get(keyInfoNode_obj);
   keyValue = xmlSecTmplKeyInfoAddKeyValue(keyInfoNode);
@@ -403,8 +472,11 @@ PyObject *xmlsec_TmplKeyInfoAddX509Data(PyObject *self, PyObject *args) {
   xmlNodePtr keyInfoNode;
   xmlNodePtr X509Data;
 
-  if (!PyArg_ParseTuple(args, "O:tmplKeyInfoAddX509Data", &keyInfoNode_obj))
-    return NULL;
+  if (CheckArgs(args, "O:tmplKeyInfoAddX509Data")) {
+    if (!PyArg_ParseTuple(args, "O:tmplKeyInfoAddX509Data", &keyInfoNode_obj))
+      return NULL;
+  }
+  else return NULL;
 
   keyInfoNode = xmlNodePtr_get(keyInfoNode_obj);
   X509Data = xmlSecTmplKeyInfoAddX509Data(keyInfoNode);
@@ -419,9 +491,12 @@ PyObject *xmlsec_TmplKeyInfoAddRetrievalMethod(PyObject *self, PyObject *args) {
   const xmlChar *type = NULL;
   xmlNodePtr node;
 
-  if (!PyArg_ParseTuple(args, "Ozz:tmplKeyInfoAddRetrievalMethod",
-			&keyInfoNode_obj, &uri, &type))
-    return NULL;
+  if (CheckArgs(args, "Oss:tmplKeyInfoAddRetrievalMethod")) {
+    if (!PyArg_ParseTuple(args, "Ozz:tmplKeyInfoAddRetrievalMethod",
+			  &keyInfoNode_obj, &uri, &type))
+      return NULL;
+  }
+  else return NULL;
   
   keyInfoNode = xmlNodePtr_get(keyInfoNode_obj);
   node = xmlSecTmplKeyInfoAddRetrievalMethod(keyInfoNode, uri, type);
@@ -435,9 +510,12 @@ PyObject *xmlsec_TmplRetrievalMethodAddTransform(PyObject *self, PyObject *args)
   xmlSecTransformId transformId;
   xmlNodePtr node;
 
-  if (!PyArg_ParseTuple(args, "OO:tmplRetrievalMethodAddTransform",
-			&retrMethodNode_obj, &transformId_obj))
-    return NULL;
+  if (CheckArgs(args, "OO:tmplRetrievalMethodAddTransform")) {
+    if (!PyArg_ParseTuple(args, "OO:tmplRetrievalMethodAddTransform",
+			  &retrMethodNode_obj, &transformId_obj))
+      return NULL;
+  }
+  else return NULL;
   
   retrMethodNode = xmlNodePtr_get(retrMethodNode_obj);
   transformId = xmlSecTransformId_get(transformId_obj);
@@ -456,15 +534,15 @@ PyObject *xmlsec_TmplKeyInfoAddEncryptedKey(PyObject *self, PyObject *args) {
   const xmlChar *recipient = NULL;
   xmlNodePtr encKeyNode;
 
-  if (!PyArg_ParseTuple(args, "OOzzz:tmplKeyInfoAddEncryptedKey",
-			&keyInfoNode_obj, &encMethodId_obj, &id, &type,
-			&recipient))
-    return NULL;
-
-  /* the encryption method is optional. */
-  if (encMethodId_obj != Py_None) {
-    encMethodId = xmlSecTransformId_get(encMethodId_obj);
+  if (CheckArgs(args, "Oosss:tmplKeyInfoAddEncryptedKey")) {
+    if (!PyArg_ParseTuple(args, "OOzzz:tmplKeyInfoAddEncryptedKey",
+			  &keyInfoNode_obj, &encMethodId_obj, &id, &type,
+			  &recipient))
+      return NULL;
   }
+  else return NULL;
+
+  encMethodId = xmlSecTransformId_get(encMethodId_obj);
   keyInfoNode = xmlNodePtr_get(keyInfoNode_obj);
   encKeyNode = xmlSecTmplKeyInfoAddEncryptedKey(keyInfoNode, encMethodId,
 						id, type, recipient);
@@ -478,9 +556,12 @@ PyObject *xmlsec_TmplTransformAddHmacOutputLength(PyObject *self, PyObject *args
   xmlSecSize bitsLen;
   int ret;
 
-  if (!PyArg_ParseTuple(args, "Oi:tmplTransformAddHmacOutputLength",
-			&transformNode_obj, &bitsLen))
-    return NULL;
+  if (CheckArgs(args, "OI:tmplTransformAddHmacOutputLength")) {
+    if (!PyArg_ParseTuple(args, "Oi:tmplTransformAddHmacOutputLength",
+			  &transformNode_obj, &bitsLen))
+      return NULL;
+  }
+  else return NULL;
 
   transformNode = xmlNodePtr_get(transformNode_obj);
 
@@ -496,9 +577,12 @@ PyObject *xmlsec_TmplTransformAddRsaOaepParam(PyObject *self, PyObject *args) {
   xmlSecSize size;
   int ret;
 
-  if (!PyArg_ParseTuple(args, "Os#:tmplTransformAddRsaOaepParam",
-			&transformNode_obj, &buf, &size))
-    return NULL;
+  if (CheckArgs(args, "OS:tmplTransformAddRsaOaepParam")) {
+    if (!PyArg_ParseTuple(args, "Os#:tmplTransformAddRsaOaepParam",
+			  &transformNode_obj, &buf, &size))
+      return NULL;
+  }
+  else return NULL;
 
   transformNode = xmlNodePtr_get(transformNode_obj);
   
@@ -513,9 +597,12 @@ PyObject *xmlsec_TmplTransformAddXsltStylesheet(PyObject *self, PyObject *args) 
   const xmlChar *xslt;
   int ret;
 
-  if (!PyArg_ParseTuple(args, "Os:tmplTransformAddXsltStylesheet",
-			&transformNode_obj, &xslt))
-    return NULL;
+  if (CheckArgs(args, "OS:tmplTransformAddXsltStylesheet")) {
+    if (!PyArg_ParseTuple(args, "Os:tmplTransformAddXsltStylesheet",
+			  &transformNode_obj, &xslt))
+      return NULL;
+  }
+  else return NULL;
 
   transformNode = xmlNodePtr_get(transformNode_obj);
   
@@ -530,9 +617,12 @@ PyObject *xmlsec_TmplTransformAddC14NInclNamespaces(PyObject *self, PyObject *ar
   const xmlChar *prefixList = NULL;
   int ret;
 
-  if (!PyArg_ParseTuple(args, "Oz:tmplTransformAddC14NInclNamespaces",
-			&transformNode_obj, &prefixList))
-    return NULL;
+  if (CheckArgs(args, "Os:tmplTransformAddC14NInclNamespaces")) {
+    if (!PyArg_ParseTuple(args, "Oz:tmplTransformAddC14NInclNamespaces",
+			  &transformNode_obj, &prefixList))
+      return NULL;
+  }
+  else return NULL;
 
   transformNode = xmlNodePtr_get(transformNode_obj);
   
@@ -548,13 +638,16 @@ PyObject *xmlsec_TmplTransformAddXPath(PyObject *self, PyObject *args) {
   xmlChar **nsList = NULL;
   int ret;
 
-  if (!PyArg_ParseTuple(args, "OsO:tmplTransformAddXPath",
-			&transformNode_obj, &expression, &nsList_obj))
-    return NULL;
+  if (CheckArgs(args, "OSo:tmplTransformAddXPath")) {
+    if (!PyArg_ParseTuple(args, "OsO:tmplTransformAddXPath",
+			  &transformNode_obj, &expression, &nsList_obj))
+      return NULL;
+  }
+  else return NULL;
 
   transformNode = xmlNodePtr_get(transformNode_obj);
-  if (nsList_obj != Py_None)
-    nsList = PyStringList_AsCharPtrPtr(nsList_obj);
+  /* convert Python string list into C string array */
+  nsList = PythonStringList_get(nsList_obj);
 
   ret = xmlSecTmplTransformAddXPath(transformNode, expression,
 				    (const xmlChar **)nsList);
@@ -571,13 +664,15 @@ PyObject *xmlsec_TmplTransformAddXPath2(PyObject *self, PyObject *args) {
   xmlChar **nsList = NULL;
   int ret;
 
-  if (!PyArg_ParseTuple(args, "OssO:tmplTransformAddXPath2",
-			&transformNode_obj, &type, &expression, &nsList_obj))
-    return NULL;
+  if (CheckArgs(args, "OSSo:tmplTransformAddXPath2")) {
+    if (!PyArg_ParseTuple(args, "OssO:tmplTransformAddXPath2",
+			  &transformNode_obj, &type, &expression, &nsList_obj))
+      return NULL;
+  }
+  else return NULL;
 
   transformNode = xmlNodePtr_get(transformNode_obj);
-  if (nsList_obj != Py_None)
-    nsList = PyStringList_AsCharPtrPtr(nsList_obj);
+  nsList = PythonStringList_get(nsList_obj);
 
   ret = xmlSecTmplTransformAddXPath2(transformNode, type, expression,
 				     (const xmlChar **)nsList);
@@ -593,13 +688,15 @@ PyObject *xmlsec_TmplTransformAddXPointer(PyObject *self, PyObject *args) {
   xmlChar **nsList = NULL;
   int ret;
 
-  if (!PyArg_ParseTuple(args, "OsO:tmplTransformAddXPointer",
-			&transformNode_obj, &expression, &nsList_obj))
-    return NULL;
+  if (CheckArgs(args, "OSo:tmplTransformAddXPointer")) {
+    if (!PyArg_ParseTuple(args, "OsO:tmplTransformAddXPointer",
+			  &transformNode_obj, &expression, &nsList_obj))
+      return NULL;
+  }
+  else return NULL;
 
   transformNode = xmlNodePtr_get(transformNode_obj);
-  if (nsList_obj != Py_None)
-    nsList = PyStringList_AsCharPtrPtr(nsList_obj);
+  nsList = PythonStringList_get(nsList_obj);
 
   ret = xmlSecTmplTransformAddXPointer(transformNode, expression,
 				       (const xmlChar **)nsList);
