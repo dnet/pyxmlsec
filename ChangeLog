@@ -1,3 +1,87 @@
+2004-01-25  Valery Febvre  <vfebvre@easter-eggs.com>
+
+	* examples/*.py:
+	All examples updated because Ids become functions.
+
+	* xmlsec.py:
+	Key data Ids and Crypto Transforms Ids become functions (+ doc added).
+	Attribut 'value' of class Key is now returned as KeyData object.
+	getValue, getData and ensureData methods of class Key return now KeyData
+	objects.
+	Transform Ids become functions (+ doc added).
+	TransformId class was added.
+	'defSignMethodId', 'defC14NMethodId' and 'defDigestMethodId' attributs
+	of class DSigCtx are now returned as TransformId object.
+
+2004-01-24  Valery Febvre  <vfebvre@easter-eggs.com>
+
+	* xmlsecmod.c:
+	Added methods tmplTransformAddHmacOutputLength,
+	tmplTransformAddRsaOaepParam, tmplTransformAddXsltStylesheet,
+	tmplTransformAddC14NInclNamespaces, tmplTransformAddXPath,
+	tmplTransformAddXPath2, tmplTransformAddXPointer, transformIdCreate
+	in xmlsec_methods[]
+
+	* xmldsig.c:
+	All PyCObject_AsVoidPtr() replaced by xmlSecTransformId_get()
+
+	* wrap_objs.h:
+	Structure xmlSecPtr_object and macro xmlSecPtr_get() were added.
+
+	* wrap_objs.c:
+	Function PyStringList_AsCharPtrArray() was added.
+
+	* transforms.c, transforms.h:
+	Added functions xmlsec_TransformInitializeMethod,
+	xmlsec_TransformFinalizeMethod, xmlsec_TransformGetDataTypeMethod,
+	xmlsec_TransformNodeReadMethod, xmlsec_TransformNodeWriteMethod,
+	xmlsec_TransformSetKeyRequirementsMethod, xmlsec_TransformSetKeyMethod,
+	xmlsec_TransformVerifyMethod, xmlsec_TransformPushBinMethod,
+	xmlsec_TransformPopBinMethod, xmlsec_TransformPushXmlMethod,
+	xmlsec_TransformPopXmlMethod, xmlsec_TransformExecuteMethod,
+	transforms_TransformIdCreate
+
+	* list.c:
+	All PyCObject_AsVoidPtr() replaced by xmlSecPtrListId_get()
+
+	* keysdata.c:
+	All PyCObject_AsVoidPtr() replaced by xmlSecKeyDataId_get()
+
+	* keys.c:
+	All PyCObject_AsVoidPtr() replaced by xmlSecKeyDataId_get()
+
+	* templates.c:
+	Added functions: xmlsec_TmplTransformAddHmacOutputLength,
+	xmlsec_TmplTransformAddRsaOaepParam,
+	xmlsec_TmplTransformAddXsltStylesheet,
+	xmlsec_TmplTransformAddC14NInclNamespaces,
+	xmlsec_TmplTransformAddXPath, xmlsec_TmplTransformAddXPath2,
+	xmlsec_TmplTransformAddXPointer
+
+	* base64.c:
+	xmlsec_Base64CtxFinal and xmlsec_Base64Decode fixed
+
+2004-01-23  Valery Febvre  <vfebvre@easter-eggs.com>
+
+	* templates.c, templates.h:
+	All functions cleanup
+	Added functions xmlsec_TmplKeyInfoAddRetrievalMethod,
+	xmlsec_TmplRetrievalMethodAddTransform
+
+2004-01-22  Valery Febvre  <vfebvre@easter-eggs.com>
+
+	* base64.c:
+	Bugfixes in xmlsec_Base64CtxUpdate, xmlsec_Base64CtxFinal, xmlsec_Base64Decode
+
+2004-01-21  Valery Febvre  <vfebvre@easter-eggs.com>
+
+	* app.c:
+	Added '#if defined XMLSEC_CRYPTO_OPENSSL' to avoid compilation problems
+	with GnuTLS
+
+	* nodeset.c:
+	Added callback management for walkFunc attribut of xmlsec_NodeSetWalk() function
+
 2004-01-20  Valery Febvre  <vfebvre@easter-eggs.com>
 	* xmlsec.py:
 	Added 9 functions: keyDataIdsGet, keyDataIdsInit, keyDataIdsShutdown,
@@ -7,6 +91,10 @@
 	getType, getSize, getIdentifier, debugDump, debugXmlDump, getName,
 	isValid, checkId, checkUsage, checkSize
 	Added new class KeyDataId with method: getName
+	Added missing arguments in KeyData.__init__
+	parseFile, parseMemory and parseMemoryExt functions return now
+	libxml2.xmlDoc objects instead of BAD PyCObjects.
+	Methods __getattr__ and __setattr__ were added in class NodeSet.
 
 	* xmlsecmod.c:
 	Added methods keyDataIdsGet, keyDataIdsInit, keyDataIdsShutdown,
@@ -31,6 +119,8 @@
 	xmlsec_KeyDataGetName, xmlsec_KeyDataIsValid, xmlsec_KeyDataCheckId,
 	xmlsec_KeyDataCheckUsage, xmlsec_KeyDataCheckSize,
 	keysdata_KeyDataIdCreate, xmlsec_KeyDataKlassGetName
+
+	* parser.c: Removed some useless lines
 
 	* wrap_objs.h: Added #include <libxml/xmlmemory.h>
 
