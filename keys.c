@@ -69,16 +69,29 @@ PyObject *xmlsec_KeyCreate(PyObject *self, PyObject *args) {
   return (ret);
 }
 
+PyObject *xmlsec_KeyDestroy(PyObject *self, PyObject *args) {
+  PyObject *key_obj;
+  xmlSecKeyPtr key;
+
+  if (!PyArg_ParseTuple(args, "O:keyDestroy", &key_obj))
+    return NULL;
+
+  key = (xmlSecKeyPtr)xmlSecKeyPtr_get(PyObject_GetAttr(key_obj, PyString_FromString("_o")));
+  xmlSecKeyDestroy(key);
+
+  return Py_BuildValue("i", 0);
+}
+
 PyObject *xmlsec_KeySetName(PyObject *self, PyObject *args) {
   PyObject *key_obj;
   xmlSecKeyPtr key;
   const xmlChar *name;
   int result;
   
-  if (!PyArg_ParseTuple(args, "Os", &key_obj, &name))
+  if (!PyArg_ParseTuple(args, "Os:keySetName", &key_obj, &name))
     return NULL;
 
-  key = (xmlSecKeyPtr)PyxmlNode_Get(PyObject_GetAttr(key_obj, PyString_FromString("_o")));
+  key = (xmlSecKeyPtr)xmlSecKeyPtr_get(PyObject_GetAttr(key_obj, PyString_FromString("_o")));
   result = xmlSecKeySetName(key, name);
   return Py_BuildValue("i", result);
 }
