@@ -87,6 +87,7 @@ PyObject *xmlsec_DSigCtxCreate(PyObject *self, PyObject *args) {
 
   if (mngr_obj != Py_None)
     mngr = xmlSecKeysMngrPtr_get(PyObject_GetAttr(mngr_obj, PyString_FromString("_o")));
+  /* mngr may be NULL */
   dsigCtx = xmlSecDSigCtxCreate(mngr);
   if (dsigCtx == NULL) {
     PyErr_SetFromErrno(xmlsec_error);
