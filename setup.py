@@ -26,8 +26,8 @@
 from distutils.core import setup, Extension
 
 setup(name = "pyxmlsec",
-      version = "0.20031113",
-      description = "Python binding for XML Security Library (XMLSec)",
+      version = "0.20031118",
+      description = "A set of Python bindings for XML Security Library (XMLSec)",
       long_description = ''' ''',
       author = "Valery Febvre",
       author_email = "vfebvre@easter-eggs.com",
@@ -51,4 +51,3 @@ setup(name = "pyxmlsec",
                                )],
       py_modules = ["xmlsec", "xmlsec_strings"]
 )
-
