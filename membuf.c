@@ -22,9 +22,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <Python.h>
+#include "wrap_objs.h"
 
-#include "xmlsecmod.h"
 #include "transforms.h"
 #include "buffer.h"
 #include "membuf.h"
@@ -42,7 +41,7 @@ PyObject *xmlsec_TransformMemBufGetBuffer(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "O:transformMemBufGetBuffer", &transform_obj))
     return NULL;
 
-  transform = xmlSecTransformPtr_get(PyObject_GetAttr(transform_obj, PyString_FromString("_o")));
+  transform = xmlSecTransformPtr_get(transform_obj);
   buf = xmlSecTransformMemBufGetBuffer(transform);
 
   ret = PyCObject_FromVoidPtrAndDesc((void *) buf, (char *) "xmlSecBufferPtr", NULL);

@@ -1,5 +1,3 @@
-#include <xmlsec/xmltree.h>
-
 PyObject *xmlsec_NodeGetName(PyObject *self, PyObject *args);
 PyObject *xmlsec_GetNodeNsHref(PyObject *self, PyObject *args);
 PyObject *xmlsec_CheckNodeName(PyObject *self, PyObject *args);

@@ -22,11 +22,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <Python.h>
-#include <xmlsec/openssl/app.h>
-#include <xmlsec/openssl/crypto.h>
+#include "wrap_objs.h"
 
-#include "xmlsecmod.h"
+#include "openssl.h"
 
 PyObject *xmlsec_OpenSSLAppInit(PyObject *self, PyObject *args) {
   char *config;

@@ -1,11 +1,9 @@
-#include <xmlsec/keyinfo.h>
-
 typedef struct {
     PyObject_HEAD
     xmlSecKeyInfoCtxPtr obj;
 } xmlSecKeyInfoCtxPtr_object;
 
-#define xmlSecKeyInfoCtxPtr_get(v) (((v) == Py_None) ? NULL : (((xmlSecKeyInfoCtxPtr_object *)(v))->obj))
+#define xmlSecKeyInfoCtxPtr_get(v) (((v) == Py_None) ? NULL : (((xmlSecKeyInfoCtxPtr_object *)(PyObject_GetAttr(v, PyString_FromString("_o"))))->obj))
 
 PyObject *xmlsec_KeyInfoCtxCreate(PyObject *self, PyObject *args);
 PyObject *xmlsec_KeyInfoCtxDestroy(PyObject *self, PyObject *args);

@@ -22,15 +22,12 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <Python.h>
+#include "wrap_objs.h"
 
-#include "xmlsecmod.h"
 #include "buffer.h"
 #include "keys.h"
 
-/*
-  KeyReq : the key requirements information.
-*/
+/* KeyReq : the key requirements information. */
 
 static PyObject *xmlSecKeyReq_dealloc(xmlSecKeyReq_object *self, PyObject *args) {
   PyMem_DEL(self);
@@ -190,15 +187,13 @@ PyObject *xmlsec_KeyReqMatchKey(PyObject *self, PyObject *args) {
     return NULL;
 
   keyReq = keyReq_obj->obj;
-  key = (xmlSecKeyPtr)xmlSecKeyPtr_get(PyObject_GetAttr(key_obj, PyString_FromString("_o")));
+  key = xmlSecKeyPtr_get(key_obj);
   ret = xmlSecKeyReqMatchKey(&keyReq, key);
   
   return Py_BuildValue("i", ret);
 }
 
-/*
-  Key
-*/
+/* Key */
 
 PyObject *xmlsec_KeyCreate(PyObject *self, PyObject *args) {
   xmlSecKeyPtr key;
@@ -216,7 +211,7 @@ PyObject *xmlsec_KeyDestroy(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "O:keyDestroy", &key_obj))
     return NULL;
 
-  key = (xmlSecKeyPtr)xmlSecKeyPtr_get(PyObject_GetAttr(key_obj, PyString_FromString("_o")));
+  key = xmlSecKeyPtr_get(key_obj);
   xmlSecKeyDestroy(key);
 
   return Py_BuildValue("i", 0);
@@ -229,7 +224,7 @@ PyObject *xmlsec_KeyGetName(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "O:keyGetName", &key_obj))
     return NULL;
   
-  key = (xmlSecKeyPtr)xmlSecKeyPtr_get(PyObject_GetAttr(key_obj, PyString_FromString("_o")));
+  key = xmlSecKeyPtr_get(key_obj);
 
   return Py_BuildValue("s", key->name);
 }
@@ -243,7 +238,7 @@ PyObject *xmlsec_KeySetName(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "Os:keySetName", &key_obj, &name))
     return NULL;
 
-  key = (xmlSecKeyPtr)xmlSecKeyPtr_get(PyObject_GetAttr(key_obj, PyString_FromString("_o")));
+  key = xmlSecKeyPtr_get(key_obj);
   ret = xmlSecKeySetName(key, name);
 
   return Py_BuildValue("i", ret);
@@ -299,8 +294,8 @@ PyObject *xmlsec_KeyMatch(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "OzO:keyMatch", &key_obj, &name, &keyReq_obj))
     return NULL;
 
-  key = xmlSecKeyPtr_get(PyObject_GetAttr(key_obj, PyString_FromString("_o")));
-  keyReq = xmlSecKeyReqPtr_get(PyObject_GetAttr(keyReq_obj, PyString_FromString("_o")));
+  key = xmlSecKeyPtr_get(key_obj);
+  keyReq = xmlSecKeyReqPtr_get(keyReq_obj);
   ret = xmlSecKeyMatch(key, name, keyReq);
 
   return Py_BuildValue("i", ret);
@@ -315,7 +310,7 @@ PyObject *xmlsec_KeyReadBuffer(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "OO:keyReadBuffer", &dataId_meth, &buffer_obj))
     return NULL;
 
-  buffer = xmlSecBufferPtr_get(PyObject_GetAttr(buffer_obj, PyString_FromString("_o")));
+  buffer = xmlSecBufferPtr_get(buffer_obj);
   key = xmlSecKeyReadBuffer(PyCObject_AsVoidPtr(dataId_meth), buffer);
   if (key == NULL) {
     Py_INCREF(Py_None);

@@ -22,10 +22,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <Python.h>
-#include <xmlsec/xmlsec.h>
+#include "wrap_objs.c"
 
-#include "xmlsecmod.h"
 #include "list.h"
 
 PyObject *xmlsec_PtrListCreate(PyObject *self, PyObject *args) {
@@ -54,7 +52,7 @@ PyObject *xmlsec_PtrListDestroy(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "O:ptrListDestroy", &list_obj))
     return NULL;
 
-  list = xmlSecPtrListPtr_get(PyObject_GetAttr(list_obj, PyString_FromString("_o")));
+  list = xmlSecPtrListPtr_get(list_obj);
   xmlSecPtrListDestroy(list);
 
   return Py_BuildValue("i", 0);
@@ -68,7 +66,7 @@ PyObject *xmlsec_PtrListAdd(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "OO:ptrListAdd", &list_obj, &item_meth))
     return NULL;
 
-  list = xmlSecPtrListPtr_get(PyObject_GetAttr(list_obj, PyString_FromString("_o")));
+  list = xmlSecPtrListPtr_get(list_obj);
   ret = xmlSecPtrListAdd(list, BAD_CAST PyCObject_AsVoidPtr(item_meth));
   if (ret < 0) {
     PyErr_SetFromErrno(xmlsec_error);
@@ -84,7 +82,8 @@ PyObject *xmlsec_PtrListGetSize(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "O:ptrListGetSize", &list_obj))
     return NULL;
 
-  list = xmlSecPtrListPtr_get(PyObject_GetAttr(list_obj, PyString_FromString("_o")));
+  list = xmlSecPtrListPtr_get(list_obj);
+
   ret = xmlSecPtrListGetSize(list);
   return Py_BuildValue("i", ret);
 }

@@ -22,9 +22,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <Python.h>
+#include "wrap_objs.h"
 
-#include "xmlsecmod.h"
 #include "keyinfo.h"
 #include "x509.h"
 
@@ -39,8 +38,8 @@ PyObject *xmlsec_X509DataGetNodeContent(PyObject *self, PyObject *args) {
 			&deleteChildren, &keyInfoCtx_obj))
     return NULL;
 
-  node = xmlNodePtr_get(PyObject_GetAttr(node_obj, PyString_FromString("_o")));
-  keyInfoCtx = xmlSecKeyInfoCtxPtr_get(PyObject_GetAttr(keyInfoCtx_obj, PyString_FromString("_o")));
+  node = xmlNodePtr_get(node_obj);
+  keyInfoCtx = xmlSecKeyInfoCtxPtr_get(keyInfoCtx_obj);
   ret = xmlSecX509DataGetNodeContent(node, deleteChildren, keyInfoCtx);
 
   return Py_BuildValue("i", ret);

@@ -1,5 +1,3 @@
-#include <xmlsec/keys.h>
-
 typedef struct {
   PyObject_HEAD
   xmlSecKeyReq obj;
@@ -15,8 +13,8 @@ typedef struct {
   xmlSecKeyPtr obj;
 } xmlSecKeyPtr_object;
 
-#define xmlSecKeyPtr_get(v) (((v) == Py_None) ? NULL : (((xmlSecKeyPtr_object *)(v))->obj))
-#define xmlSecKeyReqPtr_get(v) (((v) == Py_None) ? NULL : (((xmlSecKeyReqPtr_object *)(v))->obj))
+#define xmlSecKeyPtr_get(v) (((v) == Py_None) ? NULL : (((xmlSecKeyPtr_object *)(PyObject_GetAttr(v, PyString_FromString("_o"))))->obj))
+#define xmlSecKeyReqPtr_get(v) (((v) == Py_None) ? NULL : (((xmlSecKeyReqPtr_object *)(PyObject_GetAttr(v, PyString_FromString("_o"))))->obj))
 
 PyObject *keys_KeyReqCreate(PyObject *self, PyObject *args);
 PyObject *xmlsec_KeyReqInitialize(PyObject *self, PyObject *args);

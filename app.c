@@ -22,10 +22,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <Python.h>
-#include <xmlsec/crypto.h>
+//#define XMLSEC_CRYPTO_DYNAMIC_LOADING
+#include "wrap_objs.h"
 
-#include "xmlsecmod.h"
+#include "app.h"
 #include "keys.h"
 #include "keysmngr.h"
 
@@ -52,7 +52,7 @@ PyObject *xmlsec_CryptoKeysMngrInit(PyObject *self, PyObject *args) {
 
   if (!PyArg_ParseTuple(args, "O:cryptoKeysMngrInit", &mngr_obj))
     return NULL;
-  mngr = xmlSecKeysMngrPtr_get(PyObject_GetAttr(mngr_obj, PyString_FromString("_o")));
+  mngr = xmlSecKeysMngrPtr_get(mngr_obj);
   ret = xmlSecCryptoKeysMngrInit(mngr);
 
   return Py_BuildValue("i", ret);
@@ -84,7 +84,7 @@ PyObject *xmlsec_CryptoAppDefaultKeysMngrInit(PyObject *self, PyObject *args) {
 
   if (!PyArg_ParseTuple(args, "O:cryptoAppDefaultKeysMngrInit", &mngr_obj))
     return NULL;
-  mngr = xmlSecKeysMngrPtr_get(PyObject_GetAttr(mngr_obj, PyString_FromString("_o")));
+  mngr = xmlSecKeysMngrPtr_get(mngr_obj);
   ret = xmlSecCryptoAppDefaultKeysMngrInit(mngr);
 
   return Py_BuildValue("i", ret);
@@ -99,9 +99,9 @@ PyObject *xmlsec_CryptoAppDefaultKeysMngrAdoptKey(PyObject *self, PyObject *args
   if (!PyArg_ParseTuple(args, "OO:cryptoAppDefaultKeysMngrAdoptKey", &mngr_obj, &key_obj))
     return NULL;
 
-  mngr = xmlSecKeysMngrPtr_get(PyObject_GetAttr(mngr_obj, PyString_FromString("_o")));
-  key = xmlSecKeyPtr_get(PyObject_GetAttr(key_obj, PyString_FromString("_o")));
-  ret = xmlSecOpenSSLAppDefaultKeysMngrAdoptKey(mngr, key);
+  mngr = xmlSecKeysMngrPtr_get(mngr_obj);
+  key = xmlSecKeyPtr_get(key_obj);
+  ret = xmlSecCryptoAppDefaultKeysMngrAdoptKey(mngr, key);
 
   return Py_BuildValue("i", ret);
 }
@@ -115,7 +115,7 @@ PyObject *xmlsec_CryptoAppDefaultKeysMngrLoad(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "Os:cryptoAppDefaultKeysMngrLoad", &mngr_obj, &uri))
     return NULL;
 
-  mngr = xmlSecKeysMngrPtr_get(PyObject_GetAttr(mngr_obj, PyString_FromString("_o")));
+  mngr = xmlSecKeysMngrPtr_get(mngr_obj);
   ret = xmlSecCryptoAppDefaultKeysMngrLoad(mngr, uri);
 
   return Py_BuildValue("i", ret);
@@ -132,7 +132,7 @@ PyObject *xmlsec_CryptoAppDefaultKeysMngrSave(PyObject *self, PyObject *args) {
 			&filename, &type))
     return NULL;
 
-  mngr = xmlSecKeysMngrPtr_get(PyObject_GetAttr(mngr_obj, PyString_FromString("_o")));
+  mngr = xmlSecKeysMngrPtr_get(mngr_obj);
   ret = xmlSecCryptoAppDefaultKeysMngrSave(mngr, filename, type);
 
   return Py_BuildValue("i", ret);
@@ -150,7 +150,7 @@ PyObject *xmlsec_CryptoAppKeysMngrCertLoad(PyObject *self, PyObject *args) {
 			&filename, &format, &type))
     return NULL;
 
-  mngr = xmlSecKeysMngrPtr_get(PyObject_GetAttr(mngr_obj, PyString_FromString("_o")));
+  mngr = xmlSecKeysMngrPtr_get(mngr_obj);
   ret = xmlSecCryptoAppKeysMngrCertLoad(mngr, filename, format, type);
 
   return Py_BuildValue("i", ret);
@@ -213,7 +213,7 @@ PyObject *xmlsec_CryptoAppKeyCertLoad(PyObject *self, PyObject *args) {
 			&format))
     return NULL;
 
-  key = xmlSecKeyPtr_get(PyObject_GetAttr(key_obj, PyString_FromString("_o")));
+  key = xmlSecKeyPtr_get(key_obj);
   ret  = xmlSecCryptoAppKeyCertLoad(key, filename, format);
 
   return Py_BuildValue("i", ret);

@@ -1,11 +1,9 @@
-#include <xmlsec/buffer.h>
-
 typedef struct {
     PyObject_HEAD
     xmlSecBufferPtr obj;
 } xmlSecBufferPtr_object;
 
-#define xmlSecBufferPtr_get(v) (((v) == Py_None) ? NULL : (((xmlSecBufferPtr_object *)(v))->obj))
+#define xmlSecBufferPtr_get(v) (((v) == Py_None) ? NULL : (((xmlSecBufferPtr_object *)(PyObject_GetAttr(v, PyString_FromString("_o"))))->obj))
 
 PyObject *xmlsec_BufferCreate(PyObject *self, PyObject *args);
 PyObject *xmlsec_BufferDestroy(PyObject *self, PyObject *args);

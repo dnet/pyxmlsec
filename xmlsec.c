@@ -22,7 +22,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "xmlsecmod.h"
+#include "wrap_objs.h"
+
 #include "xmlsec.h"
 
 PyObject *xmlsec_Init(PyObject *self, PyObject *args) {

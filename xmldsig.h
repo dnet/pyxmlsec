@@ -1,16 +1,15 @@
-#include <xmlsec/xmldsig.h>
-
 typedef struct {
     PyObject_HEAD
     xmlSecDSigCtxPtr obj;
 } xmlSecDSigCtxPtr_object;
-#define xmlSecDSigCtxPtr_get(v) (((v) == Py_None) ? NULL : (((xmlSecDSigCtxPtr_object *)(v))->obj))
 
 typedef struct {
     PyObject_HEAD
     xmlSecDSigReferenceCtxPtr obj;
 } xmlSecDSigReferenceCtxPtr_object;
-#define xmlSecDSigReferenceCtxPtr_get(v) (((v) == Py_None) ? NULL : (((xmlSecDSigReferenceCtxPtr_object *)(v))->obj))
+
+#define xmlSecDSigCtxPtr_get(v) (((v) == Py_None) ? NULL : (((xmlSecDSigCtxPtr_object *)(PyObject_GetAttr(v, PyString_FromString("_o"))))->obj))
+#define xmlSecDSigReferenceCtxPtr_get(v) (((v) == Py_None) ? NULL : (((xmlSecDSigReferenceCtxPtr_object *)(PyObject_GetAttr(v, PyString_FromString("_o"))))->obj))
 
 PyObject *xmlsec_DSigCtxCreate(PyObject *self, PyObject *args);
 PyObject *xmlsec_DSigCtxDestroy(PyObject *self, PyObject *args);

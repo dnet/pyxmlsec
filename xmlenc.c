@@ -22,9 +22,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <Python.h>
+#include "wrap_objs.h"
 
-#include "xmlsecmod.h"
 #include "keys.h"
 #include "keysmngr.h"
 #include "xmlenc.h"
@@ -39,7 +38,7 @@ PyObject *xmlsec_EncCtxCreate(PyObject *self, PyObject *args) {
     return NULL;
 
   if (keysMngr_obj != Py_None) {
-    keysMngr = xmlSecKeysMngrPtr_get(PyObject_GetAttr(keysMngr_obj, PyString_FromString("_o")));
+    keysMngr = xmlSecKeysMngrPtr_get(keysMngr_obj);
   }
   encCtx = xmlSecEncCtxCreate(keysMngr);
   ret = PyCObject_FromVoidPtrAndDesc((void *) encCtx, (char *) "xmlSecEncCtxPtr", NULL);
@@ -53,7 +52,7 @@ PyObject *xmlsec_EncCtxDestroy(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "O:encCtxDestroy", &encCtx_obj))
     return NULL;
 
-  encCtx = xmlSecEncCtxPtr_get(PyObject_GetAttr(encCtx_obj, PyString_FromString("_o")));
+  encCtx = xmlSecEncCtxPtr_get(encCtx_obj);
   xmlSecEncCtxDestroy(encCtx);
 
   Py_INCREF(Py_None);
@@ -69,8 +68,8 @@ PyObject *xmlsec_EncCtxInitialize(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "OO:encCtxInitialize", &encCtx_obj, &keysMngr_obj))
     return NULL;
 
-  encCtx = xmlSecEncCtxPtr_get(PyObject_GetAttr(encCtx_obj, PyString_FromString("_o")));
-  keysMngr = xmlSecKeysMngrPtr_get(PyObject_GetAttr(keysMngr_obj, PyString_FromString("_o")));
+  encCtx = xmlSecEncCtxPtr_get(encCtx_obj);
+  keysMngr = xmlSecKeysMngrPtr_get(keysMngr_obj);
   
   ret = xmlSecEncCtxInitialize(encCtx, keysMngr);
   if (ret < 0) {
@@ -86,7 +85,7 @@ PyObject *xmlsec_EncCtxFinalize(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "O:encCtxFinalize", &encCtx_obj))
     return NULL;
 
-  encCtx = xmlSecEncCtxPtr_get(PyObject_GetAttr(encCtx_obj, PyString_FromString("_o")));
+  encCtx = xmlSecEncCtxPtr_get(encCtx_obj);
   
   xmlSecEncCtxFinalize(encCtx);
 
@@ -102,8 +101,8 @@ PyObject *xmlsec_EncCtxCopyUserPref(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "OO:encCtxCopyUserPref", &dst_obj, &src_obj))
     return NULL;
 
-  dst = xmlSecEncCtxPtr_get(PyObject_GetAttr(dst_obj, PyString_FromString("_o")));
-  src = xmlSecEncCtxPtr_get(PyObject_GetAttr(src_obj, PyString_FromString("_o")));
+  dst = xmlSecEncCtxPtr_get(dst_obj);
+  src = xmlSecEncCtxPtr_get(src_obj);
 
   ret = xmlSecEncCtxCopyUserPref(dst, src);
   if (ret < 0) {
@@ -119,7 +118,7 @@ PyObject *xmlsec_EncCtxReset(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "O:encCtxReset", &encCtx_obj))
     return NULL;
 
-  encCtx = xmlSecEncCtxPtr_get(PyObject_GetAttr(encCtx_obj, PyString_FromString("_o")));
+  encCtx = xmlSecEncCtxPtr_get(encCtx_obj);
   
   xmlSecEncCtxReset(encCtx);
 
@@ -139,8 +138,8 @@ PyObject *xmlsec_EncCtxBinaryEncrypt(PyObject *self, PyObject *args) {
 			&data, &dataSize))
     return NULL;
 
-  encCtx = xmlSecEncCtxPtr_get(PyObject_GetAttr(encCtx_obj, PyString_FromString("_o")));
-  tmpl = xmlNodePtr_get(PyObject_GetAttr(tmpl_obj, PyString_FromString("_o")));
+  encCtx = xmlSecEncCtxPtr_get(encCtx_obj);
+  tmpl = xmlNodePtr_get(tmpl_obj);
 
   ret = xmlSecEncCtxBinaryEncrypt(encCtx, tmpl, data, dataSize);
   if (ret < 0) {
@@ -159,9 +158,9 @@ PyObject *xmlsec_EncCtxXmlEncrypt(PyObject *self, PyObject *args) {
 			&node_obj))
     return NULL;
 
-  encCtx = xmlSecEncCtxPtr_get(PyObject_GetAttr(encCtx_obj, PyString_FromString("_o")));
-  tmpl = xmlNodePtr_get(PyObject_GetAttr(tmpl_obj, PyString_FromString("_o")));
-  node = xmlNodePtr_get(PyObject_GetAttr(node_obj, PyString_FromString("_o")));
+  encCtx = xmlSecEncCtxPtr_get(encCtx_obj);
+  tmpl = xmlNodePtr_get(tmpl_obj);
+  node = xmlNodePtr_get(node_obj);
 
   ret = xmlSecEncCtxXmlEncrypt(encCtx, tmpl, node);
   if (ret < 0) {
@@ -181,8 +180,8 @@ PyObject *xmlsec_EncCtxUriEncrypt(PyObject *self, PyObject *args) {
 			&uri))
     return NULL;
 
-  encCtx = xmlSecEncCtxPtr_get(PyObject_GetAttr(encCtx_obj, PyString_FromString("_o")));
-  tmpl = xmlNodePtr_get(PyObject_GetAttr(tmpl_obj, PyString_FromString("_o")));
+  encCtx = xmlSecEncCtxPtr_get(encCtx_obj);
+  tmpl = xmlNodePtr_get(tmpl_obj);
 
   ret = xmlSecEncCtxUriEncrypt(encCtx, tmpl, uri);
   if (ret < 0) {
@@ -200,8 +199,8 @@ PyObject *xmlsec_EncCtxDecrypt(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "OO:encCtxDecrypt", &encCtx_obj, &node_obj))
     return NULL;
 
-  encCtx = xmlSecEncCtxPtr_get(PyObject_GetAttr(encCtx_obj, PyString_FromString("_o")));
-  node = xmlNodePtr_get(PyObject_GetAttr(node_obj, PyString_FromString("_o")));
+  encCtx = xmlSecEncCtxPtr_get(encCtx_obj);
+  node = xmlNodePtr_get(node_obj);
 
   ret = xmlSecEncCtxDecrypt(encCtx, node);
   if (ret < 0) {
@@ -220,8 +219,8 @@ PyObject *xmlsec_EncCtxDecryptToBuffer(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "OO:encCtxDecryptToBuffer", &encCtx_obj, &node_obj))
     return NULL;
 
-  encCtx = xmlSecEncCtxPtr_get(PyObject_GetAttr(encCtx_obj, PyString_FromString("_o")));
-  node = xmlNodePtr_get(PyObject_GetAttr(node_obj, PyString_FromString("_o")));
+  encCtx = xmlSecEncCtxPtr_get(encCtx_obj);
+  node = xmlNodePtr_get(node_obj);
 
   buf = xmlSecEncCtxDecryptToBuffer(encCtx, node);
   if (buf == NULL) {
@@ -233,36 +232,32 @@ PyObject *xmlsec_EncCtxDecryptToBuffer(PyObject *self, PyObject *args) {
 }
 
 PyObject *xmlsec_EncCtxDebugDump(PyObject *self, PyObject *args) {
-  PyObject *encCtx_obj;
-  const char *output_path;
+  PyObject *encCtx_obj, *output_obj;
   FILE *output;
   xmlSecEncCtxPtr encCtx;
 
-  if (!PyArg_ParseTuple(args, "Os:encCtxDebugDump", &encCtx_obj, &output_path))
+  if (!PyArg_ParseTuple(args, "Os:encCtxDebugDump", &encCtx_obj, &output_obj))
     return NULL;
 
-  encCtx = xmlSecEncCtxPtr_get(PyObject_GetAttr(encCtx_obj, PyString_FromString("_o")));
-  output = fopen(output_path, "a+");
+  encCtx = xmlSecEncCtxPtr_get(encCtx_obj);
+  output = (FILE *) PyFile_get(output_obj);
   xmlSecEncCtxDebugDump(encCtx, output);
-  fclose(output);
 
   Py_INCREF(Py_None);
   return Py_None;
 }
 
 PyObject *xmlsec_EncCtxDebugXmlDump(PyObject *self, PyObject *args) {
-  PyObject *encCtx_obj;
-  const char *output_path;
+  PyObject *encCtx_obj, *output_obj;
   FILE *output;
   xmlSecEncCtxPtr encCtx;
 
-  if (!PyArg_ParseTuple(args, "Os:encCtxDebugXmlDump", &encCtx_obj, &output_path))
+  if (!PyArg_ParseTuple(args, "Os:encCtxDebugXmlDump", &encCtx_obj, &output_obj))
     return NULL;
 
-  encCtx = xmlSecEncCtxPtr_get(PyObject_GetAttr(encCtx_obj, PyString_FromString("_o")));
-  output = fopen(output_path, "a+");
+  encCtx = xmlSecEncCtxPtr_get(encCtx_obj);
+  output = (FILE *) PyFile_get(output_obj);
   xmlSecEncCtxDebugXmlDump(encCtx, output);
-  fclose(output);
 
   Py_INCREF(Py_None);
   return Py_None;
@@ -277,8 +272,8 @@ PyObject *xmlenc_set_encKey(PyObject *self, PyObject *args) {
 
   if (!PyArg_ParseTuple(args, "OO:encCtxSetEncKey", &encCtx_obj, &encKey_obj))
     return NULL;
-  encCtx = xmlSecEncCtxPtr_get(PyObject_GetAttr(encCtx_obj, PyString_FromString("_o")));
-  encCtx->encKey = xmlSecKeyPtr_get(PyObject_GetAttr(encKey_obj, PyString_FromString("_o")));
+  encCtx = xmlSecEncCtxPtr_get(encCtx_obj);
+  encCtx->encKey = xmlSecKeyPtr_get(encKey_obj);
 
   ret = PyCObject_FromVoidPtrAndDesc((void *) encCtx, (char *) "xmlSecEncCtxPtr", NULL);
   return (ret);
@@ -291,7 +286,7 @@ PyObject *xmlenc_get_result(PyObject *self, PyObject *args) {
 
   if (!PyArg_ParseTuple(args, "O:encCtxGetResult", &encCtx_obj))
     return NULL;
-  encCtx = xmlSecEncCtxPtr_get(PyObject_GetAttr(encCtx_obj, PyString_FromString("_o")));
+  encCtx = xmlSecEncCtxPtr_get(encCtx_obj);
 
   ret = PyCObject_FromVoidPtrAndDesc((void *) encCtx->result, (char *) "xmlSecBufferPtr", NULL);
   return (ret);
@@ -303,7 +298,7 @@ PyObject *xmlenc_get_resultBase64Encoded(PyObject *self, PyObject *args) {
 
   if (!PyArg_ParseTuple(args, "O:encCtxGetResultBase64Encoded", &encCtx_obj))
     return NULL;
-  encCtx = xmlSecEncCtxPtr_get(PyObject_GetAttr(encCtx_obj, PyString_FromString("_o")));
+  encCtx = xmlSecEncCtxPtr_get(encCtx_obj);
 
   return Py_BuildValue("i", encCtx->resultBase64Encoded);
 }
@@ -314,7 +309,7 @@ PyObject *xmlenc_get_resultReplaced(PyObject *self, PyObject *args) {
 
   if (!PyArg_ParseTuple(args, "O:encCtxGetResultReplaced", &encCtx_obj))
     return NULL;
-  encCtx = xmlSecEncCtxPtr_get(PyObject_GetAttr(encCtx_obj, PyString_FromString("_o")));
+  encCtx = xmlSecEncCtxPtr_get(encCtx_obj);
 
   return Py_BuildValue("i", encCtx->resultReplaced);
 }

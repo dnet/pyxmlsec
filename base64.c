@@ -22,9 +22,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <Python.h>
+#include "wrap_objs.h"
 
-#include "xmlsecmod.h"
 #include "base64.h"
 
 PyObject *xmlsec_Base64CtxCreate(PyObject *self, PyObject *args) {
@@ -53,7 +52,7 @@ PyObject *xmlsec_Base64CtxDestroy(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "O:base64CtxDestroy", &ctx_obj))
     return NULL;
 
-  ctx = xmlSecBase64CtxPtr_get(PyObject_GetAttr(ctx_obj, PyString_FromString("_o")));
+  ctx = xmlSecBase64CtxPtr_get(ctx_obj);
   
   xmlSecBase64CtxDestroy(ctx);
 
@@ -71,7 +70,7 @@ PyObject *xmlsec_Base64CtxInitialize(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "Oii:base64CtxInitialize", &ctx_obj, &encode, &columns))
     return NULL;
 
-  ctx = xmlSecBase64CtxPtr_get(PyObject_GetAttr(ctx_obj, PyString_FromString("_o")));
+  ctx = xmlSecBase64CtxPtr_get(ctx_obj);
 
   ret = xmlSecBase64CtxInitialize(ctx, encode, columns);
 
@@ -88,7 +87,7 @@ PyObject *xmlsec_Base64CtxFinalize(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "O:base64CtxFinalize", &ctx_obj))
     return NULL;
 
-  ctx = xmlSecBase64CtxPtr_get(PyObject_GetAttr(ctx_obj, PyString_FromString("_o")));
+  ctx = xmlSecBase64CtxPtr_get(ctx_obj);
   
   xmlSecBase64CtxFinalize(ctx);
 
@@ -109,7 +108,7 @@ PyObject *xmlsec_Base64CtxUpdate(PyObject *self, PyObject *args) {
 			&out, &outSize))
     return NULL;
 
-  ctx = xmlSecBase64CtxPtr_get(PyObject_GetAttr(ctx_obj, PyString_FromString("_o")));
+  ctx = xmlSecBase64CtxPtr_get(ctx_obj);
 
   ret = xmlSecBase64CtxUpdate(ctx, in, inSize, out, outSize);
 
@@ -129,7 +128,7 @@ PyObject *xmlsec_Base64CtxFinal(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "Osisi:base64CtxFinal", &ctx_obj, &out, &outSize))
     return NULL;
 
-  ctx = xmlSecBase64CtxPtr_get(PyObject_GetAttr(ctx_obj, PyString_FromString("_o")));
+  ctx = xmlSecBase64CtxPtr_get(ctx_obj);
 
   ret = xmlSecBase64CtxFinal(ctx, out, outSize);
 

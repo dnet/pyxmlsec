@@ -22,9 +22,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <Python.h>
+#include "wrap_objs.h"
 
-#include "xmlsecmod.h"
 #include "buffer.h"
 
 PyObject *xmlsec_BufferCreate(PyObject *self, PyObject *args) {
@@ -51,7 +50,7 @@ PyObject *xmlsec_BufferDestroy(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "O:bufferDestroy", &buf_obj))
     return NULL;
 
-  buf = xmlSecBufferPtr_get(PyObject_GetAttr(buf_obj, PyString_FromString("_o")));
+  buf = xmlSecBufferPtr_get(buf_obj);
   xmlSecBufferDestroy(buf);
 
   return Py_BuildValue("i", 0);
@@ -66,7 +65,7 @@ PyObject *xmlsec_BufferInitialize(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "Oi:bufferInitialize", &buf_obj, &size))
     return NULL;
 
-  buf = xmlSecBufferPtr_get(PyObject_GetAttr(buf_obj, PyString_FromString("_o")));
+  buf = xmlSecBufferPtr_get(buf_obj);
   
   ret = xmlSecBufferInitialize(buf, size);
   if (ret < 0) {
@@ -82,7 +81,7 @@ PyObject *xmlsec_BufferFinalize(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "O:bufferFinalize", &buf_obj))
     return NULL;
 
-  buf = xmlSecBufferPtr_get(PyObject_GetAttr(buf_obj, PyString_FromString("_o")));
+  buf = xmlSecBufferPtr_get(buf_obj);
   xmlSecBufferFinalize(buf);
 
   return Py_BuildValue("i", 0);
@@ -96,7 +95,7 @@ PyObject *xmlsec_BufferGetData(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "O:bufferGetData", &buf_obj))
     return NULL;
 
-  buf = xmlSecBufferPtr_get(PyObject_GetAttr(buf_obj, PyString_FromString("_o")));
+  buf = xmlSecBufferPtr_get(buf_obj);
   data = xmlSecBufferGetData(buf);
 
   return Py_BuildValue("s", data);
@@ -112,7 +111,7 @@ PyObject *xmlsec_BufferSetData(PyObject *self, PyObject *args) {
     if (!PyArg_ParseTuple(args, "Osi:bufferSetData", &buf_obj, &data, &size))
     return NULL;
 
-  buf = xmlSecBufferPtr_get(PyObject_GetAttr(buf_obj, PyString_FromString("_o")));
+  buf = xmlSecBufferPtr_get(buf_obj);
   ret = xmlSecBufferSetData(buf, data, size);
   
   return Py_BuildValue("i", ret);
@@ -126,7 +125,7 @@ PyObject *xmlsec_BufferGetSize(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "O:bufferGetSize", &buf_obj))
     return NULL;
 
-  buf = xmlSecBufferPtr_get(PyObject_GetAttr(buf_obj, PyString_FromString("_o")));
+  buf = xmlSecBufferPtr_get(buf_obj);
   size = xmlSecBufferGetSize(buf);
 
   return Py_BuildValue("i", size);
@@ -141,7 +140,7 @@ PyObject *xmlsec_BufferSetSize(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "Oi:bufferSetSize", &buf_obj, &size))
     return NULL;
 
-  buf = xmlSecBufferPtr_get(PyObject_GetAttr(buf_obj, PyString_FromString("_o")));
+  buf = xmlSecBufferPtr_get(buf_obj);
   ret = xmlSecBufferSetSize(buf, size);
   
   return Py_BuildValue("i", ret);
@@ -155,7 +154,7 @@ PyObject *xmlsec_BufferGetMaxSize(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "O:bufferGetMaxSize", &buf_obj))
     return NULL;
 
-  buf = xmlSecBufferPtr_get(PyObject_GetAttr(buf_obj, PyString_FromString("_o")));
+  buf = xmlSecBufferPtr_get(buf_obj);
   size = xmlSecBufferGetMaxSize(buf);
 
   return Py_BuildValue("i", size);
@@ -170,7 +169,7 @@ PyObject *xmlsec_BufferSetMaxSize(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "Oi:bufferSetMaxSize", &buf_obj, &size))
     return NULL;
 
-  buf = xmlSecBufferPtr_get(PyObject_GetAttr(buf_obj, PyString_FromString("_o")));
+  buf = xmlSecBufferPtr_get(buf_obj);
   ret = xmlSecBufferSetMaxSize(buf, size);
   
   return Py_BuildValue("i", ret);
@@ -183,7 +182,7 @@ PyObject *xmlsec_BufferEmpty(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "O:bufferEmpty", &buf_obj))
     return NULL;
 
-  buf = xmlSecBufferPtr_get(PyObject_GetAttr(buf_obj, PyString_FromString("_o")));
+  buf = xmlSecBufferPtr_get(buf_obj);
   xmlSecBufferEmpty(buf);
 
   Py_INCREF(Py_None);
@@ -200,7 +199,7 @@ PyObject *xmlsec_BufferAppend(PyObject *self, PyObject *args) {
     if (!PyArg_ParseTuple(args, "Osi:bufferAppend", &buf_obj, &data, &size))
     return NULL;
 
-  buf = xmlSecBufferPtr_get(PyObject_GetAttr(buf_obj, PyString_FromString("_o")));
+  buf = xmlSecBufferPtr_get(buf_obj);
   ret = xmlSecBufferAppend(buf, data, size);
   
   return Py_BuildValue("i", ret);
@@ -216,7 +215,7 @@ PyObject *xmlsec_BufferPrepend(PyObject *self, PyObject *args) {
     if (!PyArg_ParseTuple(args, "Osi:bufferPrepend", &buf_obj, &data, &size))
     return NULL;
 
-  buf = xmlSecBufferPtr_get(PyObject_GetAttr(buf_obj, PyString_FromString("_o")));
+  buf = xmlSecBufferPtr_get(buf_obj);
   ret = xmlSecBufferPrepend(buf, data, size);
   
   return Py_BuildValue("i", ret);
@@ -231,7 +230,7 @@ PyObject *xmlsec_BufferRemoveHead(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "Oi:bufferRemoveHead", &buf_obj, &size))
     return NULL;
 
-  buf = xmlSecBufferPtr_get(PyObject_GetAttr(buf_obj, PyString_FromString("_o")));
+  buf = xmlSecBufferPtr_get(buf_obj);
   ret = xmlSecBufferRemoveHead(buf, size);
   
   return Py_BuildValue("i", ret);
@@ -246,7 +245,7 @@ PyObject *xmlsec_BufferRemoveTail(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "Oi:bufferRemoveTail", &buf_obj, &size))
     return NULL;
 
-  buf = xmlSecBufferPtr_get(PyObject_GetAttr(buf_obj, PyString_FromString("_o")));
+  buf = xmlSecBufferPtr_get(buf_obj);
   ret = xmlSecBufferRemoveTail(buf, size);
   
   return Py_BuildValue("i", ret);
@@ -261,7 +260,7 @@ PyObject *xmlsec_BufferReadFile(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "Os:bufferReadFile", &buf_obj, &filename))
     return NULL;
 
-  buf = xmlSecBufferPtr_get(PyObject_GetAttr(buf_obj, PyString_FromString("_o")));
+  buf = xmlSecBufferPtr_get(buf_obj);
   ret = xmlSecBufferReadFile(buf, filename);
   
   return Py_BuildValue("i", ret);
@@ -276,8 +275,8 @@ PyObject *xmlsec_BufferBase64NodeContentRead(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "OO:bufferBase64NodeContentRead", &buf_obj, &node_obj))
     return NULL;
 
-  buf = xmlSecBufferPtr_get(PyObject_GetAttr(buf_obj, PyString_FromString("_o")));
-  node = xmlNodePtr_get(PyObject_GetAttr(node_obj, PyString_FromString("_o")));
+  buf = xmlSecBufferPtr_get(buf_obj);
+  node = xmlNodePtr_get(node_obj);
   ret = xmlSecBufferBase64NodeContentRead(buf, node);
 
   return Py_BuildValue("i", ret);
@@ -294,8 +293,8 @@ PyObject *xmlsec_BufferBase64NodeContentWrite(PyObject *self, PyObject *args) {
 			&node_obj, &columns))
     return NULL;
 
-  buf = xmlSecBufferPtr_get(PyObject_GetAttr(buf_obj, PyString_FromString("_o")));
-  node = xmlNodePtr_get(PyObject_GetAttr(node_obj, PyString_FromString("_o")));
+  buf = xmlSecBufferPtr_get(buf_obj);
+  node = xmlNodePtr_get(node_obj);
   ret = xmlSecBufferBase64NodeContentWrite(buf, node, columns);
 
   return Py_BuildValue("i", ret);
@@ -310,7 +309,7 @@ PyObject *xmlsec_BufferCreateOutputBuffer(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "O:bufferCreateOutputBuffer", &buf_obj))
     return NULL;
 
-  buf = xmlSecBufferPtr_get(PyObject_GetAttr(buf_obj, PyString_FromString("_o")));
+  buf = xmlSecBufferPtr_get(buf_obj);
   outBuf = xmlSecBufferCreateOutputBuffer(buf);
 
   ret = PyCObject_FromVoidPtrAndDesc((void *) outBuf, (char *) "xmlOutputBufferPtr", NULL);

@@ -22,9 +22,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <Python.h>
+#include "wrap_objs.h"
 
-#include "xmlsecmod.h"
 #include "keyinfo.h"
 #include "keysmngr.h"
 
@@ -44,7 +43,7 @@ PyObject *xmlsec_KeysMngrDestroy(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "O:keysMngrDestroy", &mngr_obj))
     return NULL;
 
-  mngr = xmlSecKeysMngrPtr_get(PyObject_GetAttr(mngr_obj, PyString_FromString("_o")));
+  mngr = xmlSecKeysMngrPtr_get(mngr_obj);
   xmlSecKeysMngrDestroy(mngr);
 
   Py_INCREF(Py_None);
@@ -62,8 +61,8 @@ PyObject *xmlsec_KeysMngrFindKey(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "OsO:keysMngrFindKey", &mngr_obj, &name, &keyInfoCtx_obj))
     return NULL;
  
-  mngr = xmlSecKeysMngrPtr_get(PyObject_GetAttr(mngr_obj, PyString_FromString("_o")));
-  keyInfoCtx = xmlSecKeyInfoCtxPtr_get(PyObject_GetAttr(keyInfoCtx_obj, PyString_FromString("_o")));
+  mngr = xmlSecKeysMngrPtr_get(mngr_obj);
+  keyInfoCtx = xmlSecKeyInfoCtxPtr_get(keyInfoCtx_obj);
   key = xmlSecKeysMngrFindKey(mngr, name, keyInfoCtx);
 
   ret = PyCObject_FromVoidPtrAndDesc((void *) key, (char *) "xmlSecKeyPtr", NULL);
@@ -90,7 +89,7 @@ PyObject *xmlsec_KeyStoreDestroy(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "O:keyStoreDestroy", &store_obj))
     return NULL;
 
-  store = xmlSecKeyStorePtr_get(PyObject_GetAttr(store_obj, PyString_FromString("_o")));
+  store = xmlSecKeyStorePtr_get(store_obj);
   xmlSecKeyStoreDestroy(store);
 
   Py_INCREF(Py_None);
@@ -108,8 +107,8 @@ PyObject *xmlsec_KeyStoreFindKey(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "OsO:keyStoreFindKey", &store_obj, &name, &keyInfoCtx_obj))
     return NULL;
  
-  store = xmlSecKeyStorePtr_get(PyObject_GetAttr(store_obj, PyString_FromString("_o")));
-  keyInfoCtx = xmlSecKeyInfoCtxPtr_get(PyObject_GetAttr(keyInfoCtx_obj, PyString_FromString("_o")));
+  store = xmlSecKeyStorePtr_get(store_obj);
+  keyInfoCtx = xmlSecKeyInfoCtxPtr_get(keyInfoCtx_obj);
   key = xmlSecKeyStoreFindKey(store, name, keyInfoCtx);
 
   ret = PyCObject_FromVoidPtrAndDesc((void *) key, (char *) "xmlSecKeyPtr", NULL);

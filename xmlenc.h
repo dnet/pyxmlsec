@@ -1,11 +1,9 @@
-#include <xmlsec/xmlenc.h>
-
 typedef struct {
     PyObject_HEAD
     xmlSecEncCtxPtr obj;
 } xmlSecEncCtxPtr_object;
 
-#define xmlSecEncCtxPtr_get(v) (((v) == Py_None) ? NULL : (((xmlSecEncCtxPtr_object *)(v))->obj))
+#define xmlSecEncCtxPtr_get(v) (((v) == Py_None) ? NULL : (((xmlSecEncCtxPtr_object *)(PyObject_GetAttr(v, PyString_FromString("_o"))))->obj))
 
 PyObject *xmlsec_EncCtxCreate(PyObject *self, PyObject *args);
 PyObject *xmlsec_EncCtxDestroy(PyObject *self, PyObject *args);

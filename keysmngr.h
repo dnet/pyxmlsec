@@ -1,5 +1,3 @@
-#include <xmlsec/keysmngr.h>
-
 typedef struct {
     PyObject_HEAD
     xmlSecKeysMngrPtr obj;
@@ -10,8 +8,8 @@ typedef struct {
     xmlSecKeyStorePtr obj;
 } xmlSecKeyStorePtr_object;
 
-#define xmlSecKeysMngrPtr_get(v) (((v) == Py_None) ? NULL : (((xmlSecKeysMngrPtr_object *)(v))->obj))
-#define xmlSecKeyStorePtr_get(v) (((v) == Py_None) ? NULL : (((xmlSecKeyStorePtr_object *)(v))->obj))
+#define xmlSecKeysMngrPtr_get(v) (((v) == Py_None) ? NULL : (((xmlSecKeysMngrPtr_object *)(PyObject_GetAttr(v, PyString_FromString("_o"))))->obj))
+#define xmlSecKeyStorePtr_get(v) (((v) == Py_None) ? NULL : (((xmlSecKeyStorePtr_object *)(PyObject_GetAttr(v, PyString_FromString("_o"))))->obj))
 
 PyObject *xmlsec_KeysMngrCreate(PyObject *self, PyObject *args);
 PyObject *xmlsec_KeysMngrDestroy(PyObject *self, PyObject *args);

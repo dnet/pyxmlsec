@@ -22,7 +22,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "xmlsecmod.h"
+#include "wrap_objs.h"
+
 #include "xmltree.h"
 
 PyObject *xmlsec_NodeGetName(PyObject *self, PyObject *args) {
@@ -31,7 +32,7 @@ PyObject *xmlsec_NodeGetName(PyObject *self, PyObject *args) {
 
   if(!PyArg_ParseTuple(args, (char *) "O:NodeGetName", &node_obj))
     return NULL;
-  node = xmlNodePtr_get(PyObject_GetAttr(node_obj, PyString_FromString("_o")));
+  node = xmlNodePtr_get(node_obj);
   return Py_BuildValue("s", xmlSecNodeGetName(node));
 }
 
@@ -41,7 +42,7 @@ PyObject *xmlsec_GetNodeNsHref(PyObject *self, PyObject *args) {
 
   if(!PyArg_ParseTuple(args, (char *) "O:getNodeNsHref", &cur_obj))
     return NULL;
-  cur = xmlNodePtr_get(PyObject_GetAttr(cur_obj, PyString_FromString("_o")));
+  cur = xmlNodePtr_get(cur_obj);
   return Py_BuildValue("s", xmlSecGetNodeNsHref(cur));
 }
 
@@ -53,7 +54,7 @@ PyObject *xmlsec_CheckNodeName(PyObject *self, PyObject *args) {
 
   if(!PyArg_ParseTuple(args, (char *) "Osz:checkNodeName", &cur_obj, &name, &ns))
     return NULL;
-  cur = xmlNodePtr_get(PyObject_GetAttr(cur_obj, PyString_FromString("_o")));
+  cur = xmlNodePtr_get(cur_obj);
   return Py_BuildValue("i", xmlSecCheckNodeName(cur, name, ns));
 }
 
@@ -64,7 +65,7 @@ PyObject *xmlsec_GetNextElementNode(PyObject *self, PyObject *args) {
 
   if(!PyArg_ParseTuple(args, (char *) "O:getNextElementNode", &cur_obj))
     return NULL;
-  cur = xmlNodePtr_get(PyObject_GetAttr(cur_obj, PyString_FromString("_o")));
+  cur = xmlNodePtr_get(cur_obj);
   node = xmlSecGetNextElementNode(cur);
 
   return PyCObject_FromVoidPtrAndDesc((void *) node, (char *) "xmlNodePtr", NULL);
@@ -85,7 +86,7 @@ PyObject *xmlsec_FindChild(PyObject *self, PyObject *args) {
     return NULL;
   }
 
-  parent = xmlNodePtr_get(PyObject_GetAttr(parent_obj, PyString_FromString("_o")));
+  parent = xmlNodePtr_get(parent_obj);
   node = xmlSecFindChild(parent, name, ns);
   return PyCObject_FromVoidPtrAndDesc((void *) node, (char *) "xmlNodePtr", NULL);
 }
@@ -105,7 +106,7 @@ PyObject *xmlsec_FindParent(PyObject *self, PyObject *args) {
     return NULL;
   }
 
-  cur = xmlNodePtr_get(PyObject_GetAttr(cur_obj, PyString_FromString("_o")));
+  cur = xmlNodePtr_get(cur_obj);
   node = xmlSecFindParent(cur, name, ns);
   return PyCObject_FromVoidPtrAndDesc((void *) node, (char *) "xmlNodePtr", NULL);
 }
@@ -125,7 +126,7 @@ PyObject *xmlsec_FindNode(PyObject *self, PyObject *args) {
     return NULL;
   }
 
-  parent = xmlNodePtr_get(PyObject_GetAttr(parent_obj, PyString_FromString("_o")));
+  parent = xmlNodePtr_get(parent_obj);
   node = xmlSecFindNode(parent, name, ns);
   return PyCObject_FromVoidPtrAndDesc((void *) node, (char *) "xmlNodePtr", NULL);
 }
@@ -145,7 +146,7 @@ PyObject *xmlsec_AddChild(PyObject *self, PyObject *args) {
     return NULL;
   }
 
-  parent = xmlNodePtr_get(PyObject_GetAttr(parent_obj, PyString_FromString("_o")));
+  parent = xmlNodePtr_get(parent_obj);
   node = xmlSecAddChild(parent, name, ns);
   return PyCObject_FromVoidPtrAndDesc((void *) node, (char *) "xmlNodePtr", NULL);
 }
@@ -165,7 +166,7 @@ PyObject *xmlsec_AddNextSibling(PyObject *self, PyObject *args) {
     return NULL;
   }
 
-  node = xmlNodePtr_get(PyObject_GetAttr(node_obj, PyString_FromString("_o")));
+  node = xmlNodePtr_get(node_obj);
   new_node = xmlSecAddNextSibling(node, name, ns);
   return PyCObject_FromVoidPtrAndDesc((void *) new_node, (char *) "xmlNodePtr", NULL);
 }
@@ -185,7 +186,7 @@ PyObject *xmlsec_AddPrevSibling(PyObject *self, PyObject *args) {
     return NULL;
   }
 
-  node = xmlNodePtr_get(PyObject_GetAttr(node_obj, PyString_FromString("_o")));
+  node = xmlNodePtr_get(node_obj);
   new_node = xmlSecAddPrevSibling(node, name, ns);
   return PyCObject_FromVoidPtrAndDesc((void *) new_node, (char *) "xmlNodePtr", NULL);
 }
@@ -198,8 +199,8 @@ PyObject *xmlsec_ReplaceNode(PyObject *self, PyObject *args) {
   if(!PyArg_ParseTuple(args, (char *) "OO:replaceNode", &node_obj, &newNode_obj))
     return NULL;
 
-  node = xmlNodePtr_get(PyObject_GetAttr(node_obj, PyString_FromString("_o")));
-  newNode = xmlNodePtr_get(PyObject_GetAttr(newNode_obj, PyString_FromString("_o")));
+  node = xmlNodePtr_get(node_obj);
+  newNode = xmlNodePtr_get(newNode_obj);
 
   return Py_BuildValue("i", xmlSecReplaceNode(node, newNode));
 }
@@ -212,8 +213,8 @@ PyObject *xmlsec_ReplaceContent(PyObject *self, PyObject *args) {
   if(!PyArg_ParseTuple(args, (char *) "OO:replaceContent", &node_obj, &newNode_obj))
     return NULL;
 
-  node = xmlNodePtr_get(PyObject_GetAttr(node_obj, PyString_FromString("_o")));
-  newNode = xmlNodePtr_get(PyObject_GetAttr(newNode_obj, PyString_FromString("_o")));
+  node = xmlNodePtr_get(node_obj);
+  newNode = xmlNodePtr_get(newNode_obj);
 
   return Py_BuildValue("i", xmlSecReplaceContent(node, newNode));
 }
@@ -228,7 +229,7 @@ PyObject *xmlsec_ReplaceNodeBuffer(PyObject *self, PyObject *args) {
 		       &node_obj, &buffer, &size))
     return NULL;
 
-  node = xmlNodePtr_get(PyObject_GetAttr(node_obj, PyString_FromString("_o")));
+  node = xmlNodePtr_get(node_obj);
 
   return Py_BuildValue("i", xmlSecReplaceNodeBuffer(node, buffer, size));
 }
@@ -242,8 +243,8 @@ PyObject *xmlsec_AddIDs(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, (char *) "OOs:addIDs", &doc_obj, &cur_obj, &ids))
     return NULL;
 
-  doc = xmlDocPtr_get(PyObject_GetAttr(doc_obj, PyString_FromString("_o")));
-  cur = xmlNodePtr_get(PyObject_GetAttr(cur_obj, PyString_FromString("_o")));
+  doc = xmlDocPtr_get(doc_obj);
+  cur = xmlNodePtr_get(cur_obj);
 
   // ids should be a list (NULL terminated)
   xmlSecAddIDs(doc, cur, ids);
@@ -271,7 +272,7 @@ PyObject *xmlsec_IsEmptyNode(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, (char *) "O:isEmptyNode", &node_obj))
     return NULL;
 
-  node = xmlNodePtr_get(PyObject_GetAttr(node_obj, PyString_FromString("_o")));
+  node = xmlNodePtr_get(node_obj);
 
   return Py_BuildValue("i", xmlSecIsEmptyNode(node));
 }
