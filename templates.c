@@ -1,4 +1,4 @@
-/* $id$ 
+/* $id:$ 
  *
  * pyxmlsec -- A Python binding for XML Security library (XMLSec)
  *
