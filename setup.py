@@ -171,13 +171,14 @@ extract_libs(xmlsec1_libs)
 #print libraries
 
 em = Extension("xmlsecmod",
-               sources = ["wrap_objs.c",
-                          "xmlsecmod.c", "app.c", "base64.c", "buffer.c",
+               sources = ["utils.c", "wrap_objs.c",
+                          "app.c", "base64.c", "buffer.c",
                           "keyinfo.c", "keys.c", "keysdata.c", "keysmngr.c",
                           "list.c", "membuf.c", "nodeset.c", "parser.c",
                           "templates.c", "transforms.c", "version.c",
                           "xmldsig.c", "xmlenc.c", "xmlsec.c", "xmltree.c",
-                          "x509.c"],
+                          "x509.c",
+                          "xmlsecmod.c"],
                define_macros = define_macros,
                include_dirs  = include_dirs,
                library_dirs  = library_dirs,
@@ -187,7 +188,7 @@ em = Extension("xmlsecmod",
 doclines = __doc__.split("\n")
 
 setup(name = "PyXMLSec",
-      version = "0.20040124",
+      version = "0.20040202",
       description = doclines[0],
       long_description = "\n" . join(doclines[2:]),
       author = "Valéry Febvre",
