@@ -97,10 +97,14 @@ def cryptoKeysMngrInit(mngr):
     """
     return xmlsecmod.cryptoKeysMngrInit(mngr)
 # Key data ids methods
-keyDataDesId  = xmlsecmod.keyDataDesId()
-keyDataDsaId  = xmlsecmod.keyDataDsaId()
-keyDataRsaId  = xmlsecmod.keyDataRsaId()
-keyDataX509Id = xmlsecmod.keyDataX509Id()
+keyDataAesId         = xmlsecmod.keyDataAesId()
+keyDataDesId         = xmlsecmod.keyDataDesId()
+keyDataDsaId         = xmlsecmod.keyDataDsaId()
+keyDataHmacId        = xmlsecmod.keyDataHmacId()
+keyDataRsaId         = xmlsecmod.keyDataRsaId()
+keyDataX509Id        = xmlsecmod.keyDataX509Id()
+keyDataRawX509CertId = xmlsecmod.keyDataRawX509CertId()
+x509StoreId          = xmlsecmod.x509StoreId()
 # Crypto Transforms Ids methods
 transformAes128CbcId     = xmlsecmod.transformAes128CbcId()
 transformAes192CbcId     = xmlsecmod.transformAes192CbcId()
@@ -183,7 +187,7 @@ def cryptoAppKeysMngrCertLoad(mngr, filename, format, type):
     return xmlsecmod.cryptoAppKeysMngrCertLoad(mngr, filename, format, type)
 def cryptoAppKeyLoad(filename, format, pwd, pwdCallback, pwdCallbackCtx):
     """
-    Reads key from the a file.
+    Reads key from filename.
     filename       : the key filename.
     format         : the key file format.
     pwd            : the key file password.
@@ -195,6 +199,35 @@ def cryptoAppKeyLoad(filename, format, pwd, pwdCallback, pwdCallbackCtx):
                                      pwdCallback, pwdCallbackCtx)
     if ret is None: raise parserError('xmlSecCryptoAppKeyLoad() failed')
     return Key(_obj=ret)
+def cryptoAppPkcs12Load(filename, pwd, pwdCallback, pwdCallbackCtx):
+    """
+    Reads key and all associated certificates from the PKCS12 file.
+    For uniformity, call cryptoAppKeyLoad instead of this function.
+    Pass in format=xmlsec.KeyDataFormatPkcs12.
+    filename       : the PKCS12 key filename.
+    pwd            : the PKCS12 file password.
+    pwdCallback    : the password callback.
+    pwdCallbackCtx : the user context for password callback.
+    Returns        : the key or None if an error occurs.
+    """
+    ret = xmlsecmod.cryptoAppPkcs12Load(filename, pwd,
+                                        pwdCallback, pwdCallbackCtx)
+    if ret is None: raise parserError('xmlSecCryptoAppKeyLoad() failed')
+    return Key(_obj=ret)
+def cryptoAppKeyCertLoad(key, filename, format):
+    """
+    Reads the certificate from filename and adds it to key.
+    key      : the key.
+    filename : the certificate filename.
+    format   : the certificate file format.
+    Returns  : 0 on success or a negative value otherwise.
+    """
+    return xmlsecmod.cryptoAppKeyCertLoad(key, filename, format)
+def cryptoAppGetDefaultPwdCallback():
+    """
+    Gets default password callback.
+    """
+    return xmlsecmod.cryptoAppGetDefaultPwdCallback()
 
 ###############################################################################
 # parse.h
