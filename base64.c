@@ -26,23 +26,28 @@
 
 #include "base64.h"
 
+PyObject *wrap_xmlSecBase64CtxPtr(xmlSecBase64CtxPtr ctx) {
+  PyObject *ret;
+
+  if (ctx == NULL) {
+    Py_INCREF(Py_None);
+    return (Py_None);
+  }
+  ret = PyCObject_FromVoidPtrAndDesc((void *) ctx,
+				     (char *) "xmlSecBase64CtxPtr", NULL);
+  return (ret);
+}
+
+/*****************************************************************************/
+
 PyObject *xmlsec_Base64CtxCreate(PyObject *self, PyObject *args) {
   int encode;
   int columns;
-  xmlSecBase64CtxPtr ctx;
-  PyObject *ret;
 
   if (!PyArg_ParseTuple(args, "ii:base64CtxCreate", &encode, &columns))
     return NULL;
 
-  ctx = xmlSecBase64CtxCreate(encode, columns);
-  if (ctx == NULL) {
-    Py_INCREF(Py_None);
-    return Py_None;
-  }
-
-  ret = PyCObject_FromVoidPtrAndDesc((void *) ctx, (char *) "xmlSecBase64CtxPtr", NULL);
-  return (ret);
+  return (wrap_xmlSecBase64CtxPtr(xmlSecBase64CtxCreate(encode, columns)));
 }
 
 PyObject *xmlsec_Base64CtxDestroy(PyObject *self, PyObject *args) {
@@ -57,7 +62,7 @@ PyObject *xmlsec_Base64CtxDestroy(PyObject *self, PyObject *args) {
   xmlSecBase64CtxDestroy(ctx);
 
   Py_INCREF(Py_None);
-  return Py_None;
+  return (Py_None);
 }
 
 PyObject *xmlsec_Base64CtxInitialize(PyObject *self, PyObject *args) {
@@ -65,19 +70,13 @@ PyObject *xmlsec_Base64CtxInitialize(PyObject *self, PyObject *args) {
   int encode;
   int columns;
   xmlSecBase64CtxPtr ctx;
-  int ret;
 
   if (!PyArg_ParseTuple(args, "Oii:base64CtxInitialize", &ctx_obj, &encode, &columns))
     return NULL;
 
   ctx = xmlSecBase64CtxPtr_get(ctx_obj);
 
-  ret = xmlSecBase64CtxInitialize(ctx, encode, columns);
-
-  if (ret < 0) {
-    PyErr_SetFromErrno(xmlsec_error);
-  }
-  return Py_BuildValue("i", ret);
+  return (wrap_int(xmlSecBase64CtxInitialize(ctx, encode, columns)));
 }
 
 PyObject *xmlsec_Base64CtxFinalize(PyObject *self, PyObject *args) {
@@ -92,7 +91,7 @@ PyObject *xmlsec_Base64CtxFinalize(PyObject *self, PyObject *args) {
   xmlSecBase64CtxFinalize(ctx);
 
   Py_INCREF(Py_None);
-  return Py_None;
+  return (Py_None);
 }
 
 PyObject *xmlsec_Base64CtxUpdate(PyObject *self, PyObject *args) {
@@ -102,7 +101,6 @@ PyObject *xmlsec_Base64CtxUpdate(PyObject *self, PyObject *args) {
   xmlSecSize inSize;
   xmlSecByte *out;
   xmlSecSize outSize;
-  int ret;
 
   if (!PyArg_ParseTuple(args, "Osisi:base64CtxUpdate", &ctx_obj, &in, &inSize,
 			&out, &outSize))
@@ -110,12 +108,7 @@ PyObject *xmlsec_Base64CtxUpdate(PyObject *self, PyObject *args) {
 
   ctx = xmlSecBase64CtxPtr_get(ctx_obj);
 
-  ret = xmlSecBase64CtxUpdate(ctx, in, inSize, out, outSize);
-
-  if (ret < 0) {
-    PyErr_SetFromErrno(xmlsec_error);
-  }
-  return Py_BuildValue("i", ret);
+  return (wrap_int(xmlSecBase64CtxUpdate(ctx, in, inSize, out, outSize)));
 }
 
 PyObject *xmlsec_Base64CtxFinal(PyObject *self, PyObject *args) {
@@ -123,52 +116,33 @@ PyObject *xmlsec_Base64CtxFinal(PyObject *self, PyObject *args) {
   xmlSecBase64CtxPtr ctx;
   xmlSecByte *out;
   xmlSecSize outSize;
-  int ret;
 
   if (!PyArg_ParseTuple(args, "Osisi:base64CtxFinal", &ctx_obj, &out, &outSize))
     return NULL;
 
   ctx = xmlSecBase64CtxPtr_get(ctx_obj);
 
-  ret = xmlSecBase64CtxFinal(ctx, out, outSize);
-
-  if (ret < 0) {
-    PyErr_SetFromErrno(xmlsec_error);
-  }
-  return Py_BuildValue("i", ret);
+  return (wrap_int(xmlSecBase64CtxFinal(ctx, out, outSize)));
 }
 
 PyObject *xmlsec_Base64Encode(PyObject *self, PyObject *args) {
   const xmlSecByte *buf;
   xmlSecSize len;
   int columns;
-  xmlChar *ret;
 
   if (!PyArg_ParseTuple(args, "sii:base64Encode", &buf, &len, &columns))
     return NULL;
 
-  ret = xmlSecBase64Encode(buf, len, columns);
-
-  if (ret == NULL) {
-    Py_INCREF(Py_None);
-    return Py_None;
-  }
-  return Py_BuildValue("s", ret);
+  return (wrap_xmlCharPtr(xmlSecBase64Encode(buf, len, columns)));
 }
 
 PyObject *xmlsec_Base64Decode(PyObject *self, PyObject *args) {
   const xmlChar* str;
   xmlSecByte *buf;
   xmlSecSize len;
-  int ret;
 
   if (!PyArg_ParseTuple(args, "sii:base64Decode", &str, &buf, &len))
     return NULL;
 
-  ret = xmlSecBase64Decode(str, buf, len);
-
-  if (ret < 0) {
-    PyErr_SetFromErrno(xmlsec_error);
-  }
-  return Py_BuildValue("i", ret);
+  return (wrap_int(xmlSecBase64Decode(str, buf, len)));
 }

@@ -5,6 +5,8 @@ typedef struct {
 
 #define xmlSecBase64CtxPtr_get(v) (((v) == Py_None) ? NULL : (((xmlSecBase64CtxPtr_object *)(PyObject_GetAttr(v, PyString_FromString("_o"))))->obj))
 
+PyObject *wrap_xmlSecBase64CtxPtr(xmlSecBase64CtxPtr ctx);
+
 PyObject *xmlsec_Base64CtxCreate(PyObject *self, PyObject *args);
 PyObject *xmlsec_Base64CtxDestroy(PyObject *self, PyObject *args);
 PyObject *xmlsec_Base64CtxInitialize(PyObject *self, PyObject *args);
