@@ -1,8 +1,12 @@
-/* pyxmlsec -- A Python binding for XML Security library (XMLSec)
+/* $id$ 
  *
- * Copyright (C) 2003 Valery Febvre <vfebvre@easter-eggs.com>
+ * pyxmlsec -- A Python binding for XML Security library (XMLSec)
+ *
+ * Copyright (C) 2003
  * http://
  * 
+ * Author: Valery Febvre <vfebvre@easter-eggs.com>
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -23,6 +27,7 @@
 #include "xmltree.h"
 #include "xmldsig.h"
 #include "templates.h"
+#include "transforms.h"
 #include "keys.h"
 #include "crypto.h"
 #include "openssl.h"
@@ -44,11 +49,14 @@ static PyMethodDef xmlsec_methods[] = {
   {"dsigCtxGetStatus",  xmldsig_get_status,    METH_VARARGS},
 
   /* crypto.h */
-  {"cryptoAppInit",     xmlsec_CryptoAppInit,     METH_VARARGS},
-  {"cryptoAppKeyLoad",  xmlsec_CryptoAppKeyLoad,  METH_VARARGS},
-  {"cryptoAppShutdown", xmlsec_CryptoAppShutdown, METH_VARARGS},
-  {"cryptoInit",        xmlsec_CryptoInit,        METH_VARARGS},
-  {"cryptoShutdown",    xmlsec_CryptoShutdown,    METH_VARARGS},
+  {"cryptoAppInit",      xmlsec_CryptoAppInit,      METH_VARARGS},
+  {"cryptoAppKeyLoad",   xmlsec_CryptoAppKeyLoad,   METH_VARARGS},
+  {"cryptoAppShutdown",  xmlsec_CryptoAppShutdown,  METH_VARARGS},
+  {"cryptoInit",         xmlsec_CryptoInit,         METH_VARARGS},
+  {"cryptoShutdown",     xmlsec_CryptoShutdown,     METH_VARARGS},
+  {"transformDsaSha1Id", xmlsec_TransformDsaSha1Id, METH_VARARGS},
+  {"transformRsaSha1Id", xmlsec_TransformRsaSha1Id, METH_VARARGS},
+  {"transformSha1Id",    xmlsec_TransformSha1Id,    METH_VARARGS},
 
   /* templates.h */
   {"tmplSignatureCreate",        xmlsec_TmplSignatureCreate,        METH_VARARGS},
@@ -56,6 +64,10 @@ static PyMethodDef xmlsec_methods[] = {
   {"tmplReferenceAddTransform",  xmlsec_TmplReferenceAddTransform,  METH_VARARGS},
   {"tmplSignatureEnsureKeyInfo", xmlsec_TmplSignatureEnsureKeyInfo, METH_VARARGS},
   {"tmplKeyInfoAddKeyName",      xmlsec_TmplKeyInfoAddKeyName,      METH_VARARGS},
+
+  /* transforms.h */
+  {"transformExclC14NId",  xmlsec_TransformExclC14NId,  METH_VARARGS},
+  {"transformEnvelopedId", xmlsec_TransformEnvelopedId, METH_VARARGS},
 
   /* keys.h */
   {"keyCreate",  xmlsec_KeyCreate,  METH_VARARGS},

@@ -22,27 +22,16 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <xmlsec/xmltree.h>
+#include <Python.h>
+#include <xmlsec/transforms.h>
 
 #include "xmlsecmod.h"
-#include "xmltree.h"
+#include "transforms.h"
 
-PyObject *xmlsec_FindNode(PyObject *self, PyObject *args) {
-  PyObject *obj_parent;
-  const xmlChar *name;
-  const xmlChar *ns;
-  xmlNodePtr parent;
-  xmlNodePtr node;
-
-  if(!PyArg_ParseTuple(args, (char *) "Osz:findNode", &obj_parent, &name, &ns))
-    return NULL;
-
-  if (!PyInstance_Check(obj_parent)) {
-    printf("parent isn't an Instance !!!\n");
-    return NULL;
-  }
-
-  parent = PyxmlNode_Get(PyObject_GetAttr(obj_parent, PyString_FromString("_o")));
-  node = xmlSecFindNode((xmlNodePtr)parent, name, ns);
-  return PyCObject_FromVoidPtrAndDesc((void *) node, (char *) "xmlNodePtr", NULL);
+/* Transforms Ids */
+PyObject *xmlsec_TransformExclC14NId(PyObject *self, PyObject *args) {
+  return PyCObject_FromVoidPtr((void *) xmlSecTransformExclC14NId, NULL);
+}
+PyObject *xmlsec_TransformEnvelopedId(PyObject *self, PyObject *args) {
+  return PyCObject_FromVoidPtr((void *) xmlSecTransformEnvelopedId, NULL);
 }

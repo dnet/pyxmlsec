@@ -1,8 +1,12 @@
-/* pyxmlsec -- A Python binding for XML Security library (XMLSec)
+/* $id$ 
  *
- * Copyright (C) 2003 Valery Febvre <vfebvre@easter-eggs.com>
+ * pyxmlsec -- A Python binding for XML Security library (XMLSec)
+ *
+ * Copyright (C) 2003
  * http://
  * 
+ * Author: Valery Febvre <vfebvre@easter-eggs.com>
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -79,4 +83,15 @@ PyObject *xmlsec_CryptoAppKeyLoad(PyObject *self, PyObject *args) {
   key = xmlSecCryptoAppKeyLoad(filename, format, NULL, NULL, NULL);
   ret = PyCObject_FromVoidPtrAndDesc((void *) key, (char *) "xmlSecKeyPtr", NULL);
   return (PyObject *)ret;
+}
+
+/* Crypto transforms ids */
+PyObject *xmlsec_TransformDsaSha1Id(PyObject *self, PyObject *args) {
+  return PyCObject_FromVoidPtr((void  *)xmlSecTransformDsaSha1Id, NULL);
+}
+PyObject *xmlsec_TransformRsaSha1Id(PyObject *self, PyObject *args) {
+  return PyCObject_FromVoidPtr((void  *)xmlSecTransformRsaSha1Id, NULL);
+}
+PyObject *xmlsec_TransformSha1Id(PyObject *self, PyObject *args) {
+  return PyCObject_FromVoidPtr((void  *)xmlSecTransformSha1Id, NULL);
 }

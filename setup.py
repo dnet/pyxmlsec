@@ -13,7 +13,7 @@ setup(name = "pyxmlsec",
       ext_modules = [Extension("xmlsecmod",
                                sources = ["xmlsecmod.c", "xmlsec.c", "xmltree.c",
                                           "xmldsig.c", "crypto.c", "openssl.c",
-                                          "templates.c", "keys.c"],
+                                          "templates.c", "transforms.c", "keys.c"],
                                define_macros = [('XMLSEC_NO_XKMS', '1'),
                                                 ('XMLSEC_CRYPTO', 'openssl'),
                                                 ('XMLSEC_CRYPTO_OPENSSL', '1')],
@@ -23,6 +23,6 @@ setup(name = "pyxmlsec",
                                libraries = ["xmlsec1-openssl", "xmlsec1", "crypto",
                                             "xslt", "xml2", "pthread", "z" ,"m"],
                                )],
-      py_modules = ["xmlsec"]
+      py_modules = ["xmlsec", "xmlsec_strings"]
 )
 
