@@ -65,20 +65,23 @@ static PyMethodDef xmlsec_methods[] = {
   {"transformXmlParserId", xmlsec_TransformXmlParserId, METH_VARARGS},
 
   /* xmlenc.h */
-  {"encCtxCreate",          xmlsec_EncCtxCreate,          METH_VARARGS},
-  {"encCtxDestroy",         xmlsec_EncCtxDestroy,         METH_VARARGS},
-  {"encCtxInitialize",      xmlsec_EncCtxInitialize,      METH_VARARGS},
-  {"encCtxFinalize",        xmlsec_EncCtxFinalize,        METH_VARARGS},
-  {"encCtxCopyUserPref",    xmlsec_EncCtxCopyUserPref,    METH_VARARGS},
-  {"encCtxReset",           xmlsec_EncCtxReset,           METH_VARARGS},
-  {"encCtxBinaryEncrypt",   xmlsec_EncCtxBinaryEncrypt,   METH_VARARGS},
-  {"encCtxXmlEncrypt",      xmlsec_EncCtxXmlEncrypt,      METH_VARARGS},
-  {"encCtxUriEncrypt",      xmlsec_EncCtxUriEncrypt,      METH_VARARGS},
-  {"encCtxDecrypt",         xmlsec_EncCtxDecrypt,         METH_VARARGS},
-  {"encCtxDecryptToBuffer", xmlsec_EncCtxDecryptToBuffer, METH_VARARGS},
-  {"encCtxDebugDump",       xmlsec_EncCtxDebugDump,       METH_VARARGS},
-  {"encCtxDebugXmlDump",    xmlsec_EncCtxDebugXmlDump,    METH_VARARGS},
-  {"encCtxSetEncKey",       xmlenc_set_encKey,            METH_VARARGS}, // New
+  {"encCtxCreate",                 xmlsec_EncCtxCreate,            METH_VARARGS},
+  {"encCtxDestroy",                xmlsec_EncCtxDestroy,           METH_VARARGS},
+  {"encCtxInitialize",             xmlsec_EncCtxInitialize,        METH_VARARGS},
+  {"encCtxFinalize",               xmlsec_EncCtxFinalize,          METH_VARARGS},
+  {"encCtxCopyUserPref",           xmlsec_EncCtxCopyUserPref,      METH_VARARGS},
+  {"encCtxReset",                  xmlsec_EncCtxReset,             METH_VARARGS},
+  {"encCtxBinaryEncrypt",          xmlsec_EncCtxBinaryEncrypt,     METH_VARARGS},
+  {"encCtxXmlEncrypt",             xmlsec_EncCtxXmlEncrypt,        METH_VARARGS},
+  {"encCtxUriEncrypt",             xmlsec_EncCtxUriEncrypt,        METH_VARARGS},
+  {"encCtxDecrypt",                xmlsec_EncCtxDecrypt,           METH_VARARGS},
+  {"encCtxDecryptToBuffer",        xmlsec_EncCtxDecryptToBuffer,   METH_VARARGS},
+  {"encCtxDebugDump",              xmlsec_EncCtxDebugDump,         METH_VARARGS},
+  {"encCtxDebugXmlDump",           xmlsec_EncCtxDebugXmlDump,      METH_VARARGS},
+  {"encCtxSetEncKey",              xmlenc_set_encKey,              METH_VARARGS},
+  {"encCtxGetResult",              xmlenc_get_result,              METH_VARARGS}, // New
+  {"encCtxGetResultBase64Encoded", xmlenc_get_resultBase64Encoded, METH_VARARGS}, // New
+  {"encCtxGetResultReplaced",      xmlenc_get_resultReplaced,      METH_VARARGS}, // New
 
   /* xmltree.h */
   {"nodeGetName",        xmlsec_NodeGetName,        METH_VARARGS},
@@ -143,16 +146,31 @@ static PyMethodDef xmlsec_methods[] = {
   {"transformDsaSha1Id", xmlsec_TransformDsaSha1Id, METH_VARARGS},
   {"transformRsaSha1Id", xmlsec_TransformRsaSha1Id, METH_VARARGS},
   {"transformSha1Id",    xmlsec_TransformSha1Id,    METH_VARARGS},
-  {"keyDataDesId",  xmlsec_KeyDataDesId,  METH_VARARGS}, // New
+  {"keyDataDesId",  xmlsec_KeyDataDesId,  METH_VARARGS},
   {"keyDataDsaId",  xmlsec_KeyDataDsaId,  METH_VARARGS},
   {"keyDataRsaId",  xmlsec_KeyDataRsaId,  METH_VARARGS},
   {"keyDataX509Id", xmlsec_KeyDataX509Id, METH_VARARGS},
 
   /* buffer.h */
-  {"bufferCreate",     xmlsec_BufferCreate,     METH_VARARGS},
-  {"bufferDestroy",    xmlsec_BufferDestroy,    METH_VARARGS},
-  {"bufferInitialize", xmlsec_BufferInitialize, METH_VARARGS},
-  {"bufferFinalize",   xmlsec_BufferFinalize,   METH_VARARGS},
+  {"bufferCreate",                 xmlsec_BufferCreate,                 METH_VARARGS},
+  {"bufferDestroy",                xmlsec_BufferDestroy,                METH_VARARGS},
+  {"bufferInitialize",             xmlsec_BufferInitialize,             METH_VARARGS},
+  {"bufferFinalize",               xmlsec_BufferFinalize,               METH_VARARGS},
+  {"bufferGetData",                xmlsec_BufferGetData,                METH_VARARGS}, // New
+  {"bufferSetData",                xmlsec_BufferSetData,                METH_VARARGS}, // New
+  {"bufferGetSize",                xmlsec_BufferGetSize,                METH_VARARGS}, // New
+  {"bufferSetSize",                xmlsec_BufferSetSize,                METH_VARARGS}, // New
+  {"bufferGetMaxSize",             xmlsec_BufferGetMaxSize,             METH_VARARGS}, // New
+  {"bufferSetMaxSize",             xmlsec_BufferSetMaxSize,             METH_VARARGS}, // New
+  {"bufferEmpty",                  xmlsec_BufferEmpty,                  METH_VARARGS}, // New
+  {"bufferAppend",                 xmlsec_BufferAppend,                 METH_VARARGS}, // New
+  {"bufferPrepend",                xmlsec_BufferPrepend,                METH_VARARGS}, // New
+  {"bufferRemoveHead",             xmlsec_BufferRemoveHead,             METH_VARARGS}, // New
+  {"bufferRemoveTail",             xmlsec_BufferRemoveTail,             METH_VARARGS}, // New
+  {"bufferReadFile",               xmlsec_BufferReadFile,               METH_VARARGS}, // New
+  {"bufferBase64NodeContentRead",  xmlsec_BufferBase64NodeContentRead,  METH_VARARGS}, // New
+  {"bufferBase64NodeContentWrite", xmlsec_BufferBase64NodeContentWrite, METH_VARARGS}, // New
+  {"bufferCreateOutputBuffer",     xmlsec_BufferCreateOutputBuffer,     METH_VARARGS}, // New
 
   /* membuf.h */
   {"transformMemBufId",        xmlsec_TransformMemBufId,        METH_VARARGS},
@@ -194,9 +212,9 @@ static PyMethodDef xmlsec_methods[] = {
   {"keyDestroy",        xmlsec_KeyDestroy,        METH_VARARGS},
   {"keyGetName",        xmlsec_KeySetName,        METH_VARARGS},
   {"keySetName",        xmlsec_KeySetName,        METH_VARARGS},
-  {"keyReadBuffer",     xmlsec_KeyReadBuffer,     METH_VARARGS}, // New
-  {"keyReadBinaryFile", xmlsec_KeyReadBinaryFile, METH_VARARGS}, // New
-  {"keyReadMemory",     xmlsec_KeyReadMemory,     METH_VARARGS}, // New
+  {"keyReadBuffer",     xmlsec_KeyReadBuffer,     METH_VARARGS},
+  {"keyReadBinaryFile", xmlsec_KeyReadBinaryFile, METH_VARARGS},
+  {"keyReadMemory",     xmlsec_KeyReadMemory,     METH_VARARGS},
   /* keyinfo.h */
   {"keyInfoCtxCreate",     xmlsec_KeyInfoCtxCreate,     METH_VARARGS},
   {"keyInfoCtxDestroy",    xmlsec_KeyInfoCtxDestroy,    METH_VARARGS},
