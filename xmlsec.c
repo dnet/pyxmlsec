@@ -1,6 +1,6 @@
 /* $Id$ 
  *
- * pyxmlsec -- A Python binding for XML Security library (XMLSec)
+ * PyXMLSec -- Python bindings for XML Security library (XMLSec)
  *
  * Copyright (C) 2003
  * http://pyxmlsec.labs.libre-entreprise.org

@@ -1,6 +1,6 @@
 /* $Id$ 
  *
- * pyxmlsec -- A Python binding for XML Security library (XMLSec)
+ * PyXMLSec - Python bindings for XML Security library (XMLSec)
  *
  * Copyright (C) 2003 Easter-eggs, Valery Febvre
  * http://pyxmlsec.labs.libre-entreprise.org/
@@ -85,9 +85,9 @@ PyObject *xmlsec_DSigCtxCreate(PyObject *self, PyObject *args) {
   if(!PyArg_ParseTuple(args, (char *) "O:dsigCtxCreate", &mngr_obj))
     return NULL;
 
+  /* mngr may be NULL */
   if (mngr_obj != Py_None)
     mngr = xmlSecKeysMngrPtr_get(PyObject_GetAttr(mngr_obj, PyString_FromString("_o")));
-  /* mngr may be NULL */
   dsigCtx = xmlSecDSigCtxCreate(mngr);
   if (dsigCtx == NULL) {
     PyErr_SetFromErrno(xmlsec_error);
