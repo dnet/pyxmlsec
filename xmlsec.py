@@ -76,32 +76,196 @@ def cryptoKeysMngrInit(mngr):
     """
     return xmlsecmod.cryptoKeysMngrInit(mngr)
 # Key data ids methods
-keyDataAesId         = xmlsecmod.keyDataAesId()
-keyDataDesId         = xmlsecmod.keyDataDesId()
-keyDataDsaId         = xmlsecmod.keyDataDsaId()
-keyDataHmacId        = xmlsecmod.keyDataHmacId()
-keyDataRsaId         = xmlsecmod.keyDataRsaId()
-keyDataX509Id        = xmlsecmod.keyDataX509Id()
-keyDataRawX509CertId = xmlsecmod.keyDataRawX509CertId()
-x509StoreId          = xmlsecmod.x509StoreId()
+def keyDataAesId():
+    """
+    The AES key data id.
+    Returns : AES key data id or None if an error occurs (xmlsec-crypto library
+    is not loaded or the AES key data id is not implemented).
+    """
+    return KeyDataId(_obj=xmlsecmod.keyDataAesId())
+def keyDataDesId():
+    """
+    The DES key data id.
+    Returns : DES key data id or None if an error occurs (xmlsec-crypto library
+    is not loaded or the DES key data id is not implemented).
+    """
+    return KeyDataId(_obj=xmlsecmod.keyDataDesId())
+def keyDataDsaId():
+    """
+    The DSA key data id.
+    Returns : DSA key data id or None if an error occurs (xmlsec-crypto library
+    is not loaded or the DSA key data id is not implemented).
+    """
+    return KeyDataId(_obj=xmlsecmod.keyDataDsaId())
+def keyDataHmacId():
+    """
+    The HMAC key data id.
+    Returns : HMAC key data id or None if an error occurs (xmlsec-crypto
+    library is not loaded or the HMAC key data id is not implemented).
+    """
+    return KeyDataId(_obj=xmlsecmod.keyDataHmacId())
+def keyDataRsaId():
+    """
+    The RSA key data id.
+    Returns : RSA key data id or None if an error occurs (xmlsec-crypto library
+    is not loaded or the RSA key data id is not implemented).
+    """
+    return KeyDataId(_obj=xmlsecmod.keyDataRsaId())
+def keyDataX509Id():
+    """
+    The X509 key data id.
+    Returns : X509 key data id or None if an error occurs (xmlsec-crypto
+    library is not loaded or the X509 key data id is not implemented).
+    """
+    return KeyDataId(_obj=xmlsecmod.keyDataX509Id())
+def keyDataRawX509CertId():
+    """
+    The raw X509 cert key data id.
+    Returns : raw x509 cert key data id or None if an error occurs
+    (xmlsec-crypto library is not loaded or the raw X509 cert key data id is
+    not implemented).
+    """
+    return KeyDataId(_obj=xmlsecmod.keyDataRawX509CertId())
+def x509StoreId():
+    """
+    The X509 certificates key data store id.
+    Returns : X509 certificates key data store id or None if an error occurs
+    (xmlsec-crypto library is not loaded or the raw X509 cert key data id is
+    not implemented).
+    """
+    # FIXME : should return KeyDataStoreId
+    return xmlsecmod.x509StoreId()
 # Crypto Transforms Ids methods
-transformAes128CbcId     = xmlsecmod.transformAes128CbcId()
-transformAes192CbcId     = xmlsecmod.transformAes192CbcId()
-transformAes256CbcId     = xmlsecmod.transformAes256CbcId()
-transformKWAes128Id      = xmlsecmod.transformKWAes128Id()
-transformKWAes192Id      = xmlsecmod.transformKWAes192Id()
-transformKWAes256Id      = xmlsecmod.transformKWAes256Id()
-transformDes3CbcId       = xmlsecmod.transformDes3CbcId()
-transformKWDes3Id        = xmlsecmod.transformKWDes3Id()
-transformDsaSha1Id       = xmlsecmod.transformDsaSha1Id()
-transformHmacSha1Id      = xmlsecmod.transformHmacSha1Id()
-transformHmacRipemd160Id = xmlsecmod.transformHmacRipemd160Id()
-transformHmacMd5Id       = xmlsecmod.transformHmacMd5Id()
-transformRipemd160Id     = xmlsecmod.transformRipemd160Id()
-transformRsaSha1Id       = xmlsecmod.transformRsaSha1Id()
-transformRsaPkcs1Id      = xmlsecmod.transformRsaPkcs1Id()
-transformRsaOaepId       = xmlsecmod.transformRsaOaepId()
-transformSha1Id          = xmlsecmod.transformSha1Id()
+def transformAes128CbcId():
+    """
+    AES 128 CBC encryption transform id.
+    Returns : AES 128 CBC encryption transform id or None if an error occurs
+    (the xmlsec-crypto library is not loaded or this transform is not
+    implemented).
+    """
+    return TransformId(_obj=xmlsecmod.transformAes128CbcId())
+def transformAes192CbcId():
+    """
+    AES 192 CBC encryption transform id.
+    Returns : AES 192 CBC encryption transform id or None if an error occurs
+    (the xmlsec-crypto library is not loaded or this transform is not
+    implemented).
+    """
+    return TransformId(_obj=xmlsecmod.transformAes192CbcId())
+def transformAes256CbcId():
+    """
+    AES 256 CBC encryption transform id.
+    Returns : AES 256 CBC encryption transform id or None if an error occurs
+    (the xmlsec-crypto library is not loaded or this transform is not
+    implemented).
+    """
+    return TransformId(_obj=xmlsecmod.transformAes256CbcId())
+def transformKWAes128Id():
+    """
+    The AES-128 kew wrapper transform id.
+    Returns : AES-128 kew wrapper transform id is or None if an error occurs
+    (the xmlsec-crypto library is not loaded or this transform is not
+    implemented).
+    """
+    return TransformId(_obj=xmlsecmod.transformKWAes128Id())
+def transformKWAes192Id():
+    """
+    The AES-192 kew wrapper transform id.
+    Returns : AES-192 kew wrapper transform id is or None if an error occurs
+    (the xmlsec-crypto library is not loaded or this transform is not
+    implemented).
+    """
+    return TransformId(_obj=xmlsecmod.transformKWAes192Id())
+def transformKWAes256Id():
+    """
+    The AES-256 kew wrapper transform id.
+    Returns : AES-256 kew wrapper transform id is or None if an error occurs
+    (the xmlsec-crypto library is not loaded or this transform is not
+    implemented).
+    """
+    return TransformId(_obj=xmlsecmod.transformKWAes256Id())
+def transformDes3CbcId():
+    """
+    Triple DES CBC encryption transform id.
+    Returns : Triple DES encryption transform id or None if an error occurs
+    (the xmlsec-crypto library is not loaded or this transform is not
+    implemented).
+    """
+    return TransformId(_obj=xmlsecmod.transformDes3CbcId())
+def transformKWDes3Id():
+    """
+    The Triple DES key wrapper transform id.
+    Returns : Triple DES key wrapper transform id or None if an error occurs
+    (the xmlsec-crypto library is not loaded or this transform is not
+    implemented).
+    """
+    return TransformId(_obj=xmlsecmod.transformKWDes3Id())
+def transformDsaSha1Id():
+    """
+    The DSA-SHA1 signature transform id.
+    Returns : DSA-SHA1 signature transform id or None if an error occurs (the
+    xmlsec-crypto library is not loaded or this transform is not implemented).
+    """
+    return TransformId(_obj=xmlsecmod.transformDsaSha1Id())
+def transformHmacSha1Id():
+    """
+    The HMAC-SHA1 transform id.
+    Returns : HMAC-SHA1 transform id or None if an error occurs
+    (the xmlsec-crypto library is not loaded or this transform is not
+    implemented).
+    """
+    return TransformId(_obj=xmlsecmod.transformHmacSha1Id())
+def transformHmacRipemd160Id():
+    """
+    The HMAC-RIPEMD160 transform id.
+    Returns : HMAC-RIPEMD160 transform id or None if an error occurs (the
+    xmlsec-crypto library is not loaded or this transform is not implemented).
+    """
+    return TransformId(_obj=xmlsecmod.transformHmacRipemd160Id())
+def transformHmacMd5Id():
+    """
+    The HMAC-MD5 transform id.
+    Returns : HMAC-MD5 transform id or None if an error occurs (the
+    xmlsec-crypto library is not loaded or this transform is not implemented).
+    """
+    return TransformId(_obj=xmlsecmod.transformHmacMd5Id())
+def transformRipemd160Id():
+    """
+    RIPEMD-160 digest transform id.
+    Returns : RIPEMD-160 digest transform id or None if an error occurs (the
+    xmlsec-crypto library is not loaded or this transform is not implemented).
+    """
+    return TransformId(_obj=xmlsecmod.transformRipemd160Id())
+def transformRsaSha1Id():
+    """
+    The RSA-SHA1 signature transform id.
+    Returns : RSA-SHA1 signature transform id or None if an error occurs (the
+    xmlsec-crypto library is not loaded or this transform is not implemented).
+    """
+    return TransformId(_obj=xmlsecmod.transformRsaSha1Id())
+def transformRsaPkcs1Id():
+    """
+    The RSA-PKCS1 key transport transform id.
+    Returns : RSA-PKCS1 key transport transform id or None if an error occurs
+    (the xmlsec-crypto library is not loaded or this transform is not
+    implemented).
+    """
+    return TransformId(_obj=xmlsecmod.transformRsaPkcs1Id())
+def transformRsaOaepId():
+    """
+    The RSA-OAEP key transport transform id.
+    Returns : RSA-OAEP key transport transform id or None if an error occurs
+    (the xmlsec-crypto library is not loaded or this transform is not
+    implemented).
+    """
+    return TransformId(_obj=xmlsecmod.transformRsaOaepId())
+def transformSha1Id():
+    """
+    SHA-1 digest transform id.
+    Returns : SHA-1 digest transform id or None if an error occurs (the
+    xmlsec-crypto library is not loaded or this transform is not implemented).
+    """
+    return TransformId(_obj=xmlsecmod.transformSha1Id())
 # High level routines form xmlsec command line utility
 def cryptoAppInit(config=None):
     """
@@ -691,11 +855,12 @@ class Key:
         ret = xmlsecmod.keyGetAttr(self, name)
         if ret is None:
             raise AttributeError, name
+        if name == "value":
+            return KeyData(_obj=ret)
         if name == "dataList":
             return PtrList(_obj=ret)
         else:
             # name, usage, notValidBefore, notValidAfter
-            # FIXME -> value (KeyData)
             return ret
     def __setattr__(self, name, value):
         if self.__isprivate(name):
@@ -745,8 +910,7 @@ class Key:
         Gets key value (see also setValue method).
         Returns : key value (crypto material).
         """
-        # FIXME : should return KeyData object
-        return xmlsecmod.keyGetValue(self)
+        return KeyData(_obj=xmlsecmod.keyGetValue(self))
     def setValue(self, value):
         """
         Sets key value (see also setValue method).
@@ -760,16 +924,14 @@ class Key:
         dataId  : the requested data klass.
         Returns : additional data associated with the key.
         """
-        # FIXME : should return KeyData object
-        return xmlsecmod.keyGetData(self)
+        return KeyData(_obj=xmlsecmod.keyGetData(self))
     def ensureData(self, dataId):
         """
         If necessary, creates key data of dataId klass and adds to key.
         dataId  : the requested data klass.
         Returns : key data or None if an error occurs.
         """
-        # FIXME : should return KeyData object
-        return xmlsecmod.keyEnsureData(self, dataId)
+        return KeyData(_obj=xmlsecmod.keyEnsureData(self, dataId))
     def adoptData(self, data):
         """
         Adds data to the key. The data object will be destroyed by key.
@@ -844,8 +1006,11 @@ class KeyReq:
         ret = xmlsecmod.keyReqGetAttr(self, name)
         if ret is None:
             raise AttributeError, name
-        # keyId, keyType, keyUsage, keyBitsSize
-        return ret
+        if name == "keyId":
+            return KeyDataId(_obj=ret)
+        else:
+            # keyType, keyUsage, keyBitsSize
+            return ret
     def __setattr__(self, name, value):
         if self.__isprivate(name):
             self.__dict__[name] = value
@@ -1969,18 +2134,95 @@ class TmplCipherReference(libxml2.xmlNode):
 ###############################################################################
 # transforms.h
 ###############################################################################
-transformBase64Id               = xmlsecmod.transformBase64Id()
-transformInclC14NId             = xmlsecmod.transformInclC14NId()
-transformInclC14NWithCommentsId = xmlsecmod.transformInclC14NWithCommentsId()
-transformExclC14NId             = xmlsecmod.transformExclC14NId()
-transformExclC14NWithCommentsId = xmlsecmod.transformExclC14NWithCommentsId()
-transformEnvelopedId            = xmlsecmod.transformEnvelopedId()
-transformXPathId                = xmlsecmod.transformXPathId()
-transformXPath2Id               = xmlsecmod.transformXPath2Id()
-transformXPointerId             = xmlsecmod.transformXPointerId()
-transformXsltId                 = xmlsecmod.transformXsltId()
-transformRemoveXmlTagsC14NId    = xmlsecmod.transformRemoveXmlTagsC14NId()
-transformVisa3DHackId           = xmlsecmod.transformVisa3DHackId()
+def transformBase64Id():
+    """
+    The Base64 transform id (http://www.w3.org/TR/xmldsig-core/sec-Base-64).
+    The normative specification for base64 decoding transforms is RFC 2045
+    (http://www.ietf.org/rfc/rfc2045.txt).
+    Returns : base64 transform id.
+    """
+    return TransformId(_obj=xmlsecmod.transformBase64Id())
+def transformInclC14NId():
+    """
+    Inclusive (regular) canonicalization that omits comments transform id
+    (http://www.w3.org/TR/xmldsig-core/sec-c14nAlg and
+    http://www.w3.org/TR/2001/REC-xml-c14n-20010315).
+    Returns : c14n transform id.
+    """
+    return TransformId(_obj=xmlsecmod.transformInclC14NId())
+def transformInclC14NWithCommentsId():
+    """
+    Inclusive (regular) canonicalization that includes comments transform id
+    (http://www.w3.org/TR/xmldsig-core/sec-c14nAlg and
+    http://www.w3.org/TR/2001/REC-xml-c14n-20010315).
+    Returns : c14n with comments transform id.
+    """
+    return TransformId(_obj=xmlsecmod.transformInclC14NWithCommentsId())
+def transformExclC14NId():
+    """
+    Exclusive canoncicalization that ommits comments transform id
+    (http://www.w3.org/TR/xml-exc-c14n/).
+    Returns : exclusive c14n transform id.
+    """
+    return TransformId(_obj=xmlsecmod.transformExclC14NId())
+def transformExclC14NWithCommentsId():
+    """
+    Exclusive canoncicalization that includes comments transform id
+    (http://www.w3.org/TR/xml-exc-c14n/).
+    Returns : exclusive c14n with comments transform id.
+    """
+    return TransformId(_obj=xmlsecmod.transformExclC14NWithCommentsId())
+def transformEnvelopedId():
+    """
+    The enveloped transform id
+    (http://www.w3.org/TR/xmldsig-core/sec-EnvelopedSignature).
+    Returns : enveloped transform id.
+    """
+    return TransformId(_obj=xmlsecmod.transformEnvelopedId())
+def transformXPathId():
+    """
+    The XPath transform evaluates given XPath expression and intersects the
+    result with the previous nodes set.
+    (http://www.w3.org/TR/xmldsig-core/sec-XPath).
+    Returns : XPath transform id.
+    """
+    return TransformId(_obj=xmlsecmod.transformXPathId())
+def transformXPath2Id():
+    """
+    The XPath2 transform id (http://www.w3.org/TR/xmldsig-filter2/).
+    Returns : XPath2 transform id.
+    """
+    return TransformId(_obj=xmlsecmod.transformXPath2Id())
+def transformXPointerId():
+    """
+    The XPointer transform id
+    (http://www.ietf.org/internet-drafts/draft-eastlake-xmldsig-uri-02.txt).
+    Returns : XPointer transform id.
+    """
+    return TransformId(_obj=xmlsecmod.transformXPointerId())
+def transformXsltId():
+    """
+    XSLT transform id (http://www.w3.org/TR/xmldsig-core/sec-XSLT).
+    Returns : XSLT transform id.
+    """
+    return TransformId(_obj=xmlsecmod.transformXsltId())
+def transformRemoveXmlTagsC14NId():
+    """
+    The 'remove xml tags' transform id (used before base64 transforms)
+    (http://www.w3.org/TR/xmldsig-core/sec-Base-64).
+    Returns : 'remove xml tags' transform id.
+    """
+    return TransformId(_obj=xmlsecmod.transformRemoveXmlTagsC14NId())
+def transformVisa3DHackId():
+    """
+    Selects node subtree by given node id string. The only reason why we need
+    this is Visa3D protocol. It doesn't follow XML/XPointer/XMLDSig specs and
+    allows something like '12345' in the URI attribute. Since we couldn't
+    evaluate such expressions thru XPath/XPointer engine, we need to have this
+    hack here.
+    Returns : Visa3DHack transform id.
+    """
+    return TransformId(_obj=xmlsecmod.transformVisa3DHackId())
 # The transform execution status
 TransformStatusNone     = 0 # the status unknown.
 TransformStatusWorking  = 1 # the transform is executed.
@@ -2018,6 +2260,7 @@ TransformUsageDigestMethod     = 0x0004 # Transform could be used in <dsig:Diges
 TransformUsageSignatureMethod  = 0x0008 # Transform could be used in <dsig:SignatureMethod>.
 TransformUsageEncryptionMethod = 0x0010 # Transform could be used in <enc:EncryptionMethod>.
 TransformUsageAny              = 0xFFFF # Transform could be used for operation.
+
 def transformUriTypeCheck(type, uri):
     """
     Checks if uri matches expected type type.
@@ -2027,6 +2270,7 @@ def transformUriTypeCheck(type, uri):
     occurs.
     """
     return xmlsecmod.transformUriTypeCheck(type, uri)
+
 class Transform:
     def __init__(self, _obj=None):
         """
@@ -2122,6 +2366,45 @@ class TransformCtx:
         """Resets transfroms context for new processing."""
         xmlsecmod.transformCtxReset(self)
 
+class TransformId:
+    def __init__(self, klassSize=None, objSize=None, name=None, href=None,
+                 usage=None, initialize=None, finalize=None, readNode=None,
+                 writeNode=None, setKeyReq=None, setKey=None, verify=None,
+                 getDataType=None, pushBin=None, popBin=None, pushXml=None,
+                 popXml=None, execute=None, _obj=None):
+        """
+        Creates new transform klass id.
+        klassSize   : the transform klass structure size.
+        objSize     : the transform object size.
+        name        : the transform's name.
+        href        : the transform's identification string (href).
+        usage       : the allowed transforms usages.
+        initialize  : the initialization method.
+        finalize    : the finmalization (destroy) function.
+        readNode    : the XML node read method.
+        writeNode   : the XML node write method.
+        setKeyReq   : the set key requirements method.
+        setKey      : the set key method.
+        verify      : the verify method (for digest and signature transforms).
+        getDataType : the input/output data type query method.
+        pushBin     : the binary data 'push thru chain' processing method.
+        popBin      : the binary data 'pop from chain' procesing method.
+        pushXml     : the XML data 'push thru chain' processing method.
+        popXml      : the XML data 'pop from chain' procesing method.
+        execute     : the low level data processing method used by default
+        implementations of pushBin, popBin, pushXml and popXml.
+        Returns     : new transform klass id or None if an error occurs.
+        """
+        if _obj != None:
+            self._o = _obj
+            return
+        self._o = xmlsecmod.transformIdCreate(klassSize, objSize, name, href,
+                                              usage, initialize, finalize,
+                                              readNode, writeNode, setKeyReq,
+                                              setKey, verify, getDataType,
+                                              pushBin, popBin, pushXml, popXml,
+                                              execute)
+
 ###############################################################################
 # version.h
 ###############################################################################
@@ -2191,6 +2474,12 @@ class DSigCtx:
             return TransformCtx(_obj=ret)
         elif name == "enabledReferenceTransforms":
             return PtrList(_obj=ret)
+        elif name == "defSignMethodId":
+            return TransformId(_obj=ret)
+        elif name == "defC14NMethodId":
+            return TransformId(_obj=ret)
+        elif name == "defDigestMethodId":
+            return TransformId(_obj=ret)
         elif name == "signKey":
             return Key(_obj=ret)
         elif name == "result":
@@ -2209,7 +2498,7 @@ class DSigCtx:
             return PtrList(_obj=ret)
         else:
             # flags, flags2, enabledReferenceUris
-            # FIXME -> defSignMethodId, defC14NMethodId, defDigestMethodId
+            # FIXME -> referencePreExecuteCallback
             # operation, status, id
             return ret
     def __setattr__(self, name, value):
