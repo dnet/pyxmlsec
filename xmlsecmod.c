@@ -65,19 +65,31 @@ static PyMethodDef xmlsec_methods[] = {
   {"getHex",             xmlsec_GetHex,             METH_VARARGS},
 
   /* xmldsig.h */
-  {"dsigCtxCreate",                   xmlsec_DSigCtxCreate,                   METH_VARARGS},
-  {"dsigCtxDestroy",                  xmlsec_DSigCtxDestroy,                  METH_VARARGS},
-  {"dsigCtxInitialize",               xmlsec_DSigCtxInitialize,               METH_VARARGS},
-  {"dsigCtxFinalize",                 xmlsec_DSigCtxFinalize,                 METH_VARARGS},
-  {"dsigCtxSign",                     xmlsec_DSigCtxSign,                     METH_VARARGS},
-  {"dsigCtxVerify",                   xmlsec_DSigCtxVerify,                   METH_VARARGS},
-  {"dsigCtxEnableReferenceTransform", xmlsec_DSigCtxEnableReferenceTransform, METH_VARARGS},
-  {"dsigCtxEnableSignatureTransform", xmlsec_DSigCtxEnableSignatureTransform, METH_VARARGS},
-  {"dsigCtxSetSignKey",               xmldsig_set_signKey,                    METH_VARARGS},
-  {"dsigCtxSetEnabledReferenceUris",  xmldsig_set_enabledReferenceUris,       METH_VARARGS},
-  {"dsigCtxGetStatus",                xmldsig_get_status,                     METH_VARARGS},
-  {"dsigCtxGetKeyInfoReadCtx",        xmldsig_get_keyInfoReadCtx,             METH_VARARGS},
-  {"dsigCtxGetSignedInfoReferences",  xmldsig_get_signedInfoReferences,       METH_VARARGS},
+  {"dsigCtxCreate",                      xmlsec_DSigCtxCreate,                      METH_VARARGS},
+  {"dsigCtxDestroy",                     xmlsec_DSigCtxDestroy,                     METH_VARARGS},
+  {"dsigCtxInitialize",                  xmlsec_DSigCtxInitialize,                  METH_VARARGS},
+  {"dsigCtxFinalize",                    xmlsec_DSigCtxFinalize,                    METH_VARARGS},
+  {"dsigCtxSign",                        xmlsec_DSigCtxSign,                        METH_VARARGS},
+  {"dsigCtxVerify",                      xmlsec_DSigCtxVerify,                      METH_VARARGS},
+  {"dsigCtxEnableReferenceTransform",    xmlsec_DSigCtxEnableReferenceTransform,    METH_VARARGS},
+  {"dsigCtxEnableSignatureTransform",    xmlsec_DSigCtxEnableSignatureTransform,    METH_VARARGS},
+  {"dsigCtxGetPreSignBuffer",            xmlsec_DSigCtxGetPreSignBuffer,            METH_VARARGS}, // New
+  {"dsigCtxDebugDump",                   xmlsec_DSigCtxDebugDump,                   METH_VARARGS}, // New
+  {"dsigCtxDebugXmlDump",                xmlsec_DSigCtxDebugXmlDump,                METH_VARARGS}, // New
+  {"dsigReferenceCtxCreate",             xmlsec_DSigReferenceCtxCreate,             METH_VARARGS}, // New
+  {"dsigReferenceCtxDestroy",            xmlsec_DSigReferenceCtxDestroy,            METH_VARARGS}, // New
+  {"dsigReferenceCtxInitialize",         xmlsec_DSigReferenceCtxInitialize,         METH_VARARGS}, // New
+  {"dsigReferenceCtxFinalize",           xmlsec_DSigReferenceCtxFinalize,           METH_VARARGS}, // New
+  {"dsigReferenceCtxProcessNode",        xmlsec_DSigReferenceCtxProcessNode,        METH_VARARGS}, // New
+  {"dsigReferenceCtxGetPreDigestBuffer", xmlsec_DSigReferenceCtxGetPreDigestBuffer, METH_VARARGS}, // New
+  {"dsigReferenceCtxDebugDump",          xmlsec_DSigReferenceCtxDebugDump,          METH_VARARGS}, // New
+  {"dsigReferenceCtxDebugXmlDump",       xmlsec_DSigReferenceCtxDebugXmlDump,       METH_VARARGS}, // New
+  {"dsigReferenceCtxListId",             xmlsec_DSigReferenceCtxListId,             METH_VARARGS}, // New
+  {"dsigCtxSetSignKey",                  xmldsig_set_signKey,                       METH_VARARGS},
+  {"dsigCtxSetEnabledReferenceUris",     xmldsig_set_enabledReferenceUris,          METH_VARARGS},
+  {"dsigCtxGetStatus",                   xmldsig_get_status,                        METH_VARARGS},
+  {"dsigCtxGetKeyInfoReadCtx",           xmldsig_get_keyInfoReadCtx,                METH_VARARGS},
+  {"dsigCtxGetSignedInfoReferences",     xmldsig_get_signedInfoReferences,          METH_VARARGS},
 
   /* app.h */
   {"cryptoInit",         xmlsec_CryptoInit,         METH_VARARGS},
@@ -99,10 +111,10 @@ static PyMethodDef xmlsec_methods[] = {
   {"keyDataX509Id", xmlsec_KeyDataX509Id, METH_VARARGS},
 
   /* buffer.h */
-  {"bufferCreate",     xmlsec_BufferCreate,     METH_VARARGS}, // New
-  {"bufferDestroy",    xmlsec_BufferDestroy,    METH_VARARGS}, // New
-  {"bufferInitialize", xmlsec_BufferInitialize, METH_VARARGS}, // New
-  {"bufferFinalize",   xmlsec_BufferFinalize,   METH_VARARGS}, // New
+  {"bufferCreate",     xmlsec_BufferCreate,     METH_VARARGS},
+  {"bufferDestroy",    xmlsec_BufferDestroy,    METH_VARARGS},
+  {"bufferInitialize", xmlsec_BufferInitialize, METH_VARARGS},
+  {"bufferFinalize",   xmlsec_BufferFinalize,   METH_VARARGS},
 
   /* list.h  */
   {"ptrListCreate",  xmlsec_PtrListCreate,  METH_VARARGS},
