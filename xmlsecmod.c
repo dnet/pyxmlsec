@@ -271,8 +271,8 @@ void initxmlsecmod(void) {
   m = Py_InitModule("xmlsecmod", xmlsec_methods);
   d = PyModule_GetDict(m);
 
-  xmlsec_error = PyErr_NewException("xmlsec.error", NULL, NULL);
-  PyDict_SetItemString(d, "error", xmlsec_error);
+  xmlsec_error = PyErr_NewException("xmlsecmod.error", NULL, NULL);
+  PyDict_SetItemString(d, "xmlsecmod error", xmlsec_error);
   Py_INCREF(xmlsec_error);
-  PyModule_AddObject(m, "error", xmlsec_error);
+  PyModule_AddObject(m, "xmlsecmod error", xmlsec_error);
 }
