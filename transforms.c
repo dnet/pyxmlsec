@@ -25,7 +25,9 @@
 #include "wrap_objs.h"
 
 #include "transforms.h"
+#include "buffer.h"
 #include "keys.h"
+#include "list.h"
 #include "nodeset.h"
 
 PyObject *wrap_xmlSecTransformCtxPtr(xmlSecTransformCtxPtr ctx) {
@@ -80,6 +82,117 @@ PyObject *xmlsec_TransformUriTypeCheck(PyObject *self, PyObject *args) {
 
 /******************************************************************************/
 /* TransformCtx                                                               */
+/******************************************************************************/
+
+static xmlHashTablePtr TransformCtxPreExecuteCallbacks = NULL;
+
+static int xmlsec_TransformCtxPreExecuteCallback(xmlSecTransformCtxPtr transformCtx) {
+  PyObject *args, *result;
+  PyObject *func = NULL;
+
+  func = xmlHashLookup2(TransformCtxPreExecuteCallbacks,
+			transformCtx->uri, transformCtx->xptrExpr);
+
+  args = Py_BuildValue((char *) "O", wrap_xmlSecTransformCtxPtr(transformCtx));
+
+  Py_INCREF(func);
+  result = PyEval_CallObject(func, args);
+  Py_DECREF(func);
+  Py_DECREF(args);
+
+  return (PyInt_AsLong(result));
+}
+
+PyObject *xmlSecTransformCtx_getattr(PyObject *self, PyObject *args) {
+  PyObject *transformCtx_obj;
+  xmlSecTransformCtxPtr transformCtx;
+  const char *attr;
+
+  if (!PyArg_ParseTuple(args, "Os:transformCtxGetAttr",
+			&transformCtx_obj, &attr))
+    return NULL;
+
+  transformCtx = xmlSecTransformCtxPtr_get(transformCtx_obj);
+
+  if (!strcmp(attr, "__members__"))
+    return Py_BuildValue("[sssssssssss]", "flags",
+			 "flags2", "enabledUris", "enabledTransforms",
+			 "preExecCallback", "result", "status", "uri",
+			 "xptrExpr", "first", "last");
+  if (!strcmp(attr, "flags"))
+    return (wrap_int(transformCtx->flags));
+  if (!strcmp(attr, "flags2"))
+    return (wrap_int(transformCtx->flags2));
+  if (!strcmp(attr, "enabledUris"))
+    return (wrap_int(transformCtx->enabledUris));
+  if (!strcmp(attr, "enabledTransforms"))
+    return (wrap_xmlSecPtrListPtr(&(transformCtx->enabledTransforms)));
+  if (!strcmp(attr, "preExecCallback"))
+    return PyCObject_FromVoidPtr((void *) transformCtx->preExecCallback, NULL);
+  if (!strcmp(attr, "result"))
+    return (wrap_xmlSecBufferPtr(transformCtx->result));
+  if (!strcmp(attr, "status"))
+    return (wrap_int(transformCtx->status));
+  if (!strcmp(attr, "uri"))
+    return (wrap_xmlCharPtr(transformCtx->uri));
+  if (!strcmp(attr, "xptrExpr"))
+    return (wrap_xmlCharPtr(transformCtx->xptrExpr));
+  if (!strcmp(attr, "first"))
+    return (wrap_xmlSecTransformPtr(transformCtx->first));
+  if (!strcmp(attr, "last"))
+    return (wrap_xmlSecTransformPtr(transformCtx->last));
+
+  Py_INCREF(Py_None);
+  return (Py_None);
+}
+
+PyObject *xmlSecTransformCtx_setattr(PyObject *self, PyObject *args) {
+  PyObject *transformCtx_obj, *value_obj;
+  xmlSecTransformCtxPtr transformCtx;
+  const char *name;
+
+  if (!PyArg_ParseTuple(args, "OsO:transformCtxSetAttr",
+			&transformCtx_obj, &name, &value_obj))
+    return NULL;
+
+  transformCtx = xmlSecTransformCtxPtr_get(transformCtx_obj);
+    
+  if (!strcmp(name, "flags"))
+    transformCtx->flags = PyInt_AsLong(value_obj);
+  else if (!strcmp(name, "flags2"))
+    transformCtx->flags2 = PyInt_AsLong(value_obj);
+  else if (!strcmp(name, "enabledUris"))
+    transformCtx->enabledUris = PyInt_AsLong(value_obj);
+  else if (!strcmp(name, "enabledTransforms"))
+    transformCtx->enabledTransforms = *(xmlSecPtrListPtr_get(value_obj));
+  else if (!strcmp(name, "preExecCallback"))
+    if (value_obj != Py_None) {
+      if (TransformCtxPreExecuteCallbacks == NULL)
+	TransformCtxPreExecuteCallbacks = xmlHashCreate(HASH_TABLE_SIZE);
+      xmlHashAddEntry2(TransformCtxPreExecuteCallbacks,
+		       transformCtx->uri, transformCtx->xptrExpr, value_obj);
+      Py_XINCREF(value_obj);
+      transformCtx->preExecCallback = xmlsec_TransformCtxPreExecuteCallback;
+    }
+    else
+      transformCtx->preExecCallback = NULL;
+  else if (!strcmp(name, "result"))
+    transformCtx->result = xmlSecBufferPtr_get(value_obj);
+  else if (!strcmp(name, "status"))
+    transformCtx->status = PyInt_AsLong(value_obj);
+  else if (!strcmp(name, "uri"))
+    transformCtx->uri = PyString_AsString(value_obj);
+  else if (!strcmp(name, "xptrExpr"))
+    transformCtx->xptrExpr = PyString_AsString(value_obj);
+  else if (!strcmp(name, "first"))
+    transformCtx->first = xmlSecTransformPtr_get(value_obj);
+  else if (!strcmp(name, "last"))
+    transformCtx->last = xmlSecTransformPtr_get(value_obj);
+
+  Py_INCREF(Py_None);
+  return (Py_None);
+}
+
 /******************************************************************************/
 
 PyObject *xmlsec_TransformCtxCreate(PyObject *self, PyObject *args) {
@@ -230,10 +343,6 @@ PyObject *xmlsec_TransformSetKeyReq(PyObject *self, PyObject *args) {
   return (wrap_int(ret));
 }
 
-PyObject *xmlsec_TransformBase64Id(PyObject *self, PyObject *args) {
-  return PyCObject_FromVoidPtr((void *) xmlSecTransformBase64Id, NULL);
-}
-
 PyObject *xmlsec_TransformBase64SetLineSize(PyObject *self, PyObject *args) {
   PyObject *transform_obj;
   xmlSecTransformPtr transform;
@@ -248,6 +357,47 @@ PyObject *xmlsec_TransformBase64SetLineSize(PyObject *self, PyObject *args) {
 
   Py_INCREF(Py_None);
   return (Py_None);
+}
+
+PyObject *xmlsec_TransformXPointerSetExpr(PyObject *self, PyObject *args) {
+  PyObject *transform_obj, *hereNode_obj;
+  xmlSecTransformPtr transform;
+  const xmlChar *expr;
+  xmlSecNodeSetType nodeSetType;
+  xmlNodePtr hereNode;
+  int ret;
+
+  if(!PyArg_ParseTuple(args, (char *) "OsiO:transformXPointerSetExpr",
+		       &transform_obj, &expr, &nodeSetType, &hereNode_obj))
+    return NULL;
+
+  transform = xmlSecTransformPtr_get(transform_obj);
+  hereNode = xmlNodePtr_get(hereNode_obj);
+  ret = xmlSecTransformXPointerSetExpr(transform, expr, nodeSetType, hereNode);
+
+  return (wrap_int(ret));
+}
+
+PyObject *xmlsec_TransformVisa3DHackSetID(PyObject *self, PyObject *args) {
+  PyObject *transform_obj;
+  xmlSecTransformPtr transform;
+  const xmlChar *id;
+  int ret;
+
+  if(!PyArg_ParseTuple(args, (char *) "Os:transformVisa3DHackSetID",
+		       &transform_obj, &id))
+    return NULL;
+
+  transform = xmlSecTransformPtr_get(transform_obj);
+  ret = xmlSecTransformVisa3DHackSetID(transform, id);
+
+  return (wrap_int(ret));
+}
+
+/*****************************************************************************/
+
+PyObject *xmlsec_TransformBase64Id(PyObject *self, PyObject *args) {
+  return PyCObject_FromVoidPtr((void *) xmlSecTransformBase64Id, NULL);
 }
 
 PyObject *xmlsec_TransformInclC14NId(PyObject *self, PyObject *args) {
@@ -282,25 +432,6 @@ PyObject *xmlsec_TransformXPointerId(PyObject *self, PyObject *args) {
   return PyCObject_FromVoidPtr((void *) xmlSecTransformXPointerId, NULL);
 }
 
-PyObject *xmlsec_TransformXPointerSetExpr(PyObject *self, PyObject *args) {
-  PyObject *transform_obj, *hereNode_obj;
-  xmlSecTransformPtr transform;
-  const xmlChar *expr;
-  xmlSecNodeSetType nodeSetType;
-  xmlNodePtr hereNode;
-  int ret;
-
-  if(!PyArg_ParseTuple(args, (char *) "OsiO:transformXPointerSetExpr",
-		       &transform_obj, &expr, &nodeSetType, &hereNode_obj))
-    return NULL;
-
-  transform = xmlSecTransformPtr_get(transform_obj);
-  hereNode = xmlNodePtr_get(hereNode_obj);
-  ret = xmlSecTransformXPointerSetExpr(transform, expr, nodeSetType, hereNode);
-
-  return (wrap_int(ret));
-}
-
 PyObject *xmlsec_TransformXsltId(PyObject *self, PyObject *args) {
   return PyCObject_FromVoidPtr((void *) xmlSecTransformXsltId, NULL);
 }
@@ -311,22 +442,6 @@ PyObject *xmlsec_TransformRemoveXmlTagsC14NId(PyObject *self, PyObject *args) {
 
 PyObject *xmlsec_TransformVisa3DHackId(PyObject *self, PyObject *args) {
   return PyCObject_FromVoidPtr((void *) xmlSecTransformVisa3DHackId, NULL);
-}
-
-PyObject *xmlsec_TransformVisa3DHackSetID(PyObject *self, PyObject *args) {
-  PyObject *transform_obj;
-  xmlSecTransformPtr transform;
-  const xmlChar *id;
-  int ret;
-
-  if(!PyArg_ParseTuple(args, (char *) "Os:transformVisa3DHackSetID",
-		       &transform_obj, &id))
-    return NULL;
-
-  transform = xmlSecTransformPtr_get(transform_obj);
-  ret = xmlSecTransformVisa3DHackSetID(transform, id);
-
-  return (wrap_int(ret));
 }
 
 /******************************************************************************/
