@@ -405,7 +405,7 @@ PyObject *xmlsec_PtrListIdCreate(PyObject *self, PyObject *args) {
   PyObject *duplicateItem_obj, *destroyItem_obj;
   PyObject *debugDumpItem_obj, *debugXmlDumpItem_obj;
   const xmlChar *name;
-  xmlSecPtrListId listId;
+  struct _xmlSecPtrListKlass *listId;
 
   if(!PyArg_ParseTuple(args, (char *) "sOOOO:ptrListIdCreate", &name,
 		       &duplicateItem_obj, &destroyItem_obj, &debugDumpItem_obj,
@@ -429,7 +429,7 @@ PyObject *xmlsec_PtrListIdCreate(PyObject *self, PyObject *args) {
   if (debugXmlDumpItem_obj != Py_None)
     xmlHashAddEntry(PtrDebugDumpItemMethods, name, debugXmlDumpItem_obj);
 
-  listId = (xmlSecPtrListId) xmlMalloc(sizeof(xmlSecPtrListKlass));
+  listId = xmlMalloc(sizeof(xmlSecPtrListKlass));
   listId->name = name;
   if (duplicateItem_obj != Py_None)
     listId->duplicateItem = xmlsec_PtrDuplicateItemMethod;

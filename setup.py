@@ -5,10 +5,10 @@
 #
 # PyXMLSec - Python bindings for XML Security library (XMLSec)
 #
-# Copyright (C) 2003-2004 Easter-eggs, Valery Febvre
+# Copyright (C) 2003-2004 Easter-eggs, Valéry Febvre
 # http://pyxmlsec.labs.libre-entreprise.org
 #
-# Author: Valery Febvre <vfebvre@easter-eggs.com>
+# Author: Valéry Febvre <vfebvre@easter-eggs.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

@@ -309,7 +309,9 @@ PyObject *xmlsec_SimpleKeysStoreId(PyObject *self, PyObject *args) {
   return PyCObject_FromVoidPtr((void *) xmlSecSimpleKeysStoreId, NULL);
 }
 
-/*****************************************************************************/
+/******************************************************************************/
+/* KeyStoreId                                                                 */
+/******************************************************************************/
 
 static xmlHashTablePtr KeyStoreInitializeMethods = NULL;
 static xmlHashTablePtr KeyStoreFinalizeMethods   = NULL;
@@ -370,12 +372,14 @@ static xmlSecKeyPtr xmlsec_KeyStoreFindKeyMethod(xmlSecKeyStorePtr store,
   return (xmlSecKeyPtr_get(result));
 }
 
+/******************************************************************************/
+
 PyObject *keysmngr_KeyStoreIdCreate(PyObject *self, PyObject *args) {
   PyObject *initialize_obj, *finalize_obj, *findKey_obj;
   xmlSecSize klassSize;
   xmlSecSize objSize;
   const xmlChar *name;    
-  xmlSecKeyStoreId storeId;
+  struct _xmlSecKeyStoreKlass *storeId;
 
   if(!PyArg_ParseTuple(args, (char *) "iisOOO:keyStoreIdCreate", &klassSize,
 		       &objSize, &name, &initialize_obj, &finalize_obj,
@@ -396,7 +400,7 @@ PyObject *keysmngr_KeyStoreIdCreate(PyObject *self, PyObject *args) {
   if (findKey_obj != Py_None)
     xmlHashAddEntry(KeyStoreFindKeyMethods,    name, findKey_obj);
 
-  storeId = (xmlSecKeyStoreId) xmlMalloc(sizeof(xmlSecKeyStoreKlass));
+  storeId = xmlMalloc(sizeof(xmlSecKeyStoreKlass));
 
   /* FIXME
     storeId->klassSize = klassSize;
