@@ -222,6 +222,35 @@ class TmplSignature(libxml2.xmlNode):
         return TmplReference(xmlsecmod.tmplSignatureAddReference(self,
                                                                  digestMethodId,
                                                                  id, uri, type))
+    def addObject(self, id=None, mimeType=None, encoding=None):
+        """
+        Adds <dsig:Object/> node to the <dsig:Signature/> node.
+        id       : the node id (may be None).
+        mimeType : the object mime type (may be None).
+        encoding : the object encoding (may be None).
+        Returns  : the newly created <dsig:Object/> node or None if
+        an error occurs.
+        """
+        return TmplObject(xmlsecmod.tmplSignatureAddObject(self, id, mimeType,
+                                                           encoding))
+    def getSignMethodNode(self):
+        """
+        Gets <dsig:SignatureMethod/> child of <dsig:KeyInfo/> node.
+        Returns : <dsig:SignatureMethod /> node or None if an error occurs.
+        """
+        _obj = xmlsecmod.tmplSignatureGetSignMethodNode(self)
+        if _obj is None:
+            raise parserError('xmlSecTmplSignatureGetSignMethodNode() failed')
+        return libxml2.xmlNode(_obj=_obj)
+    def getC14NMethodNode(self):
+        """
+        Gets <dsig:CanonicalizationMethod/> child of <dsig:KeyInfo/> node.
+        Returns : <dsig:CanonicalizationMethod /> node or None if an error occurs.
+        """
+        _obj = xmlsecmod.tmplSignatureGetC14NMethodNode(self)
+        if _obj is None:
+            raise parserError('xmlSecTmplSignatureGetC14NMethodNode() failed')
+        return libxml2.xmlNode(_obj=_obj)
     def ensureKeyInfo(self, id=None):
         """
         Adds (if necessary) <dsig:KeyInfo/> node to the <dsig:Signature/> node.
@@ -230,7 +259,6 @@ class TmplSignature(libxml2.xmlNode):
         occurs.
         """
         return TmplKeyInfo(xmlsecmod.tmplSignatureEnsureKeyInfo(self, id))
-
 
 class TmplKeyInfo(libxml2.xmlNode):
     def __init__(self, _obj=None):
@@ -243,19 +271,33 @@ class TmplKeyInfo(libxml2.xmlNode):
         """
         Adds <dsig:KeyName/> node to the <dsig:KeyInfo/> node.
         name    : the key name (optional).
-        Returns : the pointer to the newly created <dsig:KeyName/> node or None
+        Returns : the newly created <dsig:KeyName/> node or None
         if an error occurs.
         """
-        return TmplKeyName(xmlsecmod.tmplKeyInfoAddKeyName(self, name))
-
-
-class TmplKeyName(libxml2.xmlNode):
-    def __init__(self, _obj=None):
-        self._o = None
-        libxml2.xmlNode.__init__(self, _obj=_obj)
-    def __repr__(self):
-        return "<xmlSecTmplKeyName object (%s) at 0x%x>" % (self.name, id (self))
-
+        _obj = xmlsecmod.tmplKeyInfoAddKeyName(self, name)
+        if _obj is None:
+            raise parserError('xmlSecTmplKeyInfoAddKeyName() failed')
+        return libxml2.xmlNode(_obj=_obj)
+    def addKeyValue(self):
+        """
+        Adds <dsig:KeyValue/> node to the <dsig:KeyInfo/> node.
+        Returns : the newly created <dsig:KeyValue/> node or None if an error
+        occurs.
+        """
+        _obj = xmlsecmod.tmplKeyInfoAddKeyValue(self)
+        if _obj is None:
+            raise parserError('xmlSecTmplKeyInfoAddKeyValue() failed')
+        return libxml2.xmlNode(_obj=_obj)
+    def addX509Data(self):
+        """
+        Adds <dsig:X509Data/> node to the <dsig:KeyInfo/> node.
+        Returns : the newly created <dsig:X509Data/> node or None if an error
+        occurs.
+        """
+        _obj = xmlsecmod.tmplKeyInfoAddX509Data(self)
+        if _obj is None:
+            raise parserError('xmlSecTmplKeyInfoAddX509Data() failed')
+        return libxml2.xmlNode(_obj=_obj)
 
 class TmplReference(libxml2.xmlNode):
     def __init__(self, _obj=None):
@@ -271,8 +313,59 @@ class TmplReference(libxml2.xmlNode):
         Returns     : the newly created <dsig:Transform/> node or None if
         an error occurs.
         """
-        return xmlsecmod.tmplReferenceAddTransform(self, transformId)
+        _obj = xmlsecmod.tmplReferenceAddTransform(self, transformId)
+        return libxml2.xmlNode(_obj=_obj)
 
+class TmplObject(libxml2.xmlNode):
+    def __init__(self, _obj=None):
+        self._o = None
+        libxml2.xmlNode.__init__(self, _obj=_obj)
+    def __repr__(self):
+        return "<xmlSecTmplObject object (%s) at 0x%x>" % (self.name,
+                                                           id (self))
+    def addSignProperties(self, id=None, target=None):
+        """
+        Adds <dsig:SignatureProperties/> node to the <dsig:Object/> node.
+        id      : the node id (may be None).
+        target  : the Target (may be None).
+        Returns : the newly created <dsig:SignatureProperties/> node or None
+        if an error occurs.
+        """
+        _obj = xmlsecmod.tmplObjectAddSignProperties(self, id, target)
+        if _obj is None:
+            raise parserError('xmlSecTmplObjectAddSignProperties() failed')
+        return libxml2.xmlNode(_obj=_obj)
+    def addManifest(self, id=None):
+        """
+        Adds <dsig:Manifest/> node to the <dsig:Object/> node.
+        id      : the node id (may be NULL).
+        Returns : the newly created <dsig:Manifest/> node or None if
+        an error occurs.
+        """
+        return TmplManifest(_obj=xmlsecmod.tmplObjectAddManifest(self, id))
+        
+class TmplManifest(libxml2.xmlNode):
+    def __init__(self, _obj=None):
+        self._o = None
+        libxml2.xmlNode.__init__(self, _obj=_obj)
+    def __repr__(self):
+        return "<xmlSecTmplManifest object (%s) at 0x%x>" % (self.name,
+                                                             id (self))
+    def addReference(self, digestMethodId, id=None, uri=None, type=None):
+        """
+        Adds <dsig:Reference/> node with specified URI (uri), Id (id) and Type
+        (type) attributes and the required children <dsig:DigestMethod/> and
+        <dsig:DigestValue/> to the <dsig:Manifest/> node.
+        digestMethodId : the reference digest method.
+        id      : the node id (may be None).
+        uri     : the reference node uri (may be None).
+        type    : the reference node type (may be None).
+        Returns : the newly created <dsig:Reference/> node or None if
+        an error occurs.
+        """
+        _obj = xmlsecmod.tmplManifestAddReference(self, digestMethodId,
+                                                  id, uri, type)
+        return TmplReference(_obj=_obj)
 
 KeyDataTypeUnknown   = 0x0000 # The key data type is unknown (same as #xmlSecKeyDataTypeNone)
 KeyDataTypeNone	     = KeyDataTypeUnknown
