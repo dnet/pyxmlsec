@@ -79,11 +79,19 @@ static PyMethodDef xmlsec_methods[] = {
   {"ptrListGetSize", xmlsec_PtrListGetSize, METH_VARARGS},
 
   /* templates.h */
-  {"tmplSignatureCreate",        xmlsec_TmplSignatureCreate,        METH_VARARGS},
-  {"tmplSignatureAddReference",  xmlsec_TmplSignatureAddReference,  METH_VARARGS},
-  {"tmplReferenceAddTransform",  xmlsec_TmplReferenceAddTransform,  METH_VARARGS},
-  {"tmplSignatureEnsureKeyInfo", xmlsec_TmplSignatureEnsureKeyInfo, METH_VARARGS},
-  {"tmplKeyInfoAddKeyName",      xmlsec_TmplKeyInfoAddKeyName,      METH_VARARGS},
+  {"tmplSignatureCreate",            xmlsec_TmplSignatureCreate,            METH_VARARGS},
+  {"tmplSignatureEnsureKeyInfo",     xmlsec_TmplSignatureEnsureKeyInfo,     METH_VARARGS},
+  {"tmplSignatureAddReference",      xmlsec_TmplSignatureAddReference,      METH_VARARGS},
+  {"tmplSignatureAddObject",         xmlsec_TmplSignatureAddObject,         METH_VARARGS},
+  {"tmplSignatureGetSignMethodNode", xmlsec_TmplSignatureGetSignMethodNode, METH_VARARGS},
+  {"tmplSignatureGetC14NMethodNode", xmlsec_TmplSignatureGetC14NMethodNode, METH_VARARGS},
+  {"tmplReferenceAddTransform",      xmlsec_TmplReferenceAddTransform,      METH_VARARGS},
+  {"tmplObjectAddSignProperties",    xmlsec_TmplObjectAddSignProperties,    METH_VARARGS},
+  {"tmplObjectAddManifest",          xmlsec_TmplObjectAddManifest,          METH_VARARGS},
+  {"tmplManifestAddReference",       xmlsec_TmplManifestAddReference,       METH_VARARGS},
+  {"tmplKeyInfoAddKeyName",          xmlsec_TmplKeyInfoAddKeyName,          METH_VARARGS},
+  {"tmplKeyInfoAddKeyValue",         xmlsec_TmplKeyInfoAddKeyValue,         METH_VARARGS},
+  {"tmplKeyInfoAddX509Data",         xmlsec_TmplKeyInfoAddX509Data,         METH_VARARGS},
 
   /* transforms.h */
   {"transformInclC14NId",  xmlsec_TransformInclC14NId,  METH_VARARGS},
