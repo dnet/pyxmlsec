@@ -41,7 +41,21 @@ static PyMethodDef xmlsec_methods[] = {
   {"shutdown", xmlsec_Shutdown, METH_VARARGS},
 
   /* xmltree.h */
-  {"findNode", xmlsec_FindNode, METH_VARARGS},
+  {"getNodeNsHref",      xmlsec_GetNodeNsHref,      METH_VARARGS},
+  {"checkNodeName",      xmlsec_CheckNodeName,      METH_VARARGS},
+  {"getNextElementNode", xmlsec_GetNextElementNode, METH_VARARGS},
+  {"findChild",          xmlsec_FindNode,           METH_VARARGS},
+  {"findParent",         xmlsec_FindNode,           METH_VARARGS},
+  {"findNode",           xmlsec_FindNode,           METH_VARARGS},
+  {"addChild",           xmlsec_AddChild,           METH_VARARGS},
+  {"addNextSibling",     xmlsec_AddNextSibling,     METH_VARARGS},
+  {"addPrevSibling",     xmlsec_AddPrevSibling,     METH_VARARGS},
+  {"replaceNode",        xmlsec_ReplaceNode,        METH_VARARGS},
+  {"replaceContent",     xmlsec_ReplaceContent,     METH_VARARGS},
+  {"replaceNodeBuffer",  xmlsec_ReplaceNodeBuffer,  METH_VARARGS},
+  {"addIDs",             xmlsec_AddIDs,             METH_VARARGS},
+  {"isHex",              xmlsec_IsHex,              METH_VARARGS},
+  {"getHex",             xmlsec_GetHex,             METH_VARARGS},
 
   /* xmldsig.h */
   {"dsigCtxCreate",                   xmlsec_DSigCtxCreate,                   METH_VARARGS},
@@ -126,6 +140,9 @@ void initxmlsecmod(void) {
   
   m = Py_InitModule("xmlsecmod", xmlsec_methods);
   d = PyModule_GetDict(m);
+
   xmlsec_error = PyErr_NewException("xmlsec.error", NULL, NULL);
   PyDict_SetItemString(d, "error", xmlsec_error);
+  Py_INCREF(xmlsec_error);
+  PyModule_AddObject(m, "error", xmlsec_error);
 }
