@@ -27,16 +27,14 @@
 #include "list.h"
 
 PyObject *xmlsec_PtrListCreate(PyObject *self, PyObject *args) {
-  PyObject *id_obj;
-  xmlSecPtrListId id = NULL;
+  PyObject *id_meth;
   xmlSecPtrListPtr list;
   PyObject *ret;
   
-  if(!PyArg_ParseTuple(args, (char *) "O:ptrListCreate", &id_obj))
+  if(!PyArg_ParseTuple(args, (char *) "O:ptrListCreate", &id_meth))
     return NULL;
 
-  // TODO: get id from id_obj
-  list = xmlSecPtrListCreate(id);
+  list = xmlSecPtrListCreate(PyCObject_AsVoidPtr(id_meth));
   if (list == NULL) {
     PyErr_SetFromErrno(xmlsec_error);
   }
