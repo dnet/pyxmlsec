@@ -421,18 +421,19 @@ class Base64Ctx:
     def finalize(self):
         """Frees all the resources allocated by Base64 context."""
         xmlsecmod.base64CtxDestroy(self)
-    def update(self, in, inSize, out, outSize):
+    def update(self, inBuf, inBufSize, outBuf, outBufSize):
         # FIXME
         """
         Encodes or decodes the next piece of data from input buffer.
-        in      : the input buffer
-        inSize  : the input buffer size
-        out     : the output buffer
-        outSize : the output buffer size
+        inBuf      : the input buffer
+        inBufSize  : the input buffer size
+        outBuf     : the output buffer
+        outBufSize : the output buffer size
         Returns : the number of bytes written to output buffer
         or -1 if an error occurs.
         """
-        return xmlsecmod.base64CtxUpdate(self, in, inSize, out, outSize)
+        return xmlsecmod.base64CtxUpdate(self, inBuf, inBufSize, outBuf,
+                                         outBufSize)
     def final(self, out, outSize):
         # FIXME
         """
@@ -1516,8 +1517,10 @@ class KeyStore:
         _obj = xmlsecmod.keyStoreFindKey(self, name, key_info_ctx)
         if _obj is None: raise Error('xmlSecKeyStoreFindKey() failed')
         return Key(_obj=_obj)
-    
-simpleKeysStoreId = xmlsecmod.simpleKeysStoreId()
+
+def simpleKeysStoreId():
+    """Returns a simple keys store klass id."""
+    return KeyStoreId(_obj=xmlsecmod.simpleKeysStoreId())
 class KeyStoreId:
     def __init__(self, klassSize=None, objSize=None, name=None, initialize=None,
                  finalize=None, findKey=None, _obj=None):
@@ -1691,8 +1694,12 @@ class PtrListId:
 ###############################################################################
 # membuf.h
 ###############################################################################
-# The Memory Buffer transform Id method
-transformMemBufId = xmlsecmod.transformMemBufId()
+def transformMemBufId():
+    """
+    Returns the memory buffer transform id (used to store the data that go
+    through it).
+    """
+    return TransformId(_obj=xmlsecmod.transformMemBufId())
 def transformMemBufGetBuffer(transform):
     """
     Gets the memory buffer transform buffer.
