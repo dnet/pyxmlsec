@@ -71,7 +71,8 @@ PyObject *xmlsec_Base64CtxInitialize(PyObject *self, PyObject *args) {
   int columns;
   xmlSecBase64CtxPtr ctx;
 
-  if (!PyArg_ParseTuple(args, "Oii:base64CtxInitialize", &ctx_obj, &encode, &columns))
+  if (!PyArg_ParseTuple(args, "Oii:base64CtxInitialize",
+			&ctx_obj, &encode, &columns))
     return NULL;
 
   ctx = xmlSecBase64CtxPtr_get(ctx_obj);
@@ -95,34 +96,34 @@ PyObject *xmlsec_Base64CtxFinalize(PyObject *self, PyObject *args) {
 }
 
 PyObject *xmlsec_Base64CtxUpdate(PyObject *self, PyObject *args) {
-  PyObject *ctx_obj;
+  PyObject *ctx_obj, *out_obj;
   xmlSecBase64CtxPtr ctx;
   const xmlSecByte *in;
   xmlSecSize inSize;
-  xmlSecByte *out;
   xmlSecSize outSize;
 
-  if (!PyArg_ParseTuple(args, "Osisi:base64CtxUpdate", &ctx_obj, &in, &inSize,
-			&out, &outSize))
+  if (!PyArg_ParseTuple(args, "OsiOi:base64CtxUpdate", &ctx_obj, &in, &inSize,
+			&out_obj, &outSize))
     return NULL;
 
   ctx = xmlSecBase64CtxPtr_get(ctx_obj);
 
-  return (wrap_int(xmlSecBase64CtxUpdate(ctx, in, inSize, out, outSize)));
+  return (wrap_int(xmlSecBase64CtxUpdate(ctx, in, inSize,
+					 (xmlSecByte *)out_obj, outSize)));
 }
 
 PyObject *xmlsec_Base64CtxFinal(PyObject *self, PyObject *args) {
-  PyObject *ctx_obj;
+  PyObject *ctx_obj, *out_obj;
   xmlSecBase64CtxPtr ctx;
-  xmlSecByte *out;
   xmlSecSize outSize;
 
-  if (!PyArg_ParseTuple(args, "Osisi:base64CtxFinal", &ctx_obj, &out, &outSize))
+  if (!PyArg_ParseTuple(args, "OOi:base64CtxFinal",
+			&ctx_obj, &out_obj, &outSize))
     return NULL;
 
   ctx = xmlSecBase64CtxPtr_get(ctx_obj);
 
-  return (wrap_int(xmlSecBase64CtxFinal(ctx, out, outSize)));
+  return (wrap_int(xmlSecBase64CtxFinal(ctx, (xmlSecByte *)out_obj, outSize)));
 }
 
 PyObject *xmlsec_Base64Encode(PyObject *self, PyObject *args) {
@@ -137,12 +138,12 @@ PyObject *xmlsec_Base64Encode(PyObject *self, PyObject *args) {
 }
 
 PyObject *xmlsec_Base64Decode(PyObject *self, PyObject *args) {
+  PyObject *buf_obj;
   const xmlChar* str;
-  xmlSecByte *buf;
   xmlSecSize len;
 
-  if (!PyArg_ParseTuple(args, "sii:base64Decode", &str, &buf, &len))
+  if (!PyArg_ParseTuple(args, "ssi:base64Decode", &str, &buf_obj, &len))
     return NULL;
 
-  return (wrap_int(xmlSecBase64Decode(str, buf, len)));
+  return (wrap_int(xmlSecBase64Decode(str, (xmlSecByte *)buf_obj, len)));
 }
