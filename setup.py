@@ -32,7 +32,8 @@ import commands
 #print commands.getoutput('pkg-config xmlsec1 --libs')
 
 em = Extension("xmlsecmod",
-               sources = ["xmlsecmod.c", "app.c", "base64.c", "buffer.c",
+               sources = ["wrap_objs.c",
+                          "xmlsecmod.c", "app.c", "base64.c", "buffer.c",
                           "keyinfo.c", "keys.c", "keysmngr.c", "list.c",
                           "membuf.c", "nodeset.c", "parser.c", "templates.c",
                           "transforms.c", "xmldsig.c", "xmlenc.c", "xmlsec.c",
