@@ -4,7 +4,7 @@
 #
 # PyXMLSec - Python bindings for XML Security library (XMLSec)
 #
-# Copyright (C) 2003 Easter-eggs, Valery Febvre
+# Copyright (C) 2003-2004 Easter-eggs, Valery Febvre
 # http://pyxmlsec.labs.libre-entreprise.org
 #
 # Author: Valery Febvre <vfebvre@easter-eggs.com>
@@ -25,7 +25,7 @@
 
 """
 PyXMLSec - Python bindings for XML Security library (XMLSec)
-Copyright (C) 2003 Easter-eggs, Valery Febvre
+Copyright (C) 2003-2004 Easter-eggs, Valery Febvre
 
 Author   : Valery Febvre <vfebvre@easter-eggs.com>
 Homepage : http://pyxmlsec.labs.libre-entreprise.org
