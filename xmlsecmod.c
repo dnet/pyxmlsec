@@ -263,7 +263,7 @@ static PyMethodDef xmlsec_methods[] = {
   {"transformXPointerSetExpr",        xmlsec_TransformXPointerSetExpr,        METH_VARARGS}, // New
   {"transformXsltId",                 xmlsec_TransformXsltId,                 METH_VARARGS}, // New
   {"transformRemoveXmlTagsC14NId",    xmlsec_TransformRemoveXmlTagsC14NId,    METH_VARARGS}, // New
-  {"transformVisa3DHackID",           xmlsec_TransformVisa3DHackId,           METH_VARARGS}, // New
+  {"transformVisa3DHackId",           xmlsec_TransformVisa3DHackId,           METH_VARARGS}, // New
   {"transformVisa3DHackSetID",        xmlsec_TransformVisa3DHackSetID,        METH_VARARGS}, // New
 
   /* keys.h */

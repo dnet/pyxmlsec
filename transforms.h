@@ -12,6 +12,7 @@ typedef struct {
 #define xmlSecTransformCtxPtr_get(v) (((v) == Py_None) ? NULL : (((xmlSecTransformCtxPtr_object *)(PyObject_GetAttr(v, PyString_FromString("_o"))))->obj))
 
 PyObject *xmlsec_TransformUriTypeCheck(PyObject *self, PyObject *args);
+
 PyObject *xmlsec_TransformCtxCreate(PyObject *self, PyObject *args);
 PyObject *xmlsec_TransformCtxDestroy(PyObject *self, PyObject *args);
 PyObject *xmlsec_TransformCtxInitialize(PyObject *self, PyObject *args);
