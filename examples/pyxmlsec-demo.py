@@ -172,6 +172,7 @@ def interface():
     clist.append_row(['Encrypting XML file with a session key and dynamicaly created template'])
     clist.append_row(['Decrypting an encrypted file using a single key'])
     clist.append_row(['Decrypting an encrypted file using keys manager'])
+    clist.append_row(['Decrypting an encrypted file using a custom keys manager'])
     sw_clist.add(clist)
     # Notebook
     ntb = gtk.Notebook()
@@ -228,6 +229,8 @@ def on_clist_row_clicked(selection):
         tview_src.append_text(commands.getoutput('cat ./decrypt1.py'))
     elif row == 11:
         tview_src.append_text(commands.getoutput('cat ./decrypt2.py'))
+    elif row == 12:
+        tview_src.append_text(commands.getoutput('cat ./decrypt3.py'))
 
 def on_clist_row_doubleclicked(treeview, path, treeviewcolumn):
     ntb.set_current_page(1)
@@ -341,6 +344,15 @@ def on_clist_row_doubleclicked(treeview, path, treeviewcolumn):
         tview_exec.append_text('Result', 1)
         tview_exec.append_text('------', 1)
         tview_exec.append_text(commands.getoutput('./decrypt2.py encrypt2-res.xml deskey.bin'), 2)
+    elif row == 12:
+        tview_exec.append_text('Decrypting an encrypted file using a custom keys manager')
+        tview_exec.append_text('-----------------------------------------------')
+        tview_exec.append_text('Doc file encrypt1-res.xml', 1)
+        tview_exec.append_text('-------------------------', 1)
+        tview_exec.append_text(commands.getoutput('cat ./encrypt1-res.xml'), 2)
+        tview_exec.append_text('Result', 1)
+        tview_exec.append_text('------', 1)
+        tview_exec.append_text(commands.getoutput('./decrypt3.py encrypt1-res.xml'), 2)
 
 if __name__ == '__main__':
     interface()
