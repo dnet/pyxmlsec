@@ -4,7 +4,31 @@ PyObject *wrap_int(int val) {
   return (Py_BuildValue("i", val));
 }
 
-PyObject *wrap_str(char *str) {
+PyObject *wrap_charPtr(char *str) {
+  PyObject *ret;
+
+  if (str == NULL) {
+    Py_INCREF(Py_None);
+    return (Py_None);
+  }
+  /* deallocation */
+  free (str);
+  ret = PyString_FromString(str);
+  return (ret);
+}
+
+PyObject *wrap_charPtrConst(const char *str) {
+  PyObject *ret;
+
+  if (str == NULL) {
+    Py_INCREF(Py_None);
+    return (Py_None);
+  }
+  ret = PyString_FromString(str);
+  return (ret);
+}
+
+PyObject *wrap_xmlCharPtr(xmlChar *str) {
   PyObject *ret;
 
   if (str == NULL) {
@@ -12,11 +36,23 @@ PyObject *wrap_str(char *str) {
     return (Py_None);
   }
   ret = PyString_FromString((char *) str);
+  /* deallocation */
   xmlFree(str);
   return (ret);
 }
 
-/* functions for libxml objects */
+PyObject *wrap_xmlCharPtrConst(const xmlChar *str) {
+  PyObject *ret;
+
+  if (str == NULL) {
+    Py_INCREF(Py_None);
+    return (Py_None);
+  }
+  ret = PyString_FromString((char *) str);
+  return (ret);
+}
+
+/* Functions for libxml objects */
 
 PyObject *wrap_xmlDocPtr(xmlDocPtr doc) {
   PyObject *ret;

@@ -57,7 +57,10 @@ PyObject *xmlsec_error;
 /* wrapper functions */
 
 PyObject *wrap_int(int val);
-PyObject *wrap_str(char *str);
+PyObject *wrap_charPtr(char *str);
+PyObject *wrap_charPtrConst(const char *str);
+PyObject *wrap_xmlCharPtr(xmlChar *str);
+PyObject *wrap_xmlCharPtrConst(const xmlChar *str);
 
 PyObject *wrap_xmlDocPtr(xmlDocPtr doc);
 PyObject *wrap_xmlNodePtr(xmlNodePtr node);
