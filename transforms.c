@@ -2,8 +2,8 @@
  *
  * pyxmlsec -- A Python binding for XML Security library (XMLSec)
  *
- * Copyright (C) 2003
- * http://
+ * Copyright (C) 2003 Easter-eggs, Valery Febvre
+ * http://pyxmlsec.labs.libre-entreprise.org/
  * 
  * Author: Valery Febvre <vfebvre@easter-eggs.com>
  *
@@ -23,7 +23,6 @@
  */
 
 #include <Python.h>
-#include <xmlsec/transforms.h>
 
 #include "xmlsecmod.h"
 #include "transforms.h"

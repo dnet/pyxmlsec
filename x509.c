@@ -26,6 +26,7 @@
 
 #include "xmlsecmod.h"
 #include "keyinfo.h"
+#include "x509.h"
 
 PyObject *xmlsec_X509DataGetNodeContent(PyObject *self, PyObject *args) {
   PyObject *node_obj, *keyInfoCtx_obj;
