@@ -31,7 +31,7 @@ PyObject *xmlsec_NodeGetName(PyObject *self, PyObject *args) {
   xmlNodePtr node;
 
   if (CheckArgs(args, "O:nodeGetName")) {
-    if(!PyArg_ParseTuple(args, (char *) "O:NodeGetName", &node_obj))
+    if(!PyArg_ParseTuple(args, (char *) "O:nodeGetName", &node_obj))
       return NULL;
   }
   else return NULL;
@@ -119,7 +119,8 @@ PyObject *xmlsec_FindParent(PyObject *self, PyObject *args) {
   xmlNodePtr node;
 
   if (CheckArgs(args, "OSs:findParent")) {
-    if(!PyArg_ParseTuple(args, (char *) "Osz:findParent", &cur_obj, &name, &ns))
+    if(!PyArg_ParseTuple(args, (char *) "Osz:findParent",
+			 &cur_obj, &name, &ns))
       return NULL;
   }
   else return NULL;
@@ -158,7 +159,8 @@ PyObject *xmlsec_AddChild(PyObject *self, PyObject *args) {
   xmlNodePtr node;
 
   if (CheckArgs(args, "OSs:addChild")) {
-    if(!PyArg_ParseTuple(args, (char *) "Osz:addChild", &parent_obj, &name, &ns))
+    if(!PyArg_ParseTuple(args, (char *) "Osz:addChild",
+			 &parent_obj, &name, &ns))
       return NULL;
   }
   else return NULL;
