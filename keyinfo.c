@@ -25,7 +25,85 @@
 #include <Python.h>
 
 #include "xmlsecmod.h"
+#include "keysmngr.h"
 #include "keyinfo.h"
+
+PyObject *xmlsec_KeyInfoCtxCreate(PyObject *self, PyObject *args) {
+  PyObject *mngr_obj;
+  xmlSecKeysMngrPtr mngr = NULL;
+  xmlSecKeyInfoCtxPtr keyInfoCtx;
+  PyObject *ret;
+
+  if (!PyArg_ParseTuple(args, "O:keyInfoCtxCreate", &mngr_obj))
+    return NULL;
+
+  if (mngr_obj != Py_None)
+    mngr = xmlSecKeysMngrPtr_get(PyObject_GetAttr(mngr_obj, PyString_FromString("_o")));
+  /* mngr may be NULL */
+  keyInfoCtx = xmlSecKeyInfoCtxCreate(mngr);
+
+  ret = PyCObject_FromVoidPtrAndDesc((void *) keyInfoCtx, (char *) "xmlSecKeyInfoCtxPtr", NULL);
+  return (ret);
+}
+
+PyObject *xmlsec_KeyInfoCtxDestroy(PyObject *self, PyObject *args) {
+  PyObject *keyInfoCtx_obj;
+  xmlSecKeyInfoCtxPtr keyInfoCtx;
+
+  if (!PyArg_ParseTuple(args, "O:keyInfoCtxDestroy", &keyInfoCtx_obj))
+    return NULL;
+
+  keyInfoCtx = xmlSecKeyInfoCtxPtr_get(PyObject_GetAttr(keyInfoCtx_obj, PyString_FromString("_o")));
+  xmlSecKeyInfoCtxDestroy(keyInfoCtx);
+
+  return Py_BuildValue("i", 0);
+}
+
+PyObject *xmlsec_KeyInfoCtxInitialize(PyObject *self, PyObject *args) {
+  PyObject *keyInfoCtx_obj, *mngr_obj;
+  xmlSecKeyInfoCtxPtr keyInfoCtx;
+  xmlSecKeysMngrPtr mngr = NULL;
+  int ret;
+
+  if (!PyArg_ParseTuple(args, "OO:keyInfoCtxInitialize", &keyInfoCtx_obj, &mngr_obj))
+    return NULL;
+
+  keyInfoCtx = xmlSecKeyInfoCtxPtr_get(PyObject_GetAttr(keyInfoCtx_obj, PyString_FromString("_o")));
+  if (mngr_obj != Py_None)
+    mngr = xmlSecKeysMngrPtr_get(PyObject_GetAttr(mngr_obj, PyString_FromString("_o")));
+  
+  ret = xmlSecKeyInfoCtxInitialize(keyInfoCtx, mngr);
+  if (ret < 0) {
+    PyErr_SetFromErrno(xmlsec_error);
+  }
+  return Py_BuildValue("i", ret);
+}
+
+PyObject *xmlsec_KeyInfoCtxFinalize(PyObject *self, PyObject *args) {
+  PyObject *keyInfoCtx_obj;
+  xmlSecKeyInfoCtxPtr keyInfoCtx;
+
+  if (!PyArg_ParseTuple(args, "O:keyInfoCtxFinalize", &keyInfoCtx_obj))
+    return NULL;
+
+  keyInfoCtx = xmlSecKeyInfoCtxPtr_get(PyObject_GetAttr(keyInfoCtx_obj, PyString_FromString("_o")));
+  
+  xmlSecKeyInfoCtxFinalize(keyInfoCtx);
+  return Py_BuildValue("i", 0);
+}
+
+PyObject *xmlsec_KeyInfoCtxReset(PyObject *self, PyObject *args) {
+  PyObject *keyInfoCtx_obj;
+  xmlSecKeyInfoCtxPtr keyInfoCtx;
+
+  if (!PyArg_ParseTuple(args, "O:keyInfoCtxReset", &keyInfoCtx_obj))
+    return NULL;
+
+  keyInfoCtx = xmlSecKeyInfoCtxPtr_get(PyObject_GetAttr(keyInfoCtx_obj, PyString_FromString("_o")));
+  
+  xmlSecKeyInfoCtxReset(keyInfoCtx);
+  return Py_BuildValue("i", 0);
+}
 
 PyObject *keyinfo_get_enabledKeyData(PyObject *self, PyObject *args) {
   PyObject *keyInfoCtx_obj;
