@@ -416,7 +416,7 @@ PyObject *xmlsec_DSigReferenceCtxListId(PyObject *self, PyObject *args) {
   return PyCObject_FromVoidPtr((void *) xmlSecDSigReferenceCtxListId, NULL);
 }
 
-/* ######################################################################### */
+/******************************************************************************/
 
 PyObject *xmldsig_set_signKey(PyObject *self, PyObject *args) {
   PyObject *dsigCtx_obj, *signKey_obj;
