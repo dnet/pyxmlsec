@@ -71,32 +71,63 @@
 /* }; */
 
 PyObject *xmlsec_DSigCtxCreate(PyObject *self, PyObject *args) {
-  PyObject *obj_keyMngr;
-  xmlSecDSigCtxPtr dsig_ctx;
+  PyObject *keyMngr_obj;
+  xmlSecDSigCtxPtr dsigCtx;
   PyObject *ret;
   
-  if(!PyArg_ParseTuple(args, (char *) "O:DSigCtxCreate", &obj_keyMngr))
+  if(!PyArg_ParseTuple(args, (char *) "O:DSigCtxCreate", &keyMngr_obj))
     return NULL;
-  dsig_ctx = xmlSecDSigCtxCreate(NULL);
+  dsigCtx = xmlSecDSigCtxCreate(NULL);
   
-  ret = PyCObject_FromVoidPtrAndDesc((void *) dsig_ctx, (char *) "xmlSecDSigCtxPtr", NULL);
+  ret = PyCObject_FromVoidPtrAndDesc((void *) dsigCtx, (char *) "xmlSecDSigCtxPtr", NULL);
   return (ret);
 }
 
+PyObject *xmlsec_DSigCtxDestroy(PyObject *self, PyObject *args) {
+  PyObject *dsigCtx_obj;
+  xmlSecDSigCtxPtr dsigCtx;
+
+  if (!PyArg_ParseTuple(args, "O", &dsigCtx_obj))
+    return NULL;
+  dsigCtx = xmlSecDSigCtxPtr_get(PyObject_GetAttr(dsigCtx_obj, PyString_FromString("_o")));
+  xmlSecDSigCtxDestroy(dsigCtx);
+  return Py_BuildValue("i", 0);
+}
+
 PyObject *xmlsec_DSigCtxSign(PyObject *self, PyObject *args) {
-  PyObject *obj_dsigCtx;
-  PyObject *obj_tmpl;
+  PyObject *dsigCtx_obj;
+  PyObject *tmpl_obj;
   xmlSecDSigCtxPtr dsigCtx;
   xmlNodePtr tmpl;
   int ret;
 
-  if (!PyArg_ParseTuple(args, "OO", &obj_dsigCtx, &obj_tmpl))
+  if (!PyArg_ParseTuple(args, "OO", &dsigCtx_obj, &tmpl_obj))
     return NULL;
 
-  dsigCtx = xmlSecDSigCtxPtr_get(PyObject_GetAttr(obj_dsigCtx, PyString_FromString("_o")));
-  tmpl = PyxmlNode_Get(PyObject_GetAttr(obj_tmpl, PyString_FromString("_o")));
+  dsigCtx = xmlSecDSigCtxPtr_get(PyObject_GetAttr(dsigCtx_obj, PyString_FromString("_o")));
+  tmpl = PyxmlNode_Get(PyObject_GetAttr(tmpl_obj, PyString_FromString("_o")));
 
   ret = xmlSecDSigCtxSign(dsigCtx, tmpl);
+  if (ret < 0) {
+    PyErr_SetFromErrno(xmlsec_error);
+  }
+  return Py_BuildValue("i", ret);
+}
+
+PyObject *xmlsec_DSigCtxVerify(PyObject *self, PyObject *args) {
+  PyObject *dsigCtx_obj;
+  PyObject *node_obj;
+  xmlSecDSigCtxPtr dsigCtx;
+  xmlNodePtr node;
+  int ret;
+
+  if (!PyArg_ParseTuple(args, "OO", &dsigCtx_obj, &node_obj))
+    return NULL;
+
+  dsigCtx = xmlSecDSigCtxPtr_get(PyObject_GetAttr(dsigCtx_obj, PyString_FromString("_o")));
+  node = PyxmlNode_Get(PyObject_GetAttr(node_obj, PyString_FromString("_o")));
+
+  ret = xmlSecDSigCtxVerify(dsigCtx, node);
   if (ret < 0) {
     PyErr_SetFromErrno(xmlsec_error);
   }
@@ -115,4 +146,17 @@ PyObject *xmldsig_set_signKey(PyObject *self, PyObject *args) {
 
   ret = PyCObject_FromVoidPtrAndDesc((void *) dsigCtx, (char *) "xmlSecDSigCtxPtr", NULL);
   return (ret);
+}
+
+PyObject *xmldsig_get_status(PyObject *self, PyObject *args) {
+  PyObject *dsigCtx_obj;
+  xmlSecDSigCtxPtr dsigCtx;
+  int ret;
+
+  if (!PyArg_ParseTuple(args, "O", &dsigCtx_obj))
+    return NULL;
+  dsigCtx = xmlSecDSigCtxPtr_get(PyObject_GetAttr(dsigCtx_obj, PyString_FromString("_o")));
+  ret = dsigCtx->status;
+
+  return Py_BuildValue("i", ret);
 }
