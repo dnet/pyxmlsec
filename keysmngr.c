@@ -215,7 +215,7 @@ PyObject *xmlsec_KeysMngrGetDataStore(PyObject *self, PyObject *args) {
     return NULL;
 
   mngr = xmlSecKeysMngrPtr_get(mngr_obj);
-  id = (xmlSecKeyDataStoreId) PyCObject_AsVoidPtr(id_meth);
+  id = (xmlSecKeyDataStoreId) PyCObject_AsVoidPtr(id_meth); // FIXME
   store = xmlSecKeysMngrGetDataStore(mngr, id);
 
   return (wrap_xmlSecKeyDataStorePtr(store));
@@ -371,8 +371,6 @@ static xmlSecKeyPtr xmlsec_KeyStoreFindKeyMethod(xmlSecKeyStorePtr store,
 
   return (xmlSecKeyPtr_get(result));
 }
-
-/******************************************************************************/
 
 PyObject *keysmngr_KeyStoreIdCreate(PyObject *self, PyObject *args) {
   PyObject *initialize_obj, *finalize_obj, *findKey_obj;
