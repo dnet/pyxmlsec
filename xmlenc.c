@@ -25,8 +25,10 @@
 #include "wrap_objs.h"
 
 #include "buffer.h"
+#include "keyinfo.h"
 #include "keys.h"
 #include "keysmngr.h"
+#include "transforms.h"
 #include "xmlenc.h"
 
 PyObject *wrap_xmlSecEncCtxPtr(xmlSecEncCtxPtr ctx) {
@@ -39,6 +41,133 @@ PyObject *wrap_xmlSecEncCtxPtr(xmlSecEncCtxPtr ctx) {
   ret = PyCObject_FromVoidPtrAndDesc((void *) ctx,
 				     (char *) "xmlSecEncCtxPtr", NULL);
   return (ret);
+}
+
+/*****************************************************************************/
+
+PyObject *xmlSecEncCtx_getattr(PyObject *self, PyObject *args) {
+  PyObject *encCtx_obj;
+  xmlSecEncCtxPtr encCtx;
+  const char *attr;
+
+  if (!PyArg_ParseTuple(args, "Os:encCtxGetAttr",
+			&encCtx_obj, &attr))
+    return NULL;
+
+  encCtx = xmlSecEncCtxPtr_get(encCtx_obj);
+
+  if (!strcmp(attr, "__members__"))
+    return Py_BuildValue("[sssssssssssssssssssssss]", "flags",
+			 "flags2", "mode", "keyInfoReadCtx", "keyInfoWriteCtx",
+			 "transformCtx", "defEncMethodId",
+			 "encKey", "operation", "result", "resultBase64Encoded",
+			 "resultReplaced", "encMethod",
+			 "id", "type", "mimeType", "encoding", "recipient",
+			 "carriedKeyName", "encDataNode", "encMethodNode",
+			 "keyInfoNode", "cipherValueNode");
+  if (!strcmp(attr, "flags"))
+    return (wrap_int(encCtx->flags));
+  if (!strcmp(attr, "flags2"))
+    return (wrap_int(encCtx->flags2));
+  if (!strcmp(attr, "mode"))
+    return (wrap_int(encCtx->mode));
+  if (!strcmp(attr, "keyInfoReadCtx"))
+    return (wrap_xmlSecKeyInfoCtxPtr(&(encCtx->keyInfoReadCtx)));
+  if (!strcmp(attr, "keyInfoWriteCtx"))
+    return (wrap_xmlSecKeyInfoCtxPtr(&(encCtx->keyInfoWriteCtx)));
+  if (!strcmp(attr, "transformCtx"))
+    return (wrap_xmlSecTransformCtxPtr(&(encCtx->transformCtx)));
+  if (!strcmp(attr, "defEncMethodId"))
+    return (PyCObject_FromVoidPtr((void *) encCtx->defEncMethodId, NULL));
+  if (!strcmp(attr, "encKey"))
+    return (wrap_xmlSecKeyPtr(encCtx->encKey));
+  if (!strcmp(attr, "operation"))
+    return (wrap_int(encCtx->operation));
+  if (!strcmp(attr, "result"))
+    return (wrap_xmlSecBufferPtr(encCtx->result));
+  if (!strcmp(attr, "resultBase64Encoded"))
+    return (wrap_int(encCtx->resultBase64Encoded));
+  if (!strcmp(attr, "resultReplaced"))
+    return (wrap_int(encCtx->resultReplaced));
+  if (!strcmp(attr, "encMethod"))
+    return (wrap_xmlSecTransformPtr(encCtx->encMethod));
+  if (!strcmp(attr, "id"))
+    return (wrap_xmlCharPtr(encCtx->id));
+  if (!strcmp(attr, "type"))
+    return (wrap_xmlCharPtr(encCtx->type));
+  if (!strcmp(attr, "mimeType"))
+    return (wrap_xmlCharPtr(encCtx->mimeType));
+  if (!strcmp(attr, "encoding"))
+    return (wrap_xmlCharPtr(encCtx->encoding));
+  if (!strcmp(attr, "recipient"))
+    return (wrap_xmlCharPtr(encCtx->recipient));
+  if (!strcmp(attr, "carriedKeyName"))
+    return (wrap_xmlCharPtr(encCtx->carriedKeyName));
+  if (!strcmp(attr, "encDataNode"))
+    return (wrap_xmlNodePtr(encCtx->encDataNode));
+  if (!strcmp(attr, "encMethodNode"))
+    return (wrap_xmlNodePtr(encCtx->encMethodNode));
+  if (!strcmp(attr, "keyInfoNode"))
+    return (wrap_xmlNodePtr(encCtx->keyInfoNode));
+  if (!strcmp(attr, "cipherValueNode"))
+    return (wrap_xmlNodePtr(encCtx->cipherValueNode));
+
+  Py_INCREF(Py_None);
+  return (Py_None);
+}
+
+PyObject *xmlSecEncCtx_setattr(PyObject *self, PyObject *args) {
+  PyObject *encCtx_obj, *value_obj;
+  xmlSecEncCtxPtr encCtx;
+  const char *name;
+
+  if (!PyArg_ParseTuple(args, "OsO:encCtxSetAttr",
+			&encCtx_obj, &name, &value_obj))
+    return NULL;
+
+  encCtx = xmlSecEncCtxPtr_get(encCtx_obj);
+    
+  if (!strcmp(name, "flags"))
+    encCtx->flags = PyInt_AsLong(value_obj);
+  else if (!strcmp(name, "flags2"))
+    encCtx->flags2 = PyInt_AsLong(value_obj);
+  else if (!strcmp(name, "mode"))
+    encCtx->mode = PyInt_AsLong(value_obj);
+  else if (!strcmp(name, "keyInfoReadCtx"))
+    encCtx->keyInfoReadCtx = *(xmlSecKeyInfoCtxPtr_get(value_obj));
+  else if (!strcmp(name, "keyInfoWriteCtx"))
+    encCtx->keyInfoWriteCtx = *(xmlSecKeyInfoCtxPtr_get(value_obj));
+  else if (!strcmp(name, "transformCtx"))
+    encCtx->transformCtx = *(xmlSecTransformCtxPtr_get(value_obj));
+  else if (!strcmp(name, "defEncMethodId"))
+    encCtx->defEncMethodId = PyCObject_AsVoidPtr(value_obj);
+  else if (!strcmp(name, "encKey"))
+    encCtx->encKey = xmlSecKeyPtr_get(value_obj);
+  else if (!strcmp(name, "operation"))
+    encCtx->operation = PyInt_AsLong(value_obj);
+  else if (!strcmp(name, "result"))
+    encCtx->result = xmlSecBufferPtr_get(value_obj);
+  else if (!strcmp(name, "resultBase64Encoded"))
+    encCtx->resultBase64Encoded = PyInt_AsLong(value_obj);
+  else if (!strcmp(name, "resultReplaced"))
+    encCtx->resultReplaced = PyInt_AsLong(value_obj);
+  else if (!strcmp(name, "encMethod"))
+    encCtx->encMethod = xmlSecTransformPtr_get(value_obj);
+  else if (!strcmp(name, "id"))
+    encCtx->id = PyString_AsString(value_obj);
+  else if (!strcmp(name, "type"))
+    encCtx->type = PyString_AsString(value_obj);
+  else if (!strcmp(name, "mimeType"))
+    encCtx->mimeType = PyString_AsString(value_obj);
+  else if (!strcmp(name, "encoding"))
+    encCtx->encoding = PyString_AsString(value_obj);
+  else if (!strcmp(name, "recipient"))
+    encCtx->recipient = PyString_AsString(value_obj);
+  else if (!strcmp(name, "carriedKeyName"))
+    encCtx->carriedKeyName = PyString_AsString(value_obj);
+
+  Py_INCREF(Py_None);
+  return (Py_None);
 }
 
 /*****************************************************************************/
@@ -242,51 +371,4 @@ PyObject *xmlsec_EncCtxDebugXmlDump(PyObject *self, PyObject *args) {
 
   Py_INCREF(Py_None);
   return (Py_None);
-}
-
-/******************************************************************************/
-
-PyObject *xmlenc_set_encKey(PyObject *self, PyObject *args) {
-  PyObject *encCtx_obj, *encKey_obj;
-  xmlSecEncCtxPtr encCtx;
-
-  if (!PyArg_ParseTuple(args, "OO:encCtxSetEncKey", &encCtx_obj, &encKey_obj))
-    return NULL;
-  encCtx = xmlSecEncCtxPtr_get(encCtx_obj);
-  encCtx->encKey = xmlSecKeyPtr_get(encKey_obj);
-
-  return (wrap_xmlSecEncCtxPtr(encCtx));
-}
-
-PyObject *xmlenc_get_result(PyObject *self, PyObject *args) {
-  PyObject *encCtx_obj;
-  xmlSecEncCtxPtr encCtx;
-
-  if (!PyArg_ParseTuple(args, "O:encCtxGetResult", &encCtx_obj))
-    return NULL;
-  encCtx = xmlSecEncCtxPtr_get(encCtx_obj);
-
-  return (wrap_xmlSecBufferPtr(encCtx->result));
-}
-
-PyObject *xmlenc_get_resultBase64Encoded(PyObject *self, PyObject *args) {
-  PyObject *encCtx_obj;
-  xmlSecEncCtxPtr encCtx;
-
-  if (!PyArg_ParseTuple(args, "O:encCtxGetResultBase64Encoded", &encCtx_obj))
-    return NULL;
-  encCtx = xmlSecEncCtxPtr_get(encCtx_obj);
-
-  return (wrap_int(encCtx->resultBase64Encoded));
-}
-
-PyObject *xmlenc_get_resultReplaced(PyObject *self, PyObject *args) {
-  PyObject *encCtx_obj;
-  xmlSecEncCtxPtr encCtx;
-
-  if (!PyArg_ParseTuple(args, "O:encCtxGetResultReplaced", &encCtx_obj))
-    return NULL;
-  encCtx = xmlSecEncCtxPtr_get(encCtx_obj);
-
-  return (wrap_int(encCtx->resultReplaced));
 }

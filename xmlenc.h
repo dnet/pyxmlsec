@@ -7,6 +7,9 @@ typedef struct {
 
 PyObject *wrap_xmlSecEncCtxPtr(xmlSecEncCtxPtr ctx);
 
+PyObject *xmlSecEncCtx_getattr(PyObject *self, PyObject *args);
+PyObject *xmlSecEncCtx_setattr(PyObject *self, PyObject *args);
+
 PyObject *xmlsec_EncCtxCreate(PyObject *self, PyObject *args);
 PyObject *xmlsec_EncCtxDestroy(PyObject *self, PyObject *args);
 PyObject *xmlsec_EncCtxInitialize(PyObject *self, PyObject *args);
