@@ -265,8 +265,8 @@ PyObject *xmlsec_KeyDataDebugDump(PyObject *self, PyObject *args) {
   xmlSecKeyDataPtr data;
   FILE *output;
   
-  if (CheckArgs(args, "O:keyDataDebugDump")) {
-    if (!PyArg_ParseTuple(args, "O:keyDataDebugDump", &data_obj, &output_obj))
+  if (CheckArgs(args, "OF:keyDataDebugDump")) {
+    if (!PyArg_ParseTuple(args, "OO:keyDataDebugDump", &data_obj, &output_obj))
       return NULL;
   }
   else return NULL;
@@ -285,8 +285,8 @@ PyObject *xmlsec_KeyDataDebugXmlDump(PyObject *self, PyObject *args) {
   xmlSecKeyDataPtr data;
   FILE *output;
   
-  if (CheckArgs(args, "O:keyDataDebugXmlDump")) {
-    if (!PyArg_ParseTuple(args, "O:keyDataDebugXmlDump", &data_obj,
+  if (CheckArgs(args, "OF:keyDataDebugXmlDump")) {
+    if (!PyArg_ParseTuple(args, "OO:keyDataDebugXmlDump", &data_obj,
 			  &output_obj))
       return NULL;
   }
