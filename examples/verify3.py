@@ -18,14 +18,14 @@ xmlsec.cryptoInit()
 
 #############################
 
-mngr = xmlsec.keysMngrCreate()
+mngr = xmlsec.KeysMngr()
 xmlsec.cryptoAppDefaultKeysMngrInit(mngr)
 xmlsec.cryptoAppKeysMngrCertLoad(mngr, "./rootcert.pem",
                                  xmlsec.KeyDataFormatPem,
                                  xmlsec.KeyDataTypeTrusted)
 doc = libxml2.parseFile("./sign3-res.xml")
 node = xmlsec.findNode(doc.getRootElement(), xmlsec.NodeSignature, xmlsec.DSigNs)
-dsig_ctx = xmlsec.dsigCtxCreate(mngr)
+dsig_ctx = xmlsec.DSigCtx(mngr)
 if dsig_ctx.verify(node) < 0:
     print "Error: signature verify"
 if dsig_ctx.getStatus():

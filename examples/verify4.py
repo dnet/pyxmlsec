@@ -18,7 +18,7 @@ xmlsec.cryptoInit()
 
 #############################
 
-mngr = xmlsec.keysMngrCreate()
+mngr = xmlsec.KeysMngr()
 xmlsec.cryptoAppDefaultKeysMngrInit(mngr)
 xmlsec.cryptoAppKeysMngrCertLoad(mngr, "./rootcert.pem",
                                  xmlsec.KeyDataFormatPem,
@@ -26,7 +26,7 @@ xmlsec.cryptoAppKeysMngrCertLoad(mngr, "./rootcert.pem",
 
 doc = libxml2.parseFile("./verify4-res.xml")
 node = xmlsec.findNode(doc.getRootElement(), xmlsec.NodeSignature, xmlsec.DSigNs)
-dsig_ctx = xmlsec.dsigCtxCreate(mngr)
+dsig_ctx = xmlsec.DSigCtx(mngr)
 
 dsig_ctx.setEnabledReferenceUris(xmlsec.TransformUriTypeEmpty)
 if (dsig_ctx.enableSignatureTransform(xmlsec.transformInclC14NId) < 0 or

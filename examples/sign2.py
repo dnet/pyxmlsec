@@ -17,8 +17,10 @@ xmlsec.cryptoAppInit(None)
 xmlsec.cryptoInit()
 
 doc = libxml2.parseFile("./sign2-doc.xml")
-signNode = xmlsec.tmplSignatureCreate(doc, xmlsec.transformExclC14NId,
-                                      xmlsec.transformRsaSha1Id, None)
+#signNode = xmlsec.tmplSignatureCreate(doc, xmlsec.transformExclC14NId,
+#                                      xmlsec.transformRsaSha1Id, None)
+signNode = xmlsec.TmplSignature(doc, xmlsec.transformExclC14NId,
+                                xmlsec.transformRsaSha1Id, None)
 doc.getRootElement().addChild(signNode)
 
 refNode = signNode.addReference(xmlsec.transformSha1Id, None, None, None)
@@ -27,7 +29,7 @@ refNode.addTransform(xmlsec.transformEnvelopedId)
 keyInfoNode = signNode.ensureKeyInfo(None);
 keyNameInfo = keyInfoNode.addKeyName(None)
 
-dsig_ctx = xmlsec.dsigCtxCreate()
+dsig_ctx = xmlsec.DSigCtx()
 key = xmlsec.cryptoAppKeyLoad("./rsakey.pem", xmlsec.KeyDataFormatPem,
                               None, None, None)
 

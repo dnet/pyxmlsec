@@ -9,7 +9,7 @@ import libxslt
 import xmlsec
 
 def load_keys(pem_file):
-    mngr = xmlsec.keysMngrCreate()
+    mngr = xmlsec.KeysMngr()
     if xmlsec.cryptoAppDefaultKeysMngrInit(mngr) < 0:
         print "Error: failed to initialize keys manager"
         mngr.destroy()
@@ -45,7 +45,7 @@ mngr = load_keys("./rsapub.pem")
 
 doc = libxml2.parseFile("./sign1-res.xml")
 node = xmlsec.findNode(doc.getRootElement(), xmlsec.NodeSignature, xmlsec.DSigNs)
-dsig_ctx = xmlsec.dsigCtxCreate(mngr)
+dsig_ctx = xmlsec.DSigCtx(mngr)
 if dsig_ctx.verify(node) < 0:
     print "Error: signature verify"
 if dsig_ctx.getStatus():

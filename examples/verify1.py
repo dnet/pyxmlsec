@@ -18,7 +18,7 @@ xmlsec.cryptoInit()
 
 doc = libxml2.parseFile("./sign1-res.xml")
 node = xmlsec.findNode(doc.getRootElement(), xmlsec.NodeSignature, xmlsec.DSigNs)
-dsig_ctx = xmlsec.dsigCtxCreate()
+dsig_ctx = xmlsec.DSigCtx()
 key = xmlsec.cryptoAppKeyLoad("./rsapub.pem", xmlsec.KeyDataFormatPem, None, None, None)
 dsig_ctx.setSignKey(key)
 key.setName("./rsapub.pem")
