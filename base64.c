@@ -2,8 +2,8 @@
  *
  * PyXMLSec - Python bindings for XML Security library (XMLSec)
  *
- * Copyright (C) 2003 Easter-eggs, Valery Febvre
- * http://pyxmlsec.labs.libre-entreprise.org/
+ * Copyright (C) 2003-2004 Easter-eggs, Valery Febvre
+ * http://pyxmlsec.labs.libre-entreprise.org
  * 
  * Author: Valery Febvre <vfebvre@easter-eggs.com>
  *
@@ -113,17 +113,18 @@ PyObject *xmlsec_Base64CtxUpdate(PyObject *self, PyObject *args) {
 }
 
 PyObject *xmlsec_Base64CtxFinal(PyObject *self, PyObject *args) {
-  PyObject *ctx_obj, *out_obj;
+  PyObject *ctx_obj;
   xmlSecBase64CtxPtr ctx;
+  xmlSecByte *out;
   xmlSecSize outSize;
 
-  if (!PyArg_ParseTuple(args, "OOi:base64CtxFinal",
-			&ctx_obj, &out_obj, &outSize))
+  if (!PyArg_ParseTuple(args, "Os#:base64CtxFinal",
+			&ctx_obj, &out, &outSize))
     return NULL;
 
   ctx = xmlSecBase64CtxPtr_get(ctx_obj);
 
-  return (wrap_int(xmlSecBase64CtxFinal(ctx, (xmlSecByte *)out_obj, outSize)));
+  return (wrap_int(xmlSecBase64CtxFinal(ctx, out, outSize)));
 }
 
 PyObject *xmlsec_Base64Encode(PyObject *self, PyObject *args) {
@@ -138,12 +139,12 @@ PyObject *xmlsec_Base64Encode(PyObject *self, PyObject *args) {
 }
 
 PyObject *xmlsec_Base64Decode(PyObject *self, PyObject *args) {
-  PyObject *buf_obj;
   const xmlChar* str;
+  xmlSecByte *buf;
   xmlSecSize len;
 
-  if (!PyArg_ParseTuple(args, "ssi:base64Decode", &str, &buf_obj, &len))
+  if (!PyArg_ParseTuple(args, "ss#:base64Decode", &str, &buf, &len))
     return NULL;
 
-  return (wrap_int(xmlSecBase64Decode(str, (xmlSecByte *)buf_obj, len)));
+  return (wrap_int(xmlSecBase64Decode(str, buf, len)));
 }
