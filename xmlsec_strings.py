@@ -391,7 +391,7 @@ NodeX509SKI		= "X509SKI"
 NameRawX509Cert	= "raw-x509-cert"
 HrefRawX509Cert	= "http://www.w3.org/2000/09/xmldsig#rawX509Certificate"
 
-NameX509Store		= "x509-store"
+NameX509Store   = "x509-store"
 
 #*************************************************************************
 # 
