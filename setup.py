@@ -35,12 +35,93 @@ Topic :: Software Development :: Libraries :: Python Modules
 """
 
 from distutils.core import setup, Extension
-import commands
+import sys, commands
 
-#print commands.getoutput('pkg-config libxml-2.0 --cflags')
-#print commands.getoutput('pkg-config libxml-2.0 --libs')
-#print commands.getoutput('pkg-config xmlsec1 --cflags')
-#print commands.getoutput('pkg-config xmlsec1 --libs')
+# the crypto engine name : openssl or gnutls
+xmlsec1_crypto = "openssl"
+#xmlsec1_crypto = "gnutls"
+
+define_macros = []
+include_dirs  = []
+library_dirs  = []
+libraries     = []
+
+def extract_cflags(cflags):
+    global define_macros, include_dirs
+    list = cflags.split(' ')
+    for flag in list:
+        if flag == '':
+            continue
+        flag = flag.replace("\\\"", "")
+        if flag[:2] == "-I":
+            if flag[2:] not in include_dirs:
+                include_dirs.append(flag[2:])
+        elif flag[:2] == "-D":
+            t = tuple(flag[2:].split('='))
+            if t not in define_macros:
+                define_macros.append(t)
+        else:
+            print "Warning : cflag %s skipped" % flag
+
+def extract_libs(libs):
+    global library_dirs, libraries
+    list = libs.split(' ')
+    for flag in list:
+        if flag == '':
+            continue
+        if flag[:2] == "-l":
+            if flag[2:] not in libraries:
+                libraries.append(flag[2:])
+        elif flag[:2] == "-L":
+            if flag[2:] not in library_dirs:
+                library_dirs.append(flag[2:])
+        else:
+            print "Warning : linker flag %s skipped" % flag
+
+
+libxml2_cflags = commands.getoutput('pkg-config libxml-2.0 --cflags')
+if libxml2_cflags[:2] not in ["-I", "-D"]:
+    libxml2_cflags = commands.getoutput('xml2-config --cflags')
+if libxml2_cflags[:2] not in ["-I", "-D"]:
+    print "Error : cannot get LibXML2 pre-processor and compiler flags"
+
+libxml2_libs = commands.getoutput('pkg-config libxml-2.0 --libs')
+if libxml2_libs[:2] not in ["-l", "-L"]:
+    libxml2_libs = commands.getoutput('xml2-config --libs')
+if libxml2_libs[:2] not in ["-l", "-L"]:
+    print "Error : cannot get LibXML2 linker flags"
+
+cmd = 'pkg-config xmlsec1-%s --cflags' % xmlsec1_crypto
+xmlsec1_cflags = commands.getoutput(cmd)
+if xmlsec1_cflags[:2] not in ["-I", "-D"]:
+    cmd = 'xmlsec1-config --cflags --crypto=%s' % xmlsec1_crypto
+    xmlsec1_cflags = commands.getoutput(cmd)
+if xmlsec1_cflags[:2] not in ["-I", "-D"]:
+    print "Error : cannot get XMLSec1 pre-processor and compiler flags"
+
+cmd = 'pkg-config xmlsec1-%s --libs' % xmlsec1_crypto
+xmlsec1_libs = commands.getoutput(cmd)
+if xmlsec1_libs[:2] not in ["-l", "-L"]:
+    cmd = 'xmlsec1-config --libs --crypto=%s' % xmlsec1_crypto
+    xmlsec1_libs = commands.getoutput(cmd)
+if xmlsec1_libs[:2] not in ["-l", "-L"]:
+    print "Error : cannot get XMLSec1 linker flags"
+
+#print libxml2_cflags
+#print libxml2_libs
+#print xmlsec1_cflags
+#print xmlsec1_libs
+
+extract_cflags(libxml2_cflags)
+extract_libs(libxml2_libs)
+
+extract_cflags(xmlsec1_cflags)
+extract_libs(xmlsec1_libs)
+
+#print define_macros
+#print include_dirs
+#print library_dirs
+#print libraries
 
 em = Extension("xmlsecmod",
                sources = ["wrap_objs.c",
@@ -51,14 +132,10 @@ em = Extension("xmlsecmod",
                           "xmldsig.c", "xmlenc.c", "xmlsec.c", "xmltree.c",
                           "x509.c",
                           "openssl.c"],
-               define_macros = [('XMLSEC_NO_XKMS', '1'),
-                                ('XMLSEC_CRYPTO', 'openssl'),
-                                ('XMLSEC_CRYPTO_OPENSSL', '1')],
-               include_dirs  = ["/usr/local/include/xmlsec1/",
-                                "/usr/include/libxml2/"],
-               library_dirs  = ["/usr/local/lib", "/usr/lib"],
-               libraries     = ["xmlsec1-openssl", "xmlsec1", "crypto",
-                                "xslt", "xml2", "pthread", "z" ,"m"]
+               define_macros = define_macros,
+               include_dirs  = include_dirs,
+               library_dirs  = library_dirs,
+               libraries     = libraries
                )
 
 setup(name = "pyxmlsec",
