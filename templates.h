@@ -21,13 +21,13 @@ PyObject *xmlsec_TmplReferenceListAddKeyReference(PyObject *self, PyObject *args
 PyObject *xmlsec_TmplKeyInfoAddKeyName(PyObject *self, PyObject *args);
 PyObject *xmlsec_TmplKeyInfoAddKeyValue(PyObject *self, PyObject *args);
 PyObject *xmlsec_TmplKeyInfoAddX509Data(PyObject *self, PyObject *args);
-PyObject *xmlsec_TmplKeyInfoAddRetrievalMethod(PyObject *self, PyObject *args); //New
-PyObject *xmlsec_TmplRetrievalMethodAddTransform(PyObject *self, PyObject *args); //New
+PyObject *xmlsec_TmplKeyInfoAddRetrievalMethod(PyObject *self, PyObject *args);
+PyObject *xmlsec_TmplRetrievalMethodAddTransform(PyObject *self, PyObject *args);
 PyObject *xmlsec_TmplKeyInfoAddEncryptedKey(PyObject *self, PyObject *args);
-PyObject *xmlsec_TmplTransformAddHmacOutputLength(PyObject *self, PyObject *args); //New
-PyObject *xmlsec_TmplTransformAddRsaOaepParam(PyObject *self, PyObject *args); //New
-PyObject *xmlsec_TmplTransformAddXsltStylesheet(PyObject *self, PyObject *args); //New
-PyObject *xmlsec_TmplTransformAddC14NInclNamespaces(PyObject *self, PyObject *args); //New
-PyObject *xmlsec_TmplTransformAddXPath(PyObject *self, PyObject *args); //New
-PyObject *xmlsec_TmplTransformAddXPath2(PyObject *self, PyObject *args); //New
-PyObject *xmlsec_TmplTransformAddXPointer(PyObject *self, PyObject *args); //New
+PyObject *xmlsec_TmplTransformAddHmacOutputLength(PyObject *self, PyObject *args);
+PyObject *xmlsec_TmplTransformAddRsaOaepParam(PyObject *self, PyObject *args);
+PyObject *xmlsec_TmplTransformAddXsltStylesheet(PyObject *self, PyObject *args);
+PyObject *xmlsec_TmplTransformAddC14NInclNamespaces(PyObject *self, PyObject *args);
+PyObject *xmlsec_TmplTransformAddXPath(PyObject *self, PyObject *args);
+PyObject *xmlsec_TmplTransformAddXPath2(PyObject *self, PyObject *args);
+PyObject *xmlsec_TmplTransformAddXPointer(PyObject *self, PyObject *args);
