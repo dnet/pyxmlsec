@@ -25,6 +25,7 @@
 #include <Python.h>
 
 #include "xmlsecmod.h"
+#include "buffer.h"
 #include "keys.h"
 
 /*
@@ -244,4 +245,63 @@ PyObject *xmlsec_KeySetName(PyObject *self, PyObject *args) {
   key = (xmlSecKeyPtr)xmlSecKeyPtr_get(PyObject_GetAttr(key_obj, PyString_FromString("_o")));
   result = xmlSecKeySetName(key, name);
   return Py_BuildValue("i", result);
+}
+
+PyObject *xmlsec_KeyReadBuffer(PyObject *self, PyObject *args) {
+  PyObject *dataId_meth, *buffer_obj;
+  xmlSecBuffer *buffer;
+  xmlSecKeyPtr key;
+  PyObject *ret;
+
+  if (!PyArg_ParseTuple(args, "OO:keyReadBuffer", &dataId_meth, &buffer_obj))
+    return NULL;
+
+  buffer = xmlSecBufferPtr_get(PyObject_GetAttr(buffer_obj, PyString_FromString("_o")));
+  key = xmlSecKeyReadBuffer(PyCObject_AsVoidPtr(dataId_meth), buffer);
+  if (key == NULL) {
+    Py_INCREF(Py_None);
+    return Py_None;
+  }
+
+  ret = PyCObject_FromVoidPtrAndDesc((void *) key, (char *) "xmlSecKeyPtr", NULL);
+  return (ret);
+}
+
+PyObject *xmlsec_KeyReadBinaryFile(PyObject *self, PyObject *args) {
+  PyObject *dataId_meth;
+  const char *filename;
+  xmlSecKeyPtr key;
+  PyObject *ret;
+
+  if (!PyArg_ParseTuple(args, "Os:keyReadBinaryFile", &dataId_meth, &filename))
+    return NULL;
+
+  key = xmlSecKeyReadBinaryFile(PyCObject_AsVoidPtr(dataId_meth), filename);
+  if (key == NULL) {
+    Py_INCREF(Py_None);
+    return Py_None;
+  }
+
+  ret = PyCObject_FromVoidPtrAndDesc((void *) key, (char *) "xmlSecKeyPtr", NULL);
+  return (ret);
+}
+
+PyObject *xmlsec_KeyReadMemory(PyObject *self, PyObject *args) {
+  PyObject *dataId_meth;
+  const xmlSecByte *data;
+  xmlSecSize dataSize;
+  xmlSecKeyPtr key;
+  PyObject *ret;
+
+  if (!PyArg_ParseTuple(args, "Osi:keyReadMemory", &dataId_meth, &data, &dataSize))
+    return NULL;
+
+  key = xmlSecKeyReadMemory(PyCObject_AsVoidPtr(dataId_meth), data, dataSize);
+  if (key == NULL) {
+    Py_INCREF(Py_None);
+    return Py_None;
+  }
+
+  ret = PyCObject_FromVoidPtrAndDesc((void *) key, (char *) "xmlSecKeyPtr", NULL);
+  return (ret);
 }

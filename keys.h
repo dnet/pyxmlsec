@@ -22,3 +22,6 @@ PyObject *xmlsec_KeyCreate(PyObject *self, PyObject *args);
 PyObject *xmlsec_KeyDestroy(PyObject *self, PyObject *args);
 PyObject *xmlsec_KeyGetName(PyObject *self, PyObject *args);
 PyObject *xmlsec_KeySetName(PyObject *self, PyObject *args);
+PyObject *xmlsec_KeyReadBuffer(PyObject *self, PyObject *args);
+PyObject *xmlsec_KeyReadBinaryFile(PyObject *self, PyObject *args);
+PyObject *xmlsec_KeyReadMemory(PyObject *self, PyObject *args);
