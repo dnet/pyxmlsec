@@ -38,6 +38,8 @@ Economy, Finance and Industry, as part of the UCIP - Collective Use of Internet
 by SMEs - programme.
 """
 
+__docformat__ = "plaintext en"
+
 import libxml2
 import libxslt
 
@@ -122,8 +124,8 @@ def cryptoAppDefaultKeysMngrAdoptKey(mngr, key):
     """
     Adds key to the keys manager mngr created with cryptoAppDefaultKeysMngrInit
     function.
-    mngr    : the keys manager.
-    key     : the key.
+      - mngr : the keys manager.
+      - key  : the key.
     Returns : 0 on success or a negative value otherwise.
     """
     return xmlsecmod.cryptoAppDefaultKeysMngrAdoptKey(mngr, key)
@@ -284,6 +286,13 @@ class Base64Ctx:
 AllocModeExact  = 0
 # the memory allocation mode that tries to minimize the number of malloc calls.
 AllocModeDouble = 1
+def bufferSetDefaultAllocMode(defAllocMode, defInitialSize):
+    """
+    Sets new global default allocation mode and minimal intial size.
+    defAllocMode   : the new default buffer allocation mode.
+    defInitialSize : the new default buffer minimal intial size.
+    """
+    xmlsecmod.bufferSetDefaultAllocMode(defAllocMode, defInitialSize)
 class Buffer:
     def __init__(self, size=None, _obj=None):
         """
@@ -733,10 +742,12 @@ NodeSetTreeWithoutCommentsInvert = 5
 NodeSetList                      = 6
 def nodeSetGetChildren(doc, parent, withComments, invert):
     """
-    Creates a new nodes set that contains: - if withComments is not 0 and invert
-    is 0: all nodes in the parent subtree; - if withComments is 0 and invert is 0:
-    all nodes in the parent subtree except comment nodes; - if withComments is not
-    0 and invert not is 0: all nodes in the doc except nodes in the parent subtree;
+    Creates a new nodes set that contains:
+    - if withComments is not 0 and invert is 0: all nodes in the parent subtree;
+    - if withComments is 0 and invert is 0: all nodes in the parent subtree
+    except comment nodes;
+    - if withComments is not 0 and invert not is 0: all nodes in the doc except
+    nodes in the parent subtree;
     - if withComments is 0 and invert is 0: all nodes in the doc except nodes in
     the parent subtree and comment nodes.
     doc          : the XML document.
@@ -1909,7 +1920,7 @@ X509DATA_SKI_NODE          = 0x00000008
 # <dsig:X509CRL/> node found or would be written back.
 X509DATA_CRL_NODE          = 0x00000010
 # Default set of nodes to write in case of empty <dsig:X509Data/> node template.
-X509DATA_DEFAULT = X509DATA_CERTIFICATE_NODE | X509DATA_CRL_NODE
+X509DATA_DEFAULT           = X509DATA_CERTIFICATE_NODE | X509DATA_CRL_NODE
 def x509DataGetNodeContent(node, deleteChildren, keyInfoCtx):
     """
     Reads the contents of <dsig:X509Data/> node and returns it as a bits mask.
