@@ -22,23 +22,25 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "xmlsecmod.h"
+#include "wrap_objs.h"
+
+#include "app.h"
 #include "base64.h"
-#include "xmlenc.h"
-#include "xmlsec.h"
-#include "xmltree.h"
-#include "xmldsig.h"
-#include "templates.h"
-#include "transforms.h"
+#include "buffer.h"
 #include "keyinfo.h"
 #include "keys.h"
 #include "keysmngr.h"
 #include "list.h"
-#include "app.h"
-#include "buffer.h"
 #include "membuf.h"
-#include "x509.h"
+#include "nodeset.h"
 #include "parser.h"
+#include "templates.h"
+#include "transforms.h"
+#include "xmldsig.h"
+#include "xmlenc.h"
+#include "xmlsec.h"
+#include "xmltree.h"
+#include "x509.h"
 #include "openssl.h"
 
 static PyMethodDef xmlsec_methods[] = {
@@ -197,6 +199,18 @@ static PyMethodDef xmlsec_methods[] = {
   {"transformMemBufId",        xmlsec_TransformMemBufId,        METH_VARARGS},
   {"transformMemBufGetBuffer", xmlsec_TransformMemBufGetBuffer, METH_VARARGS},
 
+  /* nodeset.h */
+  {"nodeSetCreate",        xmlsec_NodeSetCreate,        METH_VARARGS}, // New
+  {"nodeSetDestroy",       xmlsec_NodeSetDestroy,       METH_VARARGS}, // New
+  {"nodeSetDocDestroy",    xmlsec_NodeSetDocDestroy,    METH_VARARGS}, // New
+  {"nodeSetContains",      xmlsec_NodeSetContains,      METH_VARARGS}, // New
+  {"nodeSetAdd",           xmlsec_NodeSetAdd,           METH_VARARGS}, // New
+  {"nodeSetAddList",       xmlsec_NodeSetAddList,       METH_VARARGS}, // New
+  {"nodeSetGetChildren",   xmlsec_NodeSetGetChildren,   METH_VARARGS}, // New
+  {"nodeSetWalk",          xmlsec_NodeSetWalk,          METH_VARARGS}, // New
+  {"nodeSetDumpTextNodes", xmlsec_NodeSetDumpTextNodes, METH_VARARGS}, // New
+  {"nodeSetDebugDump",     xmlsec_NodeSetDebugDump,     METH_VARARGS}, // New
+
   /* list.h  */
   {"ptrListCreate",  xmlsec_PtrListCreate,  METH_VARARGS},
   {"ptrListDestroy", xmlsec_PtrListDestroy, METH_VARARGS},
@@ -227,12 +241,30 @@ static PyMethodDef xmlsec_methods[] = {
   {"tmplKeyInfoAddKeyName",             xmlsec_TmplKeyInfoAddKeyName,             METH_VARARGS},
   {"tmplKeyInfoAddKeyValue",            xmlsec_TmplKeyInfoAddKeyValue,            METH_VARARGS},
   {"tmplKeyInfoAddX509Data",            xmlsec_TmplKeyInfoAddX509Data,            METH_VARARGS},
-  {"tmplKeyInfoAddEncryptedKey",        xmlsec_TmplKeyInfoAddEncryptedKey,        METH_VARARGS}, // New
+  {"tmplKeyInfoAddEncryptedKey",        xmlsec_TmplKeyInfoAddEncryptedKey,        METH_VARARGS},
 
   /* transforms.h */
-  {"transformInclC14NId",  xmlsec_TransformInclC14NId,  METH_VARARGS},
-  {"transformExclC14NId",  xmlsec_TransformExclC14NId,  METH_VARARGS},
-  {"transformEnvelopedId", xmlsec_TransformEnvelopedId, METH_VARARGS},
+  {"transformUriTypeCheck",           xmlsec_TransformUriTypeCheck,           METH_VARARGS}, // New
+  {"transformCtxCreate",              xmlsec_TransformCtxCreate,              METH_VARARGS}, // New
+  {"transformCtxDestroy",             xmlsec_TransformCtxDestroy,             METH_VARARGS}, // New
+  {"transformCtxInitialize",          xmlsec_TransformCtxInitialize,          METH_VARARGS}, // New
+  {"transformCtxFinalize",            xmlsec_TransformCtxFinalize,            METH_VARARGS}, // New
+  {"transformCtxReset",               xmlsec_TransformCtxReset,               METH_VARARGS}, // New
+  {"transformBase64Id",               xmlsec_TransformBase64Id,               METH_VARARGS}, // New
+  {"transformBase64SetLineSize",      xmlsec_TransformBase64SetLineSize,      METH_VARARGS}, // New
+  {"transformInclC14NId",             xmlsec_TransformInclC14NId,             METH_VARARGS},
+  {"transformInclC14NWithCommentsId", xmlsec_TransformInclC14NWithCommentsId, METH_VARARGS}, // New
+  {"transformExclC14NId",             xmlsec_TransformExclC14NId,             METH_VARARGS},
+  {"transformExclC14NWithCommentsId", xmlsec_TransformExclC14NWithCommentsId, METH_VARARGS}, // New
+  {"transformEnvelopedId",            xmlsec_TransformEnvelopedId,            METH_VARARGS},
+  {"transformXPathId",                xmlsec_TransformXPathId,                METH_VARARGS}, // New
+  {"transformXPath2Id",               xmlsec_TransformXPath2Id,               METH_VARARGS}, // New
+  {"transformXPointerId",             xmlsec_TransformXPointerId,             METH_VARARGS}, // New
+  {"transformXPointerSetExpr",        xmlsec_TransformXPointerSetExpr,        METH_VARARGS}, // New
+  {"transformXsltId",                 xmlsec_TransformXsltId,                 METH_VARARGS}, // New
+  {"transformRemoveXmlTagsC14NId",    xmlsec_TransformRemoveXmlTagsC14NId,    METH_VARARGS}, // New
+  {"transformVisa3DHackID",           xmlsec_TransformVisa3DHackId,           METH_VARARGS}, // New
+  {"transformVisa3DHackSetID",        xmlsec_TransformVisa3DHackSetID,        METH_VARARGS}, // New
 
   /* keys.h */
   {"keyReqCreate",      keys_KeyReqCreate,        METH_VARARGS},
@@ -244,9 +276,9 @@ static PyMethodDef xmlsec_methods[] = {
   {"keyDestroy",        xmlsec_KeyDestroy,        METH_VARARGS},
   {"keyGetName",        xmlsec_KeySetName,        METH_VARARGS},
   {"keySetName",        xmlsec_KeySetName,        METH_VARARGS},
-  {"keyGenerate",       xmlsec_KeyGenerate,       METH_VARARGS}, // New
-  {"keyGenerateByName", xmlsec_KeyGenerateByName, METH_VARARGS}, // New
-  {"keyMatch",          xmlsec_KeyMatch,          METH_VARARGS}, // New
+  {"keyGenerate",       xmlsec_KeyGenerate,       METH_VARARGS},
+  {"keyGenerateByName", xmlsec_KeyGenerateByName, METH_VARARGS},
+  {"keyMatch",          xmlsec_KeyMatch,          METH_VARARGS},
   {"keyReadBuffer",     xmlsec_KeyReadBuffer,     METH_VARARGS},
   {"keyReadBinaryFile", xmlsec_KeyReadBinaryFile, METH_VARARGS},
   {"keyReadMemory",     xmlsec_KeyReadMemory,     METH_VARARGS},
