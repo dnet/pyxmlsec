@@ -67,8 +67,7 @@ PyObject *xmlSecPtrList_getattr(PyObject *self, PyObject *args) {
   if (!strcmp(attr, "__members__"))
     return Py_BuildValue("[sssss]", "id", "data", "use", "max", "allocMode");
   if (!strcmp(attr, "id"))
-    return PyCObject_FromVoidPtrAndDesc((void *) list->id,
-					(char *) "xmlSecPtrListId", NULL);
+    return wrap_xmlSecPtrListId(list->id);
   if (!strcmp(attr, "data"))
     return (wrap_xmlSecPtr(list->data));
   if (!strcmp(attr, "use"))
@@ -95,10 +94,10 @@ PyObject *xmlSecPtrList_setattr(PyObject *self, PyObject *args) {
     
   if (!strcmp(name, "id")) {
     Py_XINCREF(value_obj);
-    list->id = PyCObject_AsVoidPtr(value_obj);
+    list->id = xmlSecPtrListId_get(value_obj);
   }
   else if (!strcmp(name, "data"))
-    list->data = PyCObject_AsVoidPtr(value_obj);
+    list->data = PyCObject_AsVoidPtr(value_obj); // FIXME
   else if (!strcmp(name, "use"))
     list->use = PyInt_AsLong(value_obj);
   else if (!strcmp(name, "max"))
@@ -120,7 +119,8 @@ PyObject *xmlsec_PtrListCreate(PyObject *self, PyObject *args) {
   if(!PyArg_ParseTuple(args, (char *) "O:ptrListCreate", &id_obj))
     return NULL;
 
-  if (id_obj != Py_None) id = PyCObject_AsVoidPtr(id_obj);
+  if (id_obj != Py_None)
+    id = xmlSecPtrListId_get(id_obj);
   list = xmlSecPtrListCreate(id);
   
   return (wrap_xmlSecPtrListPtr(list));
@@ -143,14 +143,15 @@ PyObject *xmlsec_PtrListDestroy(PyObject *self, PyObject *args) {
 PyObject *xmlsec_PtrListInitialize(PyObject *self, PyObject *args) {
   PyObject *list_obj, *id_obj;
   xmlSecPtrListPtr list;
-  xmlSecPtrListId id;
+  xmlSecPtrListId id = NULL;
 
   if(!PyArg_ParseTuple(args, (char *) "OO:ptrListInitialize",
 		       &list_obj, &id_obj))
     return NULL;
 
   list = xmlSecPtrListPtr_get(list_obj);
-  id = PyCObject_AsVoidPtr(id_obj);
+  if (id_obj != Py_None)
+    id = xmlSecPtrListId_get(id_obj);
 
   return (wrap_int(xmlSecPtrListInitialize(list, id)));
 }
@@ -243,7 +244,7 @@ PyObject *xmlsec_PtrListAdd(PyObject *self, PyObject *args) {
     return NULL;
 
   list = xmlSecPtrListPtr_get(list_obj);
-  ret = xmlSecPtrListAdd(list, BAD_CAST PyCObject_AsVoidPtr(item_obj));
+  ret = xmlSecPtrListAdd(list, xmlSecPtr_get(item_obj));
 
   return (wrap_int(ret));
 }
@@ -258,7 +259,7 @@ PyObject *xmlsec_PtrListSet(PyObject *self, PyObject *args) {
     return NULL;
 
   list = xmlSecPtrListPtr_get(list_obj);
-  ret = xmlSecPtrListSet(list, BAD_CAST PyCObject_AsVoidPtr(item_obj), pos);
+  ret = xmlSecPtrListSet(list, xmlSecPtr_get(item_obj), pos);
 
   return (wrap_int(ret));
 }
