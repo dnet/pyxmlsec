@@ -88,11 +88,14 @@ PyObject *xmlsec_KeyDataIdsRegisterDefault(PyObject *self, PyObject *args) {
 
 PyObject *xmlsec_KeyDataIdsRegister(PyObject *self, PyObject *args) {
   PyObject *id_obj;
+  xmlSecKeyDataId id;
 
   if (!PyArg_ParseTuple(args, "O:keyDataIdsRegister", &id_obj))
     return NULL;
 
-  return (wrap_int(xmlSecKeyDataIdsRegister(PyCObject_AsVoidPtr(id_obj))));
+  id = xmlSecKeyDataId_get(id_obj);
+
+  return (wrap_int(xmlSecKeyDataIdsRegister(id)));
 }
 
 /******************************************************************************/
@@ -145,7 +148,7 @@ PyObject *xmlsec_KeyDataCreate(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "O:keyDataCreate", &id_obj))
     return NULL;
 
-  id  = PyCObject_AsVoidPtr(id_obj);
+  id  = xmlSecKeyDataId_get(id_obj);
 
   return (wrap_xmlSecKeyDataPtr(xmlSecKeyDataCreate(id)));
 }
@@ -272,7 +275,7 @@ PyObject *xmlsec_KeyDataXmlRead(PyObject *self, PyObject *args) {
 			&id_obj, &key_obj, &node_obj, &keyInfoCtx_obj))
     return NULL;
 
-  id = PyCObject_AsVoidPtr(id_obj);
+  id = xmlSecKeyDataId_get(id_obj);
   key = xmlSecKeyPtr_get(key_obj);
   node = xmlNodePtr_get(node_obj);
   keyInfoCtx = xmlSecKeyInfoCtxPtr_get(keyInfoCtx_obj);
@@ -291,7 +294,7 @@ PyObject *xmlsec_KeyDataXmlWrite(PyObject *self, PyObject *args) {
 			&id_obj, &key_obj, &node_obj, &keyInfoCtx_obj))
     return NULL;
 
-  id = PyCObject_AsVoidPtr(id_obj);
+  id = xmlSecKeyDataId_get(id_obj);
   key = xmlSecKeyPtr_get(key_obj);
   node = xmlNodePtr_get(node_obj);
   keyInfoCtx = xmlSecKeyInfoCtxPtr_get(keyInfoCtx_obj);
@@ -311,7 +314,7 @@ PyObject *xmlsec_KeyDataBinRead(PyObject *self, PyObject *args) {
 			&id_obj, &key_obj, &buf, &bufSize, &keyInfoCtx_obj))
     return NULL;
 
-  id = PyCObject_AsVoidPtr(id_obj);
+  id = xmlSecKeyDataId_get(id_obj);
   key = xmlSecKeyPtr_get(key_obj);
   keyInfoCtx = xmlSecKeyInfoCtxPtr_get(keyInfoCtx_obj);
 
@@ -333,7 +336,7 @@ PyObject *xmlsec_KeyDataBinWrite(PyObject *self, PyObject *args) {
 			&id_obj, &key_obj, &buf, &bufSize, &keyInfoCtx_obj))
     return NULL;
 
-  id = PyCObject_AsVoidPtr(id_obj);
+  id = xmlSecKeyDataId_get(id_obj);
   key = xmlSecKeyPtr_get(key_obj);
   keyInfoCtx = xmlSecKeyInfoCtxPtr_get(keyInfoCtx_obj);
 
@@ -374,7 +377,7 @@ PyObject *xmlsec_KeyDataCheckId(PyObject *self, PyObject *args) {
     return NULL;
 
   data = xmlSecKeyDataPtr_get(data_obj);
-  dataId = PyCObject_AsVoidPtr(dataId_obj);
+  dataId = xmlSecKeyDataId_get(dataId_obj);
 
   return (wrap_int(xmlSecKeyDataCheckId(data, dataId)));
 }
