@@ -126,8 +126,7 @@ PyObject *keys_KeyReqCreate(PyObject *self, PyObject *args) {
 
   ret = new_xmlSecKeyReq_object(PyCObject_AsVoidPtr(keyId_meth),
 				keyType, keyUsage, keyBitsSize);
-  //return PyCObject_FromVoidPtrAndDesc((void *) ret,
-  //				      (char *) "xmlSecKeyReq_object", NULL);;
+
   return ret;
 }
 
@@ -141,9 +140,6 @@ PyObject *xmlsec_KeyReqInitialize(PyObject *self, PyObject *args) {
 
   keyReq = keyReq_obj->obj;
   ret = xmlSecKeyReqInitialize(&keyReq);
-  if (ret < 0) {
-    PyErr_SetFromErrno(xmlsec_error);
-  }
 
   return Py_BuildValue("i", ret);
 }
@@ -206,15 +202,17 @@ PyObject *xmlsec_KeyCreate(PyObject *self, PyObject *args) {
 
 PyObject *xmlsec_KeyDestroy(PyObject *self, PyObject *args) {
   PyObject *key_obj;
-  xmlSecKeyPtr key;
+  xmlSecKeyPtr key = NULL;
 
   if (!PyArg_ParseTuple(args, "O:keyDestroy", &key_obj))
     return NULL;
 
   key = xmlSecKeyPtr_get(key_obj);
-  xmlSecKeyDestroy(key);
+  if (key != NULL)
+    xmlSecKeyDestroy(key);
 
-  return Py_BuildValue("i", 0);
+  Py_INCREF(Py_None);
+  return (Py_None);
 }
 
 PyObject *xmlsec_KeyGetName(PyObject *self, PyObject *args) {
