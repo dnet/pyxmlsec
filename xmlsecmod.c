@@ -403,9 +403,11 @@ static PyMethodDef xmlsec_methods[] = {
   /* x509.h */
   {"x509DataGetNodeContent", xmlsec_X509DataGetNodeContent, METH_VARARGS},
 
-  /* openssl/crypto.h, openssl/app.h */
+  /*
+  // openssl/crypto.h, openssl/app.h
   {"openSSLAppInit", xmlsec_OpenSSLAppInit, METH_VARARGS},
   {"openSSLInit",    xmlsec_OpenSSLInit,    METH_VARARGS},
+  */
 
   {NULL, NULL} /* End of Methods Sentinel */
 };
