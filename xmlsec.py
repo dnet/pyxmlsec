@@ -1796,9 +1796,6 @@ class DSigCtx:
         output : the output file.
         """
         xmlsecmod.dsigCtxDebugXmlDump(self, output)
-    def setSignKey(self, key):
-        """Sets signKey member."""
-        self._o = xmlsecmod.dsigCtxSetSignKey(self, key)
 
 # The possible <dsig:Reference/> node locations: in the <dsig:SignedInfo/> node
 # or in the <dsig:Manifest/> node.
