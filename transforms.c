@@ -73,11 +73,14 @@ PyObject *xmlsec_TransformUriTypeCheck(PyObject *self, PyObject *args) {
   const xmlChar *uri;
   int ret;
 
-  if(!PyArg_ParseTuple(args, (char *) "is:transformUriTypeCheck", &type, &uri))
-    return NULL;
+  if (CheckArgs(args, "IS:transformUriTypeCheck")) {
+    if(!PyArg_ParseTuple(args, (char *) "is:transformUriTypeCheck", &type, &uri))
+      return NULL;
+  }
+  else return NULL;
 
   ret = xmlSecTransformUriTypeCheck(type, uri);
-  return wrap_int(ret);
+  return (wrap_int(ret));
 }
 
 /******************************************************************************/
@@ -108,9 +111,12 @@ PyObject *xmlSecTransformCtx_getattr(PyObject *self, PyObject *args) {
   xmlSecTransformCtxPtr transformCtx;
   const char *attr;
 
-  if (!PyArg_ParseTuple(args, "Os:transformCtxGetAttr",
-			&transformCtx_obj, &attr))
-    return NULL;
+  if (CheckArgs(args, "OS:transformCtxGetAttr")) {
+    if (!PyArg_ParseTuple(args, "Os:transformCtxGetAttr",
+			  &transformCtx_obj, &attr))
+      return NULL;
+  }
+  else return NULL;
 
   transformCtx = xmlSecTransformCtxPtr_get(transformCtx_obj);
 
@@ -151,9 +157,12 @@ PyObject *xmlSecTransformCtx_setattr(PyObject *self, PyObject *args) {
   xmlSecTransformCtxPtr transformCtx;
   const char *name;
 
-  if (!PyArg_ParseTuple(args, "OsO:transformCtxSetAttr",
-			&transformCtx_obj, &name, &value_obj))
-    return NULL;
+  if (CheckArgs(args, "OS?:transformCtxSetAttr")) {
+    if (!PyArg_ParseTuple(args, "OsO:transformCtxSetAttr",
+			  &transformCtx_obj, &name, &value_obj))
+      return NULL;
+  }
+  else return NULL;
 
   transformCtx = xmlSecTransformCtxPtr_get(transformCtx_obj);
     
@@ -207,8 +216,11 @@ PyObject *xmlsec_TransformCtxDestroy(PyObject *self, PyObject *args) {
   PyObject *ctx_obj;
   xmlSecTransformCtxPtr ctx;
 
-  if(!PyArg_ParseTuple(args, (char *) "O:transformCtxDestroy", &ctx_obj))
-    return NULL;
+  if (CheckArgs(args, "O:transformCtxDestroy")) {
+    if(!PyArg_ParseTuple(args, (char *) "O:transformCtxDestroy", &ctx_obj))
+      return NULL;
+  }
+  else return NULL;
 
   ctx = xmlSecTransformCtxPtr_get(ctx_obj);
   xmlSecTransformCtxDestroy(ctx);
@@ -221,8 +233,11 @@ PyObject *xmlsec_TransformCtxInitialize(PyObject *self, PyObject *args) {
   PyObject *ctx_obj;
   xmlSecTransformCtxPtr ctx;
 
-  if(!PyArg_ParseTuple(args, (char *) "O:transformCtxInitialize", &ctx_obj))
-    return NULL;
+  if (CheckArgs(args, "O:transformCtxInitialize")) {
+    if(!PyArg_ParseTuple(args, (char *) "O:transformCtxInitialize", &ctx_obj))
+      return NULL;
+  }
+  else return NULL;
 
   ctx = xmlSecTransformCtxPtr_get(ctx_obj);
   xmlSecTransformCtxInitialize(ctx);
@@ -235,8 +250,11 @@ PyObject *xmlsec_TransformCtxFinalize(PyObject *self, PyObject *args) {
   PyObject *ctx_obj;
   xmlSecTransformCtxPtr ctx;
 
-  if(!PyArg_ParseTuple(args, (char *) "O:transformCtxFinalize", &ctx_obj))
-    return NULL;
+  if (CheckArgs(args, "O:transformCtxFinalize")) {
+    if(!PyArg_ParseTuple(args, (char *) "O:transformCtxFinalize", &ctx_obj))
+      return NULL;
+  }
+  else return NULL;
 
   ctx = xmlSecTransformCtxPtr_get(ctx_obj);
   xmlSecTransformCtxFinalize(ctx);
@@ -249,8 +267,11 @@ PyObject *xmlsec_TransformCtxReset(PyObject *self, PyObject *args) {
   PyObject *ctx_obj;
   xmlSecTransformCtxPtr ctx;
 
-  if(!PyArg_ParseTuple(args, (char *) "O:transformCtxReset", &ctx_obj))
-    return NULL;
+  if (CheckArgs(args, "O:transformCtxReset")) {
+    if(!PyArg_ParseTuple(args, (char *) "O:transformCtxReset", &ctx_obj))
+      return NULL;
+  }
+  else return NULL;
 
   ctx = xmlSecTransformCtxPtr_get(ctx_obj);
   xmlSecTransformCtxReset(ctx);
@@ -268,9 +289,12 @@ PyObject *xmlSecTransform_getattr(PyObject *self, PyObject *args) {
   xmlSecTransformPtr transform;
   const char *attr;
 
-  if (!PyArg_ParseTuple(args, "Os:transformGetAttr",
-			&transform_obj, &attr))
-    return NULL;
+  if (CheckArgs(args, "OS:transformGetAttr")) {
+    if (!PyArg_ParseTuple(args, "Os:transformGetAttr",
+			  &transform_obj, &attr))
+      return NULL;
+  }
+  else return NULL;
 
   transform = xmlSecTransformPtr_get(transform_obj);
 
@@ -308,9 +332,12 @@ PyObject *xmlSecTransform_setattr(PyObject *self, PyObject *args) {
   xmlSecTransformPtr transform;
   const char *name;
 
-  if (!PyArg_ParseTuple(args, "OsO:transformSetAttr",
-			&transform_obj, &name, &value_obj))
-    return NULL;
+  if (CheckArgs(args, "OS?:transformSetAttr")) {
+    if (!PyArg_ParseTuple(args, "OsO:transformSetAttr",
+			  &transform_obj, &name, &value_obj))
+      return NULL;
+  }
+  else return NULL;
 
   transform = xmlSecTransformPtr_get(transform_obj);
     
@@ -346,8 +373,11 @@ PyObject *xmlsec_TransformCreate(PyObject *self, PyObject *args) {
   xmlSecTransformId id;
   xmlSecTransformPtr transform;
 
-  if(!PyArg_ParseTuple(args, (char *) "O:transformCreate", &id_obj))
-    return NULL;
+  if (CheckArgs(args, "O:transformCreate")) {
+    if(!PyArg_ParseTuple(args, (char *) "O:transformCreate", &id_obj))
+      return NULL;
+  }
+  else return NULL;
 
   id = xmlSecTransformId_get(id_obj);
   transform = xmlSecTransformCreate(id);
@@ -359,8 +389,11 @@ PyObject *xmlsec_TransformDestroy(PyObject *self, PyObject *args) {
   PyObject *transform_obj;
   xmlSecTransformPtr transform;
 
-  if(!PyArg_ParseTuple(args, (char *) "O:transformDestroy", &transform_obj))
-    return NULL;
+  if (CheckArgs(args, "O:transformDestroy")) {
+    if(!PyArg_ParseTuple(args, (char *) "O:transformDestroy", &transform_obj))
+      return NULL;
+  }
+  else return NULL;
 
   transform = xmlSecTransformPtr_get(transform_obj);
   xmlSecTransformDestroy(transform);
@@ -376,9 +409,12 @@ PyObject *xmlsec_TransformNodeRead(PyObject *self, PyObject *args) {
   xmlSecTransformCtxPtr transformCtx;
   xmlSecTransformPtr transform;
 
-  if(!PyArg_ParseTuple(args, (char *) "OiO:transformNodeRead", &node_obj,
-		       &usage, &transformCtx_obj))
-    return NULL;
+  if (CheckArgs(args, "OIO:transformNodeRead")) {
+    if(!PyArg_ParseTuple(args, (char *) "OiO:transformNodeRead", &node_obj,
+			 &usage, &transformCtx_obj))
+      return NULL;
+  }
+  else return NULL;
 
   node = xmlNodePtr_get(node_obj);
   transformCtx = xmlSecTransformCtxPtr_get(transformCtx_obj);
@@ -393,9 +429,12 @@ PyObject *xmlsec_TransformSetKey(PyObject *self, PyObject *args) {
   xmlSecKeyPtr key;
   int ret;
 
-  if(!PyArg_ParseTuple(args, (char *) "OO:transformSetKey", &transform_obj,
-		       &key_obj))
-    return NULL;
+  if (CheckArgs(args, "OO:transformSetKey")) {
+    if(!PyArg_ParseTuple(args, (char *) "OO:transformSetKey", &transform_obj,
+			 &key_obj))
+      return NULL;
+  }
+  else return NULL;
 
   transform = xmlSecTransformPtr_get(transform_obj);
   key = xmlSecKeyPtr_get(key_obj);
@@ -410,9 +449,12 @@ PyObject *xmlsec_TransformSetKeyReq(PyObject *self, PyObject *args) {
   xmlSecKeyReqPtr keyReq;
   int ret;
 
-  if(!PyArg_ParseTuple(args, (char *) "OO:transformSetKeyReq", &transform_obj,
-		       &keyReq_obj))
-    return NULL;
+  if (CheckArgs(args, "OO:transformSetKeyReq")) {
+    if(!PyArg_ParseTuple(args, (char *) "OO:transformSetKeyReq",
+			 &transform_obj, &keyReq_obj))
+      return NULL;
+  }
+  else return NULL;
 
   transform = xmlSecTransformPtr_get(transform_obj);
   keyReq = xmlSecKeyReqPtr_get(keyReq_obj);
@@ -426,9 +468,12 @@ PyObject *xmlsec_TransformBase64SetLineSize(PyObject *self, PyObject *args) {
   xmlSecTransformPtr transform;
   xmlSecSize lineSize;
 
-  if(!PyArg_ParseTuple(args, (char *) "Oi:transformBase64SetLineSize",
-		       &transform_obj, &lineSize))
-    return NULL;
+  if (CheckArgs(args, "OI:transformBase64SetLineSize")) {
+    if(!PyArg_ParseTuple(args, (char *) "Oi:transformBase64SetLineSize",
+			 &transform_obj, &lineSize))
+      return NULL;
+  }
+  else return NULL;
 
   transform = xmlSecTransformPtr_get(transform_obj);
   xmlSecTransformBase64SetLineSize(transform, lineSize);
@@ -445,9 +490,12 @@ PyObject *xmlsec_TransformXPointerSetExpr(PyObject *self, PyObject *args) {
   xmlNodePtr hereNode;
   int ret;
 
-  if(!PyArg_ParseTuple(args, (char *) "OsiO:transformXPointerSetExpr",
-		       &transform_obj, &expr, &nodeSetType, &hereNode_obj))
-    return NULL;
+  if (CheckArgs(args, "OSIO:transformXPointerSetExpr")) {
+    if(!PyArg_ParseTuple(args, (char *) "OsiO:transformXPointerSetExpr",
+			 &transform_obj, &expr, &nodeSetType, &hereNode_obj))
+      return NULL;
+  }
+  else return NULL;
 
   transform = xmlSecTransformPtr_get(transform_obj);
   hereNode = xmlNodePtr_get(hereNode_obj);
@@ -462,9 +510,12 @@ PyObject *xmlsec_TransformVisa3DHackSetID(PyObject *self, PyObject *args) {
   const xmlChar *id;
   int ret;
 
-  if(!PyArg_ParseTuple(args, (char *) "Os:transformVisa3DHackSetID",
-		       &transform_obj, &id))
-    return NULL;
+  if (CheckArgs(args, "OS:transformVisa3DHackSetID")) {
+    if(!PyArg_ParseTuple(args, (char *) "Os:transformVisa3DHackSetID",
+			 &transform_obj, &id))
+      return NULL;
+  }
+  else return NULL;
 
   transform = xmlSecTransformPtr_get(transform_obj);
   ret = xmlSecTransformVisa3DHackSetID(transform, id);
@@ -821,13 +872,17 @@ PyObject *transforms_TransformIdCreate(PyObject *self, PyObject *args) {
   xmlSecTransformUsage usage;
   struct _xmlSecTransformKlass *transformId;
 
-  if (!PyArg_ParseTuple(args, (char *) "iissiOOOOOOOOOOOOO:keyTransformIdCreate",
-			&klassSize, &objSize, &name, &href, &usage,
-			&initialize_obj, &finalize_obj, &readNode_obj,
-			&writeNode_obj, &setKeyReq_obj, &setKey_obj, &verify_obj,
-			&getDataType_obj, &pushBin_obj, &popBin_obj, &pushXml_obj,
-			&popXml_obj, &execute_obj))
+  if (CheckArgs(args, "IISSIccccccccccccc:keyTransformIdCreate")) {
+    if (!PyArg_ParseTuple(args, (char *) "iissiOOOOOOOOOOOOO:keyTransformIdCreate",
+			  &klassSize, &objSize, &name, &href, &usage,
+			  &initialize_obj, &finalize_obj, &readNode_obj,
+			  &writeNode_obj, &setKeyReq_obj, &setKey_obj,
+			  &verify_obj, &getDataType_obj, &pushBin_obj,
+			  &popBin_obj, &pushXml_obj, &popXml_obj,
+			  &execute_obj))
     return NULL;
+  }
+  else return NULL;
 
   if (TransformInitializeMethods == NULL && initialize_obj != Py_None)
     TransformInitializeMethods = xmlHashCreate(HASH_TABLE_SIZE);
