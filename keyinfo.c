@@ -27,6 +27,9 @@
 #include "keyinfo.h"
 #include "keys.h"
 #include "keysmngr.h"
+#include "list.h"
+#include "transforms.h"
+#include "xmlenc.h"
 
 PyObject *wrap_xmlSecKeyInfoCtxPtr(xmlSecKeyInfoCtxPtr ctx) {
   PyObject *ret;
@@ -38,6 +41,93 @@ PyObject *wrap_xmlSecKeyInfoCtxPtr(xmlSecKeyInfoCtxPtr ctx) {
   ret = PyCObject_FromVoidPtrAndDesc((void *) ctx,
 				     (char *) "xmlSecKeyInfoCtxPtr", NULL);
   return (ret);
+}
+
+/******************************************************************************/
+
+PyObject *xmlSecKeyInfoCtx_getattr(PyObject *self, PyObject *args) {
+  PyObject *keyInfoCtx_obj;
+  xmlSecKeyInfoCtxPtr keyInfoCtx;
+  const char *attr;
+
+  if (!PyArg_ParseTuple(args, "Os:keyInfoCtxGetAttr", &keyInfoCtx_obj, &attr))
+    return NULL;
+
+  keyInfoCtx = xmlSecKeyInfoCtxPtr_get(keyInfoCtx_obj);
+
+  if (!strcmp(attr, "__members__"))
+    return Py_BuildValue("[ssssssssssssss]", "flags",
+			 "flags2", "keysMngr", "mode", "enabledKeyData",
+			 "base64LineSize", "retrievalMethodCtx",
+			 "maxRetrievalMethodLevel", "encCtx",
+			 "maxEncryptedKeyLevel", "certsVerificationTime",
+			 "certsVerificationDepth", "curRetrievalMethodLevel",
+			 "keyReq");
+  if (!strcmp(attr, "flags"))
+    return (wrap_int(keyInfoCtx->flags));
+  if (!strcmp(attr, "flags2"))
+    return (wrap_int(keyInfoCtx->flags2));
+  if (!strcmp(attr, "keysMngr"))
+    return (wrap_xmlSecKeysMngrPtr(keyInfoCtx->keysMngr));
+  if (!strcmp(attr, "mode"))
+    return (wrap_int(keyInfoCtx->mode));
+  if (!strcmp(attr, "enabledKeyData"))
+    return (wrap_xmlSecPtrListPtr(&(keyInfoCtx->enabledKeyData)));
+  if (!strcmp(attr, "base64LineSize"))
+    return (wrap_int(keyInfoCtx->base64LineSize));
+  if (!strcmp(attr, "retrievalMethodCtx"))
+    return (wrap_xmlSecTransformCtxPtr(&(keyInfoCtx->retrievalMethodCtx)));
+  if (!strcmp(attr, "maxRetrievalMethodLevel"))
+    return (wrap_int(keyInfoCtx->maxRetrievalMethodLevel));
+  if (!strcmp(attr, "encCtx"))
+    return (wrap_xmlSecEncCtxPtr(keyInfoCtx->encCtx));
+  if (!strcmp(attr, "maxEncryptedKeyLevel"))
+    return (wrap_int(keyInfoCtx->maxEncryptedKeyLevel));
+  if (!strcmp(attr, "keyReq"))
+    return wrap_xmlSecKeyReqPtr(&(keyInfoCtx->keyReq));
+  /* TODO */
+
+  Py_INCREF(Py_None);
+  return (Py_None);
+}
+
+PyObject *xmlSecKeyInfoCtx_setattr(PyObject *self, PyObject *args) {
+  PyObject *keyInfoCtx_obj, *value_obj;
+  xmlSecKeyInfoCtxPtr keyInfoCtx;
+  const char *name;
+
+  if (!PyArg_ParseTuple(args, "OsO:keyInfoCtxSetAttr",
+			&keyInfoCtx_obj, &name, &value_obj))
+    return NULL;
+
+  keyInfoCtx = xmlSecKeyInfoCtxPtr_get(keyInfoCtx_obj);
+    
+  if (!strcmp(name, "flags"))
+    keyInfoCtx->flags = PyInt_AsLong(value_obj);
+  else if (!strcmp(name, "flags2"))
+    keyInfoCtx->flags2 = PyInt_AsLong(value_obj);
+  else if (!strcmp(name, "keysMngr"))
+    keyInfoCtx->keysMngr = xmlSecKeysMngrPtr_get(value_obj);
+  else if (!strcmp(name, "mode"))
+    keyInfoCtx->mode = PyInt_AsLong(value_obj);
+  else if (!strcmp(name, "enabledKeyData"))
+    keyInfoCtx->enabledKeyData = *(xmlSecPtrListPtr_get(value_obj));
+  else if (!strcmp(name, "base64LineSize"))
+    keyInfoCtx->base64LineSize = PyInt_AsLong(value_obj);
+  else if (!strcmp(name, "retrievalMethodCtx"))
+    keyInfoCtx->retrievalMethodCtx = *(xmlSecTransformCtxPtr_get(value_obj));
+  else if (!strcmp(name, "maxRetrievalMethodLevel"))
+    keyInfoCtx->maxRetrievalMethodLevel = PyInt_AsLong(value_obj);
+  else if (!strcmp(name, "encCtx"))
+    keyInfoCtx->encCtx = xmlSecEncCtxPtr_get(value_obj);
+  else if (!strcmp(name, "maxEncryptedKeyLevel"))
+    keyInfoCtx->maxEncryptedKeyLevel = PyInt_AsLong(value_obj);
+  else if (!strcmp(name, "keyReq"))
+    keyInfoCtx->keyReq = *(xmlSecKeyReqPtr_get(value_obj));
+  /* TODO */
+
+  Py_INCREF(Py_None);
+  return (Py_None);
 }
 
 /*****************************************************************************/
@@ -220,21 +310,4 @@ PyObject *xmlsec_KeyDataRetrievalMethodId(PyObject *self, PyObject *args) {
 }
 PyObject *xmlsec_KeyDataEncryptedKeyId(PyObject *self, PyObject *args) {
   return PyCObject_FromVoidPtr((void  *)xmlSecKeyDataEncryptedKeyId, NULL);
-}
-
-/*****************************************************************************/
-
-PyObject *keyinfo_get_enabledKeyData(PyObject *self, PyObject *args) {
-  PyObject *keyInfoCtx_obj;
-  xmlSecKeyInfoCtxPtr keyInfoCtx;
-  xmlSecPtrListPtr enabledKeyData;
-  PyObject *ret;
-
-  if (!PyArg_ParseTuple(args, "O:keyInfoCtxGetEnabledKeyData", &keyInfoCtx_obj))
-    return NULL;
-  keyInfoCtx = xmlSecKeyInfoCtxPtr_get(keyInfoCtx_obj);
-  enabledKeyData = &(keyInfoCtx->enabledKeyData);
-
-  ret = PyCObject_FromVoidPtrAndDesc((void *) enabledKeyData, (char *) "xmlSecPtrListPtr", NULL);
-  return (ret);
 }

@@ -7,6 +7,9 @@ typedef struct {
 
 PyObject *wrap_xmlSecKeyInfoCtxPtr(xmlSecKeyInfoCtxPtr ctx);
 
+PyObject *xmlSecKeyInfoCtx_getattr(PyObject *self, PyObject *args);
+PyObject *xmlSecKeyInfoCtx_setattr(PyObject *self, PyObject *args);
+
 PyObject *xmlsec_KeyInfoNodeRead(PyObject *self, PyObject *args);
 PyObject *xmlsec_KeyInfoNodeWrite(PyObject *self, PyObject *args);
 PyObject *xmlsec_KeyInfoCtxCreate(PyObject *self, PyObject *args);
@@ -22,5 +25,3 @@ PyObject *xmlsec_KeyDataNameId(PyObject *self, PyObject *args);
 PyObject *xmlsec_KeyDataValueId(PyObject *self, PyObject *args);
 PyObject *xmlsec_KeyDataRetrievalMethodId(PyObject *self, PyObject *args);
 PyObject *xmlsec_KeyDataEncryptedKeyId(PyObject *self, PyObject *args);
-
-PyObject *keyinfo_get_enabledKeyData(PyObject *self, PyObject *args);
