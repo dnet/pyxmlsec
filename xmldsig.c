@@ -157,9 +157,6 @@ PyObject *xmlsec_DSigCtxSign(PyObject *self, PyObject *args) {
   dsigCtx = xmlSecDSigCtxPtr_get(PyObject_GetAttr(dsigCtx_obj, PyString_FromString("_o")));
   tmpl = xmlNodePtr_get(PyObject_GetAttr(tmpl_obj, PyString_FromString("_o")));
   ret = xmlSecDSigCtxSign(dsigCtx, tmpl);
-  if (ret < 0) {
-    PyErr_SetFromErrno(xmlsec_error);
-  }
 
   return Py_BuildValue("i", ret);
 }
@@ -178,9 +175,6 @@ PyObject *xmlsec_DSigCtxVerify(PyObject *self, PyObject *args) {
   node = xmlNodePtr_get(PyObject_GetAttr(node_obj, PyString_FromString("_o")));
 
   ret = xmlSecDSigCtxVerify(dsigCtx, node);
-  if (ret < 0) {
-    PyErr_SetFromErrno(xmlsec_error);
-  }
   return Py_BuildValue("i", ret);
 }
 
@@ -194,9 +188,6 @@ PyObject *xmlsec_DSigCtxEnableReferenceTransform(PyObject *self, PyObject *args)
 
   dsigCtx = xmlSecDSigCtxPtr_get(PyObject_GetAttr(dsigCtx_obj, PyString_FromString("_o")));
   ret = xmlSecDSigCtxEnableReferenceTransform(dsigCtx, PyCObject_AsVoidPtr(transformId_meth));
-  if (ret < 0) {
-    PyErr_SetFromErrno(xmlsec_error);
-  }
   return Py_BuildValue("i", ret);
 }
 
@@ -210,9 +201,7 @@ PyObject *xmlsec_DSigCtxEnableSignatureTransform(PyObject *self, PyObject *args)
 
   dsigCtx = xmlSecDSigCtxPtr_get(PyObject_GetAttr(dsigCtx_obj, PyString_FromString("_o")));
   ret = xmlSecDSigCtxEnableSignatureTransform(dsigCtx, PyCObject_AsVoidPtr(transformId_meth));
-  if (ret < 0) {
-    PyErr_SetFromErrno(xmlsec_error);
-  }
+
   return Py_BuildValue("i", ret);
 }
 
@@ -227,8 +216,10 @@ PyObject *xmlsec_DSigCtxGetPreSignBuffer(PyObject *self, PyObject *args) {
 
   dsigCtx = xmlSecDSigCtxPtr_get(PyObject_GetAttr(dsigCtx_obj, PyString_FromString("_o")));
   buf = xmlSecDSigCtxGetPreSignBuffer(dsigCtx);
-  if (buf < 0) {
+  if (buf == NULL) {
     PyErr_SetFromErrno(xmlsec_error);
+    Py_INCREF(Py_None);
+    return Py_None;
   }
   ret = PyCObject_FromVoidPtrAndDesc((void *) buf, (char *) "xmlSecBufferPtr", NULL);
   return (ret);
