@@ -87,3 +87,13 @@ PyObject *wrap_xmlOutputBufferPtr(xmlOutputBufferPtr buf) {
 				     (char *) "xmlOutputBufferPtr", NULL);
   return (ret);
 }
+
+/* Functions for xmlsec objects */
+
+PyObject *wrap_xmlSecBytePtrConst(const xmlSecByte *c) {
+  if (c == NULL) {
+    Py_INCREF(Py_None);
+    return (Py_None);
+  }
+  return Py_BuildValue("c", c);
+}
