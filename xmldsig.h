@@ -9,6 +9,8 @@ typedef struct {
 
 PyObject *xmlsec_DSigCtxCreate(PyObject *self, PyObject *args);
 PyObject *xmlsec_DSigCtxDestroy(PyObject *self, PyObject *args);
+PyObject *xmlsec_DSigCtxInitialize(PyObject *self, PyObject *args);
+PyObject *xmlsec_DSigCtxFinalize(PyObject *self, PyObject *args);
 PyObject *xmlsec_DSigCtxSign(PyObject *self, PyObject *args);
 PyObject *xmlsec_DSigCtxVerify(PyObject *self, PyObject *args);
 PyObject *xmlsec_DSigCtxEnableReferenceTransform(PyObject *self, PyObject *args);

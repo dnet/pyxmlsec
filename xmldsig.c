@@ -110,6 +110,40 @@ PyObject *xmlsec_DSigCtxDestroy(PyObject *self, PyObject *args) {
   return Py_BuildValue("i", 0);
 }
 
+PyObject *xmlsec_DSigCtxInitialize(PyObject *self, PyObject *args) {
+  PyObject *dsigCtx_obj, *mngr_obj;
+  xmlSecDSigCtxPtr dsigCtx;
+  xmlSecKeysMngrPtr mngr = NULL;
+  int ret;
+
+  if (!PyArg_ParseTuple(args, "OO:dsigCtxInitialize", &dsigCtx_obj, &mngr_obj))
+    return NULL;
+
+  dsigCtx = xmlSecDSigCtxPtr_get(PyObject_GetAttr(dsigCtx_obj, PyString_FromString("_o")));
+  mngr = xmlSecKeysMngrPtr_get(PyObject_GetAttr(mngr_obj, PyString_FromString("_o")));
+  
+  ret = xmlSecDSigCtxInitialize(dsigCtx, mngr);
+  if (ret < 0) {
+    PyErr_SetFromErrno(xmlsec_error);
+  }
+  return Py_BuildValue("i", ret);
+}
+
+PyObject *xmlsec_DSigCtxFinalize(PyObject *self, PyObject *args) {
+  PyObject *dsigCtx_obj;
+  xmlSecDSigCtxPtr dsigCtx;
+
+  if (!PyArg_ParseTuple(args, "O:dsigCtxFinalize", &dsigCtx_obj))
+    return NULL;
+
+  dsigCtx = xmlSecDSigCtxPtr_get(PyObject_GetAttr(dsigCtx_obj, PyString_FromString("_o")));
+  
+  xmlSecDSigCtxFinalize(dsigCtx);
+
+  Py_INCREF(Py_None);
+  return Py_None;
+}
+
 PyObject *xmlsec_DSigCtxSign(PyObject *self, PyObject *args) {
   PyObject *dsigCtx_obj;
   PyObject *tmpl_obj;
