@@ -292,24 +292,28 @@ static PyMethodDef xmlsec_methods[] = {
   {"tmplKeyInfoAddKeyName",              xmlsec_TmplKeyInfoAddKeyName,              METH_VARARGS},
   {"tmplKeyInfoAddKeyValue",             xmlsec_TmplKeyInfoAddKeyValue,             METH_VARARGS},
   {"tmplKeyInfoAddX509Data",             xmlsec_TmplKeyInfoAddX509Data,             METH_VARARGS},
-  {"tmplKeyInfoAddRetrievalMethod",      xmlsec_TmplKeyInfoAddRetrievalMethod,      METH_VARARGS}, // New
-  {"tmplRetrievalMethodAddTransform",    xmlsec_TmplRetrievalMethodAddTransform,    METH_VARARGS}, // New
+  {"tmplKeyInfoAddRetrievalMethod",      xmlsec_TmplKeyInfoAddRetrievalMethod,      METH_VARARGS},
+  {"tmplRetrievalMethodAddTransform",    xmlsec_TmplRetrievalMethodAddTransform,    METH_VARARGS},
   {"tmplKeyInfoAddEncryptedKey",         xmlsec_TmplKeyInfoAddEncryptedKey,         METH_VARARGS},
-  {"tmplTransformAddHmacOutputLength",   xmlsec_TmplTransformAddHmacOutputLength,   METH_VARARGS}, // New
-  {"tmplTransformAddRsaOaepParam",       xmlsec_TmplTransformAddRsaOaepParam,       METH_VARARGS}, // New
-  {"tmplTransformAddXsltStylesheet",     xmlsec_TmplTransformAddXsltStylesheet,     METH_VARARGS}, // New
-  {"tmplTransformAddC14NInclNamespaces", xmlsec_TmplTransformAddC14NInclNamespaces, METH_VARARGS}, // New
-  {"tmplTransformAddXPath",              xmlsec_TmplTransformAddXPath,              METH_VARARGS}, // New
-  {"tmplTransformAddXPath2",             xmlsec_TmplTransformAddXPath2,             METH_VARARGS}, // New
-  {"tmplTransformAddXPointer",           xmlsec_TmplTransformAddXPointer,           METH_VARARGS}, // New
+  {"tmplTransformAddHmacOutputLength",   xmlsec_TmplTransformAddHmacOutputLength,   METH_VARARGS},
+  {"tmplTransformAddRsaOaepParam",       xmlsec_TmplTransformAddRsaOaepParam,       METH_VARARGS},
+  {"tmplTransformAddXsltStylesheet",     xmlsec_TmplTransformAddXsltStylesheet,     METH_VARARGS},
+  {"tmplTransformAddC14NInclNamespaces", xmlsec_TmplTransformAddC14NInclNamespaces, METH_VARARGS},
+  {"tmplTransformAddXPath",              xmlsec_TmplTransformAddXPath,              METH_VARARGS},
+  {"tmplTransformAddXPath2",             xmlsec_TmplTransformAddXPath2,             METH_VARARGS},
+  {"tmplTransformAddXPointer",           xmlsec_TmplTransformAddXPointer,           METH_VARARGS},
 
   /* transforms.h */
   {"transformUriTypeCheck",           xmlsec_TransformUriTypeCheck,           METH_VARARGS},
+  {"transformCtxGetAttr", xmlSecTransformCtx_getattr, METH_VARARGS}, // New
+  {"transformCtxSetAttr", xmlSecTransformCtx_setattr, METH_VARARGS}, // New
   {"transformCtxCreate",              xmlsec_TransformCtxCreate,              METH_VARARGS},
   {"transformCtxDestroy",             xmlsec_TransformCtxDestroy,             METH_VARARGS},
   {"transformCtxInitialize",          xmlsec_TransformCtxInitialize,          METH_VARARGS},
   {"transformCtxFinalize",            xmlsec_TransformCtxFinalize,            METH_VARARGS},
   {"transformCtxReset",               xmlsec_TransformCtxReset,               METH_VARARGS},
+  {"transformGetAttr", xmlSecTransform_getattr, METH_VARARGS}, // New
+  {"transformSetAttr", xmlSecTransform_setattr, METH_VARARGS}, // New
   {"transformCreate",                 xmlsec_TransformCreate,                 METH_VARARGS},
   {"transformDestroy",                xmlsec_TransformDestroy,                METH_VARARGS},
   {"transformNodeRead",               xmlsec_TransformNodeRead,               METH_VARARGS},
@@ -330,7 +334,7 @@ static PyMethodDef xmlsec_methods[] = {
   {"transformRemoveXmlTagsC14NId",    xmlsec_TransformRemoveXmlTagsC14NId,    METH_VARARGS},
   {"transformVisa3DHackId",           xmlsec_TransformVisa3DHackId,           METH_VARARGS},
   {"transformVisa3DHackSetID",        xmlsec_TransformVisa3DHackSetID,        METH_VARARGS},
-  {"transformIdCreate", transforms_TransformIdCreate, METH_VARARGS}, // New
+  {"transformIdCreate", transforms_TransformIdCreate, METH_VARARGS},
 
   /* version.h */
   {"xmlsec_version",          xmlsec_xmlsec_version,          METH_VARARGS},
