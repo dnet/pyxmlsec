@@ -98,6 +98,8 @@ static PyMethodDef xmlsec_methods[] = {
   {"base64Decode",        xmlsec_Base64Decode,        METH_VARARGS},
 
   /* buffer.h */
+  {"bufferGetAttr", xmlSecBuffer_getattr, METH_VARARGS}, // New
+  {"bufferSetAttr", xmlSecBuffer_setattr, METH_VARARGS}, // New
   {"bufferSetDefaultAllocMode",    xmlsec_BufferSetDefaultAllocMode,    METH_VARARGS},
   {"bufferCreate",                 xmlsec_BufferCreate,                 METH_VARARGS},
   {"bufferDestroy",                xmlsec_BufferDestroy,                METH_VARARGS},
@@ -120,8 +122,8 @@ static PyMethodDef xmlsec_methods[] = {
   {"bufferCreateOutputBuffer",     xmlsec_BufferCreateOutputBuffer,     METH_VARARGS},
 
   /* keys.h */
-  {"keyReqGetAttr", xmlSecKeyReq_getattr, METH_VARARGS}, // New
-  {"keyReqSetAttr", xmlSecKeyReq_setattr, METH_VARARGS}, // New
+  {"keyReqGetAttr", xmlSecKeyReq_getattr, METH_VARARGS},
+  {"keyReqSetAttr", xmlSecKeyReq_setattr, METH_VARARGS},
   {"keyReqCreate",        keys_KeyReqCreate,          METH_VARARGS},
   {"keyReqInitialize",    xmlsec_KeyReqInitialize,    METH_VARARGS},
   {"keyReqFinalize",      xmlsec_KeyReqFinalize,      METH_VARARGS},
@@ -129,6 +131,8 @@ static PyMethodDef xmlsec_methods[] = {
   {"keyReqCopy",          xmlsec_KeyReqCopy,          METH_VARARGS},
   {"keyReqMatchKey",      xmlsec_KeyReqMatchKey,      METH_VARARGS},
   {"keyReqMatchKeyValue", xmlsec_KeyReqMatchKeyValue, METH_VARARGS},
+  {"keyGetAttr", xmlSecKey_getattr, METH_VARARGS}, // New
+  {"keySetAttr", xmlSecKey_setattr, METH_VARARGS}, // New
   {"keyCreate",           xmlsec_KeyCreate,           METH_VARARGS},
   {"keyDestroy",          xmlsec_KeyDestroy,          METH_VARARGS},
   {"keyEmpty",            xmlsec_KeyEmpty,            METH_VARARGS},
@@ -155,8 +159,8 @@ static PyMethodDef xmlsec_methods[] = {
   {"keyPtrListId",        xmlsec_KeyPtrListId,        METH_VARARGS},
 
   /* keyinfo.h */
-  {"keyInfoCtxGetAttr", xmlSecKeyInfoCtx_getattr, METH_VARARGS}, // New
-  {"keyInfoCtxSetAttr", xmlSecKeyInfoCtx_setattr, METH_VARARGS}, // New
+  {"keyInfoCtxGetAttr", xmlSecKeyInfoCtx_getattr, METH_VARARGS},
+  {"keyInfoCtxSetAttr", xmlSecKeyInfoCtx_setattr, METH_VARARGS},
   {"keyInfoNodeRead",  xmlsec_KeyInfoNodeRead,  METH_VARARGS},
   {"keyInfoNodeWrite", xmlsec_KeyInfoNodeWrite, METH_VARARGS},
   {"keyInfoCtxCreate",       xmlsec_KeyInfoCtxCreate,       METH_VARARGS},
@@ -176,8 +180,8 @@ static PyMethodDef xmlsec_methods[] = {
   /* keysdata.h */
 
   /* keysmngr.h */
-  {"keysMngrGetAttr", xmlSecKeysMngr_getattr, METH_VARARGS}, // New
-  {"keysMngrSetAttr", xmlSecKeysMngr_setattr, METH_VARARGS}, // New
+  {"keysMngrGetAttr", xmlSecKeysMngr_getattr, METH_VARARGS},
+  {"keysMngrSetAttr", xmlSecKeysMngr_setattr, METH_VARARGS},
   {"keysMngrCreate",         xmlsec_KeysMngrCreate,         METH_VARARGS},
   {"keysMngrDestroy",        xmlsec_KeysMngrDestroy,        METH_VARARGS},
   {"keysMngrFindKey",        xmlsec_KeysMngrFindKey,        METH_VARARGS},
@@ -189,7 +193,7 @@ static PyMethodDef xmlsec_methods[] = {
   {"keyStoreCreate",    xmlsec_KeyStoreCreate,     METH_VARARGS},
   {"keyStoreDestroy",   xmlsec_KeyStoreDestroy,    METH_VARARGS},
   {"keyStoreFindKey",   xmlsec_KeyStoreFindKey,    METH_VARARGS},
-  {"keyStoreIdCreate",  keysmngr_KeyStoreIdCreate, METH_VARARGS}, // New
+  {"keyStoreIdCreate",  keysmngr_KeyStoreIdCreate, METH_VARARGS},
   {"simpleKeysStoreId", xmlsec_SimpleKeysStoreId,  METH_VARARGS},
 
   /* list.h  */
@@ -209,8 +213,9 @@ static PyMethodDef xmlsec_methods[] = {
   {"ptrListRemove",       xmlsec_PtrListRemove,       METH_VARARGS},
   {"ptrListDebugDump",    xmlsec_PtrListDebugDump,    METH_VARARGS},
   {"ptrListDebugXmlDump", xmlsec_PtrListDebugXmlDump, METH_VARARGS},
-  {"ptrListGetName",      xmlsec_PtrListGetName,      METH_VARARGS}, // New
-  {"ptrListIsValid",      xmlsec_PtrListIsValid,      METH_VARARGS}, // New
+  {"ptrListGetName",      xmlsec_PtrListGetName,      METH_VARARGS},
+  {"ptrListIsValid",      xmlsec_PtrListIsValid,      METH_VARARGS},
+  {"ptrListIdCreate", xmlsec_PtrListIdCreate, METH_VARARGS}, // New
 
   /* membuf.h */
   {"transformMemBufId",        xmlsec_TransformMemBufId,        METH_VARARGS},
