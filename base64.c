@@ -44,8 +44,11 @@ PyObject *xmlsec_Base64CtxCreate(PyObject *self, PyObject *args) {
   int encode;
   int columns;
 
-  if (!PyArg_ParseTuple(args, "ii:base64CtxCreate", &encode, &columns))
-    return NULL;
+  if (CheckArgs(args, "II:base64CtxCreate")) {
+    if (!PyArg_ParseTuple(args, "ii:base64CtxCreate", &encode, &columns))
+      return NULL;
+  }
+  else return NULL;
 
   return (wrap_xmlSecBase64CtxPtr(xmlSecBase64CtxCreate(encode, columns)));
 }
@@ -54,8 +57,11 @@ PyObject *xmlsec_Base64CtxDestroy(PyObject *self, PyObject *args) {
   PyObject *ctx_obj;
   xmlSecBase64CtxPtr ctx;
 
-  if (!PyArg_ParseTuple(args, "O:base64CtxDestroy", &ctx_obj))
-    return NULL;
+  if (CheckArgs(args, "O:base64CtxDestroy")) {
+    if (!PyArg_ParseTuple(args, "O:base64CtxDestroy", &ctx_obj))
+      return NULL;
+  }
+  else return NULL;
 
   ctx = xmlSecBase64CtxPtr_get(ctx_obj);
   
@@ -71,9 +77,12 @@ PyObject *xmlsec_Base64CtxInitialize(PyObject *self, PyObject *args) {
   int columns;
   xmlSecBase64CtxPtr ctx;
 
-  if (!PyArg_ParseTuple(args, "Oii:base64CtxInitialize",
-			&ctx_obj, &encode, &columns))
-    return NULL;
+  if (CheckArgs(args, "OII:base64CtxInitialize")) {
+    if (!PyArg_ParseTuple(args, "Oii:base64CtxInitialize",
+			  &ctx_obj, &encode, &columns))
+      return NULL;
+  }
+  else return NULL;
 
   ctx = xmlSecBase64CtxPtr_get(ctx_obj);
 
@@ -84,8 +93,11 @@ PyObject *xmlsec_Base64CtxFinalize(PyObject *self, PyObject *args) {
   PyObject *ctx_obj;
   xmlSecBase64CtxPtr ctx;
 
-  if (!PyArg_ParseTuple(args, "O:base64CtxFinalize", &ctx_obj))
-    return NULL;
+  if (CheckArgs(args, "O:base64CtxFinalize")) {
+    if (!PyArg_ParseTuple(args, "O:base64CtxFinalize", &ctx_obj))
+      return NULL;
+  }
+  else return NULL;
 
   ctx = xmlSecBase64CtxPtr_get(ctx_obj);
   
@@ -102,9 +114,12 @@ PyObject *xmlsec_Base64CtxUpdate(PyObject *self, PyObject *args) {
   xmlSecSize inSize;
   xmlSecSize outSize;
 
-  if (!PyArg_ParseTuple(args, "OsiOi:base64CtxUpdate", &ctx_obj, &in, &inSize,
-			&out_obj, &outSize))
+  if (CheckArgs(args, "OSIOI:base64CtxUpdate")) {
+    if (!PyArg_ParseTuple(args, "OsiOi:base64CtxUpdate", &ctx_obj,
+			  &in, &inSize, &out_obj, &outSize))
     return NULL;
+  }
+  else return NULL;
 
   ctx = xmlSecBase64CtxPtr_get(ctx_obj);
 
@@ -118,9 +133,12 @@ PyObject *xmlsec_Base64CtxFinal(PyObject *self, PyObject *args) {
   xmlSecByte *out;
   xmlSecSize outSize;
 
-  if (!PyArg_ParseTuple(args, "Os#:base64CtxFinal",
-			&ctx_obj, &out, &outSize))
+  if (CheckArgs(args, "OS:base64CtxFinal")) {
+    if (!PyArg_ParseTuple(args, "Os#:base64CtxFinal",
+			  &ctx_obj, &out, &outSize))
     return NULL;
+  }
+  else return NULL;
 
   ctx = xmlSecBase64CtxPtr_get(ctx_obj);
 
@@ -132,8 +150,11 @@ PyObject *xmlsec_Base64Encode(PyObject *self, PyObject *args) {
   xmlSecSize len;
   int columns;
 
-  if (!PyArg_ParseTuple(args, "sii:base64Encode", &buf, &len, &columns))
-    return NULL;
+  if (CheckArgs(args, "SII:base64Encode")) {
+    if (!PyArg_ParseTuple(args, "sii:base64Encode", &buf, &len, &columns))
+      return NULL;
+  }
+  else return NULL;
 
   return (wrap_xmlCharPtr(xmlSecBase64Encode(buf, len, columns)));
 }
@@ -143,8 +164,11 @@ PyObject *xmlsec_Base64Decode(PyObject *self, PyObject *args) {
   xmlSecByte *buf;
   xmlSecSize len;
 
-  if (!PyArg_ParseTuple(args, "ss#:base64Decode", &str, &buf, &len))
-    return NULL;
+  if (CheckArgs(args, "SS:base64Decode")) {
+    if (!PyArg_ParseTuple(args, "ss#:base64Decode", &str, &buf, &len))
+      return NULL;
+  }
+  else return NULL;
 
   return (wrap_int(xmlSecBase64Decode(str, buf, len)));
 }

@@ -95,9 +95,12 @@ PyObject *xmlsec_BufferSetDefaultAllocMode(PyObject *self, PyObject *args) {
   xmlSecAllocMode defAllocMode;
   xmlSecSize defInitialSize;
 
-  if(!PyArg_ParseTuple(args, (char *) "ii:bufferSetDefaultAllocMode",
-		       &defAllocMode, &defInitialSize))
-    return NULL;
+  if (CheckArgs(args, "II:bufferSetDefaultAllocMode")) {
+    if(!PyArg_ParseTuple(args, (char *) "ii:bufferSetDefaultAllocMode",
+			 &defAllocMode, &defInitialSize))
+      return NULL;
+  }
+  else return NULL;
 
   xmlSecBufferSetDefaultAllocMode(defAllocMode, defInitialSize);
   
@@ -109,8 +112,11 @@ PyObject *xmlsec_BufferCreate(PyObject *self, PyObject *args) {
   xmlSecSize size;
   xmlSecBufferPtr buf;
   
-  if(!PyArg_ParseTuple(args, (char *) "i:bufferCreate", &size))
-    return NULL;
+  if (CheckArgs(args, "I:bufferCreate")) {
+    if(!PyArg_ParseTuple(args, (char *) "i:bufferCreate", &size))
+      return NULL;
+  }
+  else return NULL;
 
   buf = xmlSecBufferCreate(size);
 
@@ -121,8 +127,11 @@ PyObject *xmlsec_BufferDestroy(PyObject *self, PyObject *args) {
   PyObject *buf_obj;
   xmlSecBufferPtr buf;
 
-  if (!PyArg_ParseTuple(args, "O:bufferDestroy", &buf_obj))
-    return NULL;
+  if (CheckArgs(args, "O:bufferDestroy")) {
+    if (!PyArg_ParseTuple(args, "O:bufferDestroy", &buf_obj))
+      return NULL;
+  }
+  else return NULL;
 
   buf = xmlSecBufferPtr_get(buf_obj);
   xmlSecBufferDestroy(buf);
@@ -136,8 +145,11 @@ PyObject *xmlsec_BufferInitialize(PyObject *self, PyObject *args) {
   xmlSecSize size;
   xmlSecBufferPtr buf;
 
-  if (!PyArg_ParseTuple(args, "Oi:bufferInitialize", &buf_obj, &size))
-    return NULL;
+  if (CheckArgs(args, "OI:bufferInitialize")) {
+    if (!PyArg_ParseTuple(args, "Oi:bufferInitialize", &buf_obj, &size))
+      return NULL;
+  }
+  else return NULL;
 
   buf = xmlSecBufferPtr_get(buf_obj);
   
@@ -148,8 +160,11 @@ PyObject *xmlsec_BufferFinalize(PyObject *self, PyObject *args) {
   PyObject *buf_obj;
   xmlSecBufferPtr buf;
 
-  if (!PyArg_ParseTuple(args, "O:bufferFinalize", &buf_obj))
-    return NULL;
+  if (CheckArgs(args, "O:bufferFinalize")) {
+    if (!PyArg_ParseTuple(args, "O:bufferFinalize", &buf_obj))
+      return NULL;
+  }
+  else return NULL;
 
   buf = xmlSecBufferPtr_get(buf_obj);
   xmlSecBufferFinalize(buf);
@@ -162,8 +177,11 @@ PyObject *xmlsec_BufferGetData(PyObject *self, PyObject *args) {
   PyObject *buf_obj;
   xmlSecBufferPtr buf;
 
-  if (!PyArg_ParseTuple(args, "O:bufferGetData", &buf_obj))
-    return NULL;
+  if (CheckArgs(args, "O:bufferGetData")) {
+    if (!PyArg_ParseTuple(args, "O:bufferGetData", &buf_obj))
+      return NULL;
+  }
+  else return NULL;
 
   buf = xmlSecBufferPtr_get(buf_obj);
 
@@ -176,8 +194,11 @@ PyObject *xmlsec_BufferSetData(PyObject *self, PyObject *args) {
   const xmlSecByte *data;
   xmlSecSize size;
 
+  if (CheckArgs(args, "OSI:bufferSetData")) {
     if (!PyArg_ParseTuple(args, "Osi:bufferSetData", &buf_obj, &data, &size))
-    return NULL;
+      return NULL;
+  }
+  else return NULL;
 
   buf = xmlSecBufferPtr_get(buf_obj);
 
@@ -189,8 +210,11 @@ PyObject *xmlsec_BufferGetSize(PyObject *self, PyObject *args) {
   xmlSecBufferPtr buf;
   xmlSecSize size;
 
-  if (!PyArg_ParseTuple(args, "O:bufferGetSize", &buf_obj))
-    return NULL;
+  if (CheckArgs(args, "O:bufferGetSize")) {
+    if (!PyArg_ParseTuple(args, "O:bufferGetSize", &buf_obj))
+      return NULL;
+  }
+  else return NULL;
 
   buf = xmlSecBufferPtr_get(buf_obj);
   size = xmlSecBufferGetSize(buf);
@@ -203,8 +227,11 @@ PyObject *xmlsec_BufferSetSize(PyObject *self, PyObject *args) {
   xmlSecBufferPtr buf;
   xmlSecSize size;
 
-  if (!PyArg_ParseTuple(args, "Oi:bufferSetSize", &buf_obj, &size))
-    return NULL;
+  if (CheckArgs(args, "OI:bufferSetSize")) {
+    if (!PyArg_ParseTuple(args, "Oi:bufferSetSize", &buf_obj, &size))
+      return NULL;
+  }
+  else return NULL;
 
   buf = xmlSecBufferPtr_get(buf_obj);
 
@@ -216,8 +243,11 @@ PyObject *xmlsec_BufferGetMaxSize(PyObject *self, PyObject *args) {
   xmlSecBufferPtr buf;
   xmlSecSize size;
 
-  if (!PyArg_ParseTuple(args, "O:bufferGetMaxSize", &buf_obj))
-    return NULL;
+  if (CheckArgs(args, "O:bufferGetMaxSize")) {
+    if (!PyArg_ParseTuple(args, "O:bufferGetMaxSize", &buf_obj))
+      return NULL;
+  }
+  else return NULL;
 
   buf = xmlSecBufferPtr_get(buf_obj);
   size = xmlSecBufferGetMaxSize(buf);
@@ -230,8 +260,11 @@ PyObject *xmlsec_BufferSetMaxSize(PyObject *self, PyObject *args) {
   xmlSecBufferPtr buf;
   xmlSecSize size;
 
-  if (!PyArg_ParseTuple(args, "Oi:bufferSetMaxSize", &buf_obj, &size))
-    return NULL;
+  if (CheckArgs(args, "OI:bufferSetMaxSize")) {
+    if (!PyArg_ParseTuple(args, "Oi:bufferSetMaxSize", &buf_obj, &size))
+      return NULL;
+  }
+  else return NULL;
 
   buf = xmlSecBufferPtr_get(buf_obj);
 
@@ -242,8 +275,11 @@ PyObject *xmlsec_BufferEmpty(PyObject *self, PyObject *args) {
   PyObject *buf_obj;
   xmlSecBufferPtr buf;
 
-  if (!PyArg_ParseTuple(args, "O:bufferEmpty", &buf_obj))
-    return NULL;
+  if (CheckArgs(args, "O:bufferEmpty")) {
+    if (!PyArg_ParseTuple(args, "O:bufferEmpty", &buf_obj))
+      return NULL;
+  }
+  else return NULL;
 
   buf = xmlSecBufferPtr_get(buf_obj);
   xmlSecBufferEmpty(buf);
@@ -258,8 +294,11 @@ PyObject *xmlsec_BufferAppend(PyObject *self, PyObject *args) {
   const xmlSecByte *data;
   xmlSecSize size;
 
-  if (!PyArg_ParseTuple(args, "Osi:bufferAppend", &buf_obj, &data, &size))
-    return NULL;
+  if (CheckArgs(args, "OSI:bufferAppend")) {
+    if (!PyArg_ParseTuple(args, "Osi:bufferAppend", &buf_obj, &data, &size))
+      return NULL;
+  }
+  else return NULL;
 
   buf = xmlSecBufferPtr_get(buf_obj);
   
@@ -272,8 +311,11 @@ PyObject *xmlsec_BufferPrepend(PyObject *self, PyObject *args) {
   const xmlSecByte *data;
   xmlSecSize size;
 
-  if (!PyArg_ParseTuple(args, "Osi:bufferPrepend", &buf_obj, &data, &size))
-    return NULL;
+  if (CheckArgs(args, "OSI:bufferPrepend")) {
+    if (!PyArg_ParseTuple(args, "Osi:bufferPrepend", &buf_obj, &data, &size))
+      return NULL;
+  }
+  else return NULL;
 
   buf = xmlSecBufferPtr_get(buf_obj);
   
@@ -285,8 +327,11 @@ PyObject *xmlsec_BufferRemoveHead(PyObject *self, PyObject *args) {
   xmlSecBufferPtr buf;
   xmlSecSize size;
 
-  if (!PyArg_ParseTuple(args, "Oi:bufferRemoveHead", &buf_obj, &size))
-    return NULL;
+  if (CheckArgs(args, "OI:bufferRemoveHead")) {
+    if (!PyArg_ParseTuple(args, "Oi:bufferRemoveHead", &buf_obj, &size))
+      return NULL;
+  }
+  else return NULL;
 
   buf = xmlSecBufferPtr_get(buf_obj);
   
@@ -298,8 +343,11 @@ PyObject *xmlsec_BufferRemoveTail(PyObject *self, PyObject *args) {
   xmlSecBufferPtr buf;
   xmlSecSize size;
 
-  if (!PyArg_ParseTuple(args, "Oi:bufferRemoveTail", &buf_obj, &size))
-    return NULL;
+  if (CheckArgs(args, "OI:bufferRemoveTail")) {
+    if (!PyArg_ParseTuple(args, "Oi:bufferRemoveTail", &buf_obj, &size))
+      return NULL;
+  }
+  else return NULL;
 
   buf = xmlSecBufferPtr_get(buf_obj);
   
@@ -311,8 +359,11 @@ PyObject *xmlsec_BufferReadFile(PyObject *self, PyObject *args) {
   xmlSecBufferPtr buf;
   const char *filename;
 
-  if (!PyArg_ParseTuple(args, "Os:bufferReadFile", &buf_obj, &filename))
-    return NULL;
+  if (CheckArgs(args, "OS:bufferReadFile")) {
+    if (!PyArg_ParseTuple(args, "Os:bufferReadFile", &buf_obj, &filename))
+      return NULL;
+  }
+  else return NULL;
 
   buf = xmlSecBufferPtr_get(buf_obj);
   
@@ -324,8 +375,12 @@ PyObject *xmlsec_BufferBase64NodeContentRead(PyObject *self, PyObject *args) {
   xmlSecBufferPtr buf;
   xmlNodePtr node;
 
-  if (!PyArg_ParseTuple(args, "OO:bufferBase64NodeContentRead", &buf_obj, &node_obj))
-    return NULL;
+  if (CheckArgs(args, "OO:bufferBase64NodeContentRead")) {
+    if (!PyArg_ParseTuple(args, "OO:bufferBase64NodeContentRead",
+			  &buf_obj, &node_obj))
+      return NULL;
+  }
+  else return NULL;
 
   buf = xmlSecBufferPtr_get(buf_obj);
   node = xmlNodePtr_get(node_obj);
@@ -339,9 +394,12 @@ PyObject *xmlsec_BufferBase64NodeContentWrite(PyObject *self, PyObject *args) {
   xmlNodePtr node;
   int columns;
 
-  if (!PyArg_ParseTuple(args, "OOi:bufferBase64NodeContentWrite", &buf_obj,
-			&node_obj, &columns))
-    return NULL;
+  if (CheckArgs(args, "OO:bufferBase64NodeContentWrite")) {
+    if (!PyArg_ParseTuple(args, "OO:bufferBase64NodeContentWrite", &buf_obj,
+			  &node_obj, &columns))
+      return NULL;
+  }
+  else return NULL;
 
   buf = xmlSecBufferPtr_get(buf_obj);
   node = xmlNodePtr_get(node_obj);
@@ -354,8 +412,11 @@ PyObject *xmlsec_BufferCreateOutputBuffer(PyObject *self, PyObject *args) {
   xmlSecBufferPtr buf;
   xmlOutputBufferPtr outBuf;
 
-  if (!PyArg_ParseTuple(args, "O:bufferCreateOutputBuffer", &buf_obj))
-    return NULL;
+  if (CheckArgs(args, "O:bufferCreateOutputBuffer")) {
+    if (!PyArg_ParseTuple(args, "O:bufferCreateOutputBuffer", &buf_obj))
+      return NULL;
+  }
+  else return NULL;
 
   buf = xmlSecBufferPtr_get(buf_obj);
   outBuf = xmlSecBufferCreateOutputBuffer(buf);
