@@ -1861,8 +1861,11 @@ class NodeSet:
 ###############################################################################
 # parse.h
 ###############################################################################
-# The XML Parser transform Id method
-transformXmlParserId = xmlsecmod.transformXmlParserId()
+
+def transformXmlParserId():
+    """Returns the XML parser transform id."""
+    return TransformId(_obj=xmlsecmod.transformXmlParserId())
+
 def parseFile(filename):
     """
     Loads XML Doc from file filename. We need a special version because of c14n
