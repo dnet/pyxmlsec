@@ -260,7 +260,7 @@ PyObject *xmlSecKey_getattr(PyObject *self, PyObject *args) {
     return Py_BuildValue("[ssssss]", "name", "value", "dataList", "usage",
 			 "notValidBefore", "notValidAfter");
   if (!strcmp(attr, "name"))
-    return (wrap_xmlCharPtr(key->name));
+    return (wrap_xmlCharPtrConst(key->name));
   if (!strcmp(attr, "value"))
     return (wrap_xmlSecKeyDataPtr(key->value));
   if (!strcmp(attr, "dataList"))
