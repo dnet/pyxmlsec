@@ -1171,6 +1171,22 @@ class TmplKeyInfo(libxml2.xmlNode):
         if _obj is None:
             raise parserError('xmlSecTmplKeyInfoAddX509Data() failed')
         return libxml2.xmlNode(_obj=_obj)
+    def addEncryptedKey(self, encMethodId, id, type, recipient):
+        """
+        Adds <enc:EncryptedKey/> node with given attributes to the
+        <dsig:KeyInfo/> node keyInfoNode.
+        encMethodId : the encryption method (optional).
+        id          : the Id attribute (optional).
+        type        : the Type attribute (optional).
+        recipient   : the Recipient attribute (optional).
+        Returns     : the newly created <enc:EncryptedKey/> node or None if an
+        error occurs.
+        """
+        _obj = xmlsecmod.tmplKeyInfoAddEncryptedKey(self, encMethodId, id, type,
+                                                    recipient)
+        if _obj is None:
+            raise parserError('xmlSecTmplKeyInfoAddEncryptedKey() failed')
+        return TmplEncData(_obj=_obj)
 
 class TmplReference(libxml2.xmlNode):
     def __init__(self, _obj=None):
@@ -1386,6 +1402,24 @@ KeyDataFormatPem      = 2 # the PEM key data (cert or public/private key).
 KeyDataFormatDer      = 3 # the DER key data (cert or public/private key).
 KeyDataFormatPkcs8Pem = 4 # the PKCS#8 PEM private key.
 KeyDataFormatPkcs8Der = 5 # the PKCS#8 DER private key.
+def keyGenerate(dataId, sizeBits, type):
+    """
+    Generates new key of requested klass dataId and type.
+    dataId   : the requested key klass (rsa, dsa, aes, ...).
+    sizeBits : the new key size (in bits!).
+    type     : the new key type (session, permanent, ...).
+    Returns  : the newly created key or None if an error occurs.
+    """
+    return Key(_obj=xmlsecmod.keyGenerate(dataId, sizeBits, type))
+def keyGenerateByName(name, sizeBits, type):
+    """
+    Generates new key of requested klass and type.
+    name     : the requested key klass name (rsa, dsa, aes, ...).
+    sizeBits : the new key size (in bits!).
+    type     : the new key type (session, permanent, ...).
+    Returns  : the newly created key or None if an error occurs.
+    """
+    return Key(_obj=xmlsecmod.keyGenerateByName(name, sizeBits, type))
 def keyReadBuffer(dataId, buffer):
     """
     Reads the key value of klass dataId from a buffer.
@@ -1441,6 +1475,14 @@ class Key:
         Returns : key name.
         """
         return xmlsecmod.keyGetName(self)
+    def match(self, name, keyReq):
+        """
+        Checks whether the key matches the given criteria.
+        name    : the key name (may be None).
+        keyReq  : the key requirements.
+        Returns : 1 if the key satisfies the given criteria or 0 otherwise.
+        """
+        return xmlsecmod.keyMatch(self, name, keyReq)
 
 class KeyReq:
     def __init__(self, keyId, keyType, keyUsage, keyBitsSize):
