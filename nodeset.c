@@ -220,6 +220,28 @@ PyObject *xmlsec_NodeSetGetChildren(PyObject *self, PyObject *args) {
   return (wrap_xmlSecNodeSetPtr(cnset));
 }
 
+static xmlHashTablePtr NodeSetWalkCallbacks = NULL;
+
+static int xmlsec_NodeSetWalkCallback(xmlSecNodeSetPtr nset, xmlNodePtr cur,
+				      xmlNodePtr parent, void *data) {
+  PyObject *args, *result;
+  PyObject *func = NULL;
+
+  func = xmlHashLookup2(NodeSetWalkCallbacks, nset->doc->name, nset->doc->URL);
+
+  args = Py_BuildValue((char *) "OOOO", wrap_xmlSecNodeSetPtr(nset),
+		       wrap_xmlNodePtr(cur), wrap_xmlNodePtr(parent),
+		       PyCObject_FromVoidPtr((void *) data, NULL));
+
+  /* Protect refcount against reentrant manipulation of callback hash */
+  Py_INCREF(func);
+  result = PyEval_CallObject(func, args);
+  Py_DECREF(func);
+  Py_DECREF(args);
+
+  return (PyInt_AsLong(result));
+}
+
 PyObject *xmlsec_NodeSetWalk(PyObject *self, PyObject *args) {
   PyObject *nset_obj, *walkFunc_obj, *data_obj;
   xmlSecNodeSetPtr nset;
@@ -230,7 +252,15 @@ PyObject *xmlsec_NodeSetWalk(PyObject *self, PyObject *args) {
     return NULL;
 
   nset = xmlSecNodeSetPtr_get(nset_obj);
-  ret = xmlSecNodeSetWalk(nset, PyCObject_AsVoidPtr(walkFunc_obj),
+
+  if (NodeSetWalkCallbacks == NULL && walkFunc_obj != Py_None)
+    NodeSetWalkCallbacks = xmlHashCreate(HASH_TABLE_SIZE);
+  if (walkFunc_obj != Py_None)
+    xmlHashAddEntry2(NodeSetWalkCallbacks, nset->doc->name, nset->doc->URL,
+		     walkFunc_obj);
+
+  Py_XINCREF(walkFunc_obj);
+  ret = xmlSecNodeSetWalk(nset, xmlsec_NodeSetWalkCallback,
 			  PyCObject_AsVoidPtr(data_obj));
 
   return (wrap_int(ret));
