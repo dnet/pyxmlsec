@@ -82,13 +82,13 @@ static PyMethodDef xmlsec_methods[] = {
   /* app.h */
   {"cryptoInit",         xmlsec_CryptoInit,         METH_VARARGS},
   {"cryptoShutdown",     xmlsec_CryptoShutdown,     METH_VARARGS},
-  {"cryptoKeysMngrInit", xmlsec_CryptoKeysMngrInit, METH_VARARGS}, // New
+  {"cryptoKeysMngrInit", xmlsec_CryptoKeysMngrInit, METH_VARARGS},
   {"cryptoAppInit",                    xmlsec_CryptoAppInit,                    METH_VARARGS},
   {"cryptoAppShutdown",                xmlsec_CryptoAppShutdown,                METH_VARARGS},
   {"cryptoAppDefaultKeysMngrInit",     xmlsec_CryptoAppDefaultKeysMngrInit,     METH_VARARGS},
   {"cryptoAppDefaultKeysMngrAdoptKey", xmlsec_CryptoAppDefaultKeysMngrAdoptKey, METH_VARARGS},
-  {"cryptoAppDefaultKeysMngrLoad",     xmlsec_CryptoAppDefaultKeysMngrLoad,     METH_VARARGS}, // New
-  {"cryptoAppDefaultKeysMngrSave",     xmlsec_CryptoAppDefaultKeysMngrSave,     METH_VARARGS}, // New
+  {"cryptoAppDefaultKeysMngrLoad",     xmlsec_CryptoAppDefaultKeysMngrLoad,     METH_VARARGS},
+  {"cryptoAppDefaultKeysMngrSave",     xmlsec_CryptoAppDefaultKeysMngrSave,     METH_VARARGS},
   {"cryptoAppKeysMngrCertLoad",        xmlsec_CryptoAppKeysMngrCertLoad,        METH_VARARGS},
   {"cryptoAppKeyLoad",                 xmlsec_CryptoAppKeyLoad,                 METH_VARARGS},
   {"transformDsaSha1Id", xmlsec_TransformDsaSha1Id, METH_VARARGS},
