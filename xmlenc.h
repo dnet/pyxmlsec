@@ -20,3 +20,5 @@ PyObject *xmlsec_EncCtxDecrypt(PyObject *self, PyObject *args);
 PyObject *xmlsec_EncCtxDecryptToBuffer(PyObject *self, PyObject *args);
 PyObject *xmlsec_EncCtxDebugDump(PyObject *self, PyObject *args);
 PyObject *xmlsec_EncCtxDebugXmlDump(PyObject *self, PyObject *args);
+
+PyObject *xmlenc_set_encKey(PyObject *self, PyObject *args);

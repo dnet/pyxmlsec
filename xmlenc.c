@@ -25,19 +25,22 @@
 #include <Python.h>
 
 #include "xmlsecmod.h"
+#include "keys.h"
 #include "keysmngr.h"
 #include "xmlenc.h"
 
 PyObject *xmlsec_EncCtxCreate(PyObject *self, PyObject *args) {
   PyObject *keysMngr_obj;
-  xmlSecKeysMngrPtr keysMngr;
+  xmlSecKeysMngrPtr keysMngr = NULL;
   xmlSecEncCtxPtr encCtx;
   PyObject *ret = NULL;
 
   if (!PyArg_ParseTuple(args, "O:encCtxCreate", &keysMngr_obj))
     return NULL;
 
-  keysMngr = xmlSecKeysMngrPtr_get(PyObject_GetAttr(keysMngr_obj, PyString_FromString("_o")));
+  if (keysMngr_obj != Py_None) {
+    keysMngr = xmlSecKeysMngrPtr_get(PyObject_GetAttr(keysMngr_obj, PyString_FromString("_o")));
+  }
   encCtx = xmlSecEncCtxCreate(keysMngr);
   ret = PyCObject_FromVoidPtrAndDesc((void *) encCtx, (char *) "xmlSecEncCtxPtr", NULL);
   return (ret);
@@ -263,4 +266,20 @@ PyObject *xmlsec_EncCtxDebugXmlDump(PyObject *self, PyObject *args) {
 
   Py_INCREF(Py_None);
   return Py_None;
+}
+
+/******************************************************************************/
+
+PyObject *xmlenc_set_encKey(PyObject *self, PyObject *args) {
+  PyObject *encCtx_obj, *encKey_obj;
+  xmlSecEncCtxPtr encCtx;
+  PyObject *ret;
+
+  if (!PyArg_ParseTuple(args, "OO:encCtxSetEncKey", &encCtx_obj, &encKey_obj))
+    return NULL;
+  encCtx = xmlSecEncCtxPtr_get(PyObject_GetAttr(encCtx_obj, PyString_FromString("_o")));
+  encCtx->encKey = xmlSecKeyPtr_get(PyObject_GetAttr(encKey_obj, PyString_FromString("_o")));
+
+  ret = PyCObject_FromVoidPtrAndDesc((void *) encCtx, (char *) "xmlSecEncCtxPtr", NULL);
+  return (ret);
 }
