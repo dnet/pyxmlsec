@@ -51,7 +51,7 @@ class TreeViewColumn(gtk.TreeViewColumn):
             if len(data) >= 4:
                 renderer.set_property ('editable', data[3])
             gtk.TreeViewColumn.__init__ (self, data[0], renderer, text=id)
-            self.set_reorderable(gtk.TRUE)
+            self.set_reorderable(True)
         elif data[1] == gobject.TYPE_OBJECT:
             renderer = gtk.CellRendererPixbuf ()
             gtk.TreeViewColumn.__init__ (self, data[0], renderer, pixbuf=id)
@@ -118,7 +118,7 @@ class CList(gtk.TreeView, Gadget):
 class TView(gtk.TextView):
     def __init__(self):
         gtk.TextView.__init__ (self)
-        self.set_editable(gtk.FALSE)
+        self.set_editable(False)
         self.buffer = self.get_buffer()
         self.set_wrap_mode(gtk.WRAP_WORD)
         tag = gtk.TextTag('monospace')
@@ -137,7 +137,7 @@ class TView(gtk.TextView):
         # self.buffer.insert(iter, text+'\n')
 
 def quit(widget=None, *args):
-    gtk.mainquit()
+    gtk.main_quit()
 
 def interface():
     global ntb, tview_exec, tview_src
@@ -146,7 +146,7 @@ def interface():
     window.set_wmclass(PACKAGE, PACKAGE)
     window.set_title(PACKAGE)
     window.resize(800, 600)
-    window.set_resizable(gtk.TRUE)
+    window.set_resizable(True)
     window.connect('destroy', quit)
     # HPaned
     vpaned = gtk.VPaned()
@@ -154,12 +154,12 @@ def interface():
     # ScrolledWindow for clist
     sw_clist = gtk.ScrolledWindow()
     sw_clist.set_policy (gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-    vpaned.pack1 (sw_clist, gtk.FALSE, gtk.FALSE)
+    vpaned.pack1 (sw_clist, False, False)
     # CList to launch examples
     clist = CList(cols = [('Examples (double click for demo)', gobject.TYPE_STRING, 0, 0, 0, 0)],
                   cbs  = [('row-activated', on_clist_row_doubleclicked)])
     clist.get_selection().connect('changed', on_clist_row_clicked)
-    clist.set_rules_hint(gtk.TRUE)
+    clist.set_rules_hint(True)
     clist.append_row(['Signing a template file'])
     clist.append_row(['Signing a file with a dynamicaly created template'])
     clist.append_row(['Signing a file with a dynamicaly created template and an X509 certificate'])
@@ -176,7 +176,7 @@ def interface():
     sw_clist.add(clist)
     # Notebook
     ntb = gtk.Notebook()
-    vpaned.pack2 (ntb, gtk.FALSE, gtk.FALSE)
+    vpaned.pack2 (ntb, False, False)
     # ScrolledWindow for TextView Source
     sw_tview_src = gtk.ScrolledWindow()
     sw_tview_src.set_policy (gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
