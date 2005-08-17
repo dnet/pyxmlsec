@@ -4,16 +4,10 @@ Requirements
 	GCC
 	LibXML requirements and associated Python bindings
 	XML Security Library version >= 1.2.x
+	OpenSSL or GnuTLS and Libgcrypt or NSS (Mozilla cryptographic library)
 
-To build
---------
-	./setup.py build
+To build, install and clean sources
+-----------------------------------
+	./setup.py
 
-To clean
---------
-	./setup.py clean -a
-
-To install
-----------
-	./setup.py install
-This step requires root access.
+The install process requires root access.
