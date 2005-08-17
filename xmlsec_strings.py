@@ -2,7 +2,7 @@
 # 
 # PyXMLSec - Python bindings for XML Security library (XMLSec)
 #
-# Copyright (C) 2003-2004 Easter-eggs, Valery Febvre
+# Copyright (C) 2003-2005 Easter-eggs, Valery Febvre
 # http://pyxmlsec.labs.libre-entreprise.org
 #
 # Author: Valery Febvre <vfebvre@easter-eggs.com>
@@ -349,14 +349,26 @@ HrefHMACKeyValue = "http://www.aleksey.com/xmlsec/2002#HMACKeyValue"
 
 NodeHMACOutputLength = "HMACOutputLength"
 
-NameHmacSha1 = "hmac-sha1"
-HrefHmacSha1 = "http://www.w3.org/2000/09/xmldsig#hmac-sha1"
+NameHmacMd5 = "hmac-md5"
+HrefHmacMd5 = "http://www.w3.org/2001/04/xmldsig-more#hmac-md5"
 
 NameHmacRipemd160 = "hmac-ripemd160"
 HrefHmacRipemd160 = "http://www.w3.org/2001/04/xmldsig-more#hmac-ripemd160"
 
-NameHmacMd5 = "hmac-md5"
-HrefHmacMd5 = "http://www.w3.org/2001/04/xmldsig-more#hmac-md5"
+NameHmacSha1 = "hmac-sha1"
+HrefHmacSha1 = "http://www.w3.org/2000/09/xmldsig#hmac-sha1"
+
+NameHmacSha224 = "hmac-sha224"
+HrefHmacSha224 = "http://www.w3.org/2001/04/xmldsig-more#hmac-sha224"
+
+NameHmacSha256 = "hmac-sha256"
+HrefHmacSha256 = "http://www.w3.org/2001/04/xmldsig-more#hmac-sha256"
+
+NameHmacSha384 = "hmac-sha384"
+HrefHmacSha384 = "http://www.w3.org/2001/04/xmldsig-more#hmac-sha384"
+
+NameHmacSha512 = "hmac-sha512"
+HrefHmacSha512 = "http://www.w3.org/2001/04/xmldsig-more#hmac-sha512"
 
 # *************************************************************************
 # *
@@ -380,6 +392,14 @@ NodeKeyValue = "KeyValue"
 # *
 # ************************************************************************/
 NameMemBuf = "membuf-transform"
+
+# *************************************************************************
+# *
+# * MD5 strings
+# *
+# ************************************************************************/
+NameMd5 = "md5"
+HrefMd5 = "http://www.w3.org/2001/04/xmldsig-more#md5"
 
 # *************************************************************************
 # *
@@ -409,8 +429,26 @@ NodeRSAModulus = "Modulus"
 NodeRSAExponent = "Exponent"
 NodeRSAPrivateExponent = "PrivateExponent"
 
+NameRsaMd5 = "rsa-md5"
+HrefRsaMd5 = "http://www.w3.org/2001/04/xmldsig-more#rsa-md5"
+
+NameRsaRipemd160 = "rsa-ripemd160"
+HrefRsaRipemd160 = "http://www.w3.org/2001/04/xmldsig-more#rsa-ripemd160"
+
 NameRsaSha1 = "rsa-sha1"
 HrefRsaSha1 = "http://www.w3.org/2000/09/xmldsig#rsa-sha1"
+
+NameRsaSha224 = "rsa-sha224"
+HrefRsaSha224 = "http://www.w3.org/2001/04/xmldsig-more#rsa-sha224"
+
+NameRsaSha256 = "rsa-sha256"
+HrefRsaSha256 = "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"
+
+NameRsaSha384 = "rsa-sha384"
+HrefRsaSha384 = "http://www.w3.org/2001/04/xmldsig-more#rsa-sha384"
+
+NameRsaSha512 = "rsa-sha512"
+HrefRsaSha512 = "http://www.w3.org/2001/04/xmldsig-more#rsa-sha512"
 
 NameRsaPkcs1 = "rsa-1_5"
 HrefRsaPkcs1 = "http://www.w3.org/2001/04/xmlenc#rsa-1_5"
@@ -426,6 +464,18 @@ NodeRsaOAEPparams = "OAEPparams"
 # ************************************************************************/
 NameSha1 = "sha1"
 HrefSha1 = "http://www.w3.org/2000/09/xmldsig#sha1"
+
+NameSha224 = "sha224"
+HrefSha224 = "http://www.w3.org/2001/04/xmldsig-more#sha224"
+
+NameSha256 = "sha256"
+HrefSha256 = "http://www.w3.org/2001/04/xmlenc#sha256"
+
+NameSha384 = "sha384"
+HrefSha384 = "http://www.w3.org/2001/04/xmldsig-more#sha384"
+
+NameSha512 = "sha512"
+HrefSha512 = "http://www.w3.org/2001/04/xmlenc#sha512"
 
 # *************************************************************************
 # *
