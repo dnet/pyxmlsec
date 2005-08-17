@@ -291,9 +291,9 @@ PyObject *xmlsec_TransformKWDes3Id(PyObject *self, PyObject *args) {
 #endif
 }
 
-/* only OPENSSL, MYCRYPTO and NSS */
+/* only OPENSSL, MSCRYPTO and NSS */
 PyObject *xmlsec_TransformDsaSha1Id(PyObject *self, PyObject *args) {
-#if defined XMLSEC_CRYPTO_OPENSSL || defined XMLSEC_CRYPTO_MYCRYPTO || defined XMLSEC_CRYPTO_NSS
+#if defined XMLSEC_CRYPTO_OPENSSL || defined XMLSEC_CRYPTO_MSCRYPTO || defined XMLSEC_CRYPTO_NSS
   return (wrap_xmlSecTransformId(xmlSecTransformDsaSha1Id));
 #else
   return (NULL);
@@ -399,9 +399,9 @@ PyObject *xmlsec_TransformRsaRipemd160Id(PyObject *self, PyObject *args) {
 #endif
 }
 
-/* only OPENSSL, MYCRYPTO and NSS */
+/* only OPENSSL, MSCRYPTO and NSS */
 PyObject *xmlsec_TransformRsaSha1Id(PyObject *self, PyObject *args) {
-#if defined XMLSEC_CRYPTO_OPENSSL || defined XMLSEC_CRYPTO_MYCRYPTO || defined XMLSEC_CRYPTO_NSS
+#if defined XMLSEC_CRYPTO_OPENSSL || defined XMLSEC_CRYPTO_MSCRYPTO || defined XMLSEC_CRYPTO_NSS
   return (wrap_xmlSecTransformId(xmlSecTransformRsaSha1Id));
 #else
   return (NULL);
@@ -444,18 +444,18 @@ PyObject *xmlsec_TransformRsaSha512Id(PyObject *self, PyObject *args) {
 #endif
 }
 
-/* only OPENSSL, MYCRYPTO and NSS */
+/* only OPENSSL, MSCRYPTO and NSS */
 PyObject *xmlsec_TransformRsaPkcs1Id(PyObject *self, PyObject *args) {
-#if defined XMLSEC_CRYPTO_OPENSSL || defined XMLSEC_CRYPTO_MYCRYPTO || defined XMLSEC_CRYPTO_NSS
+#if defined XMLSEC_CRYPTO_OPENSSL || defined XMLSEC_CRYPTO_MSCRYPTO || defined XMLSEC_CRYPTO_NSS
   return (wrap_xmlSecTransformId(xmlSecTransformRsaPkcs1Id));
 #else
   return (NULL);
 #endif
 }
 
-/* only OPENSSL, MYCRYPTO and NSS */
+/* only OPENSSL, MSCRYPTO and NSS */
 PyObject *xmlsec_TransformRsaOaepId(PyObject *self, PyObject *args) {
-#if defined XMLSEC_CRYPTO_OPENSSL || defined XMLSEC_CRYPTO_MYCRYPTO || defined XMLSEC_CRYPTO_NSS
+#if defined XMLSEC_CRYPTO_OPENSSL || defined XMLSEC_CRYPTO_MSCRYPTO || defined XMLSEC_CRYPTO_NSS
   return (wrap_xmlSecTransformId(xmlSecTransformRsaOaepId));
 #else
   return (NULL);

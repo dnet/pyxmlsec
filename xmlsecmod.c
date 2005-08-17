@@ -324,15 +324,15 @@ static PyMethodDef xmlsec_methods[] = {
 
   /* transforms.h */
   {"transformUriTypeCheck",           xmlsec_TransformUriTypeCheck,           METH_VARARGS},
-  {"transformCtxGetAttr", xmlSecTransformCtx_getattr, METH_VARARGS}, // New
-  {"transformCtxSetAttr", xmlSecTransformCtx_setattr, METH_VARARGS}, // New
+  {"transformCtxGetAttr", xmlSecTransformCtx_getattr, METH_VARARGS}, /* new */
+  {"transformCtxSetAttr", xmlSecTransformCtx_setattr, METH_VARARGS}, /* new */
   {"transformCtxCreate",              xmlsec_TransformCtxCreate,              METH_VARARGS},
   {"transformCtxDestroy",             xmlsec_TransformCtxDestroy,             METH_VARARGS},
   {"transformCtxInitialize",          xmlsec_TransformCtxInitialize,          METH_VARARGS},
   {"transformCtxFinalize",            xmlsec_TransformCtxFinalize,            METH_VARARGS},
   {"transformCtxReset",               xmlsec_TransformCtxReset,               METH_VARARGS},
-  {"transformGetAttr", xmlSecTransform_getattr, METH_VARARGS}, // New
-  {"transformSetAttr", xmlSecTransform_setattr, METH_VARARGS}, // New
+  {"transformGetAttr", xmlSecTransform_getattr, METH_VARARGS}, /* new */
+  {"transformSetAttr", xmlSecTransform_setattr, METH_VARARGS}, /* new */
   {"transformCreate",                 xmlsec_TransformCreate,                 METH_VARARGS},
   {"transformDestroy",                xmlsec_TransformDestroy,                METH_VARARGS},
   {"transformNodeRead",               xmlsec_TransformNodeRead,               METH_VARARGS},
