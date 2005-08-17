@@ -2,7 +2,7 @@
  *
  * PyXMLSec - Python bindings for XML Security library (XMLSec)
  *
- * Copyright (C) 2003-2004 Easter-eggs, Valery Febvre
+ * Copyright (C) 2003-2005 Easter-eggs, Valery Febvre
  * http://pyxmlsec.labs.libre-entreprise.org
  * 
  * Author: Valery Febvre <vfebvre@easter-eggs.com>
@@ -71,14 +71,29 @@ static PyMethodDef xmlsec_methods[] = {
   {"transformDes3CbcId",       xmlsec_TransformDes3CbcId,       METH_VARARGS},
   {"transformKWDes3Id",        xmlsec_TransformKWDes3Id,        METH_VARARGS},
   {"transformDsaSha1Id",       xmlsec_TransformDsaSha1Id,       METH_VARARGS},
-  {"transformHmacSha1Id",      xmlsec_TransformHmacSha1Id,      METH_VARARGS},
-  {"transformHmacRipemd160Id", xmlsec_TransformHmacRipemd160Id, METH_VARARGS},
   {"transformHmacMd5Id",       xmlsec_TransformHmacMd5Id,       METH_VARARGS},
+  {"transformHmacRipemd160Id", xmlsec_TransformHmacRipemd160Id, METH_VARARGS},
+  {"transformHmacSha1Id",      xmlsec_TransformHmacSha1Id,      METH_VARARGS},
+  {"transformHmacSha224Id",    xmlsec_TransformHmacSha224Id,    METH_VARARGS}, /* new */
+  {"transformHmacSha256Id",    xmlsec_TransformHmacSha256Id,    METH_VARARGS}, /* new */
+  {"transformHmacSha384Id",    xmlsec_TransformHmacSha384Id,    METH_VARARGS}, /* new */
+  {"transformHmacSha512Id",    xmlsec_TransformHmacSha512Id,    METH_VARARGS}, /* new */
+  {"transformMd5Id",           xmlsec_TransformMd5Id,           METH_VARARGS}, /* new */
   {"transformRipemd160Id",     xmlsec_TransformRipemd160Id,     METH_VARARGS},
+  {"transformRsaMd5Id",        xmlsec_TransformRsaMd5Id,        METH_VARARGS}, /* new */
+  {"transformRsaRipemd160Id",  xmlsec_TransformRsaRipemd160Id,  METH_VARARGS}, /* new */
   {"transformRsaSha1Id",       xmlsec_TransformRsaSha1Id,       METH_VARARGS},
+  {"transformRsaSha224Id",     xmlsec_TransformRsaSha224Id,     METH_VARARGS}, /* new */
+  {"transformRsaSha256Id",     xmlsec_TransformRsaSha256Id,     METH_VARARGS}, /* new */
+  {"transformRsaSha384Id",     xmlsec_TransformRsaSha384Id,     METH_VARARGS}, /* new */
+  {"transformRsaSha512Id",     xmlsec_TransformRsaSha512Id,     METH_VARARGS}, /* new */
   {"transformRsaPkcs1Id",      xmlsec_TransformRsaPkcs1Id,      METH_VARARGS},
   {"transformRsaOaepId",       xmlsec_TransformRsaOaepId,       METH_VARARGS},
   {"transformSha1Id",          xmlsec_TransformSha1Id,          METH_VARARGS},
+  {"transformSha224Id",        xmlsec_TransformSha224Id,        METH_VARARGS}, /* new */
+  {"transformSha256Id",        xmlsec_TransformSha256Id,        METH_VARARGS}, /* new */
+  {"transformSha384Id",        xmlsec_TransformSha384Id,        METH_VARARGS}, /* new */
+  {"transformSha512Id",        xmlsec_TransformSha512Id,        METH_VARARGS}, /* new */
   {"keyDataAesId",         xmlsec_KeyDataAesId,         METH_VARARGS},
   {"keyDataDesId",         xmlsec_KeyDataDesId,         METH_VARARGS},
   {"keyDataDsaId",         xmlsec_KeyDataDsaId,         METH_VARARGS},

@@ -5,7 +5,7 @@
 #
 # PyXMLSec - Python bindings for XML Security Library (XMLSec)
 #
-# Copyright (C) 2003-2004 Easter-eggs, Valéry Febvre
+# Copyright (C) 2003-2005 Easter-eggs, Valéry Febvre
 # http://pyxmlsec.labs.libre-entreprise.org
 #
 # Author: Valéry Febvre <vfebvre@easter-eggs.com>
@@ -26,7 +26,7 @@
 
 """
 PyXMLSec - Python bindings for XML Security library (XMLSec)
-Copyright (C) 2003-2004 Easter-eggs, Valéry Febvre
+Copyright (C) 2003-2005 Easter-eggs, Valery Febvre
 
 Author   : Valéry Febvre <vfebvre@easter-eggs.com>
 Homepage : http://pyxmlsec.labs.libre-entreprise.org
@@ -207,6 +207,20 @@ def transformDsaSha1Id():
     xmlsec-crypto library is not loaded or this transform is not implemented).
     """
     return TransformId(_obj=xmlsecmod.transformDsaSha1Id())
+def transformHmacMd5Id():
+    """
+    The HMAC-MD5 transform id.
+    Returns : HMAC-MD5 transform id or None if an error occurs (the
+    xmlsec-crypto library is not loaded or this transform is not implemented).
+    """
+    return TransformId(_obj=xmlsecmod.transformHmacMd5Id())
+def transformHmacRipemd160Id():
+    """
+    The HMAC-RIPEMD160 transform id.
+    Returns : HMAC-RIPEMD160 transform id or None if an error occurs (the
+    xmlsec-crypto library is not loaded or this transform is not implemented).
+    """
+    return TransformId(_obj=xmlsecmod.transformHmacRipemd160Id())
 def transformHmacSha1Id():
     """
     The HMAC-SHA1 transform id.
@@ -215,20 +229,46 @@ def transformHmacSha1Id():
     implemented).
     """
     return TransformId(_obj=xmlsecmod.transformHmacSha1Id())
-def transformHmacRipemd160Id():
+def transformHmacSha224Id():
     """
-    The HMAC-RIPEMD160 transform id.
-    Returns : HMAC-RIPEMD160 transform id or None if an error occurs (the
-    xmlsec-crypto library is not loaded or this transform is not implemented).
+    The HMAC-SHA224 transform id.
+    Returns : HMAC-SHA224 transform id or None if an error occurs
+    (the xmlsec-crypto library is not loaded or this transform is not
+    implemented).
     """
-    return TransformId(_obj=xmlsecmod.transformHmacRipemd160Id())
-def transformHmacMd5Id():
+    return TransformId(_obj=xmlsecmod.transformHmacSha224Id())
+def transformHmacSha256Id():
     """
-    The HMAC-MD5 transform id.
-    Returns : HMAC-MD5 transform id or None if an error occurs (the
-    xmlsec-crypto library is not loaded or this transform is not implemented).
+    The HMAC-SHA256 transform id.
+    Returns : HMAC-SHA256 transform id or None if an error occurs
+    (the xmlsec-crypto library is not loaded or this transform is not
+    implemented).
     """
-    return TransformId(_obj=xmlsecmod.transformHmacMd5Id())
+    return TransformId(_obj=xmlsecmod.transformHmacSha256Id())
+def transformHmacSha384Id():
+    """
+    The HMAC-SHA384 transform id.
+    Returns : HMAC-SHA384 transform id or None if an error occurs
+    (the xmlsec-crypto library is not loaded or this transform is not
+    implemented).
+    """
+    return TransformId(_obj=xmlsecmod.transformHmacSha384Id())
+def transformHmacSha512Id():
+    """
+    The HMAC-SHA512 transform id.
+    Returns : HMAC-SHA512 transform id or None if an error occurs
+    (the xmlsec-crypto library is not loaded or this transform is not
+    implemented).
+    """
+    return TransformId(_obj=xmlsecmod.transformHmacSha512Id())
+def transformMd5Id():
+    """
+    The MD5 digest transform id.
+    Returns : MD5 digest transform id or None if an error occurs
+    (the xmlsec-crypto library is not loaded or this transform is not
+    implemented).
+    """
+    return TransformId(_obj=xmlsecmod.transformMd5Id())
 def transformRipemd160Id():
     """
     RIPEMD-160 digest transform id.
@@ -236,6 +276,21 @@ def transformRipemd160Id():
     xmlsec-crypto library is not loaded or this transform is not implemented).
     """
     return TransformId(_obj=xmlsecmod.transformRipemd160Id())
+def transformRsaMd5Id():
+    """
+    The RSA-MD5 signature transform id.
+    Returns : RSA-MD5 signature transform id or None if an error occurs (the
+    xmlsec-crypto library is not loaded or this transform is not implemented).
+    """
+    return TransformId(_obj=xmlsecmod.transformRsaMd5Id())
+def transformRsaRipemd160Id():
+    """
+    The RSA-RIPEMD160 signature transform id.
+    Returns : RSA-RIPEMD160 signature transform id or None if an error occurs
+    (the xmlsec-crypto library is not loaded or this transform is not
+    implemented).
+    """
+    return TransformId(_obj=xmlsecmod.transformRsaRipemd160Id())
 def transformRsaSha1Id():
     """
     The RSA-SHA1 signature transform id.
@@ -243,6 +298,34 @@ def transformRsaSha1Id():
     xmlsec-crypto library is not loaded or this transform is not implemented).
     """
     return TransformId(_obj=xmlsecmod.transformRsaSha1Id())
+def transformRsaSha224Id():
+    """
+    The RSA-SHA224 signature transform id.
+    Returns : RSA-SHA224 signature transform id or None if an error occurs (the
+    xmlsec-crypto library is not loaded or this transform is not implemented).
+    """
+    return TransformId(_obj=xmlsecmod.transformRsaSha224Id())
+def transformRsaSha256Id():
+    """
+    The RSA-SHA256 signature transform id.
+    Returns : RSA-SHA256 signature transform id or None if an error occurs (the
+    xmlsec-crypto library is not loaded or this transform is not implemented).
+    """
+    return TransformId(_obj=xmlsecmod.transformRsaSha256Id())
+def transformRsaSha384Id():
+    """
+    The RSA-SHA384 signature transform id.
+    Returns : RSA-SHA384 signature transform id or None if an error occurs (the
+    xmlsec-crypto library is not loaded or this transform is not implemented).
+    """
+    return TransformId(_obj=xmlsecmod.transformRsaSha384Id())
+def transformRsaSha512Id():
+    """
+    The RSA-SHA512 signature transform id.
+    Returns : RSA-SHA512 signature transform id or None if an error occurs (the
+    xmlsec-crypto library is not loaded or this transform is not implemented).
+    """
+    return TransformId(_obj=xmlsecmod.transformRsaSha512Id())
 def transformRsaPkcs1Id():
     """
     The RSA-PKCS1 key transport transform id.
@@ -266,6 +349,38 @@ def transformSha1Id():
     xmlsec-crypto library is not loaded or this transform is not implemented).
     """
     return TransformId(_obj=xmlsecmod.transformSha1Id())
+def transformSha224Id():
+    """
+    The SHA224 digest transform id.
+    Returns : SHA224 digest transform id or None if an error occurs
+    (the xmlsec-crypto library is not loaded or this transform is not
+    implemented).
+    """
+    return TransformId(_obj=xmlsecmod.transformSha224Id())
+def transformSha256Id():
+    """
+    The SHA256 digest transform id.
+    Returns : SHA256 digest transform id or None if an error occurs
+    (the xmlsec-crypto library is not loaded or this transform is not
+    implemented).
+    """
+    return TransformId(_obj=xmlsecmod.transformSha256Id())
+def transformSha384Id():
+    """
+    The SHA384 digest transform id.
+    Returns : SHA384 digest transform id or None if an error occurs
+    (the xmlsec-crypto library is not loaded or this transform is not
+    implemented).
+    """
+    return TransformId(_obj=xmlsecmod.transformSha384Id())
+def transformSha512Id():
+    """
+    The SHA512 digest transform id.
+    Returns : SHA512 digest transform id or None if an error occurs
+    (the xmlsec-crypto library is not loaded or this transform is not
+    implemented).
+    """
+    return TransformId(_obj=xmlsecmod.transformSha512Id())
 # High level routines form xmlsec command line utility
 def cryptoAppInit(config=None):
     """

@@ -2,7 +2,7 @@
  *
  * PyXMLSec - Python bindings for XML Security library (XMLSec)
  *
- * Copyright (C) 2003-2004 Easter-eggs, Valery Febvre
+ * Copyright (C) 2003-2005 Easter-eggs, Valery Febvre
  * http://pyxmlsec.labs.libre-entreprise.org
  * 
  * Author: Valery Febvre <vfebvre@easter-eggs.com>
@@ -251,27 +251,27 @@ PyObject *xmlsec_TransformAes256CbcId(PyObject *self, PyObject *args) {
   return (wrap_xmlSecTransformId(xmlSecTransformAes256CbcId));
 }
 
-/* only OPENSSL */
+/* only OPENSSL and NSS */
 PyObject *xmlsec_TransformKWAes128Id(PyObject *self, PyObject *args) {
-#if defined XMLSEC_CRYPTO_OPENSSL
+#if defined XMLSEC_CRYPTO_OPENSSL || defined XMLSEC_CRYPTO_NSS
   return (wrap_xmlSecTransformId(xmlSecTransformKWAes128Id));
 #else
   return (NULL);
 #endif
 }
 
-/* only OPENSSL */
+/* only OPENSSL and NSS */
 PyObject *xmlsec_TransformKWAes192Id(PyObject *self, PyObject *args) {
-#if defined XMLSEC_CRYPTO_OPENSSL
+#if defined XMLSEC_CRYPTO_OPENSSL || defined XMLSEC_CRYPTO_NSS
   return (wrap_xmlSecTransformId(xmlSecTransformKWAes192Id));
 #else
   return (NULL);
 #endif
 }
 
-/* only OPENSSL */
+/* only OPENSSL and NSS */
 PyObject *xmlsec_TransformKWAes256Id(PyObject *self, PyObject *args) {
-#if defined XMLSEC_CRYPTO_OPENSSL
+#if defined XMLSEC_CRYPTO_OPENSSL || defined XMLSEC_CRYPTO_NSS
   return (wrap_xmlSecTransformId(xmlSecTransformKWAes256Id));
 #else
   return (NULL);
@@ -282,32 +282,94 @@ PyObject *xmlsec_TransformDes3CbcId(PyObject *self, PyObject *args) {
   return (wrap_xmlSecTransformId(xmlSecTransformDes3CbcId));
 }
 
-/* only OPENSSL */
+/* only OPENSSL and NSS */
 PyObject *xmlsec_TransformKWDes3Id(PyObject *self, PyObject *args) {
-#if defined XMLSEC_CRYPTO_OPENSSL
+#if defined XMLSEC_CRYPTO_OPENSSL || defined XMLSEC_CRYPTO_NSS
   return (wrap_xmlSecTransformId(xmlSecTransformKWDes3Id));
 #else
   return (NULL);
 #endif
 }
 
-/* only OPENSSL */
+/* only OPENSSL, MYCRYPTO and NSS */
 PyObject *xmlsec_TransformDsaSha1Id(PyObject *self, PyObject *args) {
-#if defined XMLSEC_CRYPTO_OPENSSL
+#if defined XMLSEC_CRYPTO_OPENSSL || defined XMLSEC_CRYPTO_MYCRYPTO || defined XMLSEC_CRYPTO_NSS
   return (wrap_xmlSecTransformId(xmlSecTransformDsaSha1Id));
 #else
   return (NULL);
 #endif
 }
 
-PyObject *xmlsec_TransformHmacSha1Id(PyObject *self, PyObject *args) {
-  return (wrap_xmlSecTransformId(xmlSecTransformHmacSha1Id));
-}
-PyObject *xmlsec_TransformHmacRipemd160Id(PyObject *self, PyObject *args) {
-  return (wrap_xmlSecTransformId(xmlSecTransformHmacRipemd160Id));
-}
+/* only OPENSSL, NSS and GNUTLS */
 PyObject *xmlsec_TransformHmacMd5Id(PyObject *self, PyObject *args) {
+#if defined XMLSEC_CRYPTO_OPENSSL || defined XMLSEC_CRYPTO_NSS || defined XMLSEC_CRYPTO_GNUTLS
   return (wrap_xmlSecTransformId(xmlSecTransformHmacMd5Id));
+#else
+  return (NULL);
+#endif
+}
+
+/* only OPENSSL, NSS and GNUTLS */
+PyObject *xmlsec_TransformHmacRipemd160Id(PyObject *self, PyObject *args) {
+#if defined XMLSEC_CRYPTO_OPENSSL || defined XMLSEC_CRYPTO_NSS || defined XMLSEC_CRYPTO_GNUTLS
+  return (wrap_xmlSecTransformId(xmlSecTransformHmacRipemd160Id));
+#else
+  return (NULL);
+#endif
+}
+
+/* only OPENSSL, NSS and GNUTLS */
+PyObject *xmlsec_TransformHmacSha1Id(PyObject *self, PyObject *args) {
+#if defined XMLSEC_CRYPTO_OPENSSL || defined XMLSEC_CRYPTO_NSS || defined XMLSEC_CRYPTO_GNUTLS
+  return (wrap_xmlSecTransformId(xmlSecTransformHmacSha1Id));
+#else
+  return (NULL);
+#endif
+}
+
+/* only OPENSSL >= 0.9.8 */
+PyObject *xmlsec_TransformHmacSha224Id(PyObject *self, PyObject *args) {
+#if defined XMLSEC_CRYPTO_OPENSSL && defined XMLSEC_OPENSSL_098
+  return (wrap_xmlSecTransformId(xmlSecTransformHmacSha224Id));
+#else
+  return (NULL);
+#endif
+}
+
+/* only OPENSSL >= 0.9.8 */
+PyObject *xmlsec_TransformHmacSha256Id(PyObject *self, PyObject *args) {
+#if defined XMLSEC_CRYPTO_OPENSSL && defined XMLSEC_OPENSSL_098
+  return (wrap_xmlSecTransformId(xmlSecTransformHmacSha256Id));
+#else
+  return (NULL);
+#endif
+}
+
+/* only OPENSSL >= 0.9.8 */
+PyObject *xmlsec_TransformHmacSha384Id(PyObject *self, PyObject *args) {
+#if defined XMLSEC_CRYPTO_OPENSSL && defined XMLSEC_OPENSSL_098
+  return (wrap_xmlSecTransformId(xmlSecTransformHmacSha384Id));
+#else
+  return (NULL);
+#endif
+}
+
+/* only OPENSSL >= 0.9.8 */
+PyObject *xmlsec_TransformHmacSha512Id(PyObject *self, PyObject *args) {
+#if defined XMLSEC_CRYPTO_OPENSSL && defined XMLSEC_OPENSSL_098
+  return (wrap_xmlSecTransformId(xmlSecTransformHmacSha512Id));
+#else
+  return (NULL);
+#endif
+}
+
+/* only OPENSSL >= 0.9.8 */
+PyObject *xmlsec_TransformMd5Id(PyObject *self, PyObject *args) {
+#if defined XMLSEC_CRYPTO_OPENSSL && defined XMLSEC_OPENSSL_098
+  return (wrap_xmlSecTransformId(xmlSecTransformMd5Id));
+#else
+  return (NULL);
+#endif
 }
 
 /* only OPENSSL */
@@ -319,27 +381,81 @@ PyObject *xmlsec_TransformRipemd160Id(PyObject *self, PyObject *args) {
 #endif
 }
 
-/* only OPENSSL */
+/* only OPENSSL >= 0.9.8 */
+PyObject *xmlsec_TransformRsaMd5Id(PyObject *self, PyObject *args) {
+#if defined XMLSEC_CRYPTO_OPENSSL && defined XMLSEC_OPENSSL_098
+  return (wrap_xmlSecTransformId(xmlSecTransformRsaMd5Id));
+#else
+  return (NULL);
+#endif
+}
+
+/* only OPENSSL >= 0.9.8 */
+PyObject *xmlsec_TransformRsaRipemd160Id(PyObject *self, PyObject *args) {
+#if defined XMLSEC_CRYPTO_OPENSSL && defined XMLSEC_OPENSSL_098
+  return (wrap_xmlSecTransformId(xmlSecTransformRsaRipemd160Id));
+#else
+  return (NULL);
+#endif
+}
+
+/* only OPENSSL, MYCRYPTO and NSS */
 PyObject *xmlsec_TransformRsaSha1Id(PyObject *self, PyObject *args) {
-#if defined XMLSEC_CRYPTO_OPENSSL
+#if defined XMLSEC_CRYPTO_OPENSSL || defined XMLSEC_CRYPTO_MYCRYPTO || defined XMLSEC_CRYPTO_NSS
   return (wrap_xmlSecTransformId(xmlSecTransformRsaSha1Id));
 #else
   return (NULL);
 #endif
 }
 
-/* only OPENSSL */
+/* only OPENSSL >= 0.9.8 */
+PyObject *xmlsec_TransformRsaSha224Id(PyObject *self, PyObject *args) {
+#if defined XMLSEC_CRYPTO_OPENSSL && defined XMLSEC_OPENSSL_098
+  return (wrap_xmlSecTransformId(xmlSecTransformRsaSha224Id));
+#else
+  return (NULL);
+#endif
+}
+
+/* only OPENSSL >= 0.9.8 */
+PyObject *xmlsec_TransformRsaSha256Id(PyObject *self, PyObject *args) {
+#if defined XMLSEC_CRYPTO_OPENSSL && defined XMLSEC_OPENSSL_098
+  return (wrap_xmlSecTransformId(xmlSecTransformRsaSha256Id));
+#else
+  return (NULL);
+#endif
+}
+
+/* only OPENSSL >= 0.9.8 */
+PyObject *xmlsec_TransformRsaSha384Id(PyObject *self, PyObject *args) {
+#if defined XMLSEC_CRYPTO_OPENSSL && defined XMLSEC_OPENSSL_098
+  return (wrap_xmlSecTransformId(xmlSecTransformRsaSha384Id));
+#else
+  return (NULL);
+#endif
+}
+
+/* only OPENSSL >= 0.9.8 */
+PyObject *xmlsec_TransformRsaSha512Id(PyObject *self, PyObject *args) {
+#if defined XMLSEC_CRYPTO_OPENSSL && defined XMLSEC_OPENSSL_098
+  return (wrap_xmlSecTransformId(xmlSecTransformRsaSha512Id));
+#else
+  return (NULL);
+#endif
+}
+
+/* only OPENSSL, MYCRYPTO and NSS */
 PyObject *xmlsec_TransformRsaPkcs1Id(PyObject *self, PyObject *args) {
-#if defined XMLSEC_CRYPTO_OPENSSL
+#if defined XMLSEC_CRYPTO_OPENSSL || defined XMLSEC_CRYPTO_MYCRYPTO || defined XMLSEC_CRYPTO_NSS
   return (wrap_xmlSecTransformId(xmlSecTransformRsaPkcs1Id));
 #else
   return (NULL);
 #endif
 }
 
-/* only OPENSSL */
+/* only OPENSSL, MYCRYPTO and NSS */
 PyObject *xmlsec_TransformRsaOaepId(PyObject *self, PyObject *args) {
-#if defined XMLSEC_CRYPTO_OPENSSL
+#if defined XMLSEC_CRYPTO_OPENSSL || defined XMLSEC_CRYPTO_MYCRYPTO || defined XMLSEC_CRYPTO_NSS
   return (wrap_xmlSecTransformId(xmlSecTransformRsaOaepId));
 #else
   return (NULL);
@@ -348,6 +464,42 @@ PyObject *xmlsec_TransformRsaOaepId(PyObject *self, PyObject *args) {
 
 PyObject *xmlsec_TransformSha1Id(PyObject *self, PyObject *args) {
   return (wrap_xmlSecTransformId(xmlSecTransformSha1Id));
+}
+
+/* only OPENSSL >= 0.9.8 */
+PyObject *xmlsec_TransformSha224Id(PyObject *self, PyObject *args) {
+#if defined XMLSEC_CRYPTO_OPENSSL && defined XMLSEC_OPENSSL_098
+  return (wrap_xmlSecTransformId(xmlSecTransformSha224Id));
+#else
+  return (NULL);
+#endif
+}
+
+/* only OPENSSL >= 0.9.8 */
+PyObject *xmlsec_TransformSha256Id(PyObject *self, PyObject *args) {
+#if defined XMLSEC_CRYPTO_OPENSSL && defined XMLSEC_OPENSSL_098
+  return (wrap_xmlSecTransformId(xmlSecTransformSha256Id));
+#else
+  return (NULL);
+#endif
+}
+
+/* only OPENSSL >= 0.9.8 */
+PyObject *xmlsec_TransformSha384Id(PyObject *self, PyObject *args) {
+#if defined XMLSEC_CRYPTO_OPENSSL && defined XMLSEC_OPENSSL_098
+  return (wrap_xmlSecTransformId(xmlSecTransformSha384Id));
+#else
+  return (NULL);
+#endif
+}
+
+/* only OPENSSL >= 0.9.8 */
+PyObject *xmlsec_TransformSha512Id(PyObject *self, PyObject *args) {
+#if defined XMLSEC_CRYPTO_OPENSSL && defined XMLSEC_OPENSSL_098
+  return (wrap_xmlSecTransformId(xmlSecTransformSha512Id));
+#else
+  return (NULL);
+#endif
 }
 
 /* Key data ids */
