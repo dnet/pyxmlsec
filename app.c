@@ -460,9 +460,9 @@ PyObject *xmlsec_TransformRsaPkcs1Id(PyObject *self, PyObject *args) {
 #endif
 }
 
-/* only OPENSSL, MSCRYPTO and NSS */
+/* only OPENSSL, MSCRYPTO */
 PyObject *xmlsec_TransformRsaOaepId(PyObject *self, PyObject *args) {
-#if defined XMLSEC_CRYPTO_OPENSSL || defined XMLSEC_CRYPTO_MSCRYPTO || defined XMLSEC_CRYPTO_NSS
+#if defined XMLSEC_CRYPTO_OPENSSL || defined XMLSEC_CRYPTO_MSCRYPTO
   return (wrap_xmlSecTransformId(xmlSecTransformRsaOaepId));
 #else
   return (NULL);
