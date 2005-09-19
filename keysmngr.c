@@ -450,17 +450,17 @@ PyObject *keysmngr_KeyStoreIdCreate(PyObject *self, PyObject *args) {
   storeId->klassSize = sizeof(xmlSecKeyStoreKlass);
   storeId->objSize = sizeof(xmlSecKeyStore);
 
-  storeId->name = strdup(name);
+  storeId->name = (xmlChar *)strdup((const char *)name);
   if (initialize_obj != Py_None)
-    storeId->initialize = xmlsec_KeyStoreInitializeMethod;
+    storeId->initialize = (xmlSecKeyStoreInitializeMethod)xmlsec_KeyStoreInitializeMethod;
   else
     storeId->initialize = NULL;
   if (finalize_obj != Py_None)
-    storeId->finalize = xmlsec_KeyStoreFinalizeMethod;
+    storeId->finalize = (xmlSecKeyStoreFinalizeMethod)xmlsec_KeyStoreFinalizeMethod;
   else
     storeId->finalize = NULL;
   if (findKey_obj != Py_None)
-    storeId->findKey = xmlsec_KeyStoreFindKeyMethod;
+    storeId->findKey = (xmlSecKeyStoreFindKeyMethod)xmlsec_KeyStoreFindKeyMethod;
   else
     storeId->findKey = NULL;
 

@@ -162,7 +162,7 @@ PyObject *xmlsec_Base64Encode(PyObject *self, PyObject *args) {
   strEnc = xmlSecBase64Encode(buf, len, columns);
 
   if (strEnc != NULL)
-    return (PyString_FromStringAndSize(strEnc, strlen(strEnc)));
+    return (PyString_FromStringAndSize((char *)strEnc, strlen((const char *)strEnc)));
   else {
     Py_INCREF(Py_None);
     return (Py_None);
@@ -181,12 +181,12 @@ PyObject *xmlsec_Base64Decode(PyObject *self, PyObject *args) {
   }
   else return NULL;
 
-  strDec = (xmlSecByte *) xmlMalloc(strlen(strEnc)*2);
+  strDec = (xmlSecByte *) xmlMalloc(strlen((const char *)strEnc) * 2);
 
-  len = xmlSecBase64Decode(strEnc, strDec, strlen(strEnc) * 2);
+  len = xmlSecBase64Decode(strEnc, strDec, strlen((const char *)strEnc) * 2);
 
   if (len >= 0 && strDec != NULL)
-    ret = PyString_FromStringAndSize(strDec, len);
+    ret = PyString_FromStringAndSize((char *)strDec, len);
   else {
     Py_INCREF(Py_None);
     ret = Py_None;

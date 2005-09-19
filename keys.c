@@ -291,7 +291,7 @@ PyObject *xmlSecKey_setattr(PyObject *self, PyObject *args) {
   key = xmlSecKeyPtr_get(key_obj);
     
   if (!strcmp(name, "name"))
-    key->name = PyString_AsString(value_obj);
+    key->name = (xmlChar *)PyString_AsString(value_obj);
   else if (!strcmp(name, "value"))
     key->value = xmlSecKeyDataPtr_get(value_obj);
   else if (!strcmp(name, "dataList"))

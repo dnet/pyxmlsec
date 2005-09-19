@@ -689,7 +689,7 @@ static const xmlChar* xmlsec_KeyDataGetIdentifierMethod(xmlSecKeyDataPtr data) {
   Py_DECREF(func);
   Py_DECREF(args);
 
-  return (PyString_AsString(result));
+  return ((const xmlChar*)PyString_AsString(result));
 }
 
 static void xmlsec_KeyDataDebugDumpMethod(xmlSecKeyDataPtr data, FILE *output) {
@@ -807,55 +807,55 @@ PyObject *keysdata_KeyDataIdCreate(PyObject *self, PyObject *args) {
   dataId->dataNodeNs = dataNodeNs;
 
   if (initialize_obj != Py_None)
-    dataId->initialize = xmlsec_KeyDataInitMethod;
+    dataId->initialize = (xmlSecKeyDataInitMethod)xmlsec_KeyDataInitMethod;
   else
     dataId->initialize = NULL;
   if (duplicate_obj != Py_None)
-    dataId->duplicate = xmlsec_KeyDataDuplicateMethod;
+    dataId->duplicate = (xmlSecKeyDataDuplicateMethod)xmlsec_KeyDataDuplicateMethod;
   else
     dataId->duplicate = NULL;
   if (finalize_obj != Py_None)
-    dataId->finalize = xmlsec_KeyDataFinalizeMethod;
+    dataId->finalize = (xmlSecKeyDataFinalizeMethod)xmlsec_KeyDataFinalizeMethod;
   else
     dataId->finalize = NULL;
   if (generate_obj != Py_None)
-    dataId->generate = xmlsec_KeyDataGenerateMethod;
+    dataId->generate = (xmlSecKeyDataGenerateMethod)xmlsec_KeyDataGenerateMethod;
   else
     dataId->generate = NULL;
   if (getType_obj != Py_None)
-    dataId->getType = xmlsec_KeyDataGetTypeMethod;
+    dataId->getType = (xmlSecKeyDataGetTypeMethod)xmlsec_KeyDataGetTypeMethod;
   else
     dataId->getType = NULL;
   if (getSize_obj != Py_None)
-    dataId->getSize = xmlsec_KeyDataGetSizeMethod;
+    dataId->getSize = (xmlSecKeyDataGetSizeMethod)xmlsec_KeyDataGetSizeMethod;
   else
     dataId->getSize = NULL;
   if (getIdentifier_obj != Py_None)
-    dataId->getIdentifier = xmlsec_KeyDataGetIdentifierMethod;
+    dataId->getIdentifier = (xmlSecKeyDataGetIdentifierMethod)xmlsec_KeyDataGetIdentifierMethod;
   else
     dataId->getIdentifier = NULL;
   if (xmlRead_obj != Py_None)
-    dataId->xmlRead = xmlsec_KeyDataXmlReadMethod;
+    dataId->xmlRead = (xmlSecKeyDataXmlReadMethod)xmlsec_KeyDataXmlReadMethod;
   else
     dataId->xmlRead = NULL;
   if (xmlWrite_obj != Py_None)
-    dataId->xmlWrite = xmlsec_KeyDataXmlWriteMethod;
+    dataId->xmlWrite = (xmlSecKeyDataXmlWriteMethod)xmlsec_KeyDataXmlWriteMethod;
   else
     dataId->xmlWrite = NULL;
   if (binRead_obj != Py_None)
-    dataId->binRead = xmlsec_KeyDataBinReadMethod;
+    dataId->binRead = (xmlSecKeyDataBinReadMethod)xmlsec_KeyDataBinReadMethod;
   else
     dataId->binRead = NULL;
   if (binWrite_obj != Py_None)
-    dataId->binWrite = xmlsec_KeyDataBinWriteMethod;
+    dataId->binWrite = (xmlSecKeyDataBinWriteMethod)xmlsec_KeyDataBinWriteMethod;
   else
     dataId->binWrite = NULL;
   if (debugDump_obj != Py_None)
-    dataId->debugDump = xmlsec_KeyDataDebugDumpMethod;
+    dataId->debugDump = (xmlSecKeyDataDebugDumpMethod)xmlsec_KeyDataDebugDumpMethod;
   else
     dataId->debugDump = NULL;
   if (debugXmlDump_obj != Py_None)
-    dataId->debugXmlDump = xmlsec_KeyDataDebugDumpMethod;
+    dataId->debugXmlDump = (xmlSecKeyDataDebugDumpMethod)xmlsec_KeyDataDebugDumpMethod;
   else
     dataId->debugXmlDump = NULL;
 

@@ -190,9 +190,9 @@ PyObject *xmlSecTransformCtx_setattr(PyObject *self, PyObject *args) {
   else if (!strcmp(name, "status"))
     transformCtx->status = PyInt_AsLong(value_obj);
   else if (!strcmp(name, "uri"))
-    transformCtx->uri = PyString_AsString(value_obj);
+    transformCtx->uri = (xmlChar *)PyString_AsString(value_obj);
   else if (!strcmp(name, "xptrExpr"))
-    transformCtx->xptrExpr = PyString_AsString(value_obj);
+    transformCtx->xptrExpr = (xmlChar *)PyString_AsString(value_obj);
   else if (!strcmp(name, "first"))
     transformCtx->first = xmlSecTransformPtr_get(value_obj);
   else if (!strcmp(name, "last"))

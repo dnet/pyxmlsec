@@ -83,7 +83,7 @@ PyObject *xmlSecBuffer_setattr(PyObject *self, PyObject *args) {
   buf = xmlSecBufferPtr_get(buf_obj);
     
   if (!strcmp(name, "data"))
-    buf->data = PyString_AsString(value_obj);
+    buf->data = (xmlChar *)PyString_AsString(value_obj);
   else if (!strcmp(name, "size"))
     buf->size = PyInt_AsLong(value_obj);
   else if (!strcmp(name, "maxSize"))

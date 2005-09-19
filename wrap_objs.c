@@ -1,3 +1,27 @@
+/* $Id$ 
+ *
+ * PyXMLSec - Python bindings for XML Security library (XMLSec)
+ *
+ * Copyright (C) 2003-2005 Easter-eggs, Valery Febvre
+ * http://pyxmlsec.labs.libre-entreprise.org
+ * 
+ * Author: Valery Febvre <vfebvre@easter-eggs.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
 #include "wrap_objs.h"
 
 /*****************************************************************************/
@@ -13,7 +37,7 @@ xmlChar **PythonStringList_get(PyObject *list_obj) {
   /* convert Python list into a NULL terminated C list */
   list = (xmlChar **) xmlMalloc ((PyList_Size(list_obj)+1)*sizeof (xmlChar *));
   for (i=0; i<PyList_Size(list_obj); i++)
-    list[i] = PyString_AsString(PyList_GetItem(list_obj, i));
+    list[i] = (xmlChar *)PyString_AsString(PyList_GetItem(list_obj, i));
   list[i] = NULL;
 
   return list;
@@ -147,7 +171,7 @@ PyObject *wrap_xmlSecBytePtr(xmlSecByte *str) {
     Py_INCREF(Py_None);
     return (Py_None);
   }
-  ret = PyString_FromString(str);
+  ret = PyString_FromString((char *) str);
   xmlFree(str);
   return (ret);
 }
@@ -159,6 +183,6 @@ PyObject *wrap_xmlSecBytePtrConst(const xmlSecByte *str) {
     Py_INCREF(Py_None);
     return (Py_None);
   }
-  ret = PyString_FromString(str);
+  ret = PyString_FromString((char *) str);
   return (ret);
 }

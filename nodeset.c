@@ -254,7 +254,8 @@ static int xmlsec_NodeSetWalkCallback(xmlSecNodeSetPtr nset, xmlNodePtr cur,
   PyObject *args, *result;
   PyObject *func = NULL;
 
-  func = xmlHashLookup2(NodeSetWalkCallbacks, nset->doc->name, nset->doc->URL);
+  func = xmlHashLookup2(NodeSetWalkCallbacks, (const xmlChar *)nset->doc->name,
+			nset->doc->URL);
 
   args = Py_BuildValue((char *) "OOOO", wrap_xmlSecNodeSetPtr(nset),
 		       wrap_xmlNodePtr(cur), wrap_xmlNodePtr(parent),
@@ -286,8 +287,8 @@ PyObject *xmlsec_NodeSetWalk(PyObject *self, PyObject *args) {
   if (NodeSetWalkCallbacks == NULL && walkFunc_obj != Py_None)
     NodeSetWalkCallbacks = xmlHashCreate(HASH_TABLE_SIZE);
   if (walkFunc_obj != Py_None)
-    xmlHashAddEntry2(NodeSetWalkCallbacks, nset->doc->name, nset->doc->URL,
-		     walkFunc_obj);
+    xmlHashAddEntry2(NodeSetWalkCallbacks, (const xmlChar *)nset->doc->name,
+		     nset->doc->URL, walkFunc_obj);
 
   Py_XINCREF(walkFunc_obj);
   ret = xmlSecNodeSetWalk(nset, xmlsec_NodeSetWalkCallback,

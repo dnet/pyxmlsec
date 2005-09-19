@@ -160,17 +160,17 @@ PyObject *xmlSecEncCtx_setattr(PyObject *self, PyObject *args) {
   else if (!strcmp(name, "encMethod"))
     encCtx->encMethod = xmlSecTransformPtr_get(value_obj);
   else if (!strcmp(name, "id"))
-    encCtx->id = PyString_AsString(value_obj);
+    encCtx->id = (xmlChar *)PyString_AsString(value_obj);
   else if (!strcmp(name, "type"))
-    encCtx->type = PyString_AsString(value_obj);
+    encCtx->type = (xmlChar *)PyString_AsString(value_obj);
   else if (!strcmp(name, "mimeType"))
-    encCtx->mimeType = PyString_AsString(value_obj);
+    encCtx->mimeType = (xmlChar *)PyString_AsString(value_obj);
   else if (!strcmp(name, "encoding"))
-    encCtx->encoding = PyString_AsString(value_obj);
+    encCtx->encoding = (xmlChar *)PyString_AsString(value_obj);
   else if (!strcmp(name, "recipient"))
-    encCtx->recipient = PyString_AsString(value_obj);
+    encCtx->recipient = (xmlChar *)PyString_AsString(value_obj);
   else if (!strcmp(name, "carriedKeyName"))
-    encCtx->carriedKeyName = PyString_AsString(value_obj);
+    encCtx->carriedKeyName = (xmlChar *)PyString_AsString(value_obj);
 
   Py_INCREF(Py_None);
   return (Py_None);

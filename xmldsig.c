@@ -175,7 +175,7 @@ PyObject *xmlSecDSigCtx_setattr(PyObject *self, PyObject *args) {
   else if (!strcmp(name, "signValueNode"))
     dsigCtx->signValueNode = xmlNodePtr_get(value_obj);
   else if (!strcmp(name, "id"))
-    dsigCtx->id = PyString_AsString(value_obj);
+    dsigCtx->id = (xmlChar *)PyString_AsString(value_obj);
   else if (!strcmp(name, "signedInfoReferences"))
     dsigCtx->signedInfoReferences = *(xmlSecPtrListPtr_get(value_obj));
   else if (!strcmp(name, "manifestReferences"))
@@ -458,11 +458,11 @@ PyObject *xmlSecDSigReferenceCtx_setattr(PyObject *self, PyObject *args) {
   else if (!strcmp(name, "preDigestMemBufMethod"))
     dsigRefCtx->preDigestMemBufMethod = xmlSecTransformPtr_get(value_obj);
   else if (!strcmp(name, "id"))
-    dsigRefCtx->id = PyString_AsString(value_obj);
+    dsigRefCtx->id = (xmlChar *)PyString_AsString(value_obj);
   else if (!strcmp(name, "uri"))
-    dsigRefCtx->uri = PyString_AsString(value_obj);
+    dsigRefCtx->uri = (xmlChar *)PyString_AsString(value_obj);
   else if (!strcmp(name, "type"))
-    dsigRefCtx->type = PyString_AsString(value_obj);
+    dsigRefCtx->type = (xmlChar *)PyString_AsString(value_obj);
 
   Py_INCREF(Py_None);
   return (Py_None);
