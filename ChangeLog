@@ -1,6 +1,34 @@
+2005-12-10  Valery Febvre  <vfebvre@easter-eggs.com>
+
+	* xmlsec.py: Added 3 missing Key data formats:
+	- KeyDataFormatPkcs12  : the PKCS12 format (bag of keys and certs)
+	- KeyDataFormatCertPem : the PEM cert.
+	- KeyDataFormatCertDer : the DER cert.
+	Thx to Kershaw, PJ (Philip)
+
+2005-09-19  Valery Febvre  <vfebvre@easter-eggs.com>
+
+	* base64.c, buffer.c, keys.c, keysdata.c, keysmngr.c, nodeset.c, transforms.c, wrap_objs.c, xmldsig.c, xmlenc.c:
+	Removed many many compilation warnings (GCC 4.x)
+
+	* app.c: Ooops, RSA OAEP is not supported by NSS yet
+
+2005-08-23  Valery Febvre  <vfebvre@easter-eggs.com>
+
+	* app.c:
+	Added compile flags to provide only available key data ids with the
+	selected crypto library.
+
 2005-08-17  Valery Febvre  <vfebvre@easter-eggs.com>
 
-	* xmlsec.py, xmlsecmod.c, app.c, app.h:
+	* INSTALL: update
+
+	* xmlsec_strings.py: Synchronized with XMLSec 1.2.9
+
+	* app.c, xmlsecmod.c:
+	Replaced bad XMLSEC_CRYPTO_MYCRYPTO with XMLSEC_CRYPTO_MSCRYPTO
+
+	* xmlsec.py, xmlsecmod.c, app.c, app.h:	Synchronized with XMLSec 1.2.9
 	Added functions for the 15 new crypto transform algorithms appeared in
 	XMLSec 1.2.9 (OpenSSL 0.9.8 or greater is required)
 	- transformSha224Id, transformSha256Id, transformSha384Id, transformSha512Id
