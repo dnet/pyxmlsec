@@ -1394,6 +1394,9 @@ KeyDataFormatPem      = 2 # the PEM key data (cert or public/private key).
 KeyDataFormatDer      = 3 # the DER key data (cert or public/private key).
 KeyDataFormatPkcs8Pem = 4 # the PKCS#8 PEM private key.
 KeyDataFormatPkcs8Der = 5 # the PKCS#8 DER private key.
+KeyDataFormatPkcs12   = 6 # the PKCS12 format (bag of keys and certs)
+KeyDataFormatCertPem  = 7 # the PEM cert.
+KeyDataFormatCertDer  = 8 # the DER cert.
 # The "unknown" id.
 KeyDataIdUnknown = None
 
