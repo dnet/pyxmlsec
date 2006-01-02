@@ -29,17 +29,6 @@ __doc__ = """Python bindings for XMLSec Library
 PyXMLSec is a set of Python bindings for XML Security Library (XMLSec).
 """
 
-classifiers = """\
-Development Status :: 2 - Pre-Alpha
-Intended Audience :: Developers
-License :: OSI Approved :: GNU General Public License (GPL)
-Operating System :: MacOS :: MacOS X
-Operating System :: POSIX
-Programming Language :: C
-Programming Language :: Python
-Topic :: Software Development :: Libraries :: Python Modules
-"""
-
 from distutils.core import setup, Extension
 import sys, commands
 
@@ -170,6 +159,18 @@ extract_libs(xmlsec1_libs)
 #print library_dirs
 #print libraries
 
+classifiers = [
+    'Development Status :: 5 - Production/Stable',
+    'Intended Audience :: Developers',
+    'License :: OSI Approved :: GNU General Public License (GPL)',
+    'Natural Language :: English',
+    'Operating System :: POSIX',
+    'Programming Language :: C',
+    'Programming Language :: Python',
+    'Topic :: Security',
+    'Topic :: Software Development :: Libraries :: Python Modules',
+    ]
+
 em = Extension("xmlsecmod",
                sources = ["utils.c", "wrap_objs.c",
                           "app.c", "base64.c", "buffer.c", "errors.c",
@@ -196,6 +197,8 @@ setup(name = "pyxmlsec",
       license = "GNU GPL",
       platforms = ["any"],
       url = "http://pyxmlsec.labs.libre-entreprise.org",
+      classifiers = classifiers,
+      download_url = 'https://labs.libre-entreprise.org/frs/?group_id=17',
       ext_modules = [em],
       py_modules = ["xmlsec", "xmlsec_strings"]
 )
