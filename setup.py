@@ -94,6 +94,8 @@ def extract_cflags(cflags):
                 include_dirs.append(flag[2:])
         elif flag[:2] == "-D":
             t = tuple(flag[2:].split('='))
+            if len(t) == 1:
+                t = (t[0], None) 
             if t not in define_macros:
                 define_macros.append(t)
         else:
@@ -189,7 +191,7 @@ em = Extension("xmlsecmod",
 doclines = __doc__.split("\n")
 
 setup(name = "pyxmlsec",
-      version = "cvs",
+      version = "svn",
       description = doclines[0],
       long_description = "\n" . join(doclines[2:]),
       author = "Valery Febvre",
