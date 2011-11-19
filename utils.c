@@ -38,6 +38,7 @@ int CheckArgs(PyObject *args, char *format) {
   /* S : String   */
   /* I : Integer  */
   /* F : File     */
+  /* L : List     */
   for (i = 0; i < nb_args; i++) {
     obj = PyTuple_GET_ITEM(args, i);
     /* O or o : instance */
@@ -86,6 +87,16 @@ int CheckArgs(PyObject *args, char *format) {
 	if (format[i] == 'f' && obj == Py_None) continue;
 	PyErr_Format(xmlsec_error,
 		     "%s() argument %d must be a file.",
+		     format + nb_args, i+1);
+	return 0;
+      }
+    }
+    /* L or l : list */
+    else if (format[i] == 'L' || format[i] == 'l') {
+      if (!PyList_Check(obj)) {
+	if (format[i] == 'l' && obj == Py_None) continue;
+	PyErr_Format(xmlsec_error,
+		     "%s() argument %d must be a list.",
 		     format + nb_args, i+1);
 	return 0;
       }

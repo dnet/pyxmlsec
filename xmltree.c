@@ -271,7 +271,7 @@ PyObject *xmlsec_AddIDs(PyObject *self, PyObject *args) {
   xmlNodePtr cur;
   xmlChar **ids = NULL;
 
-  if (CheckArgs(args, "OOO:addIDs")) {
+  if (CheckArgs(args, "OOL:addIDs")) {
     if (!PyArg_ParseTuple(args, (char *) "OOO:addIDs",
 			  &doc_obj, &cur_obj, &ids_obj))
       return NULL;
