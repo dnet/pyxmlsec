@@ -2,24 +2,13 @@
  *
  * PyXMLSec - Python bindings for XML Security library (XMLSec)
  *
- * Copyright (C) 2003-2005 Easter-eggs, Valery Febvre
+ * Copyright (C) 2003-2013 Easter-eggs, Valery Febvre
  * http://pyxmlsec.labs.libre-entreprise.org
  * 
  * Author: Valery Febvre <vfebvre@easter-eggs.com>
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * This is free software; see COPYING file in the source
+ * distribution for preciese wording.
  */
 
 #include <stdarg.h>
@@ -38,6 +27,7 @@ int CheckArgs(PyObject *args, char *format) {
   /* S : String   */
   /* I : Integer  */
   /* F : File     */
+  /* L : List     */
   for (i = 0; i < nb_args; i++) {
     obj = PyTuple_GET_ITEM(args, i);
     /* O or o : instance */
@@ -86,6 +76,16 @@ int CheckArgs(PyObject *args, char *format) {
 	if (format[i] == 'f' && obj == Py_None) continue;
 	PyErr_Format(xmlsec_error,
 		     "%s() argument %d must be a file.",
+		     format + nb_args, i+1);
+	return 0;
+      }
+    }
+    /* L or l : list */
+    else if (format[i] == 'L' || format[i] == 'l') {
+      if (!PyList_Check(obj)) {
+	if (format[i] == 'l' && obj == Py_None) continue;
+	PyErr_Format(xmlsec_error,
+		     "%s() argument %d must be a list.",
 		     format + nb_args, i+1);
 	return 0;
       }
