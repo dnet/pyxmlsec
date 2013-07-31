@@ -153,7 +153,7 @@ extract_libs(xmlsec1_libs)
 classifiers = [
     'Development Status :: 5 - Production/Stable',
     'Intended Audience :: Developers',
-    'License :: OSI Approved :: MIT License (MIT)',
+    'License :: OSI Approved :: MIT License',
     'Natural Language :: English',
     'Operating System :: POSIX',
     'Programming Language :: C',

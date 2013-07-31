@@ -1,3 +1,7 @@
+========
+PyXMLSec
+========
+
 PyXMLSec is a set of Python bindings for the XML Security library (XMLSec).
 
 Copyright (C) 2003-2013 Easter-eggs, Valery Febvre
