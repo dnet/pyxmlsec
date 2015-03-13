@@ -443,6 +443,18 @@ def cryptoAppKeysMngrCertLoad(mngr, filename, format, type):
     Returns  : 0 on success or a negative value otherwise.
     """
     return xmlsecmod.cryptoAppKeysMngrCertLoad(mngr, filename, format, type)
+def cryptoAppKeysMngrCertLoadMemory(mngr, data, dataSize, format, type):
+    """
+    Reads cert from memory and adds to the list of trusted or known untrusted
+    certs in store.
+    mngr : the keys manager.
+    data : the memory containing the certificate.
+    dataSize : the size of the memory containing the certificate.
+    format : the certificate file format.
+    type : the flag that indicates if the certificate in filename trusted or not.
+    Returns : 0 on success or a negative value otherwise.
+    """
+    return xmlsecmod.cryptoAppKeysMngrCertLoadMemory(mngr, data, dataSize, format, type)
 def cryptoAppKeyLoad(filename, format, pwd, pwdCallback, pwdCallbackCtx):
     """
     Reads key from filename.
@@ -456,6 +468,21 @@ def cryptoAppKeyLoad(filename, format, pwd, pwdCallback, pwdCallbackCtx):
     ret = xmlsecmod.cryptoAppKeyLoad(filename, format, pwd,
                                      pwdCallback, pwdCallbackCtx)
     if ret is None: raise Error('xmlSecCryptoAppKeyLoad() failed')
+    return Key(_obj=ret)
+def cryptoAppKeyLoadMemory(data, dataSize, format, pwd, pwdCallback, pwdCallbackCtx):
+    """
+    Reads key from filename.
+    data : the key data.
+    dataSize : the key data size.
+    format : the key file format.
+    pwd : the key file password.
+    pwdCallback : the key password callback.
+    pwdCallbackCtx : the user context for password callback.
+    Returns : the key or None if an error occurs.
+    """
+    ret = xmlsecmod.cryptoAppKeyLoadMemory(data, dataSize, format, pwd,
+    pwdCallback, pwdCallbackCtx)
+    if ret is None: raise Error('xmlSecCryptoAppKeyLoadMemory() failed')
     return Key(_obj=ret)
 def cryptoAppPkcs12Load(filename, pwd, pwdCallback, pwdCallbackCtx):
     """
@@ -481,6 +508,16 @@ def cryptoAppKeyCertLoad(key, filename, format):
     Returns  : 0 on success or a negative value otherwise.
     """
     return xmlsecmod.cryptoAppKeyCertLoad(key, filename, format)
+def cryptoAppKeyCertLoadMemory(key, data, dataSize, format):
+    """
+    Reads the certificate from filename and adds it to key.
+    key : the key.
+    data : the certificate data.
+    dataSize : the certificate data size.
+    format : the certificate file format.
+    Returns : 0 on success or a negative value otherwise.
+    """
+    return xmlsecmod.cryptoAppKeyCertLoadMemory(key, data, dataSize, format)
 def cryptoAppGetDefaultPwdCallback():
     """
     Gets default password callback.
@@ -1728,6 +1765,19 @@ class KeysMngr:
         Returns  : 0 on success or a negative value otherwise.
         """
         return xmlsecmod.cryptoAppKeysMngrCertLoad(self, filename, format, type)
+    # !!! comes from app.h (not keysmngr.h) !!!
+    def certLoadMemory(self, data, dataSize, format, type):
+        """
+        Reads cert from filename and adds to the list of trusted
+        or known untrusted certs in store.
+        data : the certificate data.
+        dataSize : the size of the certificate data.
+        format : the certificate file format.
+        type : the flag that indicates is the certificate in filename
+        trusted or not.
+        Returns : 0 on success or a negative value otherwise.
+        """
+        return xmlsecmod.cryptoAppKeysMngrCertLoadMemory(self, data, dataSize, format, type)
 
 class KeyStore:
     def __init__(self, id=None, _obj=None):

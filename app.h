@@ -11,9 +11,12 @@ PyObject *xmlsec_CryptoAppDefaultKeysMngrAdoptKey(PyObject *self, PyObject *args
 PyObject *xmlsec_CryptoAppDefaultKeysMngrLoad(PyObject *self, PyObject *args);
 PyObject *xmlsec_CryptoAppDefaultKeysMngrSave(PyObject *self, PyObject *args);
 PyObject *xmlsec_CryptoAppKeysMngrCertLoad(PyObject *self, PyObject *args);
+PyObject *xmlsec_CryptoAppKeysMngrCertLoadMemory(PyObject *self, PyObject *args);
 PyObject *xmlsec_CryptoAppKeyLoad(PyObject *self, PyObject *args);
+PyObject *xmlsec_CryptoAppKeyLoadMemory(PyObject *self, PyObject *args);
 PyObject *xmlsec_CryptoAppPkcs12Load(PyObject *self, PyObject *args);
 PyObject *xmlsec_CryptoAppKeyCertLoad(PyObject *self, PyObject *args);
+PyObject *xmlsec_CryptoAppKeyCertLoadMemory(PyObject *self, PyObject *args);
 PyObject *xmlsec_CryptoAppGetDefaultPwdCallback(PyObject *self, PyObject *args);
 
 /* transform */
