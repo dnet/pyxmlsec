@@ -84,6 +84,8 @@ libraries     = []
 
 def extract_cflags(cflags):
     global define_macros, include_dirs
+    xmlsec_openssl_prefix = 'XMLSEC_OPENSSL_'
+
     list = cflags.split(' ')
     for flag in list:
         if flag == '':
@@ -96,6 +98,28 @@ def extract_cflags(cflags):
             t = tuple(flag[2:].split('='))
             if len(t) == 1:
                 t = (t[0], None) 
+
+            # Problem: app.c only checks XMLSEC_OPENSSL_098,
+            # but newer OpenSSL libs emit other flags such as
+            # XMLSEC_OPENSSL_100
+            #
+            # Assumption: Methods provided by OpenSSL 098 will still
+            # be provided by newer versions of OpenSSL.
+            #
+            # Solution: Add the old flag for newer OpenSSL libs.
+            #
+            # See https://github.com/dnet/pyxmlsec/issues/4
+            if t[0].startswith(xmlsec_openssl_prefix) and t[1] == '1':
+                version_as_string = t[0][len(xmlsec_openssl_prefix):]
+                try:
+                    version = int(version_as_string)
+                    if version > 98:
+                        hacked_t = (xmlsec_openssl_prefix + '098', t[1])
+                        if hacked_t not in define_macros:
+                            define_macros.append(hacked_t)
+                except Exception as ex:
+                    print "Warning: I thought %s was a version flag but I don't understand %s as a number." % (repr(t), repr(version_as_string))
+
             if t not in define_macros:
                 define_macros.append(t)
         else:
