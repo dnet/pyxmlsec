@@ -30,20 +30,19 @@
 PyObject *xmlsec_X509DataGetNodeContent(PyObject *self, PyObject *args) {
   PyObject *node_obj, *keyInfoCtx_obj;
   xmlNodePtr node;
-  int deleteChildren;
   xmlSecKeyInfoCtxPtr keyInfoCtx;
   int ret;
 
   if (CheckArgs(args, "OIO:x509DataGetNodeContent")) {
     if (!PyArg_ParseTuple(args, "OiO:x509DataGetNodeContent", &node_obj,
-			  &deleteChildren, &keyInfoCtx_obj))
+			  &keyInfoCtx_obj))
       return NULL;
   }
   else return NULL;
 
   node = xmlNodePtr_get(node_obj);
   keyInfoCtx = xmlSecKeyInfoCtxPtr_get(keyInfoCtx_obj);
-  ret = xmlSecX509DataGetNodeContent(node, deleteChildren, keyInfoCtx);
+  ret = xmlSecX509DataGetNodeContent(node, keyInfoCtx);
 
   return wrap_int(ret);
 }
