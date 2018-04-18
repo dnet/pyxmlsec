@@ -1,3 +1,7 @@
+2013-07-26  Valery Febvre  <vfebvre@easter-eggs.com>
+
+	* License switch from GPL to MIT.
+
 2005-12-10  Valery Febvre  <vfebvre@easter-eggs.com>
 
 	* xmlsec.py: Added 3 missing Key data formats:
