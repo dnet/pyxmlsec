@@ -3560,14 +3560,13 @@ X509DATA_SKI_NODE          = 0x00000008
 X509DATA_CRL_NODE          = 0x00000010
 # Default set of nodes to write in case of empty <dsig:X509Data/> node template.
 X509DATA_DEFAULT           = X509DATA_CERTIFICATE_NODE | X509DATA_CRL_NODE
-def x509DataGetNodeContent(node, deleteChildren, keyInfoCtx):
+def x509DataGetNodeContent(node, keyInfoCtx):
     """
     Reads the contents of <dsig:X509Data/> node and returns it as a bits mask.
     node           : the <dsig:X509Data/> node.
-    deleteChildren : the flag that indicates whether to remove node children
     after reading.
     keyInfoCtx     : the <dsig:KeyInfo/> node processing context.
     Returns        : the bit mask representing the <dsig:X509Data/> node content
     or a negative value if an error occurs.
     """
-    return xmlsecmod.x509DataGetNodeContent(node, deleteChildren, keyInfoCtx)
+    return xmlsecmod.x509DataGetNodeContent(node, keyInfoCtx)
